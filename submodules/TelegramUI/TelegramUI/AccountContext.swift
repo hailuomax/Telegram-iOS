@@ -10,8 +10,10 @@ import TelegramPresentationData
 import AccountContext
 import LiveLocationManager
 import TemporaryCachedPeerDataManager
+#if ENABLE_WALLET
 import WalletCore
 import WalletUI
+#endif
 import PhoneNumberFormat
 
 private final class DeviceSpecificContactImportContext {
@@ -106,7 +108,9 @@ public final class AccountContextImpl: AccountContext {
     }
     public let account: Account
     
+    #if ENABLE_WALLET
     public let tonContext: StoredTonContext?
+    #endif
     
     public let fetchManager: FetchManager
     private let prefetchManager: PrefetchManager?
@@ -116,6 +120,7 @@ public final class AccountContextImpl: AccountContext {
     public let downloadedMediaStoreManager: DownloadedMediaStoreManager
     
     public let liveLocationManager: LiveLocationManager?
+    public let peersNearbyManager: PeersNearbyManager?
     public let wallpaperUploadManager: WallpaperUploadManager?
     private let themeUpdateManager: ThemeUpdateManager?
     
@@ -142,6 +147,7 @@ public final class AccountContextImpl: AccountContext {
     private let deviceSpecificContactImportContexts: QueueLocalObject<DeviceSpecificContactImportContexts>
     private var managedAppSpecificContactsDisposable: Disposable?
     
+    #if ENABLE_WALLET
     public var hasWallets: Signal<Bool, NoError> {
         return WalletStorageInterfaceImpl(postbox: self.account.postbox).getWalletRecords()
         |> map { records in
@@ -164,11 +170,15 @@ public final class AccountContextImpl: AccountContext {
         }
         |> distinctUntilChanged
     }
+    #endif
     
-    public init(sharedContext: SharedAccountContextImpl, account: Account, tonContext: StoredTonContext?, limitsConfiguration: LimitsConfiguration, contentSettings: ContentSettings, temp: Bool = false) {
+    public init(sharedContext: SharedAccountContextImpl, account: Account, /*tonContext: StoredTonContext?, */limitsConfiguration: LimitsConfiguration, contentSettings: ContentSettings, temp: Bool = false)
+    {
         self.sharedContextImpl = sharedContext
         self.account = account
+        #if ENABLE_WALLET
         self.tonContext = tonContext
+        #endif
         
         self.downloadedMediaStoreManager = DownloadedMediaStoreManagerImpl(postbox: account.postbox, accountManager: sharedContext.accountManager)
         
@@ -186,6 +196,12 @@ public final class AccountContextImpl: AccountContext {
             self.prefetchManager = nil
             self.wallpaperUploadManager = nil
             self.themeUpdateManager = nil
+        }
+        
+        if let locationManager = self.sharedContextImpl.locationManager, sharedContext.applicationBindings.isMainApp && !temp {
+            self.peersNearbyManager = PeersNearbyManagerImpl(account: account, locationManager: locationManager)
+        } else {
+            self.peersNearbyManager = nil
         }
         
         let updatedLimitsConfiguration = account.postbox.preferencesView(keys: [PreferencesKeys.limitsConfiguration])
