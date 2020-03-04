@@ -1,9 +1,49 @@
 .PHONY : check_env build build_arm64 build_debug_arm64 package package_arm64 app app_arm64 app_debug_arm64 build_buckdebug build_verbose kill_xcode clean project project_buckdebug temp
 
+export BUCK=buck
+export TELEGRAM_ENV_SET=1
+export DEVELOPMENT_CODE_SIGN_IDENTITY=iPhone Distribution: Digital Fortress LLC (C67CF9S4VU)
+export DISTRIBUTION_CODE_SIGN_IDENTITY=iPhone Distribution: Digital Fortress LLC (C67CF9S4VU)
+export DEVELOPMENT_TEAM=4UB2QM68WG
+export API_ID=1073752
+export API_HASH=2697f8e8071b20e15c088cca9d019b6f
+export BUNDLE_ID=lxtx.conch.app2
+export IS_INTERNAL_BUILD=false
+export IS_APPSTORE_BUILD=true
+export APPSTORE_ID=686449807
+export APP_SPECIFIC_URL_SCHEME=tgapp
+export ENTITLEMENTS_APP=Telegram/Telegram-iOS/Telegram-iOS-AppStoreLLC.entitlements
+export DEVELOPMENT_PROVISIONING_PROFILE_APP=HL_DEV
+export DISTRIBUTION_PROVISIONING_PROFILE_APP=match AppStore lxtx.conch.app2
+export ENTITLEMENTS_EXTENSION_SHARE=Telegram/Share/Share-AppStoreLLC.entitlements
+export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_SHARE=match Development lxtx.conch.app2.Share
+export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_SHARE=match AppStore lxtx.conch.app2.Share
+export ENTITLEMENTS_EXTENSION_WIDGET=Telegram/Widget/Widget-AppStoreLLC.entitlements
+export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_WIDGET=match Development lxtx.conch.app2.Widget
+export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_WIDGET=match AppStore lxtx.conch.app2.Widget
+export ENTITLEMENTS_EXTENSION_NOTIFICATIONSERVICE=Telegram/NotificationService/NotificationService-AppStoreLLC.entitlements
+export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_NOTIFICATIONSERVICE=match Development lxtx.conch.app2.NotificationService
+export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_NOTIFICATIONSERVICE=match AppStore lxtx.conch.app2.NotificationService
+export ENTITLEMENTS_EXTENSION_NOTIFICATIONCONTENT=Telegram/NotificationContent/NotificationContent-AppStoreLLC.entitlements
+export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_NOTIFICATIONCONTENT=match Development lxtx.conch.app2.NotificationContent
+export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_NOTIFICATIONCONTENT=match AppStore lxtx.conch.app2.NotificationContent
+export ENTITLEMENTS_EXTENSION_INTENTS=Telegram/SiriIntents/SiriIntents-AppStoreLLC.entitlements
+export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_INTENTS=match Development lxtx.conch.app2.SiriIntents
+export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_INTENTS=match AppStore lxtx.conch.app2.SiriIntents
+export DEVELOPMENT_PROVISIONING_PROFILE_WATCH_APP=match Development lxtx.conch.app2.watchkitapp
+export DISTRIBUTION_PROVISIONING_PROFILE_WATCH_APP=match AppStore lxtx.conch.app2.watchkitapp
+export DEVELOPMENT_PROVISIONING_PROFILE_WATCH_EXTENSION=match Development lxtx.conch.app2.watchkitapp.watchkitextension
+export DISTRIBUTION_PROVISIONING_PROFILE_WATCH_EXTENSION=match AppStore lxtx.conch.app2.watchkitapp.watchkitextension
+export BUILDBOX_DIR=buildbox
+export CODESIGNING_PROFILES_VARIANT=appstore
+export PACKAGE_METHOD=appstore
+
+export BUILD_NUMBER=60
+
 include Utils.makefile
 
 BUCK_OPTIONS=\
-	--config custom.appVersion="5.15.1" \
+	--config custom.appVersion="1.2.8" \
 	--config custom.developmentCodeSignIdentity="${DEVELOPMENT_CODE_SIGN_IDENTITY}" \
 	--config custom.distributionCodeSignIdentity="${DISTRIBUTION_CODE_SIGN_IDENTITY}" \
 	--config custom.developmentTeam="${DEVELOPMENT_TEAM}" \

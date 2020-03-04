@@ -1,15 +1,15 @@
 #!/bin/bash
-
+export BUILD_NUMBER="60"
 export TELEGRAM_ENV_SET="1"
 
-export DEVELOPMENT_CODE_SIGN_IDENTITY="iPhone Distribution: Digital Fortress LLC (C67CF9S4VU)"
-export DISTRIBUTION_CODE_SIGN_IDENTITY="iPhone Distribution: Digital Fortress LLC (C67CF9S4VU)"
-export DEVELOPMENT_TEAM="C67CF9S4VU"
+export DEVELOPMENT_CODE_SIGN_IDENTITY="iPhone Distribution: Digital Fortress LLC (4UB2QM68WG)"
+export DISTRIBUTION_CODE_SIGN_IDENTITY="iPhone Distribution: Digital Fortress LLC (4UB2QM68WG)"
+export DEVELOPMENT_TEAM="4UB2QM68WG"
 
-export API_ID="8"
-export API_HASH="7245de8e747a0d6fbe11f7cc14fcc0bb"
+export API_ID="1073752"
+export API_HASH="2697f8e8071b20e15c088cca9d019b6f"
 
-export BUNDLE_ID="ph.telegra.Telegraph"
+export BUNDLE_ID="lxtx.conch.app2"
 export APP_CENTER_ID=""
 export IS_INTERNAL_BUILD="false"
 export IS_APPSTORE_BUILD="true"
