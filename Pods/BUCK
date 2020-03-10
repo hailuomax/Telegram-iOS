@@ -1,0 +1,154 @@
+load("//Config:buck_rule_macros.bzl", "static_library", "apple_cxx_third_party_library")
+
+static_library(
+    name = "Alamofire",
+    srcs = glob([
+        "Alamofire/**/*.swift",
+    ]),
+    frameworks = [
+        "$SDKROOT/System/Library/Frameworks/CFNetwork.framework",
+    ],
+)
+
+static_library(
+    name = "CryptoSwift",
+    srcs = glob([
+        "CryptoSwift/**/*.swift",
+    ]),
+)
+
+static_library(
+    name = "Differentiator",
+    srcs = glob([
+        "Differentiator/**/*.swift",
+    ]),
+)
+
+static_library(
+    name = "ESPullToRefresh",
+    srcs = glob([
+        "ESPullToRefresh/**/*.swift",
+    ]),
+)
+
+static_library(
+    name = "JXPatternLock",
+    srcs = glob([
+        "JXPatternLock/**/*.swift",
+    ]),
+    frameworks = [
+        "$SDKROOT/System/Library/Frameworks/UIKit.framework",
+    ],
+)
+
+static_library(
+    name = "Kingfisher",
+    srcs = glob([
+        "Kingfisher/**/*.swift",
+    ]),
+    frameworks = [
+        "$SDKROOT/System/Library/Frameworks/CFNetwork.framework",
+        "$SDKROOT/System/Library/Frameworks/Accelerate.framework",
+    ],
+)
+
+static_library(
+    name = "Moya",
+    srcs = glob([
+        "Moya/**/*.swift",
+    ]),
+    deps = [
+        "//Pods/RxSwift:RxSwift",
+    ],
+)
+
+static_library(
+    name = "PromiseKit",
+    visibility = ["PUBLIC"],
+    exported_headers = glob([
+        "PromiseKit/**/*.h",
+    # We are excluding this header because a) it is not public and b) `PromiseKit` does not
+    # consider it to be a source in its `podspec`: https://github.com/mxcl/PromiseKit/blob/a20df65b74b3eec290e524abb9839412542328b6/PromiseKit.podspec#L114
+    ], exclude = [
+        "PromiseKit/AnyPromise+Private.h",
+    ]),
+    srcs = glob([
+        "PromiseKit/**/*.m",
+        "PromiseKit/**/*.swift",
+    # We are excluding the below sources since `PromiseKit` does not consider them sources in its
+    # `podspec`: https://github.com/mxcl/PromiseKit/blob/a20df65b74b3eec290e524abb9839412542328b6/PromiseKit.podspec#L114
+    ], exclude = [
+        "PromiseKit/Sources/PMKCallVariadicBlock.m",
+        "PromiseKit/Sources/NSMethodSignatureForBlock.m",
+    ]),
+)
+
+static_library(
+    name = "RxCocoa",
+    visibility = ["PUBLIC"],
+    exported_headers = glob([
+        "RxCocoa/**/*.h",
+    ]),
+    srcs = glob([
+        "RxCocoa/**/*.m",
+        "RxCocoa/**/*.swift",
+    ], exclude = [
+        "RxCocoa/macOS/*.swift",
+    ]),
+    deps = [
+        "//Pods/RxSwift:RxSwift",
+        "//Pods/RxRelay:RxRelay",
+    ],
+)
+
+static_library(
+    name = "RxDataSources",
+    srcs = glob([
+        "RxDataSources/**/*.swift",
+    ]),
+    deps = [
+        "//Pods/Differentiator:Differentiator",
+        "//Pods/RxSwift:RxSwift",
+        "//Pods/RxCocoa:RxCocoa",
+    ],
+)
+
+static_library(
+    name = "RxRelay",
+    srcs = glob([
+        "RxRelay/**/*.swift",
+    ]),
+    deps = [
+        "//Pods/RxSwift:RxSwift",
+    ],
+)
+
+static_library(
+    name = "RxSwift",
+    srcs = glob([
+        "RxSwift/**/*.swift",
+    ],exclude = [
+        "RxSwift/Platform/**/*.swift",
+    ]),
+)
+
+static_library(
+    name = "SnapKit",
+    srcs = glob([
+        "SnapKit/**/*.swift",
+    ]),
+)
+
+static_library(
+    name = "SwiftyJSON",
+    srcs = glob([
+        "SwiftyJSON/**/*.swift",
+    ]),
+)
+
+static_library(
+    name = "Then",
+    srcs = glob([
+        "Then/**/*.swift",
+    ]),
+)
