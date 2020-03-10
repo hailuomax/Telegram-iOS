@@ -49,7 +49,7 @@ SHARED_CONFIGS = {
     "SWIFT_WHOLE_MODULE_OPTIMIZATION": "NO",
     "ONLY_ACTIVE_ARCH": "YES",
     "LD_RUNPATH_SEARCH_PATHS": "@executable_path/Frameworks",
-    "ENABLE_BITCODE": "YES",
+    "ENABLE_BITCODE": "NO",
     "DEAD_CODE_STRIPPING": "YES",
 }
 
