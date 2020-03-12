@@ -57,7 +57,7 @@
 		E7A30F04119CDA0700000001 /* libTelegramCore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29119CDA0700000000 /* libTelegramCore.dylib */; };
 		E7A30F04119CDA0700000002 /* libTelegramCore.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29119CDA0700000000 /* libTelegramCore.dylib */; };
 		E7A30F04119CDA0700000003 /* libTelegramCore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29119CDA0700000000 /* libTelegramCore.dylib */; };
-		E7A30F04119CDA0700000004 /* libTelegramCore.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29119CDA0700000000 /* libTelegramCore.dylib */; };
+		E7A30F04119CDA0700000004 /* libTelegramCore.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29119CDA0700000000 /* libTelegramCore.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F0411B2FA1A00000000 /* simplereaction_14@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E2911B2FA1A00000000 /* simplereaction_14@2x.png */; };
 		E7A30F0411F55EF900000000 /* PhotoEditorCaption@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E2911F55EF900000000 /* PhotoEditorCaption@3x.png */; };
 		E7A30F041292048700000000 /* Instagram.html in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E291292048700000000 /* Instagram.html */; };
@@ -97,7 +97,7 @@
 		E7A30F041E5A1E9C00000003 /* libTelegramUI.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E291E5A1E9C00000000 /* libTelegramUI.dylib */; };
 		E7A30F041E5A1E9C00000004 /* libTelegramUI.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E291E5A1E9C00000000 /* libTelegramUI.dylib */; };
 		E7A30F041E5A1E9C00000005 /* libTelegramUI.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E291E5A1E9C00000000 /* libTelegramUI.dylib */; };
-		E7A30F041E5A1E9C00000006 /* libTelegramUI.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E291E5A1E9C00000000 /* libTelegramUI.dylib */; };
+		E7A30F041E5A1E9C00000006 /* libTelegramUI.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E291E5A1E9C00000000 /* libTelegramUI.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F041F42292500000000 /* TGUserHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E291F42292500000000 /* TGUserHandle.m */; };
 		E7A30F041FC4F2F000000000 /* stp_card_mastercard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E291FC4F2F000000000 /* stp_card_mastercard@2x.png */; };
 		E7A30F0420DAE01900000000 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E2920DAE01900000000 /* Assets.xcassets */; };
@@ -236,7 +236,7 @@
 		E7A30F046A322ABE00000001 /* libBuildConfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E296A322ABE00000000 /* libBuildConfig.a */; };
 		E7A30F046A322ABE00000002 /* libBuildConfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E296A322ABE00000000 /* libBuildConfig.a */; };
 		E7A30F046A98D72D00000000 /* libAsyncDisplayKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E296A98D72D00000000 /* libAsyncDisplayKit.dylib */; };
-		E7A30F046A98D72D00000001 /* libAsyncDisplayKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E296A98D72D00000000 /* libAsyncDisplayKit.dylib */; };
+		E7A30F046A98D72D00000001 /* libAsyncDisplayKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E296A98D72D00000000 /* libAsyncDisplayKit.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F046ABF6A1200000000 /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E296ABF6A1200000000 /* Empty.swift */; };
 		E7A30F046AD832AE00000000 /* ic_cam_lens@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E296AD832AE00000000 /* ic_cam_lens@2x.png */; };
 		E7A30F046B54DEC900000000 /* SSignal+Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E296B54DEC900000000 /* SSignal+Dispatch.m */; };
@@ -283,7 +283,7 @@
 		E7A30F047A51CDA100000001 /* libSyncCore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E297A51CDA100000000 /* libSyncCore.dylib */; };
 		E7A30F047A51CDA100000002 /* libSyncCore.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E297A51CDA100000000 /* libSyncCore.dylib */; };
 		E7A30F047A51CDA100000003 /* libSyncCore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E297A51CDA100000000 /* libSyncCore.dylib */; };
-		E7A30F047A51CDA100000004 /* libSyncCore.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E297A51CDA100000000 /* libSyncCore.dylib */; };
+		E7A30F047A51CDA100000004 /* libSyncCore.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E297A51CDA100000000 /* libSyncCore.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F047ADFB9F200000000 /* libAppLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E297ADFB9F200000000 /* libAppLibrary.a */; };
 		E7A30F047B48FF9800000000 /* simplereaction_15@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E297B48FF9800000000 /* simplereaction_15@3x.png */; };
 		E7A30F047C7F607300000000 /* simplereaction_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E297C7F607300000000 /* simplereaction_2@2x.png */; };
@@ -377,7 +377,7 @@
 		E7A30F04B22505DC00000000 /* libMtProtoKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29B22505DC00000000 /* libMtProtoKit.dylib */; };
 		E7A30F04B22505DC00000001 /* libMtProtoKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29B22505DC00000000 /* libMtProtoKit.dylib */; };
 		E7A30F04B22505DC00000002 /* libMtProtoKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29B22505DC00000000 /* libMtProtoKit.dylib */; };
-		E7A30F04B22505DC00000003 /* libMtProtoKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29B22505DC00000000 /* libMtProtoKit.dylib */; };
+		E7A30F04B22505DC00000003 /* libMtProtoKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29B22505DC00000000 /* libMtProtoKit.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F04B2EC863500000000 /* simplereaction_18@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29B2EC863500000000 /* simplereaction_18@3x.png */; };
 		E7A30F04B308954A00000000 /* WKInterfaceTable+TGDataDrivenTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E29B308954A00000000 /* WKInterfaceTable+TGDataDrivenTable.m */; };
 		E7A30F04B308DE2800000000 /* anim_unpin.json in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29B308DE2800000000 /* anim_unpin.json */; };
@@ -408,7 +408,7 @@
 		E7A30F04BEA6DCF600000001 /* libTelegramApi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29BEA6DCF600000000 /* libTelegramApi.dylib */; };
 		E7A30F04BEA6DCF600000002 /* libTelegramApi.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29BEA6DCF600000000 /* libTelegramApi.dylib */; };
 		E7A30F04BEA6DCF600000003 /* libTelegramApi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29BEA6DCF600000000 /* libTelegramApi.dylib */; };
-		E7A30F04BEA6DCF600000004 /* libTelegramApi.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29BEA6DCF600000000 /* libTelegramApi.dylib */; };
+		E7A30F04BEA6DCF600000004 /* libTelegramApi.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29BEA6DCF600000000 /* libTelegramApi.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F04BF0B6A9200000000 /* TGBotCommandController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E29BF0B6A9200000000 /* TGBotCommandController.m */; };
 		E7A30F04BF5CBB6200000000 /* knot_up1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29BF5CBB6200000000 /* knot_up1@2x.png */; };
 		E7A30F04BF88817800000000 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E29BF88817800000000 /* main.m */; };
@@ -463,7 +463,7 @@
 		E7A30F04D65BA68200000003 /* libSwiftSignalKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29D65BA68200000000 /* libSwiftSignalKit.dylib */; };
 		E7A30F04D65BA68200000004 /* libSwiftSignalKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29D65BA68200000000 /* libSwiftSignalKit.dylib */; };
 		E7A30F04D65BA68200000005 /* libSwiftSignalKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29D65BA68200000000 /* libSwiftSignalKit.dylib */; };
-		E7A30F04D65BA68200000006 /* libSwiftSignalKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29D65BA68200000000 /* libSwiftSignalKit.dylib */; };
+		E7A30F04D65BA68200000006 /* libSwiftSignalKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29D65BA68200000000 /* libSwiftSignalKit.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F04D6FDBAF400000000 /* stp_card_applepay_template@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29D6FDBAF400000000 /* stp_card_applepay_template@3x.png */; };
 		E7A30F04D743E0A500000000 /* BlueClassicNotificationIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29D743E0A500000000 /* BlueClassicNotificationIcon@2x.png */; };
 		E7A30F04D87EC12200000000 /* MediaDocument@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29D87EC12200000000 /* MediaDocument@2x.png */; };
@@ -474,7 +474,7 @@
 		E7A30F04DB6520C800000001 /* libPostbox.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29DB6520C800000000 /* libPostbox.dylib */; };
 		E7A30F04DB6520C800000002 /* libPostbox.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29DB6520C800000000 /* libPostbox.dylib */; };
 		E7A30F04DB6520C800000003 /* libPostbox.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29DB6520C800000000 /* libPostbox.dylib */; };
-		E7A30F04DB6520C800000004 /* libPostbox.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29DB6520C800000000 /* libPostbox.dylib */; };
+		E7A30F04DB6520C800000004 /* libPostbox.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29DB6520C800000000 /* libPostbox.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F04DBA6021D00000000 /* anim_delete.json in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29DBA6021D00000000 /* anim_delete.json */; };
 		E7A30F04DBC44C1C00000000 /* simplereaction_11@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29DBC44C1C00000000 /* simplereaction_11@3x.png */; };
 		E7A30F04DC82BB6100000000 /* anim_success.json in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29DC82BB6100000000 /* anim_success.json */; };
@@ -557,7 +557,7 @@
 		E7A30F04FEE8D8EE00000000 /* Star@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29FEE8D8EE00000000 /* Star@3x.png */; };
 		E7A30F04FF334B1F00000000 /* libDisplay.dylib in Fake Swift Dependencies (Copy Files Phase) */ = {isa = PBXBuildFile; fileRef = 1DD70E29FF334B1F00000000 /* libDisplay.dylib */; };
 		E7A30F04FF334B1F00000001 /* libDisplay.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29FF334B1F00000000 /* libDisplay.dylib */; };
-		E7A30F04FF334B1F00000002 /* libDisplay.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29FF334B1F00000000 /* libDisplay.dylib */; };
+		E7A30F04FF334B1F00000002 /* libDisplay.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29FF334B1F00000000 /* libDisplay.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F04FF74919D00000000 /* SThreadPoolTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E29FF74919D00000000 /* SThreadPoolTask.m */; };
 /* End PBXBuildFile section */
 
@@ -2742,27 +2742,35 @@
 				TargetAttributes = {
 					E66DC04E86ED67FD00000000 = {
 						DevelopmentTeam = 4UB2QM68WG;
+						ProvisioningStyle = Automatic;
 					};
 					E66DC04E8C3D58C300000000 = {
 						DevelopmentTeam = 4UB2QM68WG;
+						ProvisioningStyle = Automatic;
 					};
 					E66DC04EADE3780A00000000 = {
 						DevelopmentTeam = 4UB2QM68WG;
+						ProvisioningStyle = Automatic;
 					};
 					E66DC04EB2C34D2100000000 = {
 						DevelopmentTeam = 4UB2QM68WG;
+						ProvisioningStyle = Automatic;
 					};
 					E66DC04EC42F8D0F00000000 = {
 						DevelopmentTeam = 4UB2QM68WG;
+						ProvisioningStyle = Automatic;
 					};
 					E66DC04ECA074AD000000000 = {
 						DevelopmentTeam = 4UB2QM68WG;
+						ProvisioningStyle = Automatic;
 					};
 					E66DC04EE64F555800000000 = {
 						DevelopmentTeam = 4UB2QM68WG;
+						ProvisioningStyle = Automatic;
 					};
 					E66DC04EF6E8B68700000000 = {
 						DevelopmentTeam = 4UB2QM68WG;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -3490,6 +3498,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E291E2173E500000000 /* IntentsExtension#iphonesimulator-x86_64-Debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -3497,6 +3509,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E29AA22434E00000000 /* NotificationContentExtension#iphonesimulator-x86_64-Debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -3504,6 +3520,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E296EE5619200000000 /* NotificationServiceExtension#iphonesimulator-x86_64-Debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -3511,6 +3531,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E297102085D00000000 /* ShareExtension#iphonesimulator-x86_64-Debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -3518,7 +3542,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E29A8C8657400000000 /* Telegram-Debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
 				MARKETING_VERSION = 1.2.8;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -3526,6 +3554,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E29AD128BC600000000 /* WatchApp#watchsimulator-i386-Debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -3533,6 +3565,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E2945D1EB6B00000000 /* WatchAppExtension#watchsimulator-i386-Debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -3540,6 +3576,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E296541B71800000000 /* WidgetExtension#iphonesimulator-x86_64-Debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -3560,6 +3600,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E2900B6A60F00000000 /* IntentsExtension#iphonesimulator-x86_64-Profile.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Profile;
 		};
@@ -3567,6 +3611,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E298FC13F3800000000 /* NotificationContentExtension#iphonesimulator-x86_64-Profile.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Profile;
 		};
@@ -3574,6 +3622,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E293035DC7C00000000 /* NotificationServiceExtension#iphonesimulator-x86_64-Profile.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Profile;
 		};
@@ -3581,6 +3633,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E291DC3FC8700000000 /* ShareExtension#iphonesimulator-x86_64-Profile.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Profile;
 		};
@@ -3588,7 +3644,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E297D676FDE00000000 /* Telegram-Profile.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
 				MARKETING_VERSION = 1.2.8;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Profile;
 		};
@@ -3596,6 +3656,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E2997C149B000000000 /* WatchApp#watchsimulator-i386-Profile.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Profile;
 		};
@@ -3603,6 +3667,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E29FE27541500000000 /* WatchAppExtension#watchsimulator-i386-Profile.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Profile;
 		};
@@ -3610,6 +3678,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E2900D2E88200000000 /* WidgetExtension#iphonesimulator-x86_64-Profile.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Profile;
 		};
@@ -3630,6 +3702,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E29744D517100000000 /* IntentsExtension#iphonesimulator-x86_64-Release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
@@ -3637,6 +3713,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E290357EA9A00000000 /* NotificationContentExtension#iphonesimulator-x86_64-Release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
@@ -3644,6 +3724,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E29A3CC87DE00000000 /* NotificationServiceExtension#iphonesimulator-x86_64-Release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
@@ -3651,6 +3735,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E29915AA7E900000000 /* ShareExtension#iphonesimulator-x86_64-Release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
@@ -3658,7 +3746,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E29F0FE1B4000000000 /* Telegram-Release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
 				MARKETING_VERSION = 1.2.8;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
@@ -3666,6 +3758,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E290B57F51200000000 /* WatchApp#watchsimulator-i386-Release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
@@ -3673,6 +3769,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E2971BDFF7700000000 /* WatchAppExtension#watchsimulator-i386-Release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
@@ -3680,6 +3780,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E29746993E400000000 /* WidgetExtension#iphonesimulator-x86_64-Release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
