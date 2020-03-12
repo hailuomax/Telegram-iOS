@@ -395,7 +395,7 @@ public final class MediaManagerImpl: NSObject, MediaManager {
         
         let throttledSignal = self.globalMediaPlayerState
         |> mapToThrottled { next -> Signal<(Account, SharedMediaPlayerItemPlaybackStateOrLoading, MediaManagerPlayerType)?, NoError> in
-            return .single(next) |> then(.complete() |> delay(2.0, queue: Queue.concurrentDefaultQueue()))
+            return .single(next) |> SwiftSignalKit.then(.complete() |> delay(2.0, queue: Queue.concurrentDefaultQueue()))
         }
         
         self.mediaPlaybackStateDisposable.set(throttledSignal.start(next: { accountStateAndType in

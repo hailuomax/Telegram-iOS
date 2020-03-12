@@ -1,0 +1,11 @@
+load("//Config:buck_rule_macros.bzl", "static_library")
+
+static_library(
+    name = "Alamofire",
+    srcs = glob([
+        "Source/**/*.swift",
+    ]),
+    frameworks = [
+        "$SDKROOT/System/Library/Frameworks/CFNetwork.framework",
+    ],
+)

@@ -253,7 +253,7 @@ final class EditAccessoryPanelNode: AccessoryPanelNode {
                 }
                 return context*/
                 return nil
-            }) |> then(updateImageSignal))
+            }) |> SwiftSignalKit.then(updateImageSignal))
         }
         
         self.setNeedsLayout()

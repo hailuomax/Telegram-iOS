@@ -255,14 +255,14 @@ final class ChatMediaInputTrendingPane: ChatMediaInputPane {
                             return preloadedStickerPackThumbnail(account: account, info: info, items: items)
                             |> filter { $0 }
                             |> ignoreValues
-                            |> then(
+                            |> SwiftSignalKit.then(
                                 addStickerPackInteractively(postbox: strongSelf.context.account.postbox, info: info, items: items)
                                 |> ignoreValues
                             )
                             |> mapToSignal { _ -> Signal<(StickerPackCollectionInfo, [ItemCollectionItem]), NoError> in
                                 return .complete()
                             }
-                            |> then(.single((info, items)))
+                            |> SwiftSignalKit.then(.single((info, items)))
                         }
                     case .fetching:
                         break

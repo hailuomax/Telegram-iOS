@@ -37,7 +37,7 @@ final class AuthorizationSequenceSplashController: ViewController {
         self.theme = theme
         
         self.suggestedLocalization.set(.single(nil)
-        |> then(currentlySuggestedLocalization(network: network, extractKeys: ["Login.ContinueWithLocalization"])))
+            |> SwiftSignalKit.then(currentlySuggestedLocalization(network: network, extractKeys: ["Login.ContinueWithLocalization"])))
         let suggestedLocalization = self.suggestedLocalization
         
         let localizationSignal = SSignal(generator: { subscriber in

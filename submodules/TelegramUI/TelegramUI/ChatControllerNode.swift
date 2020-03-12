@@ -394,7 +394,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
             if display {
                 return .complete()
                 |> delay(2.5, queue: Queue.mainQueue())
-                |> then(
+                |> SwiftSignalKit.then(
                     .single(display)
                 )
             } else {

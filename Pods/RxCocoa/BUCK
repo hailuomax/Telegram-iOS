@@ -1,0 +1,19 @@
+load("//Config:buck_rule_macros.bzl", "static_library")
+
+static_library(
+    name = "RxCocoa",
+    visibility = ["PUBLIC"],
+    exported_headers = glob([
+        "**/*.h",
+    ]),
+    srcs = glob([
+        "**/*.m",
+        "**/*.swift",
+    ], exclude = [
+        "RxCocoa/macOS/*.swift",
+    ]),
+    deps = [
+        "//Pods/RxSwift:RxSwift",
+        "//Pods/RxRelay:RxRelay",
+    ],
+)

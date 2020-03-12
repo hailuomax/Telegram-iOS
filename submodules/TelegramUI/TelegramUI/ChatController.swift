@@ -792,7 +792,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                                     let message: Signal<String?, NoError> = .single(text)
                                     let noMessage: Signal<String?, NoError> = .single(nil)
                                     let delayedNoMessage: Signal<String?, NoError> = noMessage |> delay(1.0, queue: Queue.mainQueue())
-                                    strongSelf.botCallbackAlertMessage.set(message |> then(delayedNoMessage))
+                                    strongSelf.botCallbackAlertMessage.set(message |> SwiftSignalKit.then(delayedNoMessage))
                                 case let .url(url):
                                     if isGame {
                                         strongSelf.chatDisplayNode.dismissInput()
@@ -3079,7 +3079,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             if let strongSelf = self, strongSelf.presentationInterfaceState.interfaceState.editMessage == nil && !strongSelf.presentationInterfaceState.isScheduledMessages {
                 if value {
                     strongSelf.typingActivityPromise.set(Signal<Bool, NoError>.single(true)
-                    |> then(
+                    |> SwiftSignalKit.then(
                         Signal<Bool, NoError>.single(false)
                         |> delay(4.0, queue: Queue.mainQueue())
                     ))
@@ -4565,7 +4565,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                     subscriber.putNext(strongSelf.traceVisibility() && isTopmostChatController(strongSelf) && !strongSelf.context.sharedContext.mediaManager.audioSession.isOtherAudioPlaying())
                     subscriber.putCompletion()
                     return EmptyDisposable
-                } |> then(.complete() |> delay(1.0, queue: Queue.mainQueue())) |> restart
+                } |> SwiftSignalKit.then(.complete() |> delay(1.0, queue: Queue.mainQueue())) |> restart
             } else {
                 return .single(false)
             }

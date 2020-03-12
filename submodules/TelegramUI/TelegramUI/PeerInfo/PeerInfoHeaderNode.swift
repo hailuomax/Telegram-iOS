@@ -814,7 +814,7 @@ final class PeerInfoAvatarListNode: ASDisplayNode {
         |> mapToSignal { _ -> Signal<Bool, NoError> in
             return .complete()
         }
-        |> then(.single(true))
+        |> SwiftSignalKit.then(.single(true))
         
         let galleryReady = self.listContainerNode.isReady.get()
         |> filter { $0 }

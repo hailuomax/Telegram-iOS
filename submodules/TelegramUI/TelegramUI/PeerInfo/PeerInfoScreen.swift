@@ -2562,7 +2562,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                         }
                         
                         var deleteSignal = deleteContactPeerInteractively(account: strongSelf.context.account, peerId: peer.id)
-                        |> then(deleteContactFromDevice)
+                        |> SwiftSignalKit.then(deleteContactFromDevice)
                         
                         let progressSignal = Signal<Never, NoError> { subscriber in
                             guard let strongSelf = self else {
@@ -3339,7 +3339,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                                     |> mapToSignal { _ -> Signal<PeerId?, NoError> in
                                         return .complete()
                                     }
-                                    |> then(.single(upgradedPeerId))
+                                    |> SwiftSignalKit.then(.single(upgradedPeerId))
                                 }
                                 |> deliverOnMainQueue
                                 |> mapToSignal { _ -> Signal<Void, NoError> in

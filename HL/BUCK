@@ -5,4 +5,21 @@ static_library(
     srcs = glob([
         "Sources/**/*.swift",
     ]),
+    deps = [
+        "//Pods/Alamofire:Alamofire",
+        "//Pods/CryptoSwift:CryptoSwift",
+        "//Pods/Differentiator:Differentiator",
+        "//Pods/ESPullToRefresh:ESPullToRefresh",
+        "//Pods/JXPatternLock:JXPatternLock",
+        "//Pods/Kingfisher:Kingfisher",
+        "//Pods/Moya:Moya",
+        "//Pods/PromiseKit:PromiseKit",
+        "//Pods/RxCocoa:RxCocoa",
+        "//Pods/RxDataSources:RxDataSources",
+        "//Pods/RxRelay:RxRelay",
+        "//Pods/RxSwift:RxSwift",
+        "//Pods/SnapKit:SnapKit",
+        "//Pods/SwiftyJSON:SwiftyJSON",
+        "//Pods/Then:Then",
+    ],
 )

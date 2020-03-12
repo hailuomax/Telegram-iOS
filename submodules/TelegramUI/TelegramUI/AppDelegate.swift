@@ -44,6 +44,8 @@ import CoreSpotlight
 import BackgroundTasks
 #endif
 
+import HL
+
 private let handleVoipNotifications = false
 
 private var testIsLaunched = false
@@ -234,6 +236,8 @@ final class SharedApplicationContext {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         precondition(!testIsLaunched)
         testIsLaunched = true
+        
+        let test = HLTest()
         
         let _ = voipTokenPromise.get().start(next: { token in
             self.deviceToken.set(.single(token))
@@ -872,7 +876,7 @@ final class SharedApplicationContext {
                 if let context = context, let watchManager = context.context.watchManager {
                     let accountId = context.context.account.id
                     let runningTasks: Signal<WatchRunningTasks?, NoError> = .single(nil)
-                    |> then(watchManager.runningTasks)
+                        |> SwiftSignalKit.then(watchManager.runningTasks)
                     return runningTasks
                     |> distinctUntilChanged
                     |> map { value -> AccountRecordId? in
