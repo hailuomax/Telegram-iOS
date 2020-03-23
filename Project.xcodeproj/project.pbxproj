@@ -2818,6 +2818,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				E7A30F04FD34004F00000000 /* Star@2x.png in Resources */,
+				E7A30F04FEE8D8EE00000000 /* Star@3x.png in Resources */,
+				E7A30F048E96E34200000000 /* LaunchScreen.xib in Resources */,
+				E7A30F04BA6732B600000000 /* TwoFactorSetupDone.tgs in Resources */,
+				E7A30F041D59E33B00000000 /* TwoFactorSetupHint.tgs in Resources */,
+				E7A30F0466FCDB5C00000000 /* TwoFactorSetupIntro.tgs in Resources */,
+				E7A30F047494F26B00000000 /* TwoFactorSetupMail.tgs in Resources */,
+				E7A30F040AF3C7D500000000 /* TwoFactorSetupMonkeyClose.tgs in Resources */,
+				E7A30F04B9BC306100000000 /* TwoFactorSetupMonkeyCloseAndPeek.tgs in Resources */,
+				E7A30F0488B5DAB000000000 /* TwoFactorSetupMonkeyCloseAndPeekToIdle.tgs in Resources */,
+				E7A30F04EBBE297B00000000 /* TwoFactorSetupMonkeyIdle.tgs in Resources */,
+				E7A30F048C11AA3A00000000 /* TwoFactorSetupMonkeyIdle1.tgs in Resources */,
+				E7A30F048C1FC1BB00000000 /* TwoFactorSetupMonkeyIdle2.tgs in Resources */,
+				E7A30F04EC2F3F8200000000 /* TwoFactorSetupMonkeyPeek.tgs in Resources */,
+				E7A30F047CDCBC5E00000000 /* TwoFactorSetupMonkeyTracking.tgs in Resources */,
 				E7A30F044D3EB56400000000 /* Compass.tgs in Resources */,
 				E7A30F046362DAAB00000000 /* Dice_1.tgs in Resources */,
 				E7A30F046370F22C00000000 /* Dice_2.tgs in Resources */,
@@ -2885,19 +2900,6 @@
 				E7A30F0457CD649600000000 /* voip_end.caf in Resources */,
 				E7A30F0465E934B700000000 /* voip_fail.caf in Resources */,
 				E7A30F04C78B98B000000000 /* voip_ringback.caf in Resources */,
-				E7A30F048E96E34200000000 /* LaunchScreen.xib in Resources */,
-				E7A30F04BA6732B600000000 /* TwoFactorSetupDone.tgs in Resources */,
-				E7A30F041D59E33B00000000 /* TwoFactorSetupHint.tgs in Resources */,
-				E7A30F0466FCDB5C00000000 /* TwoFactorSetupIntro.tgs in Resources */,
-				E7A30F047494F26B00000000 /* TwoFactorSetupMail.tgs in Resources */,
-				E7A30F040AF3C7D500000000 /* TwoFactorSetupMonkeyClose.tgs in Resources */,
-				E7A30F04B9BC306100000000 /* TwoFactorSetupMonkeyCloseAndPeek.tgs in Resources */,
-				E7A30F0488B5DAB000000000 /* TwoFactorSetupMonkeyCloseAndPeekToIdle.tgs in Resources */,
-				E7A30F04EBBE297B00000000 /* TwoFactorSetupMonkeyIdle.tgs in Resources */,
-				E7A30F048C11AA3A00000000 /* TwoFactorSetupMonkeyIdle1.tgs in Resources */,
-				E7A30F048C1FC1BB00000000 /* TwoFactorSetupMonkeyIdle2.tgs in Resources */,
-				E7A30F04EC2F3F8200000000 /* TwoFactorSetupMonkeyPeek.tgs in Resources */,
-				E7A30F047CDCBC5E00000000 /* TwoFactorSetupMonkeyTracking.tgs in Resources */,
 				E7A30F049F00BA0200000000 /* anim_archive.json in Resources */,
 				E7A30F04406BEF2900000000 /* anim_archiveAvatar.json in Resources */,
 				E7A30F04A28B5AB000000000 /* anim_archiveswipe.json in Resources */,
@@ -3069,16 +3071,14 @@
 				E7A30F04CC98C94200000000 /* BlueNotificationIcon@3x.png in Resources */,
 				E7A30F04E5D6389D00000000 /* WhiteFilledIcon@2x.png in Resources */,
 				E7A30F04E78B113C00000000 /* WhiteFilledIcon@3x.png in Resources */,
-				E7A30F04FD34004F00000000 /* Star@2x.png in Resources */,
-				E7A30F04FEE8D8EE00000000 /* Star@3x.png in Resources */,
 				E7A30F0468FBAA6A00000000 /* LegacyComponentsResources.bundle in Resources */,
 				E7A30F04A4169AE300000000 /* AppIcons.xcassets in Resources */,
 				E7A30F042925AEA200000000 /* Icons.xcassets in Resources */,
 				E7A30F0405987B6E00000000 /* PasswordSetupUIImages.xcassets in Resources */,
 				E7A30F043549D4C400000000 /* Images.xcassets in Resources */,
-				E7A30F04A9B2537400000000 /* InfoPlist.strings in Resources */,
 				E7A30F0472A8FC2300000000 /* AppIntentVocabulary.plist in Resources */,
 				E7A30F04DCE9E9AA00000000 /* Localizable.strings in Resources */,
+				E7A30F04A9B2537400000000 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3086,6 +3086,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				E7A30F0486FBDF0600000000 /* Interface.storyboard in Resources */,
 				E7A30F0406F08DE500000000 /* File@2x.png in Resources */,
 				E7A30F04EF071DE200000000 /* Home88@2x.png in Resources */,
 				E7A30F04EF09B18C00000000 /* Location@2x.png in Resources */,
@@ -3096,7 +3097,6 @@
 				E7A30F049257080A00000000 /* MediaVideo@2x.png in Resources */,
 				E7A30F040153C97500000000 /* SavedMessagesAvatar@2x.png in Resources */,
 				E7A30F044A1B849B00000000 /* VerifiedList@2x.png in Resources */,
-				E7A30F0486FBDF0600000000 /* Interface.storyboard in Resources */,
 				E7A30F0420DAE01900000000 /* Assets.xcassets in Resources */,
 				E7A30F04DCE9E9AA00000001 /* Localizable.strings in Resources */,
 			);
