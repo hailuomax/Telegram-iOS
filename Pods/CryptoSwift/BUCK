@@ -4,6 +4,6 @@ load("//Config:buck_rule_macros.bzl", "static_library")
 static_library(
     name = "CryptoSwift",
     srcs = glob([
-        "Source/**/*.swift",
+        "Sources/**/*.swift",
     ]),
 )
