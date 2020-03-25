@@ -574,6 +574,72 @@
 				<string>1DD70E296EA6256200000000</string>
 			</array>
 		</dict>
+		<key>1DD70E29475C87E100000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>PlainPing.swift</string>
+			<key>path</key>
+			<string>Sources/Util/SimplePing/PlainPing.swift</string>
+			<key>sourceTree</key>
+			<string>SOURCE_ROOT</string>
+		</dict>
+		<key>1DD70E29B1EED75E00000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>SimplePing.h</string>
+			<key>path</key>
+			<string>Sources/Util/SimplePing/SimplePing.h</string>
+			<key>sourceTree</key>
+			<string>SOURCE_ROOT</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+		</dict>
+		<key>1DD70E29B1EED76300000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>SimplePing.m</string>
+			<key>path</key>
+			<string>Sources/Util/SimplePing/SimplePing.m</string>
+			<key>sourceTree</key>
+			<string>SOURCE_ROOT</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+		</dict>
+		<key>1DD70E2960962EB000000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>SimplePingAdapter.swift</string>
+			<key>path</key>
+			<string>Sources/Util/SimplePing/SimplePingAdapter.swift</string>
+			<key>sourceTree</key>
+			<string>SOURCE_ROOT</string>
+		</dict>
+		<key>B401C979217BDA6400000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>SimplePing</string>
+			<key>path</key>
+			<string>Sources/Util/SimplePing</string>
+			<key>sourceTree</key>
+			<string>SOURCE_ROOT</string>
+			<key>children</key>
+			<array>
+				<string>1DD70E29475C87E100000000</string>
+				<string>1DD70E29B1EED75E00000000</string>
+				<string>1DD70E29B1EED76300000000</string>
+				<string>1DD70E2960962EB000000000</string>
+			</array>
+		</dict>
 		<key>1DD70E2966536E4400000000</key>
 		<dict>
 			<key>isa</key>
@@ -582,6 +648,17 @@
 			<string>ChatMsgConversion.swift</string>
 			<key>path</key>
 			<string>Sources/Util/ChatMsgConversion.swift</string>
+			<key>sourceTree</key>
+			<string>SOURCE_ROOT</string>
+		</dict>
+		<key>1DD70E29C0EB08E400000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>ProxyManager.swift</string>
+			<key>path</key>
+			<string>Sources/Util/ProxyManager.swift</string>
 			<key>sourceTree</key>
 			<string>SOURCE_ROOT</string>
 		</dict>
@@ -597,7 +674,9 @@
 			<string>SOURCE_ROOT</string>
 			<key>children</key>
 			<array>
+				<string>B401C979217BDA6400000000</string>
 				<string>1DD70E2966536E4400000000</string>
+				<string>1DD70E29C0EB08E400000000</string>
 			</array>
 		</dict>
 		<key>1DD70E29FC79A9DB00000000</key>
@@ -797,12 +876,40 @@
 			<key>fileRef</key>
 			<string>1DD70E296EA6256200000000</string>
 		</dict>
+		<key>E7A30F04475C87E100000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>fileRef</key>
+			<string>1DD70E29475C87E100000000</string>
+		</dict>
+		<key>E7A30F04B1EED76300000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>fileRef</key>
+			<string>1DD70E29B1EED76300000000</string>
+		</dict>
+		<key>E7A30F0460962EB000000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>fileRef</key>
+			<string>1DD70E2960962EB000000000</string>
+		</dict>
 		<key>E7A30F0466536E4400000000</key>
 		<dict>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>fileRef</key>
 			<string>1DD70E2966536E4400000000</string>
+		</dict>
+		<key>E7A30F04C0EB08E400000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>fileRef</key>
+			<string>1DD70E29C0EB08E400000000</string>
 		</dict>
 		<key>E7A30F04FC79A9DB00000000</key>
 		<dict>
@@ -833,7 +940,11 @@
 				<string>E7A30F040D65BAA600000000</string>
 				<string>E7A30F040F2F29DE00000000</string>
 				<string>E7A30F046EA6256200000000</string>
+				<string>E7A30F04475C87E100000000</string>
+				<string>E7A30F04B1EED76300000000</string>
+				<string>E7A30F0460962EB000000000</string>
 				<string>E7A30F0466536E4400000000</string>
+				<string>E7A30F04C0EB08E400000000</string>
 				<string>E7A30F04FC79A9DB00000000</string>
 			</array>
 		</dict>

@@ -2,8 +2,12 @@ load("//Config:buck_rule_macros.bzl", "static_library")
 
 static_library(
     name = "HL",
+    exported_headers = glob([
+        "Sources/**/*.h",
+    ]),
     srcs = glob([
         "Sources/**/*.swift",
+        "Sources/**/*.m",
     ]),
     deps = [
         "//Pods/Alamofire:Alamofire",
