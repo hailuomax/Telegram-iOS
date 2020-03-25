@@ -210,230 +210,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E43E7F3CE00000000"
-               BuildableName = "libAlamofire.a"
-               BlueprintName = "Alamofire"
-               ReferencedContainer = "container:Pods/Alamofire/Alamofire.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E01F155B200000000"
-               BuildableName = "libCryptoSwift.a"
-               BlueprintName = "CryptoSwift"
-               ReferencedContainer = "container:Pods/CryptoSwift/CryptoSwift.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E20AD34C600000000"
-               BuildableName = "libDifferentiator.a"
-               BlueprintName = "Differentiator"
-               ReferencedContainer = "container:Pods/Differentiator/Differentiator.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04EB4A7CD0D00000000"
-               BuildableName = "libESPullToRefresh.a"
-               BlueprintName = "ESPullToRefresh"
-               ReferencedContainer = "container:Pods/ESPullToRefresh/ESPullToRefresh.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E96D73EAD00000000"
-               BuildableName = "libJXPatternLock.a"
-               BlueprintName = "JXPatternLock"
-               ReferencedContainer = "container:Pods/JXPatternLock/JXPatternLock.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E0104977C00000000"
-               BuildableName = "libKingfisher.a"
-               BlueprintName = "Kingfisher"
-               ReferencedContainer = "container:Pods/Kingfisher/Kingfisher.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04EC34DD34D00000000"
-               BuildableName = "libRxSwift.a"
-               BlueprintName = "RxSwift"
-               ReferencedContainer = "container:Pods/RxSwift/RxSwift.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E0024B04A00000000"
-               BuildableName = "libMoya.a"
-               BlueprintName = "Moya"
-               ReferencedContainer = "container:Pods/Moya/Moya.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04EA7C6EFDB00000000"
-               BuildableName = "libPromiseKit.a"
-               BlueprintName = "PromiseKit"
-               ReferencedContainer = "container:Pods/PromiseKit/PromiseKit.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04EC33797CB00000000"
-               BuildableName = "libRxRelay.a"
-               BlueprintName = "RxRelay"
-               ReferencedContainer = "container:Pods/RxRelay/RxRelay.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04EC268A2C300000000"
-               BuildableName = "libRxCocoa.a"
-               BlueprintName = "RxCocoa"
-               ReferencedContainer = "container:Pods/RxCocoa/RxCocoa.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E93DA726800000000"
-               BuildableName = "libRxDataSources.a"
-               BlueprintName = "RxDataSources"
-               ReferencedContainer = "container:Pods/RxDataSources/RxDataSources.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04EE7E5428C00000000"
-               BuildableName = "libSnapKit.a"
-               BlueprintName = "SnapKit"
-               ReferencedContainer = "container:Pods/SnapKit/SnapKit.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E9B7472CE00000000"
-               BuildableName = "libSwiftyJSON.a"
-               BlueprintName = "SwiftyJSON"
-               ReferencedContainer = "container:Pods/SwiftyJSON/SwiftyJSON.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E0027C23D00000000"
-               BuildableName = "libThen.a"
-               BlueprintName = "Then"
-               ReferencedContainer = "container:Pods/Then/Then.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E0000090400000000"
-               BuildableName = "libHL.a"
-               BlueprintName = "HL"
-               ReferencedContainer = "container:HL/HL.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "E66DC04E468F94E200000000"
                BuildableName = "libDeviceLocationManager.a"
                BlueprintName = "DeviceLocationManager"
@@ -2090,6 +1866,230 @@
                BuildableName = "libGridMessageSelectionNode.a"
                BlueprintName = "GridMessageSelectionNode"
                ReferencedContainer = "container:submodules/GridMessageSelectionNode/GridMessageSelectionNode.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E43E7F3CE00000000"
+               BuildableName = "libAlamofire.a"
+               BlueprintName = "Alamofire"
+               ReferencedContainer = "container:Pods/Alamofire/Alamofire.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E01F155B200000000"
+               BuildableName = "libCryptoSwift.a"
+               BlueprintName = "CryptoSwift"
+               ReferencedContainer = "container:Pods/CryptoSwift/CryptoSwift.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E20AD34C600000000"
+               BuildableName = "libDifferentiator.a"
+               BlueprintName = "Differentiator"
+               ReferencedContainer = "container:Pods/Differentiator/Differentiator.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04EB4A7CD0D00000000"
+               BuildableName = "libESPullToRefresh.a"
+               BlueprintName = "ESPullToRefresh"
+               ReferencedContainer = "container:Pods/ESPullToRefresh/ESPullToRefresh.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E96D73EAD00000000"
+               BuildableName = "libJXPatternLock.a"
+               BlueprintName = "JXPatternLock"
+               ReferencedContainer = "container:Pods/JXPatternLock/JXPatternLock.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E0104977C00000000"
+               BuildableName = "libKingfisher.a"
+               BlueprintName = "Kingfisher"
+               ReferencedContainer = "container:Pods/Kingfisher/Kingfisher.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04EC34DD34D00000000"
+               BuildableName = "libRxSwift.a"
+               BlueprintName = "RxSwift"
+               ReferencedContainer = "container:Pods/RxSwift/RxSwift.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E0024B04A00000000"
+               BuildableName = "libMoya.a"
+               BlueprintName = "Moya"
+               ReferencedContainer = "container:Pods/Moya/Moya.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04EA7C6EFDB00000000"
+               BuildableName = "libPromiseKit.a"
+               BlueprintName = "PromiseKit"
+               ReferencedContainer = "container:Pods/PromiseKit/PromiseKit.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04EC33797CB00000000"
+               BuildableName = "libRxRelay.a"
+               BlueprintName = "RxRelay"
+               ReferencedContainer = "container:Pods/RxRelay/RxRelay.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04EC268A2C300000000"
+               BuildableName = "libRxCocoa.a"
+               BlueprintName = "RxCocoa"
+               ReferencedContainer = "container:Pods/RxCocoa/RxCocoa.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E93DA726800000000"
+               BuildableName = "libRxDataSources.a"
+               BlueprintName = "RxDataSources"
+               ReferencedContainer = "container:Pods/RxDataSources/RxDataSources.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04EE7E5428C00000000"
+               BuildableName = "libSnapKit.a"
+               BlueprintName = "SnapKit"
+               ReferencedContainer = "container:Pods/SnapKit/SnapKit.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E9B7472CE00000000"
+               BuildableName = "libSwiftyJSON.a"
+               BlueprintName = "SwiftyJSON"
+               ReferencedContainer = "container:Pods/SwiftyJSON/SwiftyJSON.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E0027C23D00000000"
+               BuildableName = "libThen.a"
+               BlueprintName = "Then"
+               ReferencedContainer = "container:Pods/Then/Then.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E0000090400000000"
+               BuildableName = "libHL.a"
+               BlueprintName = "HL"
+               ReferencedContainer = "container:submodules/HL/HL.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
