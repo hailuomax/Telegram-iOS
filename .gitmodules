@@ -2,3 +2,6 @@
 [submodule "submodules/rlottie/rlottie"]
 	path = submodules/rlottie/rlottie
 url=https://github.com/TelegramMessenger/rlottie.git
+[submodule "submodules/HL"]
+	path = submodules/HL
+	url = https://hailuomax@github.com/hailuomax/HL
