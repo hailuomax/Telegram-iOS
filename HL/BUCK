@@ -21,5 +21,14 @@ static_library(
         "//Pods/SnapKit:SnapKit",
         "//Pods/SwiftyJSON:SwiftyJSON",
         "//Pods/Then:Then",
+        "//HL:Icons",
     ],
+)
+
+apple_asset_catalog(
+  name = "Icons",
+  dirs = [
+    "Sources/HL.xcassets",
+  ],
+  visibility = ["PUBLIC"],
 )
