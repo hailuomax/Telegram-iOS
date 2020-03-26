@@ -518,7 +518,7 @@ final class UniversalVideoGalleryItemNode: ZoomableContentGalleryItemNode {
                 } else {
                     let throttledSignal = videoNode.status
                     |> mapToThrottled { next -> Signal<MediaPlayerStatus?, NoError> in
-                        return .single(next) |> then(.complete() |> delay(2.0, queue: Queue.concurrentDefaultQueue()))
+                        return .single(next) |> SwiftSignalKit.then(.complete() |> delay(2.0, queue: Queue.concurrentDefaultQueue()))
                     }
                     
                     self.mediaPlaybackStateDisposable.set(throttledSignal.start(next: { status in

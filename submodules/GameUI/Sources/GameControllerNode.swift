@@ -138,11 +138,11 @@ final class GameControllerNode: ViewControllerTracingNode {
                         if let strongSelf = self {
                             let signals = peerIds.map { forwardGameWithScore(account: account, messageId: strongSelf.message.id, to: $0) }
                             return .single(.preparing)
-                            |> then(
+                                |> SwiftSignalKit.then(
                                 combineLatest(signals)
                                 |> mapToSignal { _ -> Signal<ShareControllerExternalStatus, NoError> in return .complete() }
                             )
-                            |> then(.single(.done))
+                                |> SwiftSignalKit.then(.single(.done))
                         } else {
                             return .single(.done)
                         }

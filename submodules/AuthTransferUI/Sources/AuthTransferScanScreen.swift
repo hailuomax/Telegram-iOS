@@ -342,7 +342,7 @@ private final class AuthTransferScanScreenNode: ViewControllerTracingNode, UIScr
         
         let throttledSignal = self.camera.detectedCodes
         |> mapToThrottled { next -> Signal<[CameraCode], NoError> in
-            return .single(next) |> then(.complete() |> delay(0.3, queue: Queue.concurrentDefaultQueue()))
+            return .single(next) |> SwiftSignalKit.then(.complete() |> delay(0.3, queue: Queue.concurrentDefaultQueue()))
         }
         
         self.codeDisposable.set((throttledSignal

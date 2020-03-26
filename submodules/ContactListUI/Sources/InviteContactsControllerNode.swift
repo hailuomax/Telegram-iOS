@@ -404,7 +404,7 @@ final class InviteContactsControllerNode: ASDisplayNode {
         }
         
         let processingQueue = Queue()
-        transition = (combineLatest(.single(nil) |> then(sortedContacts), selectionStateSignal, presentationDataPromise.get(), .single(true) |> delay(0.2, queue: Queue.mainQueue()))
+        transition = (combineLatest(.single(nil) |> SwiftSignalKit.then(sortedContacts), selectionStateSignal, presentationDataPromise.get(), .single(true) |> delay(0.2, queue: Queue.mainQueue()))
         |> mapToQueue { sortedContacts, selectionState, presentationData, ready -> Signal<InviteContactsTransition, NoError> in
             guard sortedContacts != nil || ready else {
                 return .never()

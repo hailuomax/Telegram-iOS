@@ -202,7 +202,7 @@ framework(
         "//submodules/SemanticStatusNode:SemanticStatusNode",
         "//submodules/AccountUtils:AccountUtils",
         "//submodules/Svg:Svg",
-	"//submodules/HL:HL"
+        "//submodules/HL:HL",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

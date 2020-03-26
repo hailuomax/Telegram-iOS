@@ -611,7 +611,7 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                 switch mode {
                     case .inviteActions, .banAndPromoteActions:
                         foundContacts = context.account.postbox.searchContacts(query: query.lowercased())
-                        foundRemotePeers = .single(([], [])) |> then(searchPeers(account: context.account, query: query)
+                        foundRemotePeers = .single(([], [])) |> SwiftSignalKit.then(searchPeers(account: context.account, query: query)
                         |> delay(0.2, queue: Queue.concurrentDefaultQueue()))
                     case .searchMembers, .searchBanned, .searchKicked, .searchAdmins:
                         foundContacts = .single(([], [:]))
@@ -900,7 +900,7 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                 }
                 
                 if mode == .banAndPromoteActions || mode == .inviteActions {
-                    foundRemotePeers = .single(([], [])) |> then(searchPeers(account: context.account, query: query)
+                    foundRemotePeers = .single(([], [])) |> SwiftSignalKit.then(searchPeers(account: context.account, query: query)
                         |> delay(0.2, queue: Queue.concurrentDefaultQueue()))
                 } else {
                     foundRemotePeers = .single(([], []))

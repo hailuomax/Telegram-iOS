@@ -347,11 +347,11 @@ public final class WebSearchController: ViewController {
         let scopes: [WebSearchScope: Promise<((ChatPresentationInputQueryResult?) -> ChatPresentationInputQueryResult?, Bool)>] = [.images: Promise(initializeOnFirstAccess: self.signalForQuery(query, scope: .images)
         |> mapToSignal { result -> Signal<((ChatPresentationInputQueryResult?) -> ChatPresentationInputQueryResult?, Bool), NoError> in
             return .single((result, false))
-            |> then(.single((result, true)))
+            |> SwiftSignalKit.then(.single((result, true)))
         }), .gifs: Promise(initializeOnFirstAccess: self.signalForQuery(query, scope: .gifs)
         |> mapToSignal { result -> Signal<((ChatPresentationInputQueryResult?) -> ChatPresentationInputQueryResult?, Bool), NoError> in
             return .single((result, false))
-            |> then(.single((result, true)))
+            |> SwiftSignalKit.then(.single((result, true)))
         })]
         
         var results = scope
@@ -447,12 +447,12 @@ public final class WebSearchController: ViewController {
                     maybeDelayedContextResults = results
                 }
                 
-                return botResult |> then(maybeDelayedContextResults)
+                return botResult |> SwiftSignalKit.then(maybeDelayedContextResults)
             } else {
                 return .single({ _ in return nil })
             }
         }
-        return (signal |> then(contextBot))
+        return (signal |> SwiftSignalKit.then(contextBot))
         |> deliverOnMainQueue
         |> beforeStarted { [weak self] in
             if let strongSelf = self {

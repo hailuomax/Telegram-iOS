@@ -200,7 +200,7 @@ public final class ContactsSearchContainerNode: SearchDisplayControllerContentNo
                 let foundRemoteContacts: Signal<([FoundPeer], [FoundPeer])?, NoError>
                 if categories.contains(.global) {
                     foundRemoteContacts = .single(previousFoundRemoteContacts.with({ $0 }))
-                    |> then(
+                        |> SwiftSignalKit.then(
                         searchPeers(account: context.account, query: query)
                         |> map { ($0.0, $0.1) }
                         |> delay(0.2, queue: Queue.concurrentDefaultQueue())

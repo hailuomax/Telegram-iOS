@@ -362,7 +362,7 @@ final class LocationPickerControllerNode: ViewControllerTracingNode {
         }
         
         let personalVenues: Signal<[TelegramMediaMap]?, NoError> = .single(nil)
-        |> then(
+        |> SwiftSignalKit.then(
             personalAddresses
             |> mapToSignal { homeAndWorkAddresses -> Signal<[TelegramMediaMap]?, NoError> in
                 if let (homeAddress, workAddress) = homeAndWorkAddresses {
@@ -396,7 +396,7 @@ final class LocationPickerControllerNode: ViewControllerTracingNode {
         )
         
         let venues: Signal<[TelegramMediaMap]?, NoError> = .single(nil)
-        |> then(
+        |> SwiftSignalKit.then(
             throttledUserLocation(userLocation)
             |> mapToSignal { location -> Signal<[TelegramMediaMap]?, NoError> in
                 if let location = location, location.horizontalAccuracy > 0 {
@@ -421,13 +421,13 @@ final class LocationPickerControllerNode: ViewControllerTracingNode {
         )
         
         let foundVenues: Signal<([TelegramMediaMap], CLLocation)?, NoError> = .single(nil)
-        |> then(
+        |> SwiftSignalKit.then(
             self.searchVenuesPromise.get()
             |> distinctUntilChanged
             |> mapToSignal { coordinate -> Signal<([TelegramMediaMap], CLLocation)?, NoError> in
                 if let coordinate = coordinate {
                     return (.single(nil)
-                    |> then(
+                    |> SwiftSignalKit.then(
                         nearbyVenues(account: context.account, latitude: coordinate.latitude, longitude: coordinate.longitude)
                         |> map { venues -> ([TelegramMediaMap], CLLocation)? in
                             return (venues, CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude))

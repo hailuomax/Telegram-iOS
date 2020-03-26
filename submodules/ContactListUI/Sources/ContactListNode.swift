@@ -746,7 +746,7 @@ public final class ContactListNode: ASDisplayNode {
                 self.enableUpdatesValue = value
                 if value {
                     self.contactPeersViewPromise.set(self.context.account.postbox.contactPeersView(accountPeerId: self.context.account.peerId, includePresences: true) |> mapToThrottled { next -> Signal<ContactPeersView, NoError> in
-                        return .single(next) |> then(.complete() |> delay(5.0, queue: Queue.concurrentDefaultQueue()))
+                        return .single(next) |> SwiftSignalKit.then(.complete() |> delay(5.0, queue: Queue.concurrentDefaultQueue()))
                     })
                 } else {
                     self.contactPeersViewPromise.set(self.context.account.postbox.contactPeersView(accountPeerId: self.context.account.peerId, includePresences: true) |> take(1))
@@ -792,11 +792,11 @@ public final class ContactListNode: ASDisplayNode {
         
         let contactsAuthorization = Promise<AccessType>()
         contactsAuthorization.set(.single(.allowed)
-        |> then(DeviceAccess.authorizationStatus(subject: .contacts)))
+            |> SwiftSignalKit.then(DeviceAccess.authorizationStatus(subject: .contacts)))
         
         let contactsWarningSuppressed = Promise<(Bool, Bool)>()
         contactsWarningSuppressed.set(.single((false, false))
-        |> then(
+            |> SwiftSignalKit.then(
             combineLatest(context.sharedContext.accountManager.noticeEntry(key: ApplicationSpecificNotice.permissionWarningKey(permission: .contacts)!), context.account.postbox.preferencesView(keys: [PreferencesKeys.contactsSettings]))
             |> map { noticeView, preferences -> (Bool, Bool) in
                 let settings: ContactsSettings = preferences.values[PreferencesKeys.contactsSettings] as? ContactsSettings ?? ContactsSettings.defaultSettings
@@ -966,7 +966,7 @@ public final class ContactListNode: ASDisplayNode {
                         }
                     }
                     let foundRemoteContacts: Signal<([FoundPeer], [FoundPeer]), NoError> = .single(([], []))
-                    |> then(
+                        |> SwiftSignalKit.then(
                         searchPeers(account: context.account, query: query)
                         |> map { ($0.0, $0.1) }
                         |> delay(0.2, queue: Queue.concurrentDefaultQueue())

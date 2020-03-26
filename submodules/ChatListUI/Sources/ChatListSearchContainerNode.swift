@@ -754,7 +754,7 @@ public final class ChatListSearchContainerNode: SearchDisplayControllerContentNo
             let currentRemotePeersValue = currentRemotePeers.with { $0 } ?? ([], [])
             foundRemotePeers = (
                 .single((currentRemotePeersValue.0, currentRemotePeersValue.1, true))
-                |> then(
+                |> SwiftSignalKit.then(
                     searchPeers(account: context.account, query: query)
                     |> map { ($0.0, $0.1, false) }
                     |> delay(0.2, queue: Queue.concurrentDefaultQueue())
@@ -803,7 +803,7 @@ public final class ChatListSearchContainerNode: SearchDisplayControllerContentNo
                 }
                 
                 foundRemoteMessages = .single((([], [:], 0), true))
-                |> then(
+                |> SwiftSignalKit.then(
                     searchSignal
                     |> map { foundMessages -> (([Message], [PeerId: CombinedPeerReadState], Int32), Bool) in
                         updateSearchContext { _ in
@@ -812,12 +812,12 @@ public final class ChatListSearchContainerNode: SearchDisplayControllerContentNo
                         return ((foundMessages.messages, foundMessages.readStates, 0), false)
                     }
                     |> delay(0.2, queue: Queue.concurrentDefaultQueue())
-                    |> then(loadMore)
+                    |> SwiftSignalKit.then(loadMore)
                 )
             }
             
             let resolvedMessage = .single(nil)
-            |> then(context.sharedContext.resolveUrl(account: context.account, url: query)
+            |> SwiftSignalKit.then(context.sharedContext.resolveUrl(account: context.account, url: query)
             |> mapToSignal { resolvedUrl -> Signal<Message?, NoError> in
                 if case let .channelMessage(peerId, messageId) = resolvedUrl {
                     return downloadMessage(postbox: context.account.postbox, network: context.account.network, messageId: messageId)

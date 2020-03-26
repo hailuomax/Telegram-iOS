@@ -153,7 +153,7 @@ final class LocationSearchContainerNode: ASDisplayNode {
         |> mapToSignal { query -> Signal<String?, NoError> in
             if let query = query, !query.isEmpty {
                 return (.complete() |> delay(0.6, queue: Queue.mainQueue()))
-                |> then(.single(query))
+                |> SwiftSignalKit.then(.single(query))
             } else {
                 return .single(query)
             }

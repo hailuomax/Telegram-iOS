@@ -248,7 +248,7 @@ final class ShareSearchContainerNode: ASDisplayNode, ShareContentContainerNode {
                 let accountPeer = context.account.postbox.loadedPeerWithId(context.account.peerId) |> take(1)
                 let foundLocalPeers = context.account.postbox.searchPeers(query: query.lowercased())
                 let foundRemotePeers: Signal<([FoundPeer], [FoundPeer]), NoError> = .single(([], []))
-                |> then(
+                    |> SwiftSignalKit.then(
                     searchPeers(account: context.account, query: query)
                     |> delay(0.2, queue: Queue.concurrentDefaultQueue())
                 )

@@ -456,7 +456,7 @@ final class ThemeGridSearchContentNode: SearchDisplayControllerContentNode {
             }
             
             return .single(([], true))
-            |> then(
+            |> SwiftSignalKit.then(
                 configuration
                 |> mapToSignal { configuration -> Signal<Peer?, NoError> in
                     guard let name = configuration.imageBotUsername else {
@@ -530,7 +530,7 @@ final class ThemeGridSearchContentNode: SearchDisplayControllerContentNode {
                         
                         
                         return (.complete() |> delay(0.1, queue: Queue.concurrentDefaultQueue()))
-                        |> then(
+                        |> SwiftSignalKit.then(
                             requestContextResults(account: context.account, botId: user.id, query: wallpaperQuery, peerId: context.account.peerId, limit: 16)
                             |> map { collection -> ([ThemeGridSearchEntry], Bool)? in
                                 guard let collection = collection else {
@@ -548,7 +548,7 @@ final class ThemeGridSearchContentNode: SearchDisplayControllerContentNode {
                                 return (entries, false)
                             }
                             |> delay(0.2, queue: Queue.concurrentDefaultQueue())
-                            |> then(loadMore)
+                            |> SwiftSignalKit.then(loadMore)
                         )
                     } else {
                         return .single(nil)

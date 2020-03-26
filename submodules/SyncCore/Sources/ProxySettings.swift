@@ -1,4 +1,5 @@
 import Postbox
+import HL
 
 public enum ProxyServerConnection: Equatable, Hashable, PostboxCoding {
     case socks5(username: String?, password: String?)
@@ -72,16 +73,23 @@ public struct ProxyServerSettings: PostboxCoding, Equatable, Hashable {
 }
 
 public struct ProxySettings: PreferencesEntry, Equatable {
+    
+    ///内置翻墙使用开关（默认为开）
+    public var defaultEnabled: Bool
     public var enabled: Bool
     public var servers: [ProxyServerSettings]
     public var activeServer: ProxyServerSettings?
     public var useForCalls: Bool
     
     public static var defaultSettings: ProxySettings {
-        return ProxySettings(enabled: false, servers: [], activeServer: nil, useForCalls: false)
+        
+        let enabled = (APPConfig.environment != .appStore)
+        
+        return ProxySettings(defaultEnabled: enabled, enabled: false, servers: [], activeServer: nil, useForCalls: false)
     }
     
-    public init(enabled: Bool, servers: [ProxyServerSettings], activeServer: ProxyServerSettings?, useForCalls: Bool) {
+    public init(defaultEnabled: Bool, enabled: Bool, servers: [ProxyServerSettings], activeServer: ProxyServerSettings?, useForCalls: Bool) {
+        self.defaultEnabled = defaultEnabled
         self.enabled = enabled
         self.servers = servers
         self.activeServer = activeServer
@@ -89,6 +97,7 @@ public struct ProxySettings: PreferencesEntry, Equatable {
     }
     
     public init(decoder: PostboxDecoder) {
+        self.defaultEnabled = decoder.decodeBoolForKey("defaultEnabled", orElse: true)
         if let _ = decoder.decodeOptionalStringForKey("host") {
             let legacyServer = ProxyServerSettings(decoder: decoder)
             if !legacyServer.host.isEmpty && legacyServer.port != 0 {
@@ -107,6 +116,7 @@ public struct ProxySettings: PreferencesEntry, Equatable {
     }
     
     public func encode(_ encoder: PostboxEncoder) {
+        encoder.encodeBool(self.defaultEnabled, forKey: "defaultEnabled")
         encoder.encodeInt32(self.enabled ? 1 : 0, forKey: "enabled")
         encoder.encodeObjectArray(self.servers, forKey: "servers")
         if let activeServer = self.activeServer {
@@ -126,7 +136,7 @@ public struct ProxySettings: PreferencesEntry, Equatable {
     }
     
     public var effectiveActiveServer: ProxyServerSettings? {
-        if self.enabled, let activeServer = self.activeServer {
+        if (self.defaultEnabled || self.enabled), let activeServer = self.activeServer {
             return activeServer
         } else {
             return nil

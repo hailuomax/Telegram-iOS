@@ -255,7 +255,7 @@ final class ThemeAccentColorController: ViewController {
                     
                     let apply: Signal<Void, CreateThemeError>
                     if create {
-                        apply = (prepareWallpaper |> then(createTheme(account: context.account, title: generateThemeName(accentColor: state.accentColor), resource: nil, thumbnailData: nil, settings: settings)))
+                        apply = (prepareWallpaper |> SwiftSignalKit.then(createTheme(account: context.account, title: generateThemeName(accentColor: state.accentColor), resource: nil, thumbnailData: nil, settings: settings)))
                         |> mapToSignal { next -> Signal<Void, CreateThemeError> in
                             if case let .result(resultTheme) = next {
                                 let _ = applyTheme(accountManager: context.sharedContext.accountManager, account: context.account, theme: resultTheme).start()
@@ -284,7 +284,7 @@ final class ThemeAccentColorController: ViewController {
                             }
                         }
                     } else if let theme = telegramTheme {
-                        apply = (prepareWallpaper |> then(updateTheme(account: context.account, accountManager: context.sharedContext.accountManager, theme: theme, title: theme.title, slug: theme.slug, resource: nil, settings: settings)))
+                        apply = (prepareWallpaper |> SwiftSignalKit.then(updateTheme(account: context.account, accountManager: context.sharedContext.accountManager, theme: theme, title: theme.title, slug: theme.slug, resource: nil, settings: settings)))
                         |> mapToSignal { next -> Signal<Void, CreateThemeError> in
                             if case let .result(resultTheme) = next {
                                 let _ = applyTheme(accountManager: context.sharedContext.accountManager, account: context.account, theme: resultTheme).start()

@@ -427,7 +427,7 @@ final class ThemeAccentColorControllerNode: ASDisplayNode, UIScrollViewDelegate 
         self.stateDisposable = (self.statePromise.get()
         |> deliverOn(self.queue)
         |> mapToThrottled { next -> Signal<ThemeColorState, NoError> in
-            return .single(next) |> then(.complete() |> delay(0.0166667, queue: self.queue))
+            return .single(next) |> SwiftSignalKit.then(.complete() |> delay(0.0166667, queue: self.queue))
         }
         |> map { [weak self] state -> (PresentationTheme?, (TelegramWallpaper, UIImage?, Signal<(TransformImageArguments) -> DrawingContext?, NoError>?, (() -> Void)?), UIColor, (UIColor, UIColor?)?, PatternWallpaperArguments, Bool) in
             let accentColor = state.accentColor
@@ -589,7 +589,7 @@ final class ThemeAccentColorControllerNode: ASDisplayNode, UIScrollViewDelegate 
             return chatServiceBackgroundColor(wallpaper: wallpaper, mediaBox: context.account.postbox.mediaBox)
         })
         |> take(1)
-        |> then(self.serviceBackgroundColorPromise.get()))
+        |> SwiftSignalKit.then(self.serviceBackgroundColorPromise.get()))
         |> deliverOnMainQueue).start(next: { [weak self] color in
             if let strongSelf = self {
                 strongSelf.patternPanelNode.serviceBackgroundColor = color

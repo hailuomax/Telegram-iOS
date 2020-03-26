@@ -197,7 +197,7 @@ public class AvatarGalleryController: ViewController, StandalonePresentableContr
             remoteEntriesSignal = fetchedAvatarGalleryEntries(account: context.account, peer: peer)
         }
         
-        let entriesSignal: Signal<[AvatarGalleryEntry], NoError> = .single(initialAvatarGalleryEntries(peer: peer)) |> then(remoteEntriesSignal)
+        let entriesSignal: Signal<[AvatarGalleryEntry], NoError> = .single(initialAvatarGalleryEntries(peer: peer)) |> SwiftSignalKit.then(remoteEntriesSignal)
         
         let presentationData = self.presentationData
         

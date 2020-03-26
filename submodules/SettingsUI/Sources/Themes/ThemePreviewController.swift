@@ -71,7 +71,7 @@ public final class ThemePreviewController: ViewController {
             case let .theme(theme):
                 themeName = theme.title
                 self.theme.set(.single(theme)
-                |> then(
+                |> SwiftSignalKit.then(
                     getTheme(account: context.account, slug: theme.slug)
                     |> map(Optional.init)
                     |> `catch` { _ -> Signal<TelegramTheme?, NoError> in
@@ -89,7 +89,7 @@ public final class ThemePreviewController: ViewController {
                 themeName = previewTheme.name.string
                 
                 self.presentationTheme.set(.single(self.previewTheme)
-                |> then(
+                |> SwiftSignalKit.then(
                     self.theme.get()
                     |> mapToSignal { theme in
                         if let file = theme?.file {

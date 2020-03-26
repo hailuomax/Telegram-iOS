@@ -214,7 +214,7 @@ final class LocationViewControllerNode: ViewControllerTracingNode {
         self.addSubnode(self.optionsNode)
         
         let distance: Signal<Double?, NoError> = .single(nil)
-        |> then(
+        |> SwiftSignalKit.then(
             throttledUserLocation(self.headerNode.mapNode.userLocation)
             |> map { userLocation -> Double? in
                 let location = CLLocation(latitude: mapMedia.latitude, longitude: mapMedia.longitude)
@@ -223,14 +223,14 @@ final class LocationViewControllerNode: ViewControllerTracingNode {
         )
         let address: Signal<String?, NoError>
         var eta: Signal<Double?, NoError> = .single(nil)
-        |> then(
+        |> SwiftSignalKit.then(
             driveEta(coordinate: mapMedia.coordinate)
         )
         if let venue = mapMedia.venue, let venueAddress = venue.address, !venueAddress.isEmpty {
             address = .single(venueAddress)
         } else if mapMedia.liveBroadcastingTimeout == nil {
             address = .single(nil)
-            |> then(
+            |> SwiftSignalKit.then(
                 reverseGeocodeLocation(latitude: mapMedia.latitude, longitude: mapMedia.longitude)
                 |> map { placemark -> String? in
                     return placemark?.compactDisplayAddress ?? ""

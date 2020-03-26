@@ -6,8 +6,9 @@ framework(
         "Sources/**/*.swift",
     ]),
     deps = [
-    	"//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit#shared",
-    	"//submodules/Postbox:Postbox#shared",
+        "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit#shared",
+        "//submodules/Postbox:Postbox#shared",
+        "//submodules/HL:HL",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",
