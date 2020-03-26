@@ -24,7 +24,7 @@ framework(
         "//submodules/SyncCore:SyncCore#shared",
         "//submodules/CloudData:CloudData",
         "//submodules/EncryptionProvider:EncryptionProvider",
-        "//submodules/HL:HL",
+        "//submodules/HL/HL:HL",
         "//submodules/MtProtoKit:MtProtoKit#shared",
     ],
     frameworks = [

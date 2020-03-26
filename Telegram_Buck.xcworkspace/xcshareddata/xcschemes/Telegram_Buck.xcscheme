@@ -364,10 +364,24 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04EA3ACF77800000000"
+               BuildableName = "libLanguage.a"
+               BlueprintName = "Language"
+               ReferencedContainer = "container:submodules/HL/Language/Language.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "E66DC04E0000090400000000"
                BuildableName = "libHL.a"
                BlueprintName = "HL"
-               ReferencedContainer = "container:submodules/HL/HL.xcodeproj">
+               ReferencedContainer = "container:submodules/HL/HL/HL.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry

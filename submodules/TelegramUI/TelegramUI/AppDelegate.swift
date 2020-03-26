@@ -233,6 +233,7 @@ final class SharedApplicationContext {
     
     private let deviceToken = Promise<Data?>(nil)
     
+    //MARK:  启动app的代理
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         precondition(!testIsLaunched)
         testIsLaunched = true
@@ -667,6 +668,10 @@ final class SharedApplicationContext {
         
         let accountManagerSignal = Signal<AccountManager, NoError> { subscriber in
             let accountManager = AccountManager(basePath: rootPath + "/accounts-metadata")
+            
+            //单例保存 accountManager
+            ProxyManager.shared.accountManager = accountManager
+            
             return (upgradedAccounts(accountManager: accountManager, rootPath: rootPath, encryptionParameters: encryptionParameters)
             |> deliverOnMainQueue).start(next: { progress in
                 if self.dataImportSplash == nil {
@@ -1018,6 +1023,23 @@ final class SharedApplicationContext {
                     let tonContext = StoredTonContext(basePath: account.basePath, postbox: account.postbox, network: account.network, keychain: tonKeychain)
                     #endif
                     let context = AccountContextImpl(sharedContext: sharedApplicationContext.sharedContext, account: account/*, tonContext: tonContext*/, limitsConfiguration: limitsConfiguration, contentSettings: contentSettings)
+                    
+                    ProxyManager.shared.setNetWork(context.account.network).start()
+                    //静默关注机器人
+                    //Botmanager.shared.requestBot(context: context)
+                    //                    Botmanager.shared.checkSendBot(context: context,botNameArr: ["cailuw_notice_bot"])
+                    _ = (context.account.postbox.transaction { transaction -> Peer? in
+                        if let peer = transaction.getPeer(context.account.peerId) {
+                            if let user = peer as? TelegramUser {
+                                
+                                HLAccountManager.setShareTgUser(user)
+                            }
+                            return peer
+                        }
+                        return nil
+                        }
+                        |> deliverOnMainQueue).start()
+                    
                     return AuthorizedApplicationContext(sharedApplicationContext: sharedApplicationContext, mainWindow: self.mainWindow, watchManagerArguments: watchManagerArgumentsPromise.get(), context: context, accountManager: sharedApplicationContext.sharedContext.accountManager, showCallsTab: callListSettings.showTab, reinitializedNotificationSettings: {
                         let _ = (self.context.get()
                         |> take(1)
@@ -1109,6 +1131,10 @@ final class SharedApplicationContext {
             var network: Network?
             if let context = context {
                 network = context.context.account.network
+                
+                if let network = network {
+                    ProxyManager.shared.setNetWork(network).start()
+                }
             }
             
             Logger.shared.log("App \(self.episodeId)", "received context \(String(describing: context)) account \(String(describing: context?.context.account.id)) network \(String(describing: network))")
@@ -1186,6 +1212,10 @@ final class SharedApplicationContext {
             var network: Network?
             if let context = context {
                 network = context.account.network
+                
+                if let network = network {
+                    ProxyManager.shared.setNetWork(network).start()
+                }
             }
             
             Logger.shared.log("App \(self.episodeId)", "received auth context \(String(describing: context)) account \(String(describing: context?.account.id)) network \(String(describing: network))")
@@ -1465,8 +1495,14 @@ final class SharedApplicationContext {
         self.maybeCheckForUpdates()
     }
     
+    //MARK: - app将要终止时
     func applicationWillTerminate(_ application: UIApplication) {
         Logger.shared.log("App \(self.episodeId)", "terminating")
+        
+        //判断是否需要清空代理列表
+        if UserDefaults.standard.bool(forKey: kLocalProxyListShouldClearKey){
+            ProxyManager.clearLocalProxyList()
+        }
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {

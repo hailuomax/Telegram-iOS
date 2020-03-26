@@ -221,6 +221,19 @@
 			<key>explicitFileType</key>
 			<string>archive.ar</string>
 		</dict>
+		<key>1DD70E2932FCFFB000000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>libLanguage.a</string>
+			<key>path</key>
+			<string>libLanguage.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+		</dict>
 		<key>1DD70E29F216B68200000000</key>
 		<dict>
 			<key>isa</key>
@@ -372,6 +385,7 @@
 				<string>1DD70E2909D4B5FC00000000</string>
 				<string>1DD70E299B10B03B00000000</string>
 				<string>1DD70E29ACEDB17400000000</string>
+				<string>1DD70E2932FCFFB000000000</string>
 				<string>1DD70E29F216B68200000000</string>
 				<string>1DD70E29DB6520C800000000</string>
 				<string>1DD70E29AC7B6E1300000000</string>
@@ -3459,6 +3473,13 @@
 			<key>fileRef</key>
 			<string>1DD70E29FD9D17B500000000</string>
 		</dict>
+		<key>E7A30F0432FCFFB000000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>fileRef</key>
+			<string>1DD70E2932FCFFB000000000</string>
+		</dict>
 		<key>E7A30F0409D4B5FC00000000</key>
 		<dict>
 			<key>isa</key>
@@ -3504,6 +3525,7 @@
 				<string>E7A30F046415E13600000000</string>
 				<string>E7A30F046AD4004600000000</string>
 				<string>E7A30F04FD9D17B500000000</string>
+				<string>E7A30F0432FCFFB000000000</string>
 				<string>E7A30F0409D4B5FC00000000</string>
 				<string>E7A30F04DB6520C800000000</string>
 				<string>E7A30F04D65BA68200000000</string>
