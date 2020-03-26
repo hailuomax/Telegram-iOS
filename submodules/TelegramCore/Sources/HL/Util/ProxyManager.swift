@@ -15,21 +15,21 @@ public let kLocalProxyListShouldClearKey = "kLocalProxyListShouldClearKey"
 
 
 /// 内置代理的工具
-class ProxyManager: NSObject {
+public class ProxyManager: NSObject {
     
-    var list: [ProxyServerSettings] = []
-    var accountManager: AccountManager!
-    var network: Network? = nil
+    public var list: [ProxyServerSettings] = []
+    public var accountManager: AccountManager!
+    public var network: Network? = nil
     private let statusDisposable = MetaDisposable()
-    var hadLoad: Bool = false
+    public var hadLoad: Bool = false
     
-    static let shared = ProxyManager()
+    public static let shared = ProxyManager()
     
     
     /// 设置网络
     /// - Parameter network: 网络
     @discardableResult
-    func setNetWork(_ network: Network) -> Self {
+    public func setNetWork(_ network: Network) -> Self {
         self.network = network
         return self
     }
@@ -49,7 +49,7 @@ class ProxyManager: NSObject {
         })
     }()
     
-    func start() {
+    public func start() {
 //        guard APPConfig.environment != .appStore else {return}
         _ = onceCode
     }
