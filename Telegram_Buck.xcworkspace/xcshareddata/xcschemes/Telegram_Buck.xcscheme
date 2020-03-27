@@ -2114,6 +2114,34 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E1D0C220D00000000"
+               BuildableName = "libAccount.a"
+               BlueprintName = "Account"
+               ReferencedContainer = "container:submodules/HL/Account/Account.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E049CDA4E00000000"
+               BuildableName = "libProxy.a"
+               BlueprintName = "Proxy"
+               ReferencedContainer = "container:submodules/HL/Proxy/Proxy.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "E66DC04E0795F20800000000"
                BuildableName = "libHashtagSearchUI.a"
                BlueprintName = "HashtagSearchUI"

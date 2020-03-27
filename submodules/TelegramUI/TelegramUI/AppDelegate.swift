@@ -45,6 +45,8 @@ import BackgroundTasks
 #endif
 
 import HL
+import Proxy
+import Account
 
 private let handleVoipNotifications = false
 
