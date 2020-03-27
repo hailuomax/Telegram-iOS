@@ -86,6 +86,9 @@ static_library(
         "//submodules/OpenInExternalAppUI:OpenInExternalAppUI",
         "//submodules/AccountUtils:AccountUtils",
         "//submodules/AuthTransferUI:AuthTransferUI",
+        
+        "//submodules/HL/Language:Language",
+        "//submodules/HL/Proxy:Proxy",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

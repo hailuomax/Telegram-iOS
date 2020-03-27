@@ -11,6 +11,8 @@ import ItemListUI
 import PresentationDataUtils
 import ActivityIndicator
 
+import Language
+
 private let activitySize = CGSize(width: 24.0, height: 24.0)
 
 struct ProxySettingsServerItemEditing: Equatable {
@@ -20,6 +22,8 @@ struct ProxySettingsServerItemEditing: Equatable {
 }
 
 final class ProxySettingsServerItem: ListViewItem, ItemListItem {
+    let index: Int //当defaultEnable为true时，显示线路1，2，3，4.。
+    let defaultEnable: Bool
     let theme: PresentationTheme
     let strings: PresentationStrings
     let server: ProxyServerSettings
@@ -35,7 +39,9 @@ final class ProxySettingsServerItem: ListViewItem, ItemListItem {
     let setServerWithRevealedOptions: (ProxyServerSettings?, ProxyServerSettings?) -> Void
     let removeServer: (ProxyServerSettings) -> Void
     
-    init(theme: PresentationTheme, strings: PresentationStrings, server: ProxyServerSettings, activity: Bool, active: Bool, color: ItemListCheckboxItemColor, label: String, labelAccent: Bool, editing: ProxySettingsServerItemEditing, sectionId: ItemListSectionId, action: @escaping () -> Void, infoAction: @escaping () -> Void, setServerWithRevealedOptions: @escaping (ProxyServerSettings?, ProxyServerSettings?) -> Void, removeServer: @escaping (ProxyServerSettings) -> Void) {
+    init(index: Int, theme: PresentationTheme, strings: PresentationStrings, server: ProxyServerSettings, activity: Bool, active: Bool, color: ItemListCheckboxItemColor, defaultEnable : Bool, label: String, labelAccent: Bool, editing: ProxySettingsServerItemEditing, sectionId: ItemListSectionId, action: @escaping () -> Void, infoAction: @escaping () -> Void, setServerWithRevealedOptions: @escaping (ProxyServerSettings?, ProxyServerSettings?) -> Void, removeServer: @escaping (ProxyServerSettings) -> Void) {
+        self.index = index
+        self.defaultEnable = defaultEnable
         self.theme = theme
         self.strings = strings
         self.server = server
@@ -59,6 +65,8 @@ final class ProxySettingsServerItem: ListViewItem, ItemListItem {
             
             node.contentSize = layout.contentSize
             node.insets = layout.insets
+            node.infoIconNode.isHidden = self.defaultEnable
+            node.infoButtonNode.isHidden = self.defaultEnable
             
             Queue.mainQueue().async {
                 completion(node, {
@@ -109,8 +117,8 @@ private final class ProxySettingsServerItemNode: ItemListRevealOptionsItemNode {
     private let maskNode: ASImageNode
     
     private let titleNode: TextNode
-    private let infoIconNode: ASImageNode
-    private let infoButtonNode: HighlightableButtonNode
+    let infoIconNode: ASImageNode
+    let infoButtonNode: HighlightableButtonNode
     private let statusNode: TextNode
     private let checkNode: ASImageNode
     private let activityNode: ActivityIndicator
@@ -236,8 +244,12 @@ private final class ProxySettingsServerItemNode: ItemListRevealOptionsItemNode {
             }
             
             let titleAttributedString = NSMutableAttributedString()
-            titleAttributedString.append(NSAttributedString(string: item.server.host, font: titleFont, textColor: item.theme.list.itemPrimaryTextColor))
-            titleAttributedString.append(NSAttributedString(string: ":\(item.server.port)", font: titleFont, textColor: item.theme.list.itemSecondaryTextColor))
+            if item.defaultEnable{
+                titleAttributedString.append(NSAttributedString(string: HL.Language.Proxy.Channel.setIndex(item.index + 1).localized(), font: titleFont, textColor: item.theme.list.itemPrimaryTextColor))
+            }else{
+                titleAttributedString.append(NSAttributedString(string: item.server.host, font: titleFont, textColor: item.theme.list.itemPrimaryTextColor))
+                titleAttributedString.append(NSAttributedString(string: ":\(item.server.port)", font: titleFont, textColor: item.theme.list.itemSecondaryTextColor))
+            }
             let statusAttributedString = NSAttributedString(string: item.label, font: statusFont, textColor: item.labelAccent ? item.theme.list.itemAccentColor : item.theme.list.itemSecondaryTextColor)
             
             var editableControlSizeAndApply: (CGFloat, (CGFloat) -> ItemListEditableControlNode)?
