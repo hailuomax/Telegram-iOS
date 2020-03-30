@@ -1,5 +1,5 @@
 import Postbox
-import HL
+import Config
 
 public enum ProxyServerConnection: Equatable, Hashable, PostboxCoding {
     case socks5(username: String?, password: String?)
