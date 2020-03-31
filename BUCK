@@ -103,8 +103,8 @@ apple_resource(
 apple_asset_catalog(
   name = "Icons",
   dirs = [
-    "Telegram-iOS/Icons.xcassets",
-    "Telegram-iOS/AppIcons.xcassets",
+    "Telegram/Telegram-iOS/Icons.xcassets",
+    "Telegram/Telegram-iOS/AppIcons.xcassets",
   ],
   app_icon = "AppIconLLC",
   visibility = ["PUBLIC"],
