@@ -204,6 +204,8 @@ framework(
         "//submodules/Svg:Svg",
         "//submodules/StatisticsUI:StatisticsUI",
         "//submodules/ManagedAnimationNode:ManagedAnimationNode",
+
+	"//HL:HL"
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",
