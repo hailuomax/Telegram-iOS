@@ -434,10 +434,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E1D0C220D00000000"
-               BuildableName = "libAccount.a"
-               BlueprintName = "Account"
-               ReferencedContainer = "container:submodules/HL/Account/Account.xcodeproj">
+               BlueprintIdentifier = "E66DC04E03DDBF6200000000"
+               BuildableName = "libCache.a"
+               BlueprintName = "Cache"
+               ReferencedContainer = "container:Pods/Cache/Cache.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -448,10 +448,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E52EF3C1F00000000"
-               BuildableName = "libExtension.a"
-               BlueprintName = "Extension"
-               ReferencedContainer = "container:submodules/HL/Extension/Extension.xcodeproj">
+               BlueprintIdentifier = "E66DC04E91B2B43D00000000"
+               BuildableName = "libResult.a"
+               BlueprintName = "Result"
+               ReferencedContainer = "container:Pods/Result/Result.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -462,10 +462,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E000101FA00000000"
-               BuildableName = "libApi.a"
-               BlueprintName = "Api"
-               ReferencedContainer = "container:submodules/HL/Api/Api.xcodeproj">
+               BlueprintIdentifier = "E66DC04ED119F20E00000000"
+               BuildableName = "libNetwork.a"
+               BlueprintName = "Network"
+               ReferencedContainer = "container:submodules/HL/Network/Network.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -2160,6 +2160,48 @@
                BuildableName = "libGridMessageSelectionNode.a"
                BlueprintName = "GridMessageSelectionNode"
                ReferencedContainer = "container:submodules/GridMessageSelectionNode/GridMessageSelectionNode.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E1D0C220D00000000"
+               BuildableName = "libAccount.a"
+               BlueprintName = "Account"
+               ReferencedContainer = "container:submodules/HL/Account/Account.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E52EF3C1F00000000"
+               BuildableName = "libExtension.a"
+               BlueprintName = "Extension"
+               ReferencedContainer = "container:submodules/HL/Extension/Extension.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E000101FA00000000"
+               BuildableName = "libApi.a"
+               BlueprintName = "Api"
+               ReferencedContainer = "container:submodules/HL/Api/Api.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry

@@ -18,8 +18,8 @@ target 'Telegram' do
 	pod 'Then', '~> 2.5.0'
 	pod 'PromiseKit', '~> 6.11.0'
  	pod 'CryptoSwift', '~> 1.0.0'
-  
  	pod 'SwiftyJSON', '~> 5.0'
  	pod 'JXPatternLock' #手势解锁
-  
+ 	pod 'Cache'
+    pod 'Result'
 end
