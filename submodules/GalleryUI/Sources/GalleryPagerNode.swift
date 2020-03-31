@@ -5,7 +5,9 @@ import Display
 import SwiftSignalKit
 import Postbox
 
-private let edgeWidth: CGFloat = 44.0
+private func edgeWidth(width: CGFloat) -> CGFloat {
+    return min(44.0, floor(width / 6.0))
+}
 
 private let leftFadeImage = generateImage(CGSize(width: 64.0, height: 1.0), opaque: false, rotatedContext: { size, context in
     let bounds = CGRect(origin: CGPoint(), size: size)
@@ -145,7 +147,31 @@ public final class GalleryPagerNode: ASDisplayNode, UIScrollViewDelegate, UIGest
         let recognizer = TapLongTapOrDoubleTapGestureRecognizer(target: self, action: #selector(self.tapLongTapOrDoubleTapGesture(_:)))
         recognizer.delegate = self
         self.tapRecognizer = recognizer
-        recognizer.tapActionAtPoint = { _ in
+        recognizer.tapActionAtPoint = { [weak self] point in
+            guard let strongSelf = self else {
+                return .fail
+            }
+            
+            let size = strongSelf.bounds
+            
+            var highlightedSide: Bool?
+            if point.x < edgeWidth(width: size.width) && strongSelf.canGoToPreviousItem() {
+                if strongSelf.items.count > 1 {
+                    highlightedSide = false
+                }
+            } else if point.x > size.width - edgeWidth(width: size.width) && strongSelf.canGoToNextItem() {
+                if strongSelf.items.count > 1 {
+                    highlightedSide = true
+                }
+            }
+            
+            if highlightedSide == nil {
+                return .fail
+            }
+            
+            if let result = strongSelf.hitTest(point, with: nil), let node = result.asyncdisplaykit_node as? ASButtonNode {
+                return .fail
+            }
             return .keepWithSingleTap
         }
         recognizer.highlight = { [weak self] point in
@@ -156,11 +182,11 @@ public final class GalleryPagerNode: ASDisplayNode, UIScrollViewDelegate, UIGest
             
             var highlightedSide: Bool?
             if let point = point {
-                if point.x < edgeWidth && strongSelf.canGoToPreviousItem() {
+                if point.x < edgeWidth(width: size.width) && strongSelf.canGoToPreviousItem() {
                     if strongSelf.items.count > 1 {
                         highlightedSide = false
                     }
-                } else if point.x > size.width - edgeWidth && strongSelf.canGoToNextItem() {
+                } else if point.x > size.width - edgeWidth(width: size.width) && strongSelf.canGoToNextItem() {
                     if strongSelf.items.count > 1 {
                         highlightedSide = true
                     }
@@ -209,9 +235,9 @@ public final class GalleryPagerNode: ASDisplayNode, UIScrollViewDelegate, UIGest
             if let (gesture, location) = recognizer.lastRecognizedGestureAndLocation {
                 if case .tap = gesture {
                     let size = self.bounds.size
-                    if location.x < edgeWidth && self.canGoToPreviousItem() {
+                    if location.x < edgeWidth(width: size.width) && self.canGoToPreviousItem() {
                         self.goToPreviousItem()
-                    } else if location.x > size.width - edgeWidth && self.canGoToNextItem() {
+                    } else if location.x > size.width - edgeWidth(width: size.width) && self.canGoToNextItem() {
                         self.goToNextItem()
                     }
                 }
