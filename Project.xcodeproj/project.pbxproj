@@ -57,7 +57,7 @@
 		E7A30F04119CDA0700000001 /* libTelegramCore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29119CDA0700000000 /* libTelegramCore.dylib */; };
 		E7A30F04119CDA0700000002 /* libTelegramCore.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29119CDA0700000000 /* libTelegramCore.dylib */; };
 		E7A30F04119CDA0700000003 /* libTelegramCore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29119CDA0700000000 /* libTelegramCore.dylib */; };
-		E7A30F04119CDA0700000004 /* libTelegramCore.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29119CDA0700000000 /* libTelegramCore.dylib */; };
+		E7A30F04119CDA0700000004 /* libTelegramCore.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29119CDA0700000000 /* libTelegramCore.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F0411B2FA1A00000000 /* simplereaction_14@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E2911B2FA1A00000000 /* simplereaction_14@2x.png */; };
 		E7A30F0411F55EF900000000 /* PhotoEditorCaption@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E2911F55EF900000000 /* PhotoEditorCaption@3x.png */; };
 		E7A30F041292048700000000 /* Instagram.html in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E291292048700000000 /* Instagram.html */; };
@@ -97,7 +97,7 @@
 		E7A30F041E5A1E9C00000003 /* libTelegramUI.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E291E5A1E9C00000000 /* libTelegramUI.dylib */; };
 		E7A30F041E5A1E9C00000004 /* libTelegramUI.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E291E5A1E9C00000000 /* libTelegramUI.dylib */; };
 		E7A30F041E5A1E9C00000005 /* libTelegramUI.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E291E5A1E9C00000000 /* libTelegramUI.dylib */; };
-		E7A30F041E5A1E9C00000006 /* libTelegramUI.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E291E5A1E9C00000000 /* libTelegramUI.dylib */; };
+		E7A30F041E5A1E9C00000006 /* libTelegramUI.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E291E5A1E9C00000000 /* libTelegramUI.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F041F42292500000000 /* TGUserHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E291F42292500000000 /* TGUserHandle.m */; };
 		E7A30F041FC4F2F000000000 /* stp_card_mastercard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E291FC4F2F000000000 /* stp_card_mastercard@2x.png */; };
 		E7A30F0420DAE01900000000 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E2920DAE01900000000 /* Assets.xcassets */; };
@@ -236,7 +236,7 @@
 		E7A30F046A322ABE00000001 /* libBuildConfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E296A322ABE00000000 /* libBuildConfig.a */; };
 		E7A30F046A322ABE00000002 /* libBuildConfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E296A322ABE00000000 /* libBuildConfig.a */; };
 		E7A30F046A98D72D00000000 /* libAsyncDisplayKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E296A98D72D00000000 /* libAsyncDisplayKit.dylib */; };
-		E7A30F046A98D72D00000001 /* libAsyncDisplayKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E296A98D72D00000000 /* libAsyncDisplayKit.dylib */; };
+		E7A30F046A98D72D00000001 /* libAsyncDisplayKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E296A98D72D00000000 /* libAsyncDisplayKit.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F046ABF6A1200000000 /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E296ABF6A1200000000 /* Empty.swift */; };
 		E7A30F046AD832AE00000000 /* ic_cam_lens@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E296AD832AE00000000 /* ic_cam_lens@2x.png */; };
 		E7A30F046B54DEC900000000 /* SSignal+Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E296B54DEC900000000 /* SSignal+Dispatch.m */; };
@@ -283,7 +283,7 @@
 		E7A30F047A51CDA100000001 /* libSyncCore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E297A51CDA100000000 /* libSyncCore.dylib */; };
 		E7A30F047A51CDA100000002 /* libSyncCore.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E297A51CDA100000000 /* libSyncCore.dylib */; };
 		E7A30F047A51CDA100000003 /* libSyncCore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E297A51CDA100000000 /* libSyncCore.dylib */; };
-		E7A30F047A51CDA100000004 /* libSyncCore.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E297A51CDA100000000 /* libSyncCore.dylib */; };
+		E7A30F047A51CDA100000004 /* libSyncCore.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E297A51CDA100000000 /* libSyncCore.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F047ADFB9F200000000 /* libAppLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E297ADFB9F200000000 /* libAppLibrary.a */; };
 		E7A30F047B48FF9800000000 /* simplereaction_15@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E297B48FF9800000000 /* simplereaction_15@3x.png */; };
 		E7A30F047C7F607300000000 /* simplereaction_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E297C7F607300000000 /* simplereaction_2@2x.png */; };
@@ -377,7 +377,7 @@
 		E7A30F04B22505DC00000000 /* libMtProtoKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29B22505DC00000000 /* libMtProtoKit.dylib */; };
 		E7A30F04B22505DC00000001 /* libMtProtoKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29B22505DC00000000 /* libMtProtoKit.dylib */; };
 		E7A30F04B22505DC00000002 /* libMtProtoKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29B22505DC00000000 /* libMtProtoKit.dylib */; };
-		E7A30F04B22505DC00000003 /* libMtProtoKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29B22505DC00000000 /* libMtProtoKit.dylib */; };
+		E7A30F04B22505DC00000003 /* libMtProtoKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29B22505DC00000000 /* libMtProtoKit.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F04B2EC863500000000 /* simplereaction_18@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29B2EC863500000000 /* simplereaction_18@3x.png */; };
 		E7A30F04B308954A00000000 /* WKInterfaceTable+TGDataDrivenTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E29B308954A00000000 /* WKInterfaceTable+TGDataDrivenTable.m */; };
 		E7A30F04B308DE2800000000 /* anim_unpin.json in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29B308DE2800000000 /* anim_unpin.json */; };
@@ -408,7 +408,7 @@
 		E7A30F04BEA6DCF600000001 /* libTelegramApi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29BEA6DCF600000000 /* libTelegramApi.dylib */; };
 		E7A30F04BEA6DCF600000002 /* libTelegramApi.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29BEA6DCF600000000 /* libTelegramApi.dylib */; };
 		E7A30F04BEA6DCF600000003 /* libTelegramApi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29BEA6DCF600000000 /* libTelegramApi.dylib */; };
-		E7A30F04BEA6DCF600000004 /* libTelegramApi.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29BEA6DCF600000000 /* libTelegramApi.dylib */; };
+		E7A30F04BEA6DCF600000004 /* libTelegramApi.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29BEA6DCF600000000 /* libTelegramApi.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F04BF0B6A9200000000 /* TGBotCommandController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E29BF0B6A9200000000 /* TGBotCommandController.m */; };
 		E7A30F04BF5CBB6200000000 /* knot_up1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29BF5CBB6200000000 /* knot_up1@2x.png */; };
 		E7A30F04BF88817800000000 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E29BF88817800000000 /* main.m */; };
@@ -463,7 +463,7 @@
 		E7A30F04D65BA68200000003 /* libSwiftSignalKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29D65BA68200000000 /* libSwiftSignalKit.dylib */; };
 		E7A30F04D65BA68200000004 /* libSwiftSignalKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29D65BA68200000000 /* libSwiftSignalKit.dylib */; };
 		E7A30F04D65BA68200000005 /* libSwiftSignalKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29D65BA68200000000 /* libSwiftSignalKit.dylib */; };
-		E7A30F04D65BA68200000006 /* libSwiftSignalKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29D65BA68200000000 /* libSwiftSignalKit.dylib */; };
+		E7A30F04D65BA68200000006 /* libSwiftSignalKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29D65BA68200000000 /* libSwiftSignalKit.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F04D6FDBAF400000000 /* stp_card_applepay_template@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29D6FDBAF400000000 /* stp_card_applepay_template@3x.png */; };
 		E7A30F04D743E0A500000000 /* BlueClassicNotificationIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29D743E0A500000000 /* BlueClassicNotificationIcon@2x.png */; };
 		E7A30F04D87EC12200000000 /* MediaDocument@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29D87EC12200000000 /* MediaDocument@2x.png */; };
@@ -474,7 +474,7 @@
 		E7A30F04DB6520C800000001 /* libPostbox.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29DB6520C800000000 /* libPostbox.dylib */; };
 		E7A30F04DB6520C800000002 /* libPostbox.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29DB6520C800000000 /* libPostbox.dylib */; };
 		E7A30F04DB6520C800000003 /* libPostbox.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29DB6520C800000000 /* libPostbox.dylib */; };
-		E7A30F04DB6520C800000004 /* libPostbox.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29DB6520C800000000 /* libPostbox.dylib */; };
+		E7A30F04DB6520C800000004 /* libPostbox.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29DB6520C800000000 /* libPostbox.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F04DBA6021D00000000 /* anim_delete.json in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29DBA6021D00000000 /* anim_delete.json */; };
 		E7A30F04DBC44C1C00000000 /* simplereaction_11@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29DBC44C1C00000000 /* simplereaction_11@3x.png */; };
 		E7A30F04DC82BB6100000000 /* anim_success.json in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29DC82BB6100000000 /* anim_success.json */; };
@@ -557,7 +557,7 @@
 		E7A30F04FEE8D8EE00000000 /* Star@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DD70E29FEE8D8EE00000000 /* Star@3x.png */; };
 		E7A30F04FF334B1F00000000 /* libDisplay.dylib in Fake Swift Dependencies (Copy Files Phase) */ = {isa = PBXBuildFile; fileRef = 1DD70E29FF334B1F00000000 /* libDisplay.dylib */; };
 		E7A30F04FF334B1F00000001 /* libDisplay.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DD70E29FF334B1F00000000 /* libDisplay.dylib */; };
-		E7A30F04FF334B1F00000002 /* libDisplay.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29FF334B1F00000000 /* libDisplay.dylib */; };
+		E7A30F04FF334B1F00000002 /* libDisplay.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1DD70E29FF334B1F00000000 /* libDisplay.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E7A30F04FF74919D00000000 /* SThreadPoolTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD70E29FF74919D00000000 /* SThreadPoolTask.m */; };
 /* End PBXBuildFile section */
 
@@ -2751,6 +2751,7 @@
 					};
 					E66DC04EB2C34D2100000000 = {
 						DevelopmentTeam = 4UB2QM68WG;
+						ProvisioningStyle = Automatic;
 					};
 					E66DC04EC42F8D0F00000000 = {
 						DevelopmentTeam = 4UB2QM68WG;
@@ -2810,21 +2811,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				E7A30F04FD34004F00000000 /* Star@2x.png in Resources */,
-				E7A30F04FEE8D8EE00000000 /* Star@3x.png in Resources */,
-				E7A30F048E96E34200000000 /* LaunchScreen.xib in Resources */,
-				E7A30F04BA6732B600000000 /* TwoFactorSetupDone.tgs in Resources */,
-				E7A30F041D59E33B00000000 /* TwoFactorSetupHint.tgs in Resources */,
-				E7A30F0466FCDB5C00000000 /* TwoFactorSetupIntro.tgs in Resources */,
-				E7A30F047494F26B00000000 /* TwoFactorSetupMail.tgs in Resources */,
-				E7A30F040AF3C7D500000000 /* TwoFactorSetupMonkeyClose.tgs in Resources */,
-				E7A30F04B9BC306100000000 /* TwoFactorSetupMonkeyCloseAndPeek.tgs in Resources */,
-				E7A30F0488B5DAB000000000 /* TwoFactorSetupMonkeyCloseAndPeekToIdle.tgs in Resources */,
-				E7A30F04EBBE297B00000000 /* TwoFactorSetupMonkeyIdle.tgs in Resources */,
-				E7A30F048C11AA3A00000000 /* TwoFactorSetupMonkeyIdle1.tgs in Resources */,
-				E7A30F048C1FC1BB00000000 /* TwoFactorSetupMonkeyIdle2.tgs in Resources */,
-				E7A30F04EC2F3F8200000000 /* TwoFactorSetupMonkeyPeek.tgs in Resources */,
-				E7A30F047CDCBC5E00000000 /* TwoFactorSetupMonkeyTracking.tgs in Resources */,
 				E7A30F044D3EB56400000000 /* Compass.tgs in Resources */,
 				E7A30F046362DAAB00000000 /* Dice_1.tgs in Resources */,
 				E7A30F046370F22C00000000 /* Dice_2.tgs in Resources */,
@@ -2892,6 +2878,18 @@
 				E7A30F0457CD649600000000 /* voip_end.caf in Resources */,
 				E7A30F0465E934B700000000 /* voip_fail.caf in Resources */,
 				E7A30F04C78B98B000000000 /* voip_ringback.caf in Resources */,
+				E7A30F04BA6732B600000000 /* TwoFactorSetupDone.tgs in Resources */,
+				E7A30F041D59E33B00000000 /* TwoFactorSetupHint.tgs in Resources */,
+				E7A30F0466FCDB5C00000000 /* TwoFactorSetupIntro.tgs in Resources */,
+				E7A30F047494F26B00000000 /* TwoFactorSetupMail.tgs in Resources */,
+				E7A30F040AF3C7D500000000 /* TwoFactorSetupMonkeyClose.tgs in Resources */,
+				E7A30F04B9BC306100000000 /* TwoFactorSetupMonkeyCloseAndPeek.tgs in Resources */,
+				E7A30F0488B5DAB000000000 /* TwoFactorSetupMonkeyCloseAndPeekToIdle.tgs in Resources */,
+				E7A30F04EBBE297B00000000 /* TwoFactorSetupMonkeyIdle.tgs in Resources */,
+				E7A30F048C11AA3A00000000 /* TwoFactorSetupMonkeyIdle1.tgs in Resources */,
+				E7A30F048C1FC1BB00000000 /* TwoFactorSetupMonkeyIdle2.tgs in Resources */,
+				E7A30F04EC2F3F8200000000 /* TwoFactorSetupMonkeyPeek.tgs in Resources */,
+				E7A30F047CDCBC5E00000000 /* TwoFactorSetupMonkeyTracking.tgs in Resources */,
 				E7A30F049F00BA0200000000 /* anim_archive.json in Resources */,
 				E7A30F04406BEF2900000000 /* anim_archiveAvatar.json in Resources */,
 				E7A30F04A28B5AB000000000 /* anim_archiveswipe.json in Resources */,
@@ -3019,6 +3017,7 @@
 				E7A30F04EB14130700000000 /* currencies.json in Resources */,
 				E7A30F043F61D17900000000 /* MessageSent.caf in Resources */,
 				E7A30F045FFC844500000000 /* notification.caf in Resources */,
+				E7A30F048E96E34200000000 /* LaunchScreen.xib in Resources */,
 				E7A30F043453BAB500000000 /* BlackClassicIcon@2x.png in Resources */,
 				E7A30F043608935400000000 /* BlackClassicIcon@3x.png in Resources */,
 				E7A30F04A86C10B100000000 /* BlackClassicIconIpad.png in Resources */,
@@ -3063,14 +3062,16 @@
 				E7A30F04CC98C94200000000 /* BlueNotificationIcon@3x.png in Resources */,
 				E7A30F04E5D6389D00000000 /* WhiteFilledIcon@2x.png in Resources */,
 				E7A30F04E78B113C00000000 /* WhiteFilledIcon@3x.png in Resources */,
+				E7A30F04FD34004F00000000 /* Star@2x.png in Resources */,
+				E7A30F04FEE8D8EE00000000 /* Star@3x.png in Resources */,
 				E7A30F0468FBAA6A00000000 /* LegacyComponentsResources.bundle in Resources */,
 				E7A30F04A4169AE300000000 /* AppIcons.xcassets in Resources */,
 				E7A30F042925AEA200000000 /* Icons.xcassets in Resources */,
 				E7A30F0405987B6E00000000 /* PasswordSetupUIImages.xcassets in Resources */,
 				E7A30F043549D4C400000000 /* Images.xcassets in Resources */,
+				E7A30F04A9B2537400000000 /* InfoPlist.strings in Resources */,
 				E7A30F0472A8FC2300000000 /* AppIntentVocabulary.plist in Resources */,
 				E7A30F04DCE9E9AA00000000 /* Localizable.strings in Resources */,
-				E7A30F04A9B2537400000000 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3078,7 +3079,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				E7A30F0486FBDF0600000000 /* Interface.storyboard in Resources */,
 				E7A30F0406F08DE500000000 /* File@2x.png in Resources */,
 				E7A30F04EF071DE200000000 /* Home88@2x.png in Resources */,
 				E7A30F04EF09B18C00000000 /* Location@2x.png in Resources */,
@@ -3089,6 +3089,7 @@
 				E7A30F049257080A00000000 /* MediaVideo@2x.png in Resources */,
 				E7A30F040153C97500000000 /* SavedMessagesAvatar@2x.png in Resources */,
 				E7A30F044A1B849B00000000 /* VerifiedList@2x.png in Resources */,
+				E7A30F0486FBDF0600000000 /* Interface.storyboard in Resources */,
 				E7A30F0420DAE01900000000 /* Assets.xcassets in Resources */,
 				E7A30F04DCE9E9AA00000001 /* Localizable.strings in Resources */,
 			);
@@ -3518,6 +3519,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E29A8C8657400000000 /* Telegram-Debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -3587,6 +3592,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E297D676FDE00000000 /* Telegram-Profile.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Profile;
 		};
@@ -3656,6 +3665,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DD70E29F0FE1B4000000000 /* Telegram-Release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4UB2QM68WG;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
