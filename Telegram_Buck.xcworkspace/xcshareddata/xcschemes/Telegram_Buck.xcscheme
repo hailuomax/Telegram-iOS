@@ -154,6 +154,76 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04EA3ACF77800000000"
+               BuildableName = "libLanguage.a"
+               BlueprintName = "Language"
+               ReferencedContainer = "container:submodules/HL/Language/Language.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E78A46F6200000000"
+               BuildableName = "libConfig.a"
+               BlueprintName = "Config"
+               ReferencedContainer = "container:submodules/HL/Config/Config.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E45993C0E00000000"
+               BuildableName = "libSyncCore.dylib"
+               BlueprintName = "SyncCore#shared"
+               ReferencedContainer = "container:submodules/SyncCore/SyncCore.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04EDBD28EEF00000000"
+               BuildableName = "libTelegramApi.dylib"
+               BlueprintName = "TelegramApi#shared"
+               ReferencedContainer = "container:submodules/TelegramApi/TelegramApi.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E5E043F5F00000000"
+               BuildableName = "libCloudData.a"
+               BlueprintName = "CloudData"
+               ReferencedContainer = "container:submodules/CloudData/CloudData.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "E66DC04E43E7F3CE00000000"
                BuildableName = "libAlamofire.a"
                BlueprintName = "Alamofire"
@@ -364,10 +434,38 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04EA3ACF77800000000"
-               BuildableName = "libLanguage.a"
-               BlueprintName = "Language"
-               ReferencedContainer = "container:submodules/HL/Language/Language.xcodeproj">
+               BlueprintIdentifier = "E66DC04E1D0C220D00000000"
+               BuildableName = "libAccount.a"
+               BlueprintName = "Account"
+               ReferencedContainer = "container:submodules/HL/Account/Account.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E52EF3C1F00000000"
+               BuildableName = "libExtension.a"
+               BlueprintName = "Extension"
+               ReferencedContainer = "container:submodules/HL/Extension/Extension.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E66DC04E000101FA00000000"
+               BuildableName = "libApi.a"
+               BlueprintName = "Api"
+               ReferencedContainer = "container:submodules/HL/Api/Api.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -382,48 +480,6 @@
                BuildableName = "libHL.a"
                BlueprintName = "HL"
                ReferencedContainer = "container:submodules/HL/HL/HL.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E45993C0E00000000"
-               BuildableName = "libSyncCore.dylib"
-               BlueprintName = "SyncCore#shared"
-               ReferencedContainer = "container:submodules/SyncCore/SyncCore.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04EDBD28EEF00000000"
-               BuildableName = "libTelegramApi.dylib"
-               BlueprintName = "TelegramApi#shared"
-               ReferencedContainer = "container:submodules/TelegramApi/TelegramApi.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E5E043F5F00000000"
-               BuildableName = "libCloudData.a"
-               BlueprintName = "CloudData"
-               ReferencedContainer = "container:submodules/CloudData/CloudData.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -2104,20 +2160,6 @@
                BuildableName = "libGridMessageSelectionNode.a"
                BlueprintName = "GridMessageSelectionNode"
                ReferencedContainer = "container:submodules/GridMessageSelectionNode/GridMessageSelectionNode.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E66DC04E1D0C220D00000000"
-               BuildableName = "libAccount.a"
-               BlueprintName = "Account"
-               ReferencedContainer = "container:submodules/HL/Account/Account.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry

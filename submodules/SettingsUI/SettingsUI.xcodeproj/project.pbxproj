@@ -78,6 +78,19 @@
 				<string>B401C9792F7F325000000000</string>
 			</array>
 		</dict>
+		<key>1DD70E29DF683BDB00000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>libAccount.a</string>
+			<key>path</key>
+			<string>libAccount.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+		</dict>
 		<key>1DD70E299D2580DA00000000</key>
 		<dict>
 			<key>isa</key>
@@ -676,6 +689,19 @@
 			<key>explicitFileType</key>
 			<string>archive.ar</string>
 		</dict>
+		<key>1DD70E2932FCFFB000000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>libLanguage.a</string>
+			<key>path</key>
+			<string>libLanguage.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+		</dict>
 		<key>1DD70E29E220F5E800000000</key>
 		<dict>
 			<key>isa</key>
@@ -1139,6 +1165,32 @@
 			<string>libProgressNavigationButtonNode.a</string>
 			<key>path</key>
 			<string>libProgressNavigationButtonNode.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+		</dict>
+		<key>1DD70E29AC7B6E1300000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>libPromiseKit.a</string>
+			<key>path</key>
+			<string>libPromiseKit.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+		</dict>
+		<key>1DD70E29F40FF29C00000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>libProxy.a</string>
+			<key>path</key>
+			<string>libProxy.a</string>
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
 			<key>explicitFileType</key>
@@ -1739,6 +1791,7 @@
 			<string><![CDATA[<group>]]></string>
 			<key>children</key>
 			<array>
+				<string>1DD70E29DF683BDB00000000</string>
 				<string>1DD70E299D2580DA00000000</string>
 				<string>1DD70E29DAB3815C00000000</string>
 				<string>1DD70E291E16CC6C00000000</string>
@@ -1785,6 +1838,7 @@
 				<string>1DD70E295C00B78600000000</string>
 				<string>1DD70E295A26607D00000000</string>
 				<string>1DD70E29167A31BF00000000</string>
+				<string>1DD70E2932FCFFB000000000</string>
 				<string>1DD70E29E220F5E800000000</string>
 				<string>1DD70E296C39078B00000000</string>
 				<string>1DD70E2952137F3500000000</string>
@@ -1821,6 +1875,8 @@
 				<string>1DD70E29DB6520C800000000</string>
 				<string>1DD70E294E24879B00000000</string>
 				<string>1DD70E29CBE117ED00000000</string>
+				<string>1DD70E29AC7B6E1300000000</string>
+				<string>1DD70E29F40FF29C00000000</string>
 				<string>1DD70E29AA32BBC600000000</string>
 				<string>1DD70E293E4DE92B00000000</string>
 				<string>1DD70E29AD66967300000000</string>
@@ -5124,6 +5180,34 @@
 			<key>fileRef</key>
 			<string>1DD70E29F8FF5A6500000000</string>
 		</dict>
+		<key>E7A30F0432FCFFB000000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>fileRef</key>
+			<string>1DD70E2932FCFFB000000000</string>
+		</dict>
+		<key>E7A30F04AC7B6E1300000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>fileRef</key>
+			<string>1DD70E29AC7B6E1300000000</string>
+		</dict>
+		<key>E7A30F04DF683BDB00000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>fileRef</key>
+			<string>1DD70E29DF683BDB00000000</string>
+		</dict>
+		<key>E7A30F04F40FF29C00000000</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>fileRef</key>
+			<string>1DD70E29F40FF29C00000000</string>
+		</dict>
 		<key>E7A30F0447B6256000000000</key>
 		<dict>
 			<key>isa</key>
@@ -5443,6 +5527,10 @@
 				<string>E7A30F04F29DEA1400000000</string>
 				<string>E7A30F04D1EB356900000000</string>
 				<string>E7A30F04F8FF5A6500000000</string>
+				<string>E7A30F0432FCFFB000000000</string>
+				<string>E7A30F04AC7B6E1300000000</string>
+				<string>E7A30F04DF683BDB00000000</string>
+				<string>E7A30F04F40FF29C00000000</string>
 				<string>E7A30F0447B6256000000000</string>
 				<string>E7A30F04B5051C0E00000000</string>
 				<string>E7A30F049B97462A00000000</string>
