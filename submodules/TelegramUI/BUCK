@@ -207,7 +207,6 @@ framework(
         "//submodules/HL/Account:Account",
         "//submodules/HL/Language:Language",
         "//submodules/HL/Proxy:Proxy",
-        "//submodules/HL/Api:Api",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",
