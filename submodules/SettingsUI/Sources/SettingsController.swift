@@ -1457,11 +1457,15 @@ public func settingsController(context: AccountContext, accountManager: AccountM
     }
     
     let icon: UIImage?
-    if useSpecialTabBarIcons() {
-        icon = UIImage(bundleImageName: "Chat List/Tabs/Holiday/IconSettings")
-    } else {
+    /*
+     * 修改记录：2020/3/31
+     * 设置tabbar
+     */
+//    if useSpecialTabBarIcons() {
+//        icon = UIImage(bundleImageName: "Chat List/Tabs/Holiday/IconSettings")
+//    } else {
         icon = UIImage(bundleImageName: "Chat List/Tabs/IconSettings")
-    }
+//    }
     
     let notificationsFromAllAccounts = accountManager.sharedData(keys: [ApplicationSpecificSharedDataKeys.inAppNotificationSettings])
     |> map { sharedData -> Bool in

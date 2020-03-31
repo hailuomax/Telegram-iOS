@@ -309,6 +309,10 @@ class TabBarNode: ASDisplayNode {
                 self?.updateNodeImage(i, layout: true)
             })
             if let selectedIndex = self.selectedIndex, selectedIndex == i {
+                /*
+                 * 修改记录：2020/3/31
+                 * 修改tabBar文字颜色
+                 */
                 let (textImage, contentWidth) = tabBarItemImage(item.selectedImage, title: item.title ?? "", backgroundColor: .clear, tintColor: self.theme.tabBarSelectedTextColor, horizontal: self.horizontal, imageMode: false, centered: self.centered)
                 let (image, imageContentWidth) = tabBarItemImage(item.selectedImage, title: item.title ?? "", backgroundColor: .clear, tintColor: self.theme.tabBarSelectedTextColor, horizontal: self.horizontal, imageMode: true, centered: self.centered)
                 node.textImageNode.image = textImage

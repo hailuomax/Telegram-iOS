@@ -178,11 +178,15 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController,
                 self.tabBarItem.title = self.presentationData.strings.DialogList_Title
                 
                 let icon: UIImage?
-                if useSpecialTabBarIcons() {
-                    icon = UIImage(bundleImageName: "Chat List/Tabs/Holiday/IconChats")
-                } else {
+                /*
+                 * 修改记录：2020/3/31
+                 * 会话tabbar图片
+                 */
+//                if useSpecialTabBarIcons() {
+//                    icon = UIImage(bundleImageName: "Chat List/Tabs/Holiday/IconChats")
+//                } else {
                     icon = UIImage(bundleImageName: "Chat List/Tabs/IconChats")
-                }
+//                }
                 
                 self.tabBarItem.image = icon
                 self.tabBarItem.selectedImage = icon

@@ -105,12 +105,16 @@ public class ContactsController: ViewController {
         self.title = self.presentationData.strings.Contacts_Title
         self.tabBarItem.title = self.presentationData.strings.Contacts_Title
         
+        /*
+        * 修改记录：2020/3/31
+        * 发现tabbar图片
+        */
         let icon: UIImage?
-        if useSpecialTabBarIcons() {
-            icon = UIImage(bundleImageName: "Chat List/Tabs/Holiday/IconContacts")
-        } else {
-            icon = UIImage(bundleImageName: "Chat List/Tabs/IconContacts")
-        }
+//        if useSpecialTabBarIcons() {
+//            icon = UIImage(bundleImageName: "Chat List/Tabs/Holiday/IconContacts")
+//        } else {
+            icon = UIImage(bundleImageName: "Chat List/Tabs/IconFound")
+//        }
         
         self.tabBarItem.image = icon
         self.tabBarItem.selectedImage = icon
