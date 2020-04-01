@@ -245,7 +245,7 @@ private final class ProxySettingsServerItemNode: ItemListRevealOptionsItemNode {
             
             let titleAttributedString = NSMutableAttributedString()
             if item.defaultEnable{
-                titleAttributedString.append(NSAttributedString(string: HL.Language.Proxy.Channel.setIndex(item.index + 1).localized(), font: titleFont, textColor: item.theme.list.itemPrimaryTextColor))
+                titleAttributedString.append(NSAttributedString(string: HLLanguage.Proxy.Channel.setIndex(item.index + 1).localized(), font: titleFont, textColor: item.theme.list.itemPrimaryTextColor))
             }else{
                 titleAttributedString.append(NSAttributedString(string: item.server.host, font: titleFont, textColor: item.theme.list.itemPrimaryTextColor))
                 titleAttributedString.append(NSAttributedString(string: ":\(item.server.port)", font: titleFont, textColor: item.theme.list.itemSecondaryTextColor))

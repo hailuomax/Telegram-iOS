@@ -289,7 +289,7 @@ private enum ProxySettingsControllerEntry: ItemListNodeEntry {
 private func proxySettingsControllerEntries(theme: PresentationTheme, strings: PresentationStrings, state: ProxySettingsControllerState, proxySettings: ProxySettings, buildinStatuses:[ProxyServerSettings: ProxyServerStatus], statuses: [ProxyServerSettings: ProxyServerStatus], connectionStatus: ConnectionStatus) -> [ProxySettingsControllerEntry] {
     var entries: [ProxySettingsControllerEntry] = []
 
-    entries.append(.defaultEnabled(theme, HL.Language.UseBuiltinAgent.localized(), proxySettings.defaultEnabled))
+    entries.append(.defaultEnabled(theme, HLLanguage.UseBuiltinAgent.localized(), proxySettings.defaultEnabled))
     
     if proxySettings.defaultEnabled {
         var index = 0
