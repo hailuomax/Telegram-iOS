@@ -14,6 +14,8 @@ build/*
 xcuserdata
 *.xccheckout
 *.xcscmblueprint
+*.xcodeproj
+*.xcworkspace
 *.moved-aside
 DerivedData
 *.hmap
