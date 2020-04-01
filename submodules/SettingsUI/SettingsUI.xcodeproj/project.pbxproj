@@ -403,19 +403,6 @@
 			<key>explicitFileType</key>
 			<string>archive.ar</string>
 		</dict>
-		<key>1DD70E29C66214C000000000</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>libCryptoSwift.a</string>
-			<key>path</key>
-			<string>libCryptoSwift.a</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-			<key>explicitFileType</key>
-			<string>archive.ar</string>
-		</dict>
 		<key>1DD70E2979E58A0000000000</key>
 		<dict>
 			<key>isa</key>
@@ -480,19 +467,6 @@
 			<string>BUILT_PRODUCTS_DIR</string>
 			<key>explicitFileType</key>
 			<string>compiled.mach-o.dylib</string>
-		</dict>
-		<key>1DD70E296360BEAD00000000</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>libExtension.a</string>
-			<key>path</key>
-			<string>libExtension.a</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-			<key>explicitFileType</key>
-			<string>archive.ar</string>
 		</dict>
 		<key>1DD70E29F29DEA1400000000</key>
 		<dict>
@@ -1261,45 +1235,6 @@
 			<key>explicitFileType</key>
 			<string>archive.ar</string>
 		</dict>
-		<key>1DD70E299FA7671100000000</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>libRxCocoa.a</string>
-			<key>path</key>
-			<string>libRxCocoa.a</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-			<key>explicitFileType</key>
-			<string>archive.ar</string>
-		</dict>
-		<key>1DD70E29A88D3A1900000000</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>libRxRelay.a</string>
-			<key>path</key>
-			<string>libRxRelay.a</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-			<key>explicitFileType</key>
-			<string>archive.ar</string>
-		</dict>
-		<key>1DD70E29FC029D1B00000000</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>libRxSwift.a</string>
-			<key>path</key>
-			<string>libRxSwift.a</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-			<key>explicitFileType</key>
-			<string>archive.ar</string>
-		</dict>
 		<key>1DD70E291D58331200000000</key>
 		<dict>
 			<key>isa</key>
@@ -1729,19 +1664,6 @@
 			<key>explicitFileType</key>
 			<string>archive.ar</string>
 		</dict>
-		<key>1DD70E29FD9D17B500000000</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>libThen.a</string>
-			<key>path</key>
-			<string>libThen.a</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-			<key>explicitFileType</key>
-			<string>archive.ar</string>
-		</dict>
 		<key>1DD70E29B4B05B7A00000000</key>
 		<dict>
 			<key>isa</key>
@@ -1894,13 +1816,11 @@
 				<string>1DD70E296C9831F100000000</string>
 				<string>1DD70E2915F6A49D00000000</string>
 				<string>1DD70E29016F454200000000</string>
-				<string>1DD70E29C66214C000000000</string>
 				<string>1DD70E2979E58A0000000000</string>
 				<string>1DD70E29CED1620500000000</string>
 				<string>1DD70E292417E0B200000000</string>
 				<string>1DD70E295915423000000000</string>
 				<string>1DD70E29FF334B1F00000000</string>
-				<string>1DD70E296360BEAD00000000</string>
 				<string>1DD70E29F29DEA1400000000</string>
 				<string>1DD70E29D1EB356900000000</string>
 				<string>1DD70E29BCD8FADE00000000</string>
@@ -1960,9 +1880,6 @@
 				<string>1DD70E29AA32BBC600000000</string>
 				<string>1DD70E293E4DE92B00000000</string>
 				<string>1DD70E29AD66967300000000</string>
-				<string>1DD70E299FA7671100000000</string>
-				<string>1DD70E29A88D3A1900000000</string>
-				<string>1DD70E29FC029D1B00000000</string>
 				<string>1DD70E291D58331200000000</string>
 				<string>1DD70E29CF967D4300000000</string>
 				<string>1DD70E29EA9CBB5B00000000</string>
@@ -1996,7 +1913,6 @@
 				<string>1DD70E29BA06E3A600000000</string>
 				<string>1DD70E29F0C15F9C00000000</string>
 				<string>1DD70E29F40A586F00000000</string>
-				<string>1DD70E29FD9D17B500000000</string>
 				<string>1DD70E29B4B05B7A00000000</string>
 				<string>1DD70E29CD296A8300000000</string>
 				<string>1DD70E29AE67341000000000</string>
@@ -5285,48 +5201,6 @@
 			<key>fileRef</key>
 			<string>1DD70E29DF683BDB00000000</string>
 		</dict>
-		<key>E7A30F04C66214C000000000</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>1DD70E29C66214C000000000</string>
-		</dict>
-		<key>E7A30F04FC029D1B00000000</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>1DD70E29FC029D1B00000000</string>
-		</dict>
-		<key>E7A30F04A88D3A1900000000</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>1DD70E29A88D3A1900000000</string>
-		</dict>
-		<key>E7A30F049FA7671100000000</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>1DD70E299FA7671100000000</string>
-		</dict>
-		<key>E7A30F04FD9D17B500000000</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>1DD70E29FD9D17B500000000</string>
-		</dict>
-		<key>E7A30F046360BEAD00000000</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>1DD70E296360BEAD00000000</string>
-		</dict>
 		<key>E7A30F04F40FF29C00000000</key>
 		<dict>
 			<key>isa</key>
@@ -5656,12 +5530,6 @@
 				<string>E7A30F0432FCFFB000000000</string>
 				<string>E7A30F04AC7B6E1300000000</string>
 				<string>E7A30F04DF683BDB00000000</string>
-				<string>E7A30F04C66214C000000000</string>
-				<string>E7A30F04FC029D1B00000000</string>
-				<string>E7A30F04A88D3A1900000000</string>
-				<string>E7A30F049FA7671100000000</string>
-				<string>E7A30F04FD9D17B500000000</string>
-				<string>E7A30F046360BEAD00000000</string>
 				<string>E7A30F04F40FF29C00000000</string>
 				<string>E7A30F0447B6256000000000</string>
 				<string>E7A30F04B5051C0E00000000</string>
