@@ -210,6 +210,12 @@ framework(
         "//submodules/HL/Language:Language",
         "//submodules/HL/Proxy:Proxy",
         "//submodules/HL/Config:Config",
+        "//submodules/HL/HLBase:HLBase",
+        "//submodules/HL/Extension:Extension",
+        "//Pods/RxSwift:RxSwift",
+        "//Pods/RxCocoa:RxCocoa",
+        "//Pods/SnapKit:SnapKit",
+	"//submodules/HL/AccountModule:AccountModule"
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",
