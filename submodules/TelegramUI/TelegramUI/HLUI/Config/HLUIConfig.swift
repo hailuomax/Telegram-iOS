@@ -10,4 +10,4 @@ import Language
 
 let app = UIApplication.shared.delegate as! AppDelegate
 
-typealias Language = HL.Language
+typealias Language = HLLanguage
