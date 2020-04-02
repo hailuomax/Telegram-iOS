@@ -14,9 +14,9 @@ build/*
 xcuserdata
 *.xccheckout
 *.xcscmblueprint
+*.moved-aside
 *.xcodeproj
 *.xcworkspace
-*.moved-aside
 DerivedData
 *.hmap
 *.ipa
@@ -54,4 +54,9 @@ bazel-telegram-ios/*
 bazel-testlogs
 bazel-testlogs/*
 *.xcscheme
-
+*/*.swp
+*.swp
+build-input/data
+build-input/data/*
+build-input/gen
+build-input/gen/*
