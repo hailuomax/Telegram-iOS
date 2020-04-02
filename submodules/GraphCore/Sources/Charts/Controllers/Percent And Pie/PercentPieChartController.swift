@@ -245,7 +245,7 @@ public class PercentPieChartController: BaseChartController {
     }
     
     func didTapZoomIn(date: Date, animated: Bool) {
-        guard isZoomed == false else { return }
+        guard !isZoomed, isZoomable else { return }
          cancelChartInteraction()
          let currentCollection = percentController.chartsCollection
          let range: Int = Constants.zoomedRange
@@ -291,11 +291,11 @@ public class PercentPieChartController: BaseChartController {
         }
     }
     
-    public override func apply(theme: ChartTheme, animated: Bool) {
-        super.apply(theme: theme, animated: animated)
+    public override func apply(theme: ChartTheme, strings: ChartStrings, animated: Bool) {
+        super.apply(theme: theme, strings: strings, animated: animated)
         
-        pieController.apply(theme: theme, animated: animated)
-        percentController.apply(theme: theme, animated: animated)
+        pieController.apply(theme: theme, strings: strings, animated: animated)
+        percentController.apply(theme: theme, strings: strings, animated: animated)
         transitionRenderer.backgroundColor = theme.chartBackgroundColor
     }
 }

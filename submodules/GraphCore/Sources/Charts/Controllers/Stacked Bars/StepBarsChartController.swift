@@ -78,6 +78,8 @@ public class StepBarsChartController: BaseChartController {
                 zoomedBarsController.mainBarsRenderer,
                 barsController.horizontalScalesRenderer,
                 barsController.verticalScalesRenderer,
+                barsController.lineBulletsRenderer,
+                barsController.verticalLineRenderer
 //                performanceRenderer
         ]
     }
@@ -229,7 +231,7 @@ public class StepBarsChartController: BaseChartController {
     }
     
     public override func didTapZoomIn(date: Date, pointIndex: Int) {
-        guard isZoomed == false else { return }
+        guard !isZoomed, isZoomable else { return }
         if isZoomed {
             return zoomedBarsController.hideDetailsView(animated: true)
         }
@@ -257,10 +259,10 @@ public class StepBarsChartController: BaseChartController {
         }
     }
     
-    public override func apply(theme: ChartTheme, animated: Bool) {
-        super.apply(theme: theme, animated: animated)
+    public override func apply(theme: ChartTheme, strings: ChartStrings, animated: Bool) {
+        super.apply(theme: theme, strings: strings, animated: animated)
         
-        zoomedBarsController.apply(theme: theme, animated: animated)
-        barsController.apply(theme: theme, animated: animated)
+        zoomedBarsController.apply(theme: theme, strings: strings, animated: animated)
+        barsController.apply(theme: theme, strings: strings, animated: animated)
     }
 }
