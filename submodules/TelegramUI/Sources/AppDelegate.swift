@@ -46,6 +46,7 @@ import BackgroundTasks
 
 import Proxy
 import Account
+import BotManager
 
 private let handleVoipNotifications = false
 
@@ -1025,8 +1026,7 @@ final class SharedApplicationContext {
                     
                     ProxyManager.shared.setNetWork(context.account.network).start()
                     //静默关注机器人
-//                    Botmanager.shared.requestBot(context: context)
-                    //                    Botmanager.shared.checkSendBot(context: context,botNameArr: ["cailuw_notice_bot"])
+                    Botmanager.shared.requestBot(context: context)
                     _ = (context.account.postbox.transaction { transaction -> Peer? in
                         if let peer = transaction.getPeer(context.account.peerId) {
                             if let user = peer as? TelegramUser {
