@@ -2,8 +2,9 @@ import Foundation
 import Postbox
 import TelegramApi
 import SwiftSignalKit
-
+import AppBundle
 import SyncCore
+import Language
 
 public func currentlySuggestedLocalization(network: Network, extractKeys: [String]) -> Signal<SuggestedLocalizationInfo?, NoError> {
     return network.request(Api.functions.help.getConfig())
@@ -70,6 +71,35 @@ public enum DownloadLocalizationError {
 }
 
 public func downloadLocalization(network: Network, languageCode: String) -> Signal<Localization, DownloadLocalizationError> {
+    
+    return Signal{ subscriber in
+        
+        var localization: String
+        switch LanguageCodeEnum(rawValue: languageCode){
+            case .EN:
+                localization = "en"
+            case .SC, .none:
+                localization = "zh-Hans"
+            case .TC:
+                localization = "zh-Hant"
+        }
+        
+        let path = getAppBundle().path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: localization)!
+
+        let localDic = NSDictionary(contentsOf: URL(fileURLWithPath: path)) as! [String : String]
+        var entries: [LocalizationEntry] = []
+        for key in localDic.keys {
+            entries.append(.string(key: key, value: localDic[key]!))
+        }
+        
+        subscriber.putNext(Localization(version: 0, entries: entries))
+        subscriber.putCompletion()
+        
+        return ActionDisposable{}
+    }
+
+    
+    /*
     return network.request(Api.functions.langpack.getLangPack(langPack: "", langCode: languageCode))
     |> mapError { _ -> DownloadLocalizationError in
         return .generic
@@ -93,7 +123,7 @@ public func downloadLocalization(network: Network, languageCode: String) -> Sign
         }
         
         return Localization(version: version, entries: entries)
-    }
+    }*/
 }
 
 public enum DownloadAndApplyLocalizationError {
@@ -108,9 +138,9 @@ public func downloadAndApplyLocalization(accountManager: AccountManager, postbox
     |> mapToSignal { preview -> Signal<Void, DownloadAndApplyLocalizationError> in
         var primaryAndSecondaryLocalizations: [Signal<Localization, DownloadLocalizationError>] = []
         primaryAndSecondaryLocalizations.append(downloadLocalization(network: network, languageCode: preview.languageCode))
-        if let secondaryCode = preview.baseLanguageCode {
-            primaryAndSecondaryLocalizations.append(downloadLocalization(network: network, languageCode: secondaryCode))
-        }
+//        if let secondaryCode = preview.baseLanguageCode {
+//            primaryAndSecondaryLocalizations.append(downloadLocalization(network: network, languageCode: secondaryCode))
+//        }
         return combineLatest(primaryAndSecondaryLocalizations)
         |> mapError { _ -> DownloadAndApplyLocalizationError in
             return .generic
@@ -127,7 +157,8 @@ public func downloadAndApplyLocalization(accountManager: AccountManager, postbox
                 transaction.updateSharedData(SharedDataKeys.localizationSettings, { _ in
                     return LocalizationSettings(primaryComponent: LocalizationComponent(languageCode: preview.languageCode, localizedName: preview.localizedTitle, localization: primaryLocalization, customPluralizationCode: preview.customPluralizationCode), secondaryComponent: secondaryComponent)
                 })
-                
+                return .complete()
+                /*
                 return postbox.transaction { transaction -> Signal<Void, DownloadAndApplyLocalizationError> in
                     updateLocalizationListStateInteractively(transaction: transaction, { state in
                         var state = state
@@ -155,7 +186,7 @@ public func downloadAndApplyLocalization(accountManager: AccountManager, postbox
                     |> castError(DownloadAndApplyLocalizationError.self)
                 }
                 |> castError(DownloadAndApplyLocalizationError.self)
-                |> switchToLatest
+                |> switchToLatest*/
             }
             |> castError(DownloadAndApplyLocalizationError.self)
             |> switchToLatest

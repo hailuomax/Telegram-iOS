@@ -150,10 +150,17 @@ static void TGDispatchOnMainThread(dispatch_block_t block) {
         ];
         
         NSMutableDictionary *englishStrings = [[NSMutableDictionary alloc] init];
-        NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"en" ofType:@"lproj"]];
+//        NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"en" ofType:@"lproj"]];
+        
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Localizable" ofType:@"strings" inDirectory:nil forLocalization:@"zh-Hans"];
+        NSDictionary *dic = [NSDictionary dictionaryWithContentsOfURL:[NSURL fileURLWithPath:path]];
+
+        
+        
         for (NSString *key in stringKeys) {
-            if (bundle != nil) {
-                NSString *value = [bundle localizedStringForKey:key value:key table:nil];
+            if (path != nil) {
+//                NSString *value = [bundle localizedStringForKey:key value:key table:nil];
+                NSString *value = dic[key];
                 if (value != nil) {
                     englishStrings[key] = value;
                 } else {

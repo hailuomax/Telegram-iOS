@@ -280,7 +280,7 @@ final class LocalizationListControllerNode: ViewControllerTracingNode {
     private var searchDisplayController: SearchDisplayController?
     
     private let presentationDataValue = Promise<PresentationData>()
-    private var updatedDisposable: Disposable?
+    //private var updatedDisposable: Disposable?
     private var listDisposable: Disposable?
     private let applyDisposable = MetaDisposable()
     
@@ -365,7 +365,10 @@ final class LocalizationListControllerNode: ViewControllerTracingNode {
                 activeLanguageCode = localizationSettings.primaryComponent.languageCode
             }
             var existingIds = Set<String>()
-            if let localizationListState = (view.views[preferencesKey] as? PreferencesView)?.values[PreferencesKeys.localizationListState] as? LocalizationListState, !localizationListState.availableOfficialLocalizations.isEmpty {
+            
+//            if let localizationListState = (view.views[preferencesKey] as? PreferencesView)?.values[PreferencesKeys.localizationListState] as? LocalizationListState, !localizationListState.availableOfficialLocalizations.isEmpty {
+            let localizationListState = LocalizationListState.defaultSettings
+            if !localizationListState.availableOfficialLocalizations.isEmpty {
                 strongSelf.currentListState = localizationListState
                 
                 let availableSavedLocalizations = localizationListState.availableSavedLocalizations.filter({ info in !localizationListState.availableOfficialLocalizations.contains(where: { $0.languageCode == info.languageCode }) })
@@ -395,12 +398,12 @@ final class LocalizationListControllerNode: ViewControllerTracingNode {
             let transition = preparedLanguageListNodeTransition(presentationData: presentationData, from: previousEntriesAndPresentationData?.0 ?? [], to: entries, openSearch: openSearch, selectLocalization: { [weak self] info in self?.selectLocalization(info) }, setItemWithRevealedOptions: setItemWithRevealedOptions, removeItem: removeItem, firstTime: previousEntriesAndPresentationData == nil, isLoading: entries.isEmpty, forceUpdate: previousEntriesAndPresentationData?.1 !== presentationData.theme || previousEntriesAndPresentationData?.2 !== presentationData.strings, animated: (previousEntriesAndPresentationData?.0.count ?? 0) >= entries.count)
             strongSelf.enqueueTransition(transition)
         })
-        self.updatedDisposable = synchronizedLocalizationListState(postbox: context.account.postbox, network: context.account.network).start()
+        //self.updatedDisposable = synchronizedLocalizationListState(postbox: context.account.postbox, network: context.account.network).start()
     }
     
     deinit {
         self.listDisposable?.dispose()
-        self.updatedDisposable?.dispose()
+        //self.updatedDisposable?.dispose()
         self.applyDisposable.dispose()
     }
     
@@ -487,6 +490,14 @@ final class LocalizationListControllerNode: ViewControllerTracingNode {
     }
     
     private func selectLocalization(_ info: LocalizationInfo) -> Void {
+        
+        applyingCode.set(.single(info.languageCode))
+        applyDisposable.set((downloadAndApplyLocalization(accountManager: context.sharedContext.accountManager, postbox: context.account.postbox, network: context.account.network, languageCode: info.languageCode)
+            |> deliverOnMainQueue).start(completed: {[weak self] in
+                self?.applyingCode.set(.single(nil))
+            }))
+        
+        /*
         let applyImpl: () -> Void = { [weak self] in
             guard let strongSelf = self else {
                 return
@@ -526,7 +537,7 @@ final class LocalizationListControllerNode: ViewControllerTracingNode {
             ActionSheetItemGroup(items: [ActionSheetButtonItem(title: presentationData.strings.Common_Cancel, action: { dismissAction() })])
         ])
         self.view.window?.endEditing(true)
-        self.present(controller, nil)
+        self.present(controller, nil)*/
     }
     
     func toggleEditing() {

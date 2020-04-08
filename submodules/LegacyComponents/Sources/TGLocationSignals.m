@@ -11,7 +11,7 @@
 #import "TGLocationVenue.h"
 #import "TGLocationReverseGeocodeResult.h"
 
-NSString *const TGLocationGoogleGeocodeLocale = @"en";
+
 
 @interface TGLocationHelper : NSObject <CLLocationManagerDelegate> {
     CLLocationManager *_locationManager;

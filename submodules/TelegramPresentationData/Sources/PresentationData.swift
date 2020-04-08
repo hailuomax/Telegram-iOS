@@ -11,6 +11,8 @@ import TelegramUIPreferences
 import AppBundle
 import Sunrise
 
+import Language
+
 public struct PresentationDateTimeFormat: Equatable {
     public let timeFormat: PresentationTimeFormat
     public let dateFormat: PresentationDateFormat
@@ -120,6 +122,12 @@ public func dictFromLocalization(_ value: Localization) -> [String: String] {
                 dict["\(key)_any"] = other
         }
     }
+    
+    //TODO: 用于获取多语言的数据，然后整合到本地，一般情况不用开启
+    //    for key in dict.keys.sorted(){
+    //        print("\"\(key)\" = \"\(String(describing: dict[key]))\";")
+    //    }
+    
     return dict
 }
 
@@ -274,7 +282,10 @@ public func currentPresentationDataAndSettings(accountManager: AccountManager, s
         let dateTimeFormat = currentDateTimeFormat()
         let stringsValue: PresentationStrings
         if let localizationSettings = localizationSettings {
-            stringsValue = PresentationStrings(primaryComponent: PresentationStringsComponent(languageCode: localizationSettings.primaryComponent.languageCode, localizedName: localizationSettings.primaryComponent.localizedName, pluralizationRulesCode: localizationSettings.primaryComponent.customPluralizationCode, dict: dictFromLocalization(localizationSettings.primaryComponent.localization)), secondaryComponent: localizationSettings.secondaryComponent.flatMap({ PresentationStringsComponent(languageCode: $0.languageCode, localizedName: $0.localizedName, pluralizationRulesCode: $0.customPluralizationCode, dict: dictFromLocalization($0.localization)) }), groupingSeparator: dateTimeFormat.groupingSeparator)
+            
+             stringsValue = stringValue(localizationSettings.primaryComponent.languageCode)
+            
+//            stringsValue = PresentationStrings(primaryComponent: PresentationStringsComponent(languageCode: localizationSettings.primaryComponent.languageCode, localizedName: localizationSettings.primaryComponent.localizedName, pluralizationRulesCode: localizationSettings.primaryComponent.customPluralizationCode, dict: dictFromLocalization(localizationSettings.primaryComponent.localization)), secondaryComponent: localizationSettings.secondaryComponent.flatMap({ PresentationStringsComponent(languageCode: $0.languageCode, localizedName: $0.localizedName, pluralizationRulesCode: $0.customPluralizationCode, dict: dictFromLocalization($0.localization)) }), groupingSeparator: dateTimeFormat.groupingSeparator)
         } else {
             stringsValue = defaultPresentationStrings
         }
@@ -287,6 +298,30 @@ public func currentPresentationDataAndSettings(accountManager: AccountManager, s
         
         return InitialPresentationDataAndSettings(presentationData: PresentationData(strings: stringsValue, theme: theme, autoNightModeTriggered: autoNightModeTriggered, chatWallpaper: effectiveChatWallpaper, chatFontSize: chatFontSize, chatBubbleCorners: chatBubbleCorners, listsFontSize: listsFontSize, dateTimeFormat: dateTimeFormat, nameDisplayOrder: nameDisplayOrder, nameSortOrder: nameSortOrder, disableAnimations: themeSettings.disableAnimations, largeEmoji: themeSettings.largeEmoji), automaticMediaDownloadSettings: automaticMediaDownloadSettings, autodownloadSettings: autodownloadSettings, callListSettings: callListSettings, inAppNotificationSettings: inAppNotificationSettings, mediaInputSettings: mediaInputSettings, experimentalUISettings: experimentalUISettings)
     }
+}
+
+/// 选择本地的多语言文件，处理生成PresentationStrings 模型
+/// - Parameter languageCode: 语言code
+private func stringValue(_ languageCode: String) -> PresentationStrings{
+    
+    let bundle = Bundle.main
+    //local相关信息
+    var l: (languageCode: String, localizedName: String, localization: String)
+    
+    switch LanguageCodeEnum(rawValue: languageCode) {
+    case .EN:
+        l = (languageCode, "English", "en")
+    case .SC:
+        l = (languageCode, "简体中文", "zh-Hans")
+    case .TC:
+        l = (languageCode, "繁体中文", "zh-Hant")
+    case .none:
+        return defaultPresentationStrings
+    }
+    
+    let path = bundle.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: l.localization)!
+    
+    return PresentationStrings(primaryComponent: PresentationStringsComponent(languageCode: l.languageCode, localizedName: l.localizedName, pluralizationRulesCode: nil, dict: NSDictionary(contentsOf: URL(fileURLWithPath: path)) as! [String : String]), secondaryComponent: nil, groupingSeparator: "")
 }
 
 private var first = true

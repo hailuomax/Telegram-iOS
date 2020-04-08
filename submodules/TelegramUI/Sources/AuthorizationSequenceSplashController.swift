@@ -11,6 +11,9 @@ import LegacyComponents
 
 import RMIntro
 
+import Language
+import Account
+
 final class AuthorizationSequenceSplashController: ViewController {
     private var controllerNode: AuthorizationSequenceSplashControllerNode {
         return self.displayNode as! AuthorizationSequenceSplashControllerNode
@@ -80,7 +83,8 @@ final class AuthorizationSequenceSplashController: ViewController {
         self.statusBar.statusBarStyle = theme.intro.statusBarStyle.style
         
         self.controller.startMessaging = { [weak self] in
-            self?.activateLocalization("en")
+            //self?.activateLocalization("en")
+            self?.activateLocalization("zh-hans-raw")
         }
         self.controller.startMessagingInAlternativeLanguage = { [weak self] code in
             if let code = code {
@@ -160,7 +164,8 @@ final class AuthorizationSequenceSplashController: ViewController {
             if let current = transaction.getSharedData(SharedDataKeys.localizationSettings) as? LocalizationSettings {
                 return current.primaryComponent.languageCode
             } else {
-                return "en"
+//                return "en"
+                return HLAccountManager.shareLanguageCode.rawValue
             }
         }
         let suggestedCode = self.suggestedLocalization.get()
@@ -198,7 +203,20 @@ final class AuthorizationSequenceSplashController: ViewController {
                     }
                     let stringsValue: PresentationStrings
                     if let localizationSettings = localizationSettings {
-                        stringsValue = PresentationStrings(primaryComponent: PresentationStringsComponent(languageCode: localizationSettings.primaryComponent.languageCode, localizedName: localizationSettings.primaryComponent.localizedName, pluralizationRulesCode: localizationSettings.primaryComponent.customPluralizationCode, dict: dictFromLocalization(localizationSettings.primaryComponent.localization)), secondaryComponent: localizationSettings.secondaryComponent.flatMap({ PresentationStringsComponent(languageCode: $0.languageCode, localizedName: $0.localizedName, pluralizationRulesCode: $0.customPluralizationCode, dict: dictFromLocalization($0.localization)) }), groupingSeparator: "")
+                        
+                        let languageCode = localizationSettings.primaryComponent.languageCode
+                        print(languageCode)
+                        switch LanguageCodeEnum(rawValue: languageCode) {
+                        case .EN:
+                            stringsValue = PresentationStrings(primaryComponent: PresentationStringsComponent(languageCode: languageCode, localizedName: "English", pluralizationRulesCode: nil, dict: NSDictionary(contentsOf: URL(fileURLWithPath: Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: "en")!)) as! [String : String]), secondaryComponent: nil, groupingSeparator: "")
+                        case .SC:
+                            stringsValue = PresentationStrings(primaryComponent: PresentationStringsComponent(languageCode: languageCode, localizedName: "简体中文", pluralizationRulesCode: nil, dict: NSDictionary(contentsOf: URL(fileURLWithPath: Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: "zh-Hans")!)) as! [String : String]), secondaryComponent: nil, groupingSeparator: "")
+                        case .TC:
+                            stringsValue = PresentationStrings(primaryComponent: PresentationStringsComponent(languageCode: languageCode, localizedName: "繁体中文", pluralizationRulesCode: nil, dict: NSDictionary(contentsOf: URL(fileURLWithPath: Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: "zh-Hant")!)) as! [String : String]), secondaryComponent: nil, groupingSeparator: "")
+                        case .none:
+                           stringsValue = defaultPresentationStrings
+                        }
+//                        stringsValue = PresentationStrings(primaryComponent: PresentationStringsComponent(languageCode: localizationSettings.primaryComponent.languageCode, localizedName: localizationSettings.primaryComponent.localizedName, pluralizationRulesCode: localizationSettings.primaryComponent.customPluralizationCode, dict: dictFromLocalization(localizationSettings.primaryComponent.localization)), secondaryComponent: localizationSettings.secondaryComponent.flatMap({ PresentationStringsComponent(languageCode: $0.languageCode, localizedName: $0.localizedName, pluralizationRulesCode: $0.customPluralizationCode, dict: dictFromLocalization($0.localization)) }), groupingSeparator: "")
                     } else {
                         stringsValue = defaultPresentationStrings
                     }

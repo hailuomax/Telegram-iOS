@@ -3,10 +3,11 @@ import AppBundle
 import StringPluralization
 
 private let fallbackDict: [String: String] = {
-    guard let mainPath = getAppBundle().path(forResource: "en", ofType: "lproj"), let bundle = Bundle(path: mainPath) else {
-        return [:]
-    }
-    guard let path = bundle.path(forResource: "Localizable", ofType: "strings") else {
+//    guard let mainPath = getAppBundle().path(forResource: "en", ofType: "lproj"), let bundle = Bundle(path: mainPath) else {
+//        return [:]
+//    }
+//    guard let path = bundle.path(forResource: "Localizable", ofType: "strings") else {
+    guard let path = getAppBundle().path(forResource: "Localizable", ofType: "strings", inDirectory: nil, forLocalization: "zh-Hans") else {
         return [:]
     }
     guard let dict = NSDictionary(contentsOf: URL(fileURLWithPath: path)) as? [String: String] else {

@@ -12,6 +12,8 @@ import NetworkLogging
 import SyncCore
 import EncryptionProvider
 
+import Language
+
 public enum ConnectionStatus: Equatable {
     case waitingForNetwork
     case connecting(proxyAddress: String?, proxyHasConnectionIssues: Bool)
@@ -438,7 +440,8 @@ func initializedNetwork(arguments: NetworkInitializationArguments, supplementary
             apiEnvironment.langPack = arguments.languagesCategory
             apiEnvironment.layer = NSNumber(value: Int(serialization.currentLayer()))
             apiEnvironment.disableUpdates = supplementary
-            apiEnvironment = apiEnvironment.withUpdatedLangPackCode(languageCode ?? "en")
+            //apiEnvironment = apiEnvironment.withUpdatedLangPackCode(languageCode ?? "en")
+            apiEnvironment = apiEnvironment.withUpdatedLangPackCode(languageCode ?? LanguageCodeEnum.SC.rawValue)
             
             if let effectiveActiveServer = proxySettings?.effectiveActiveServer {
                 apiEnvironment = apiEnvironment.withUpdatedSocksProxySettings(effectiveActiveServer.mtProxySettings)

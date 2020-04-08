@@ -22,6 +22,7 @@ public class LocalizationListController: ViewController {
         return self._ready
     }
     
+    ///当前语言版本数据
     private var presentationData: PresentationData
     private var presentationDataDisposable: Disposable?
     

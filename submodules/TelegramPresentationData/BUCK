@@ -16,6 +16,7 @@ static_library(
         "//submodules/AppBundle:AppBundle",
         "//submodules/StringPluralization:StringPluralization",
         "//submodules/Sunrise:Sunrise",
+        "//submodules/HL/Language:Language",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

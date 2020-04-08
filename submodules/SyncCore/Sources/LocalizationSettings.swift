@@ -54,6 +54,10 @@ public final class LocalizationSettings: PreferencesEntry, Equatable {
     public let primaryComponent: LocalizationComponent
     public let secondaryComponent: LocalizationComponent?
     
+    /// 默认值
+    public static let defaultSettings: LocalizationSettings = LocalizationSettings(primaryComponent: LocalizationComponent(languageCode: "zh-hans-raw", localizedName: "简体中文", localization: Localization(version: 0, entries: []), customPluralizationCode: nil), secondaryComponent: nil)
+    
+    
     public init(primaryComponent: LocalizationComponent, secondaryComponent: LocalizationComponent?) {
         self.primaryComponent = primaryComponent
         self.secondaryComponent = secondaryComponent

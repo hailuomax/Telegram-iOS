@@ -19,7 +19,8 @@ framework(
         "//submodules/CryptoUtils:CryptoUtils",
         "//submodules/NetworkLogging:NetworkLogging",
         "//submodules/Reachability:Reachability",
-
+        "//submodules/HL/Language:Language",
+        "//submodules/AppBundle:AppBundle",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

@@ -6,6 +6,8 @@ import MtProtoKit
 
 import SyncCore
 
+import Language
+
 private final class ManagedLocalizationUpdatesOperationsHelper {
     var operationDisposables: [Int32: Disposable] = [:]
     
@@ -127,7 +129,8 @@ func getLocalization(_ transaction: AccountManagerModifier) -> (primary: (code: 
     if let localizationSettings = localizationSettings {
         return (primary: (localizationSettings.primaryComponent.languageCode, localizationSettings.primaryComponent.localization.version, localizationSettings.primaryComponent.localization.entries), secondary: localizationSettings.secondaryComponent.flatMap({ ($0.languageCode, $0.localization.version, $0.localization.entries) }))
     } else {
-        return (primary: ("en", 0, []), secondary: nil)
+//        return (primary: ("en", 0, []), secondary: nil)
+                return (primary: (LanguageCodeEnum.SC.rawValue, 0, []), secondary: nil)
     }
 }
 
@@ -171,7 +174,8 @@ private func synchronizeLocalizationUpdates(accountManager: AccountManager, post
             return accountManager.transaction { transaction -> Signal<Void, SynchronizeLocalizationUpdatesError> in
                 let (primary, secondary) = getLocalization(transaction)
                 
-                var currentSettings = transaction.getSharedData(SharedDataKeys.localizationSettings) as? LocalizationSettings ?? LocalizationSettings(primaryComponent: LocalizationComponent(languageCode: "en", localizedName: "English", localization: Localization(version: 0, entries: []), customPluralizationCode: nil), secondaryComponent: nil)
+                //var currentSettings = transaction.getSharedData(SharedDataKeys.localizationSettings) as? LocalizationSettings ?? LocalizationSettings(primaryComponent: LocalizationComponent(languageCode: "en", localizedName: "English", localization: Localization(version: 0, entries: []), customPluralizationCode: nil), secondaryComponent: nil)
+                var currentSettings = transaction.getSharedData(SharedDataKeys.localizationSettings) as? LocalizationSettings ?? LocalizationSettings.defaultSettings
                 
                 for difference in parsedDifferences {
                     let current: (isPrimary: Bool, entries: [LocalizationEntry])
@@ -283,7 +287,8 @@ func tryApplyingLanguageDifference(transaction: AccountManagerModifier, langCode
             }
             mergedEntries.append(contentsOf: updatedEntries)
             
-            let currentSettings = transaction.getSharedData(SharedDataKeys.localizationSettings) as? LocalizationSettings ?? LocalizationSettings(primaryComponent: LocalizationComponent(languageCode: "en", localizedName: "English", localization: Localization(version: 0, entries: []), customPluralizationCode: nil), secondaryComponent: nil)
+            //let currentSettings = transaction.getSharedData(SharedDataKeys.localizationSettings) as? LocalizationSettings ?? LocalizationSettings(primaryComponent: LocalizationComponent(languageCode: "en", localizedName: "English", localization: Localization(version: 0, entries: []), customPluralizationCode: nil), secondaryComponent: nil)
+            let currentSettings = transaction.getSharedData(SharedDataKeys.localizationSettings) as? LocalizationSettings ?? LocalizationSettings.defaultSettings
             
             var updatedSettings: LocalizationSettings
             if isPrimary {

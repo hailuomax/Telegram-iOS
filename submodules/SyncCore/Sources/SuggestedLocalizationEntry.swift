@@ -1,4 +1,5 @@
 import Postbox
+import Language
 
 public final class SuggestedLocalizationEntry: PreferencesEntry {
     public let languageCode: String
@@ -10,7 +11,8 @@ public final class SuggestedLocalizationEntry: PreferencesEntry {
     }
     
     public init(decoder: PostboxDecoder) {
-        self.languageCode = decoder.decodeStringForKey("lc", orElse: "en")
+        //self.languageCode = decoder.decodeStringForKey("lc", orElse: "en")
+        self.languageCode = decoder.decodeStringForKey("lc", orElse: LanguageCodeEnum.SC.rawValue)
         self.isSeen = decoder.decodeInt32ForKey("s", orElse: 0) != 0
     }
     
