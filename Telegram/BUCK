@@ -41,7 +41,7 @@ framework_dependencies = [
     "//submodules/TelegramCore:TelegramCore",
     "//submodules/AsyncDisplayKit:AsyncDisplayKit",
     "//submodules/Display:Display",
-    "//submodules/TelegramUI:TelegramUI",
+    "//submodules/TelegramUI:TelegramUI"    
 ]
 
 resource_dependencies = [
@@ -60,6 +60,7 @@ resource_dependencies = [
     ":Icons",
     ":AdditionalIcons",
     ":LaunchScreen",
+    "//submodules/HL/AccountModule:AssetXib"
 ]
 
 build_phase_scripts = [
