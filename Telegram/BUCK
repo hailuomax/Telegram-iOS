@@ -60,7 +60,7 @@ resource_dependencies = [
     ":Icons",
     ":AdditionalIcons",
     ":LaunchScreen",
-    "//submodules/HL/AccountModule:AssetXib",
+     "//submodules/HL/UI:AssetXib",
     "//submodules/HL/HL:Icons",
 ]
 
