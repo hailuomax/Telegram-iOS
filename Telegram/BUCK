@@ -60,7 +60,8 @@ resource_dependencies = [
     ":Icons",
     ":AdditionalIcons",
     ":LaunchScreen",
-    "//submodules/HL/AccountModule:AssetXib"
+    "//submodules/HL/AccountModule:AssetXib",
+    "//submodules/HL/HL:Icons",
 ]
 
 build_phase_scripts = [
