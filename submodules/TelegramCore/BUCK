@@ -20,6 +20,7 @@ framework(
         "//submodules/NetworkLogging:NetworkLogging",
         "//submodules/Reachability:Reachability",
         "//submodules/HL/Language:Language",
+        "//submodules/HL/Account:Account",
         "//submodules/AppBundle:AppBundle",
     ],
     frameworks = [

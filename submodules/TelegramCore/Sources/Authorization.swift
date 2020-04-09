@@ -5,6 +5,7 @@ import TelegramApi
 import MtProtoKit
 
 import SyncCore
+import Account
 
 public enum AuthorizationCodeRequestError {
     case invalidPhoneNumber
@@ -219,6 +220,10 @@ public func authorizeWithCode(accountManager: AccountManager, account: Unauthori
                                     switch authorization {
                                     case let .authorization(_, _, user):
                                         let user = TelegramUser(user: user)
+                                        
+                                        //电报登录成功后，保存好user的信息
+                                        HLAccountManager.setShareTgUser(user)
+                                        
                                         let state = AuthorizedAccountState(isTestingEnvironment: account.testingEnvironment, masterDatacenterId: account.masterDatacenterId, peerId: user.id, state: nil)
                                         initializedAppSettingsAfterLogin(transaction: transaction, appVersion: account.networkArguments.appVersion, syncContacts: syncContacts)
                                         transaction.setState(state)
@@ -278,6 +283,10 @@ public func authorizeWithPassword(accountManager: AccountManager, account: Unaut
             switch result {
             case let .authorization(_, _, user):
                 let user = TelegramUser(user: user)
+                
+                //电报登录成功后，保存好user的信息
+                HLAccountManager.setShareTgUser(user)
+                
                 let state = AuthorizedAccountState(isTestingEnvironment: account.testingEnvironment, masterDatacenterId: account.masterDatacenterId, peerId: user.id, state: nil)
                 /*transaction.updatePeersInternal([user], update: { current, peer -> Peer? in
                  return peer
@@ -355,6 +364,10 @@ public func performPasswordRecovery(accountManager: AccountManager, account: Una
             switch result {
             case let .authorization(_, _, user):
                 let user = TelegramUser(user: user)
+                
+                //电报登录成功后，保存好user的信息
+                HLAccountManager.setShareTgUser(user)
+                
                 let state = AuthorizedAccountState(isTestingEnvironment: account.testingEnvironment, masterDatacenterId: account.masterDatacenterId, peerId: user.id, state: nil)
                 /*transaction.updatePeersInternal([user], update: { current, peer -> Peer? in
                  return peer
@@ -451,6 +464,10 @@ public func signUpWithName(accountManager: AccountManager, account: Unauthorized
                 switch result {
                 case let .authorization(_, _, user):
                     let user = TelegramUser(user: user)
+                    
+                    //电报登录成功后，保存好user的信息
+                    HLAccountManager.setShareTgUser(user)
+                    
                     let appliedState = account.postbox.transaction { transaction -> Void in
                         let state = AuthorizedAccountState(isTestingEnvironment: account.testingEnvironment, masterDatacenterId: account.masterDatacenterId, peerId: user.id, state: nil)
                         if let hole = account.postbox.seedConfiguration.initializeChatListWithHole.topLevel {

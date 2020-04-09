@@ -47,6 +47,7 @@ import BackgroundTasks
 import Proxy
 import Account
 import BotManager
+import RxSwift
 
 private let handleVoipNotifications = false
 
@@ -235,7 +236,19 @@ final class SharedApplicationContext {
     
     private let deviceToken = Promise<Data?>(nil)
     
+    //MARK:  启动app的代理
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        
+        //MARK:  注册telegramUser的用户更新通知
+        _ = NotificationCenter.default.rx
+            .notification(HLAccountManager.kTelegramUserDidChangeNotificationName)
+            .observeOn(MainScheduler.instance)
+            .takeUntil(self.rx.deallocated)
+            .subscribe(onNext: { _ in
+                //有用户，获取用户相关状态（主要是开车开关）
+                AccountRepo.userStatusCheck(currentVC: nil)
+            })
+        
         precondition(!testIsLaunched)
         testIsLaunched = true
         
@@ -1406,6 +1419,9 @@ final class SharedApplicationContext {
         }*/
         
         self.maybeCheckForUpdates()
+        
+        //获取单例数据
+        _ = HLAccountManager.getAccount()
         
         return true
     }
