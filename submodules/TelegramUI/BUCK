@@ -213,6 +213,7 @@ framework(
         "//submodules/HL/Config:Config",
         "//submodules/HL/HLBase:HLBase",
         "//submodules/HL/Extension:Extension",
+        "//submodules/HL/Repo:Repo",
         "//Pods/RxSwift:RxSwift",
         "//Pods/RxCocoa:RxCocoa",
         "//Pods/SnapKit:SnapKit",

@@ -48,6 +48,7 @@ import Proxy
 import Account
 import BotManager
 import RxSwift
+import Repo
 
 private let handleVoipNotifications = false
 
