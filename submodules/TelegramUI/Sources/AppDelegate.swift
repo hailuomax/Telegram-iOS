@@ -49,6 +49,8 @@ import Account
 import BotManager
 import RxSwift
 import Repo
+import ViewModel
+import UI
 
 private let handleVoipNotifications = false
 
@@ -1423,6 +1425,13 @@ final class SharedApplicationContext {
         
         //获取单例数据
         _ = HLAccountManager.getAccount()
+        
+        // 检查版本更新
+        defer{
+            CheckVersionManager.checkVersionUpdate{
+                VersionSheetVC($0).show()
+            }
+        }
         
         return true
     }

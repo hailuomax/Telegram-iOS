@@ -218,6 +218,7 @@ framework(
         "//Pods/RxCocoa:RxCocoa",
         "//Pods/SnapKit:SnapKit",
          "//submodules/HL/UI:UI",
+         "//submodules/HL/ViewModel:ViewModel",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

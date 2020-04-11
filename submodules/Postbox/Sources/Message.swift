@@ -473,6 +473,18 @@ public struct MessageGroupInfo: Equatable {
     public let stableId: UInt32
 }
 
+
+public let InTranslation: String = "\n🕳️Translate🕳️"
+public let TranslateFail: String = "\n🕳️TranslateFail🕳️"
+public let TranslateSuccess: String = "\n🕳️TranslateSuccess🕳️"
+
+public enum ReceiveStatus: Int {
+    case unReceive      //未领取
+    case hadReceive     //已领取
+    case hadExpire      //已过期
+    case nothingReceive //已抢完
+}
+
 public final class Message {
     public let stableId: UInt32
     public let stableVersion: UInt32
@@ -495,6 +507,12 @@ public final class Message {
     public let associatedMessages: SimpleDictionary<MessageId, Message>
     public let associatedMessageIds: [MessageId]
     
+    //翻译相关
+    public let translateText: String
+    public let translateStatus: Int
+    //红包领取状态相关
+    public let receiveStatus: Int
+    
     public var index: MessageIndex {
         return MessageIndex(id: self.id, timestamp: self.timestamp)
     }
@@ -513,12 +531,19 @@ public final class Message {
         self.localTags = localTags
         self.forwardInfo = forwardInfo
         self.author = author
-        self.text = text
+        
         self.attributes = attributes
         self.media = media
         self.peers = peers
         self.associatedMessages = associatedMessages
         self.associatedMessageIds = associatedMessageIds
+        
+        self.translateText = Message.separateTranslate(text: text).translateText
+        self.translateStatus = Message.getTranslateType(text: text)
+        
+        let originText = Message.separateTranslate(text: text).originText
+        self.receiveStatus = Message.getReceiveOrigin(text: originText).receiveStatus
+        self.text = Message.getReceiveOrigin(text: originText).originText
     }
     
     public func withUpdatedMedia(_ media: [Media]) -> Message {
@@ -539,6 +564,51 @@ public final class Message {
     
     func withUpdatedAssociatedMessages(_ associatedMessages: SimpleDictionary<MessageId, Message>) -> Message {
         return Message(stableId: self.stableId, stableVersion: self.stableVersion, id: self.id, globallyUniqueId: self.globallyUniqueId, groupingKey: self.groupingKey, groupInfo: self.groupInfo, timestamp: self.timestamp, flags: self.flags, tags: self.tags, globalTags: self.globalTags, localTags: self.localTags, forwardInfo: self.forwardInfo, author: self.author, text: self.text, attributes: self.attributes, media: self.media, peers: self.peers, associatedMessages: associatedMessages, associatedMessageIds: self.associatedMessageIds)
+    }
+}
+
+extension Message{
+    
+    private static func separateTranslate(text: String) -> (originText: String,translateText: String) {
+        if text.contains(TranslateFail) {
+            let array: [String] = text.components(separatedBy:TranslateFail)
+            return (originText:array[0],translateText:"")
+        } else if text.contains(TranslateSuccess) {
+            let array: [String] = text.components(separatedBy:TranslateSuccess)
+            return (originText:array[0],translateText:array[1])
+        } else if text.contains(InTranslation) {
+            let array: [String] = text.components(separatedBy:InTranslation)
+            return (originText:array[0],translateText:"")
+        }
+        return (originText:text,translateText:"")
+    }
+    
+    private static func getTranslateType(text: String) -> Int {
+        if text.contains(InTranslation) {
+            return 1
+        } else if text.contains(TranslateSuccess) {
+            return 2
+        } else if text.contains(TranslateFail) {
+            return 3
+        }
+        return 0
+    }
+    
+    private static func getReceiveOrigin(text: String) -> (originText: String,receiveStatus: Int) {
+        if text.contains("♥下载海螺 APP，体验红包新功能") {
+            let infos = text.components(separatedBy: "♥")
+            if infos.count == 7 {
+                let arr = text.split(separator: "♥").compactMap { "\($0)" }
+                guard let status = Int(arr[arr.count - 2]) else {
+                    return (originText:text,receiveStatus: 0)
+                }
+                let statusHeart = "\(status)♥】"
+                return (originText:text.replacingOccurrences(of: statusHeart, with: "】"),receiveStatus: status)
+            }
+            return (originText:text,receiveStatus: 0)
+        } else {
+            return (originText:text,receiveStatus: 0)
+        }
     }
 }
 
