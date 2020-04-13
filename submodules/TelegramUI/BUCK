@@ -219,6 +219,7 @@ framework(
         "//Pods/SnapKit:SnapKit",
          "//submodules/HL/UI:UI",
          "//submodules/HL/ViewModel:ViewModel",
+         "//submodules/HL/Translate:Translate",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

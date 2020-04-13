@@ -6,8 +6,9 @@ import TelegramCore
 import SyncCore
 import TelegramUIPreferences
 import AppBundle
+import Extension
 
-func generateCheckImage(partial: Bool, color: UIColor, width: CGFloat) -> UIImage? {
+func generateCheckImage(partial: Bool, color: UIColor, width: CGFloat = 11.0) -> UIImage? {
     return generateImage(CGSize(width: width, height: floor(width * 9.0 / 11.0)), rotatedContext: { size, context in
         context.clear(CGRect(origin: CGPoint(), size: size))
         
@@ -146,6 +147,21 @@ public final class PrincipalThemeEssentialGraphics {
     
     public let checkFreeFullImage: UIImage
     public let checkFreePartialImage: UIImage
+    
+    ///红包的时间状态图标
+    public let rpCheckFreeFullImage: UIImage
+    public let rpCheckFreePartialImage: UIImage
+    public let rpClockBubbleIncomingFrameImage: UIImage
+    public let rpClockBubbleIncomingMinImage: UIImage
+    public let rpClockBubbleOutgoingFrameImage: UIImage
+    public let rpClockBubbleOutgoingMinImage: UIImage
+    ///灰色 闪兑 转账
+    public let greyCheckFreeFullImage: UIImage
+    public let greyCheckFreePartialImage: UIImage
+    public let greyClockBubbleIncomingFrameImage: UIImage
+    public let greyClockBubbleIncomingMinImage: UIImage
+    public let greyClockBubbleOutgoingFrameImage: UIImage
+    public let greyClockBubbleOutgoingMinImage: UIImage
     
     public let clockBubbleIncomingFrameImage: UIImage
     public let clockBubbleIncomingMinImage: UIImage
@@ -294,6 +310,24 @@ public final class PrincipalThemeEssentialGraphics {
             self.chatMessageBackgroundOutgoingMergedSideOutlineImage = emptyImage
             self.chatMessageBackgroundOutgoingMergedSideShadowImage = emptyImage
             self.chatMessageBackgroundOutgoingMergedSideHighlightedImage = emptyImage
+            
+            
+            ///红包
+            self.rpCheckFreeFullImage = emptyImage
+            self.rpCheckFreePartialImage = emptyImage
+            self.rpClockBubbleIncomingFrameImage = emptyImage
+            self.rpClockBubbleIncomingMinImage = emptyImage
+            self.rpClockBubbleOutgoingFrameImage = emptyImage
+            self.rpClockBubbleOutgoingMinImage = emptyImage
+            
+            self.greyCheckFreeFullImage = emptyImage
+            self.greyCheckFreePartialImage = emptyImage
+            self.greyClockBubbleIncomingFrameImage = emptyImage
+            self.greyClockBubbleIncomingMinImage = emptyImage
+            self.greyClockBubbleOutgoingFrameImage = emptyImage
+            self.greyClockBubbleOutgoingMinImage = emptyImage
+            
+            
             self.checkMediaFullImage = emptyImage
             self.checkMediaPartialImage = emptyImage
             self.checkFreeFullImage = emptyImage
@@ -377,6 +411,23 @@ public final class PrincipalThemeEssentialGraphics {
             self.chatMessageBackgroundOutgoingMergedSideShadowImage = messageBubbleImage(maxCornerRadius: maxCornerRadius, minCornerRadius: minCornerRadius, incoming: false, fillColor: outgoing.fill, strokeColor: outgoing.stroke, neighbors: .side, theme: theme, wallpaper: wallpaper, knockout: outgoingKnockout, extendedEdges: true, onlyShadow: true)
             self.chatMessageBackgroundIncomingMergedSideHighlightedImage = messageBubbleImage(maxCornerRadius: maxCornerRadius, minCornerRadius: minCornerRadius, incoming: true, fillColor: incoming.highlightedFill, strokeColor: incoming.stroke, neighbors: .side, theme: theme, wallpaper: wallpaper, knockout: outgoingKnockout, extendedEdges: true)
             self.chatMessageBackgroundOutgoingMergedSideHighlightedImage = messageBubbleImage(maxCornerRadius: maxCornerRadius, minCornerRadius: minCornerRadius, incoming: false, fillColor: outgoing.highlightedFill, strokeColor: outgoing.stroke, neighbors: .side, theme: theme, wallpaper: wallpaper, knockout: outgoingKnockout, extendedEdges: true)
+            
+            
+            //红包
+            self.rpCheckFreeFullImage = generateCheckImage(partial: false, color: ColorEnum.kFF9A58.toColor())!
+            self.rpCheckFreePartialImage = generateCheckImage(partial: true, color: ColorEnum.kFF9A58.toColor())!
+            self.rpClockBubbleIncomingFrameImage = generateClockFrameImage(color: ColorEnum.kFF9A58.toColor())!
+            self.rpClockBubbleIncomingMinImage = generateClockMinImage(color: ColorEnum.kFF9A58.toColor())!
+            self.rpClockBubbleOutgoingFrameImage = generateClockFrameImage(color: ColorEnum.kFF9A58.toColor())!
+            self.rpClockBubbleOutgoingMinImage = generateClockMinImage(color: ColorEnum.kFF9A58.toColor())!
+            //转账 闪兑
+            self.greyCheckFreeFullImage = generateCheckImage(partial: false, color: ColorEnum.k999999.toColor())!
+            self.greyCheckFreePartialImage = generateCheckImage(partial: true, color: ColorEnum.k999999.toColor())!
+            self.greyClockBubbleIncomingFrameImage = generateClockFrameImage(color: ColorEnum.k999999.toColor())!
+            self.greyClockBubbleIncomingMinImage = generateClockMinImage(color: ColorEnum.k999999.toColor())!
+            self.greyClockBubbleOutgoingFrameImage = generateClockFrameImage(color: ColorEnum.k999999.toColor())!
+            self.greyClockBubbleOutgoingMinImage = generateClockMinImage(color: ColorEnum.k999999.toColor())!
+            
             
             self.checkBubbleFullImage = generateCheckImage(partial: false, color: theme.message.outgoingCheckColor, width: 11.0)!
             self.checkBubblePartialImage = generateCheckImage(partial: true, color: theme.message.outgoingCheckColor, width: 11.0)!

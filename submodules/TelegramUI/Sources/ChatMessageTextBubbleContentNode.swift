@@ -10,6 +10,8 @@ import UrlEscaping
 import TelegramUniversalVideoContent
 import TextSelectionNode
 
+import Language
+
 private final class CachedChatMessageText {
     let text: String
     let inputEntities: [MessageTextEntity]?
@@ -40,6 +42,11 @@ class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
     private let textNode: TextNode
     private let textAccessibilityOverlayNode: TextAccessibilityOverlayNode
     private let statusNode: ChatMessageDateAndStatusNode
+    
+    //翻译
+    private let translateNode: ChatMessageTranslateNode
+    private let translateTipsNode: TextNode
+    
     private var linkHighlightingNode: LinkHighlightingNode?
     private var textSelectionNode: TextSelectionNode?
     
@@ -51,6 +58,9 @@ class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
         self.textNode = TextNode()
         
         self.statusNode = ChatMessageDateAndStatusNode()
+        
+        self.translateNode = ChatMessageTranslateNode()
+        self.translateTipsNode = TextNode()
         
         self.textAccessibilityOverlayNode = TextAccessibilityOverlayNode()
         
@@ -83,6 +93,9 @@ class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
         let textLayout = TextNode.asyncLayout(self.textNode)
         let statusLayout = self.statusNode.asyncLayout()
         
+        //翻译
+        let translateTipsLayout = TextNode.asyncLayout(self.translateTipsNode)
+
         let currentCachedChatMessageText = self.cachedChatMessageText
         
         return { item, layoutConstants, _, _, _ in
@@ -154,7 +167,7 @@ class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                 var statusApply: ((Bool) -> Void)?
                 
                 if let statusType = statusType {
-                    let (size, apply) = statusLayout(item.context, item.presentationData, edited, viewCount, dateText, statusType, textConstrainedSize, dateReactions)
+                    let (size, apply) = statusLayout(item.context, item.presentationData, edited, viewCount, dateText, statusType, textConstrainedSize, dateReactions, .default)
                     statusSize = size
                     statusApply = apply
                 }
