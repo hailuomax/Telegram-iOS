@@ -247,9 +247,9 @@ final class SharedApplicationContext {
             .notification(HLAccountManager.kTelegramUserDidChangeNotificationName)
             .observeOn(MainScheduler.instance)
             .takeUntil(self.rx.deallocated)
-            .subscribe(onNext: { _ in
+            .subscribe(onNext: {
                 //有用户，获取用户相关状态（主要是开车开关）
-                AccountRepo.userStatusCheck(currentVC: nil)
+                AccountRepo.userStatusCheck(telegramUser: $0.userInfo?["user"] as! TelegramUser, currentVC: nil)
             })
         
         precondition(!testIsLaunched)
