@@ -61,4 +61,20 @@ public struct PresentationResourcesSettings {
     public static let changePhoneNumber = renderIcon(name: "Settings/MenuIcons/ChangePhoneNumber")
     
     public static let websites = renderIcon(name: "Settings/MenuIcons/Websites")
+    
+}
+
+public extension PresentationResourcesSettings {
+    public static let myWallet = UIImage(bundleImageName: "MyWallet")?.precomposed()
+    public static let authentication = UIImage(bundleImageName: "Authentication")?.precomposed()
+    public static let tradePassword = UIImage(bundleImageName: "TradePassword")?.precomposed()
+    public static let accountProtection = UIImage(bundleImageName: "AccountProtection")?.precomposed()
+    public static let inviteFriends = UIImage(bundleImageName: "inviteFriends")?.precomposed()
+    public static let task1 = UIImage(bundleImageName: "Task1")?.precomposed()
+    public static let task2 = UIImage(bundleImageName: "Task2")?.precomposed()
+    public static let setting = UIImage(bundleImageName: "Setting")?.precomposed()
+    public static let aboutMe = UIImage(bundleImageName: "AboutMe")?.precomposed()
+    public static let qrCode = UIImage(bundleImageName: "QRCode")?.precomposed()
+    public static let groupQRCode = UIImage(bundleImageName: "GroupQRCode")?.precomposed()
+
 }

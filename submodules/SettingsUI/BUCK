@@ -89,6 +89,10 @@ static_library(
         
         "//submodules/HL/Language:Language",
         "//submodules/HL/Proxy:Proxy",
+        "//submodules/HL/Account:Account",
+        "//submodules/HL/Config:Config",
+        "//submodules/HL/UI:UI",
+        "//submodules/HL/Repo:Repo",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",
