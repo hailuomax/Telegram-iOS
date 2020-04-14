@@ -4,11 +4,13 @@ import TelegramCore
 import SyncCore
 import AccountContext
 
+import Account
+
 func titlePanelForChatPresentationInterfaceState(_ chatPresentationInterfaceState: ChatPresentationInterfaceState, context: AccountContext, currentPanel: ChatTitleAccessoryPanelNode?, interfaceInteraction: ChatPanelInterfaceInteraction?) -> ChatTitleAccessoryPanelNode? {
     if case .overlay = chatPresentationInterfaceState.mode {
         return nil
     }
-    if chatPresentationInterfaceState.renderedPeer?.peer?.restrictionText(platform: "ios", contentSettings: context.currentContentSettings.with { $0 }) != nil {
+    if chatPresentationInterfaceState.renderedPeer?.peer?.restrictionText(platform: "ios", contentSettings: context.currentContentSettings.with { $0 }) != nil, !HLAccountManager.canDrive() {
         return nil
     }
     if chatPresentationInterfaceState.search != nil {

@@ -9,6 +9,7 @@ import SwiftSignalKit
 import TelegramPresentationData
 import AccountContext
 import AppBundle
+import Extension
 
 private let reactionCountFont = Font.semibold(11.0)
 
@@ -130,6 +131,13 @@ private final class StatusReactionNode: ASDisplayNode {
     }
 }
 
+enum HLStatusNodeType {
+    case `default`
+    case Redpacket
+    case Exchange
+    case Transfer
+}
+
 class ChatMessageDateAndStatusNode: ASDisplayNode {
     private var backgroundNode: ASImageNode?
     private var checkSentNode: ASImageNode?
@@ -157,7 +165,7 @@ class ChatMessageDateAndStatusNode: ASDisplayNode {
         self.addSubnode(self.dateNode)
     }
     
-    func asyncLayout() -> (_ context: AccountContext, _ presentationData: ChatPresentationData, _ edited: Bool, _ impressionCount: Int?, _ dateText: String, _ type: ChatMessageDateAndStatusType, _ constrainedSize: CGSize, _ reactions: [MessageReaction]) -> (CGSize, (Bool) -> Void) {
+    func asyncLayout() -> (_ context: AccountContext, _ presentationData: ChatPresentationData, _ edited: Bool, _ impressionCount: Int?, _ dateText: String, _ type: ChatMessageDateAndStatusType, _ constrainedSize: CGSize, _ reactions: [MessageReaction], _ hlStatusNodeType : HLStatusNodeType) -> (CGSize, (Bool) -> Void) {
         let dateLayout = TextNode.asyncLayout(self.dateNode)
         
         var checkReadNode = self.checkReadNode
@@ -173,16 +181,16 @@ class ChatMessageDateAndStatusNode: ASDisplayNode {
         
         let makeReactionCountLayout = TextNode.asyncLayout(self.reactionCountNode)
         
-        return { context, presentationData, edited, impressionCount, dateText, type, constrainedSize, reactions in
-            let dateColor: UIColor
+        return { context, presentationData, edited, impressionCount, dateText, type, constrainedSize, reactions, hlStatusNodeType in
+            var dateColor: UIColor
             var backgroundImage: UIImage?
             var outgoingStatus: ChatMessageDateAndStatusOutgoingType?
             var leftInset: CGFloat
             
-            let loadedCheckFullImage: UIImage?
-            let loadedCheckPartialImage: UIImage?
-            let clockFrameImage: UIImage?
-            let clockMinImage: UIImage?
+            var loadedCheckFullImage: UIImage?
+            var loadedCheckPartialImage: UIImage?
+            var clockFrameImage: UIImage?
+            var clockMinImage: UIImage?
             var impressionImage: UIImage?
             
             let themeUpdated = presentationData.theme != currentTheme || type != currentType
@@ -272,6 +280,42 @@ class ChatMessageDateAndStatusNode: ASDisplayNode {
             if let impressionCount = impressionCount {
                 updatedDateText = compactNumericCountString(impressionCount, decimalSeparator: presentationData.dateTimeFormat.decimalSeparator) + " " + updatedDateText
             }
+            
+            //修改自定义 状态颜色
+            if hlStatusNodeType == .Redpacket {
+                dateColor = ColorEnum.kFF9A58.toColor()
+                loadedCheckFullImage = graphics.rpCheckFreeFullImage
+                loadedCheckPartialImage = graphics.rpCheckFreePartialImage
+                switch type {
+                    case .BubbleIncoming:
+                        clockFrameImage = graphics.rpClockBubbleIncomingFrameImage
+                        clockMinImage = graphics.rpClockBubbleIncomingMinImage
+                    case .BubbleOutgoing(_):
+                        clockFrameImage = graphics.rpClockBubbleOutgoingFrameImage
+                        clockMinImage = graphics.rpClockBubbleOutgoingMinImage
+                    default:
+                        clockFrameImage = graphics.rpClockBubbleIncomingFrameImage
+                        clockMinImage = graphics.rpClockBubbleIncomingMinImage
+                }
+            }
+            
+            if hlStatusNodeType == .Exchange || hlStatusNodeType == .Transfer {
+                dateColor = ColorEnum.k999999.toColor()
+                loadedCheckFullImage = graphics.greyCheckFreeFullImage
+                loadedCheckPartialImage = graphics.greyCheckFreePartialImage
+                switch type {
+                    case .BubbleIncoming:
+                        clockFrameImage = graphics.greyClockBubbleIncomingFrameImage
+                        clockMinImage = graphics.greyClockBubbleIncomingMinImage
+                    case .BubbleOutgoing(_):
+                        clockFrameImage = graphics.greyClockBubbleOutgoingFrameImage
+                        clockMinImage = graphics.greyClockBubbleOutgoingMinImage
+                    default:
+                        clockFrameImage = graphics.greyClockBubbleIncomingFrameImage
+                        clockMinImage = graphics.greyClockBubbleIncomingMinImage
+                }
+            }
+            
             
             let dateFont = Font.regular(floor(presentationData.fontSize.baseDisplaySize * 11.0 / 17.0))
             let (date, dateApply) = dateLayout(TextNodeLayoutArguments(attributedString: NSAttributedString(string: updatedDateText, font: dateFont, textColor: dateColor), backgroundColor: nil, maximumNumberOfLines: 1, truncationType: .middle, constrainedSize: constrainedSize, alignment: .natural, cutout: nil, insets: UIEdgeInsets()))
@@ -669,10 +713,10 @@ class ChatMessageDateAndStatusNode: ASDisplayNode {
             let resultSizeAndApply: (CGSize, (Bool) -> Void)
             if let node = node, let currentLayout = currentLayout {
                 resultNode = node
-                resultSizeAndApply = currentLayout(context, presentationData, edited, impressionCount, dateText, type, constrainedSize, reactions)
+                resultSizeAndApply = currentLayout(context, presentationData, edited, impressionCount, dateText, type, constrainedSize, reactions, .default)
             } else {
                 resultNode = ChatMessageDateAndStatusNode()
-                resultSizeAndApply = resultNode.asyncLayout()(context, presentationData, edited, impressionCount, dateText, type, constrainedSize, reactions)
+                resultSizeAndApply = resultNode.asyncLayout()(context, presentationData, edited, impressionCount, dateText, type, constrainedSize, reactions, .default)
             }
             
             return (resultSizeAndApply.0, { animated in

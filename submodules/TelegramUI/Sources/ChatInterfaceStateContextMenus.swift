@@ -16,6 +16,10 @@ import AppBundle
 import SaveToCameraRoll
 import PresentationDataUtils
 
+import Language
+import Model
+import Translate
+
 private struct MessageContextMenuData {
     let starStatus: Bool?
     let canReply: Bool
@@ -513,6 +517,38 @@ func contextMenuForChatPresentationIntefaceState(chatPresentationInterfaceState:
                     f(.custom(transition))
                 })
             })))
+        } else if !message.text.isEmpty { //翻译
+            
+            if messages[0].flags.contains(.Incoming){
+                let presentationData = context.sharedContext.currentPresentationData.with { $0 }
+                let locale = presentationData.strings.baseLanguageCode
+                var title = HLLanguage.TranslateTitle.localized()
+                var mode: TranslateType = .translate
+                if message.translateStatus > 0 {
+                    title = HLLanguage.UndoTranslateTitle.localized()
+                    mode = .undoTranslate
+                }
+                actions.append(.action(ContextMenuActionItem(text: title, icon: { theme in
+                    return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Edit"), color: theme.actionSheet.primaryTextColor)
+                }, action: {_, f in
+                    if mode == .translate {
+                        let newMessageText = message.text + InTranslation
+                        updateMessage(context: context, message: message, text: newMessageText)
+                        let _ = (Translate.gtranslate(message.text, presentationData.strings.baseLanguageCode)  |> deliverOnMainQueue).start(next: { translated in
+                            
+                            let newMessageText = message.text + TranslateSuccess + translated
+                            updateMessage(context: context, message: message, text: newMessageText)
+                        }, error: {_ in
+                            let newMessageText = message.text + TranslateFail
+                            updateMessage(context: context, message: message, text: newMessageText)
+                        })
+                    } else {
+                        let newMessageText = message.text
+                        updateMessage(context: context, message: message, text: newMessageText)
+                    }
+                    f(.default)
+                })))
+            }
         }
         
         var activePoll: TelegramMediaPoll?
@@ -846,6 +882,19 @@ func contextMenuForChatPresentationIntefaceState(chatPresentationInterfaceState:
         
         return actions
     }
+}
+
+func updateMessage(context: AccountContext, message: Message, text: String) {
+    let _ = (context.account.postbox.transaction { transaction -> Void in
+        transaction.updateMessage(message.id, update: { currentMessage in
+            var storeForwardInfo: StoreMessageForwardInfo?
+            if let forwardInfo = currentMessage.forwardInfo {
+                storeForwardInfo = StoreMessageForwardInfo(authorId: forwardInfo.author?.id, sourceId: forwardInfo.source?.id, sourceMessageId: forwardInfo.sourceMessageId, date: forwardInfo.date, authorSignature: forwardInfo.authorSignature)
+            }
+
+            return .update(StoreMessage(id: currentMessage.id, globallyUniqueId: currentMessage.globallyUniqueId, groupingKey: currentMessage.groupingKey, timestamp: currentMessage.timestamp, flags: StoreMessageFlags(currentMessage.flags), tags: currentMessage.tags, globalTags: currentMessage.globalTags, localTags: currentMessage.localTags, forwardInfo: storeForwardInfo, authorId: currentMessage.author?.id, text: text, attributes: currentMessage.attributes, media: currentMessage.media))
+        })
+    }).start()
 }
 
 func canPerformEditingActions(limits: LimitsConfiguration, accountPeerId: PeerId, message: Message, unlimitedInterval: Bool) -> Bool {

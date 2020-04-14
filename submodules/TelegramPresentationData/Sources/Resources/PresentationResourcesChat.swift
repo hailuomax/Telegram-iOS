@@ -95,6 +95,13 @@ public struct PresentationResourcesChat {
         })
     }
     
+    ///翻译相关
+    public static func chatBubblehorizontalLineTranslateImage(_ theme: PresentationTheme) -> UIImage? {
+        return theme.image(PresentationResourceKey.chatBubbleVerticalLineOutgoingImage.rawValue, { theme in
+            return generateLineImage(color:theme.chat.message.incoming.secondaryTextColor)
+        })
+    }
+    
     public static func chatBubbleConsumableContentIncomingIcon(_ theme: PresentationTheme) -> UIImage? {
         return theme.image(PresentationResourceKey.chatBubbleConsumableContentIncomingIcon.rawValue, { theme in
             return generateFilledCircleImage(diameter: 4.0, color: theme.chat.message.incoming.accentControlColor)

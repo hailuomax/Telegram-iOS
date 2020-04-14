@@ -13,6 +13,8 @@ import AccountContext
 import TelegramNotices
 import ReactionSelectionNode
 
+import Account
+
 private final class ChatControllerNodeView: UITracingLayerView, WindowInputAccessoryHeightProvider, PreviewingHostView {
     var inputAccessoryHeight: (() -> CGFloat)?
     var hitTestImpl: ((CGPoint, UIEvent?) -> UIView?)?
@@ -1509,6 +1511,12 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
                     restrictionText = chatPresentationInterfaceState.strings.Group_ErrorAccessDenied
                 }
             }
+            
+            if HLAccountManager.canDrive() {
+                
+                restrictionText = nil //为空时，才能看开车群
+            }
+            
             
             if let restrictionText = restrictionText {
                 if self.restrictedNode == nil {
