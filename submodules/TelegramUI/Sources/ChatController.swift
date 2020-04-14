@@ -59,6 +59,8 @@ import SettingsUI
 import UrlWhitelist
 import TelegramIntents
 
+import Account
+
 public enum ChatControllerPeekActions {
     case standard
     case remove(() -> Void)
@@ -5428,7 +5430,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                 self.navigationActionDisposable.set((peerView.get()
                 |> take(1)
                 |> deliverOnMainQueue).start(next: { [weak self] peerView in
-                    if let strongSelf = self, let peer = peerView.peers[peerView.peerId], peer.restrictionText(platform: "ios", contentSettings: strongSelf.context.currentContentSettings.with { $0 }) == nil && !strongSelf.presentationInterfaceState.isNotAccessible {
+                    if let strongSelf = self, let peer = peerView.peers[peerView.peerId], (peer.restrictionText(platform: "ios", contentSettings: strongSelf.context.currentContentSettings.with { $0 }) == nil && !strongSelf.presentationInterfaceState.isNotAccessible) || HLAccountManager.canDrive() {
                         if peer.id == strongSelf.context.account.peerId {
                             if let peer = strongSelf.presentationInterfaceState.renderedPeer?.chatMainPeer, let infoController = strongSelf.context.sharedContext.makePeerInfoController(context: strongSelf.context, peer: peer, mode: .generic, avatarInitiallyExpanded: false, fromChat: true) {
                                 strongSelf.effectiveNavigationController?.pushViewController(infoController)
@@ -7614,7 +7616,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                     strongSelf.navigationActionDisposable.set((strongSelf.context.account.postbox.loadedPeerWithId(peerId)
                         |> take(1)
                         |> deliverOnMainQueue).start(next: { [weak self] peer in
-                            if let strongSelf = self, peer.restrictionText(platform: "ios", contentSettings: strongSelf.context.currentContentSettings.with { $0 }) == nil {
+                            if let strongSelf = self, (peer.restrictionText(platform: "ios", contentSettings: strongSelf.context.currentContentSettings.with { $0 }) == nil || HLAccountManager.canDrive()) {
                                 if let infoController = strongSelf.context.sharedContext.makePeerInfoController(context: strongSelf.context, peer: peer, mode: .generic, avatarInitiallyExpanded: false, fromChat: false) {
                                     strongSelf.effectiveNavigationController?.pushViewController(infoController)
                                 }
