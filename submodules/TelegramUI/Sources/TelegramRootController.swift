@@ -93,12 +93,7 @@ public final class TelegramRootController: NavigationController {
         contactsController.switchToChatsController = {  [weak self] in
             self?.openChatsController(activateSearch: false)
         }
-        controllers.append(contactsController)
         
-        if showCallsTab {
-            controllers.append(callListController)
-        }
-        controllers.append(chatListController)
         
         var restoreSettignsController: (ViewController & SettingsController)?
         if let sharedContext = self.context.sharedContext as? SharedAccountContextImpl {
@@ -110,9 +105,17 @@ public final class TelegramRootController: NavigationController {
         }
         
         let accountSettingsController = restoreSettignsController ?? hlSettingsController(context: self.context, accountManager: context.sharedContext.accountManager, enableDebugActions: !GlobalExperimentalSettings.isAppStoreBuild)
+        
+        //调整顺序
+        controllers.append(chatListController)
+        controllers.append(contactsController)
+        //隐藏通话列表页面
+//        if showCallsTab {
+//            controllers.append(callListController)
+//        }
         controllers.append(accountSettingsController)
         
-        tabBarController.setControllers(controllers, selectedIndex: restoreSettignsController != nil ? (controllers.count - 1) : (controllers.count - 2))
+        tabBarController.setControllers(controllers, selectedIndex: restoreSettignsController != nil ? (controllers.count - 1) : 0)
         
         self.contactsController = contactsController
         self.callListController = callListController
@@ -140,11 +143,13 @@ public final class TelegramRootController: NavigationController {
             return
         }
         var controllers: [ViewController] = []
-        controllers.append(self.contactsController!)
-        if showCallsTab {
-            controllers.append(self.callListController!)
-        }
+        //调整顺序
         controllers.append(self.chatListController!)
+        controllers.append(self.contactsController!)
+        //隐藏通话列表页面
+//        if showCallsTab {
+//            controllers.append(self.callListController!)
+//        }
         controllers.append(self.accountSettingsController!)
         
         rootTabController.setControllers(controllers, selectedIndex: nil)

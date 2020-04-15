@@ -188,10 +188,12 @@ func callListNodeEntriesForView(_ view: CallListView, state: CallListNodeState, 
                 result.append(.holeEntry(index: index, theme: state.presentationData.theme))
         }
     }
-    if showSettings {
-        result.append(.displayTabInfo(state.presentationData.theme, state.presentationData.strings.CallSettings_TabIconDescription))
-        result.append(.displayTab(state.presentationData.theme, state.presentationData.strings.CallSettings_TabIcon, showCallsTab))
-    }
+    
+    //隐藏“显示通话标签页”的设置按钮
+//    if showSettings {
+//        result.append(.displayTabInfo(state.presentationData.theme, state.presentationData.strings.CallSettings_TabIconDescription))
+//        result.append(.displayTab(state.presentationData.theme, state.presentationData.strings.CallSettings_TabIcon, showCallsTab))
+//    }
     return result
 }
 
