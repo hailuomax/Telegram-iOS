@@ -779,8 +779,8 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                 
                 if HLAccountManager.shareAccount.token == nil || HLAccountManager.shareAccount.token!.isEmpty {
                     
-                    let pushAccountValidationVC : (Bool)->() = { showPwdView in
-                        let vc = AccountValidationVC(context: context, isLogin: true,showPwdView: showPwdView, onValidateSuccess: {
+                    let pushAccountValidationVC : (Bool, Phone)->() = { showPwdView, phone in
+                        let vc = AccountValidationVC(context: context, showPwdView: showPwdView, onValidateSuccess: {
                             //手势设置页面设置好手势密保，或者点击跳过，会有此回调
                             pushControllerImpl?(assetVC)
                         })
@@ -792,20 +792,13 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                         let nv = impl(){
                         currentVC = nv.topViewController
                     }
-                    AccountRepo.userStatusCheck(currentVC: currentVC, onPushAccountLockVC: {
+                    AccountRepo.userStatusCheck(context: context, currentVC: currentVC, onPushAccountLockVC: {
                         
                         let disableVC = AccountLockVC(context: context, title: $0)
                         pushControllerImpl?(disableVC)
                         
-                    }, onPushGesturesUnlockVC: {
-                        
-                        let unlockVC = GesturesUnlockVC(context: context, status: .unlock, onValidateSuccess:{
-                            pushControllerImpl?(assetVC)
-                        })
-                        pushControllerImpl?(unlockVC)
-                        
                     }, onPushAccountValidationVC: {
-                        pushAccountValidationVC($0)
+                        pushAccountValidationVC($0,$1)
                     }, onPushBindExceptionVC: {
                         let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
                         

@@ -16,6 +16,14 @@ apple_resource(
     ], exclude = ["Sounds/**/.*", "Resources/**/.*"]),
     visibility = ["PUBLIC"],
 )
+apple_resource(
+    name = "AssetXib",
+    visibility = ["PUBLIC"],
+    dirs = [],
+    files = glob([
+        "**/*.xib",
+    ]),
+)
 
 framework(
     name = "TelegramUI",
@@ -220,6 +228,8 @@ framework(
          "//submodules/HL/UI:UI",
          "//submodules/HL/ViewModel:ViewModel",
          "//submodules/HL/Translate:Translate",
+         "//submodules/HL/Theme:Theme",
+         ":AssetXib",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

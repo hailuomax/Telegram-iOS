@@ -269,6 +269,7 @@ open class ListView: ASDisplayNode, UIScrollViewAccessibilityDelegate, UIGesture
     public final var beganInteractiveDragging: () -> Void = { }
     public final var endedInteractiveDragging: () -> Void = { }
     public final var didEndScrolling: (() -> Void)?
+    public final var didScroll: ((UIScrollView) -> Void)?
     
     private var currentGeneralScrollDirection: GeneralScrollDirection?
     public final var generalScrollDirectionUpdated: (GeneralScrollDirection) -> Void = { _ in }
@@ -739,6 +740,7 @@ open class ListView: ASDisplayNode, UIScrollViewAccessibilityDelegate, UIGesture
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.updateScrollViewDidScroll(scrollView, synchronous: false)
+        self.didScroll?(scrollView)
     }
     
     private var generalAccumulatedDeltaY: CGFloat = 0.0
@@ -4209,4 +4211,11 @@ private func findAccessibilityFocus(_ node: ASDisplayNode) -> Bool {
         return true
     }
     return false
+}
+
+extension ListView {
+    
+    open func hlShouldRecognize(_ value : Bool) {
+        scroller.hl_shouldRecognize = value
+    }
 }
