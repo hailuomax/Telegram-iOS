@@ -834,6 +834,12 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         })
     }, openInvite: {
         //MARK: 邀请好友
+        let _ = (contextValue.get()
+        |> deliverOnMainQueue
+        |> take(1)).start(next: { context in
+            let inviteVC = InviteFriendsVC(context: context)
+            pushControllerImpl?(inviteVC)
+        })
     }, openSetting: {
         //MARK: 设置
         let _ = (contextValue.get()
