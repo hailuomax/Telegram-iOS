@@ -142,7 +142,7 @@ private final class SettingsItemArguments {
         self.openAuthentication = openAuthentication
         self.openAccountEncrypted = openAccountEncrypted
         self.openTradePassword = openTradePassword
-        self.openProxy = openTradePassword
+        self.openProxy = openProxy
         self.openInvite = openInvite
         self.openSetting = openSetting
         self.openAboutMe = openAboutMe
@@ -779,7 +779,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                 
                 if HLAccountManager.shareAccount.token == nil || HLAccountManager.shareAccount.token!.isEmpty {
                     
-                    let pushAccountValidationVC : (Bool)->() = { showPwdView in
+                    let pushAccountValidationVC : (Bool, Phone)->() = { (showPwdView, phone) in
                         let vc = AccountValidationVC(context: context, isLogin: true,showPwdView: showPwdView, onValidateSuccess: {
                             //手势设置页面设置好手势密保，或者点击跳过，会有此回调
                             pushControllerImpl?(assetVC)
@@ -792,27 +792,27 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                         let nv = impl(){
                         currentVC = nv.topViewController
                     }
-                    AccountRepo.userStatusCheck(currentVC: currentVC, onPushAccountLockVC: {
-                        
-                        let disableVC = AccountLockVC(context: context, title: $0)
-                        pushControllerImpl?(disableVC)
-                        
-                    }, onPushGesturesUnlockVC: {
-                        
-                        let unlockVC = GesturesUnlockVC(context: context, status: .unlock, onValidateSuccess:{
-                            pushControllerImpl?(assetVC)
+                    
+                    let assetVerificationVC = AssetVerificationViewController(context: context)
+                    assetVerificationVC.bindAssetBlock = {(code , phone) in
+                        AccountRepo.userStatusCheck(code: code.replacingOccurrences(of: "+", with: ""),phone: phone, currentVC: currentVC, onPushAccountLockVC: {
+                            let disableVC = AccountLockVC(context: context, title: $0)
+                            pushControllerImpl?(disableVC)
+                        }, onPushGesturesUnlockVC: {
+                            let unlockVC = GesturesUnlockVC(context: context, status: .unlock, onValidateSuccess:{
+                                pushControllerImpl?(assetVC)
+                            })
+                            pushControllerImpl?(unlockVC)
+                        }, onPushAccountValidationVC: {
+                            pushAccountValidationVC($0,$1)
+                        }, onPushBindExceptionVC: {
+                            let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
+                            let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)
+                            pushControllerImpl?(exceptionVC)
                         })
-                        pushControllerImpl?(unlockVC)
-                        
-                    }, onPushAccountValidationVC: {
-                        pushAccountValidationVC($0)
-                    }, onPushBindExceptionVC: {
-                        let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
-                        
-                        let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)
-                        
-                        pushControllerImpl?(exceptionVC)
-                    })
+                    }
+                    currentVC?.navigationController?.pushViewController(assetVerificationVC, animated: true)
+
                 }else{
                     pushControllerImpl?(assetVC)
                 }
@@ -822,9 +822,22 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
 
     }, openAccountEncrypted: {
         //MARK: 资产验证
-        
+        let _ = (contextValue.get()
+        |> deliverOnMainQueue
+        |> take(1)).start(next: { context in
+            
+            let nextVC = AccountValidationVC(context: context, isLogin: false, onValidateSuccess: {})
+            pushControllerImpl?(nextVC)
+        })
     }, openTradePassword: {
         //MARK: 交易密码
+        let _ = (contextValue.get()
+        |> deliverOnMainQueue
+        |> take(1)).start(next: { context in
+            let pwdVC = TradePasswordVC(context: context, onPwdSat: nil)
+            pushControllerImpl?(pwdVC)
+
+        })
     }, openProxy: {
         //MARK: 代理
         let _ = (contextValue.get()
