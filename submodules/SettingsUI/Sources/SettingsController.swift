@@ -3,6 +3,7 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
+import protocol SwiftSignalKit.Disposable
 import Postbox
 import TelegramCore
 import SyncCore
@@ -38,6 +39,7 @@ import WalletUI
 import PhoneNumberFormat
 import AccountUtils
 import AuthTransferUI
+import Repo
 
 private let avatarFont = avatarPlaceholderFont(size: 13.0)
 
@@ -1134,6 +1136,10 @@ public func settingsController(context: AccountContext, accountManager: AccountM
         let _ = (contextValue.get()
         |> deliverOnMainQueue
         |> take(1)).start(next: { context in
+            
+            AccountRepo.getCustomerService(context.account)
+            
+            /*
             let supportPeer = Promise<PeerId?>()
             supportPeer.set(supportPeerId(account: context.account))
             let presentationData = context.sharedContext.currentPresentationData.with { $0 }
@@ -1150,7 +1156,7 @@ public func settingsController(context: AccountContext, accountManager: AccountM
                         pushControllerImpl?(context.sharedContext.makeChatController(context: context, chatLocation: .peer(peerId), subject: nil, botStart: nil, mode: .standard(previewing: false)))
                     }
                 }))
-            })]), nil)
+            })]), nil)*/
         })
     }, openFaq: { anchor in
         let resolvedUrlPromise = Promise<ResolvedUrl>()

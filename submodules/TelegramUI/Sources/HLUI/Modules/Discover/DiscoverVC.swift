@@ -351,7 +351,7 @@ extension DiscoverVC : ZCycleViewProtocol{
 
     func cycleViewDidSelectedIndex(_ cycleView: ZCycleView, index: Int) {
         let model = self.viewModel.bannerDatas[index]
-        if model.linkType == 6,let link = model.link ,link == "http://i7.app/jumpExchange" {
+        if model.linkType == 6,let link = model.link ,link == "http://\(hailuoScheme)/jumpExchange" {
             self.validate {[weak self] in
                 guard let self = self else {return}
                 //FIXME: 待接入 ExchangeSquareVC
