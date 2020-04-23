@@ -18,6 +18,8 @@ import WebSearchUI
 import PeerAvatarGalleryUI
 import MapResourceToAvatarSizes
 import PhoneNumberFormat
+import Language
+import UI
 
 private struct EditSettingsItemArguments {
     let context: AccountContext
@@ -33,6 +35,7 @@ private struct EditSettingsItemArguments {
     let saveEditingState: () -> Void
     let addAccount: () -> Void
     let logout: () -> Void
+    let openQRCode: (PeerId , String) -> Void
 }
 
 private enum SettingsSection: Int32 {
@@ -69,13 +72,15 @@ private enum SettingsEntry: ItemListNodeEntry {
     case addAccount(PresentationTheme, String)
     case logOut(PresentationTheme, String)
     
+    case qrCode(PresentationTheme, PeerId , String)
+    
     var section: ItemListSectionId {
         switch self {
             case .userInfo, .userInfoNotice:
                 return SettingsSection.info.rawValue
             case .bioText, .bioInfo:
                 return SettingsSection.bio.rawValue
-            case .phoneNumber, .username:
+        case .phoneNumber, .username, .qrCode:
                 return SettingsSection.personalData.rawValue
             case .addAccount:
                 return SettingsSection.addAccount.rawValue
@@ -99,9 +104,11 @@ private enum SettingsEntry: ItemListNodeEntry {
             case .username:
                 return 5
             case .addAccount:
-                return 6
-            case .logOut:
                 return 7
+            case .logOut:
+                return 8
+            case .qrCode:
+                return 6
         }
     }
     
@@ -184,6 +191,12 @@ private enum SettingsEntry: ItemListNodeEntry {
                 } else {
                     return false
                 }
+            case let .qrCode(lhsTheme, lhsPeerId , lhsUserName):
+                if case let .qrCode(rhsTheme, rhsPeerId , rhsUserName) = rhs, lhsTheme === rhsTheme , lhsPeerId == rhsPeerId , lhsUserName == rhsUserName {
+                    return true
+                }else {
+                    return false
+                }
         }
     }
     
@@ -223,6 +236,10 @@ private enum SettingsEntry: ItemListNodeEntry {
             case let .logOut(theme, text):
                 return ItemListActionItem(presentationData: presentationData, title: text, kind: .destructive, alignment: .center, sectionId: ItemListSectionId(self.section), style: .blocks, action: {
                     arguments.logout()
+                })
+            case let .qrCode(theme, peerId , userName):
+                return ItemListDisclosureItem(presentationData: presentationData, title: HLLanguage.MyQRCodeTitle.localized(), label: "", sectionId: ItemListSectionId(self.section), style: .blocks, action: {
+                    arguments.openQRCode(peerId, userName)
                 })
         }
     }
@@ -298,6 +315,8 @@ private func editSettingsEntries(presentationData: PresentationData, state: Edit
             entries.append(.phoneNumber(presentationData.theme, presentationData.strings.Settings_PhoneNumber, formatPhoneNumber(phone)))
         }
         entries.append(.username(presentationData.theme, presentationData.strings.Settings_Username, peer.addressName == nil ? "" : ("@" + peer.addressName!)))
+        //MARK: -- 添加二维码Item
+        entries.append(.qrCode(presentationData.theme, peer.id , peer.addressName ?? ""))
         
         if canAddAccounts {
             entries.append(.addAccount(presentationData.theme, presentationData.strings.Settings_AddAccount))
@@ -423,6 +442,14 @@ func editSettingsController(context: AccountContext, currentName: ItemListAvatar
                 presentControllerImpl?(logoutOptionsController(context: context, navigationController: navigationController, canAddAccounts: canAddAccounts, phoneNumber: phoneNumber), ViewControllerPresentationArguments(presentationAnimation: .modalSheet))
             }
         })
+    },openQRCode: { (peerId, userName) in
+        //MARK:弹出二维码页面
+        if userName.isEmpty {
+            presentControllerImpl?(usernameSetupController(context: context), nil)
+        }else {
+            let vc = QRCodeViewController(context: context, peerId: peerId , type: .user)
+            pushControllerImpl?(vc)
+        }
     })
     
     let peerView = context.account.viewTracker.peerView(context.account.peerId)
