@@ -158,11 +158,12 @@ public class ItemListAvatarAndNameInfoItem: ListViewItem, ItemListItem {
     let call: (() -> Void)?
     let action: (() -> Void)?
     let longTapAction: (() -> Void)?
+    let qrCodeAction: (() -> Void)?
     public let tag: ItemListItemTag?
     
     public let selectable: Bool
 
-    public init(accountContext: AccountContext, presentationData: ItemListPresentationData, dateTimeFormat: PresentationDateTimeFormat, mode: ItemListAvatarAndNameInfoItemMode, peer: Peer?, presence: PeerPresence?, label: String? = nil, cachedData: CachedPeerData?, state: ItemListAvatarAndNameInfoItemState, sectionId: ItemListSectionId, style: ItemListAvatarAndNameInfoItemStyle, editingNameUpdated: @escaping (ItemListAvatarAndNameInfoItemName) -> Void, editingNameCompleted: @escaping () -> Void = {}, avatarTapped: @escaping () -> Void, context: ItemListAvatarAndNameInfoItemContext? = nil, updatingImage: ItemListAvatarAndNameInfoItemUpdatingAvatar? = nil, call: (() -> Void)? = nil, action: (() -> Void)? = nil, longTapAction: (() -> Void)? = nil, tag: ItemListItemTag? = nil) {
+    public init(accountContext: AccountContext, presentationData: ItemListPresentationData, dateTimeFormat: PresentationDateTimeFormat, mode: ItemListAvatarAndNameInfoItemMode, peer: Peer?, presence: PeerPresence?, label: String? = nil, cachedData: CachedPeerData?, state: ItemListAvatarAndNameInfoItemState, sectionId: ItemListSectionId, style: ItemListAvatarAndNameInfoItemStyle, editingNameUpdated: @escaping (ItemListAvatarAndNameInfoItemName) -> Void, editingNameCompleted: @escaping () -> Void = {}, avatarTapped: @escaping () -> Void, context: ItemListAvatarAndNameInfoItemContext? = nil, updatingImage: ItemListAvatarAndNameInfoItemUpdatingAvatar? = nil, call: (() -> Void)? = nil, action: (() -> Void)? = nil, longTapAction: (() -> Void)? = nil,qrCodeAction : (() -> Void)? = nil, tag: ItemListItemTag? = nil) {
         self.accountContext = accountContext
         self.presentationData = presentationData
         self.dateTimeFormat = dateTimeFormat
@@ -183,6 +184,7 @@ public class ItemListAvatarAndNameInfoItem: ListViewItem, ItemListItem {
         self.action = action
         self.longTapAction = longTapAction
         self.tag = tag
+        self.qrCodeAction = qrCodeAction
         
         if case .settings = mode {
             self.selectable = true
@@ -278,6 +280,9 @@ public class ItemListAvatarAndNameInfoItemNode: ListViewItemNode, ItemListItemNo
         }
     }
     
+    //QRCode点击按钮
+    private let qrCodeButton : ASButtonNode
+    
     public init() {
         self.backgroundNode = ASDisplayNode()
         self.backgroundNode.isLayerBacked = true
@@ -316,8 +321,12 @@ public class ItemListAvatarAndNameInfoItemNode: ListViewItemNode, ItemListItemNo
         self.arrowNode.isLayerBacked = true
         self.arrowNode.displaysAsynchronously = false
         self.arrowNode.displayWithoutProcessing = true
+        self.arrowNode.isUserInteractionEnabled = false
         
         self.callButton = HighlightableButtonNode()
+        
+        self.qrCodeButton = ASButtonNode()
+        self.qrCodeButton.isEnabled = false
         
         super.init(layerBacked: false, dynamicBounce: false)
         
@@ -328,6 +337,8 @@ public class ItemListAvatarAndNameInfoItemNode: ListViewItemNode, ItemListItemNo
         
         self.addSubnode(self.nameNode)
         self.addSubnode(self.statusNode)
+        
+        self.addSubnode(self.qrCodeButton)
         
         self.peerPresenceManager = PeerPresenceStatusManager(update: { [weak self] in
             if let strongSelf = self, let item = strongSelf.item, let layoutWidthAndNeighbors = strongSelf.layoutWidthAndNeighbors {
@@ -959,15 +970,28 @@ public class ItemListAvatarAndNameInfoItemNode: ListViewItemNode, ItemListItemNo
                     
                     strongSelf.updateAvatarHidden()
                     
+                    //MARK: 设置二维码按钮
                     if let updatedArrowImage = updatedArrowImage {
-                        strongSelf.arrowNode.image = updatedArrowImage
+                        if case .settings = item.mode{
+                            strongSelf.arrowNode.image = PresentationResourcesSettings.qrCode
+                            strongSelf.arrowNode.isLayerBacked = false
+                            strongSelf.qrCodeButton.isEnabled = true
+                            strongSelf.qrCodeButton.addTarget(self, action: #selector(strongSelf.clickQRCode), forControlEvents: .touchUpInside)
+                        }else{
+                            strongSelf.arrowNode.image = updatedArrowImage
+                            strongSelf.qrCodeButton.isEnabled = false
+                        }
+                        
                     }
-                    
+                    //设置frame
                     if case .settings = item.mode, let arrowImage = strongSelf.arrowNode.image {
                         if strongSelf.arrowNode.supernode == nil {
                             strongSelf.addSubnode(strongSelf.arrowNode)
                         }
-                        strongSelf.arrowNode.frame = CGRect(origin: CGPoint(x: params.width - params.rightInset - 7.0 - arrowImage.size.width, y: floor((layout.contentSize.height - arrowImage.size.height) / 2.0)), size: arrowImage.size)
+//                        strongSelf.arrowNode.frame = CGRect(origin: CGPoint(x: params.width - params.rightInset - 7.0 - arrowImage.size.width, y: floor((layout.contentSize.height - arrowImage.size.height) / 2.0)), size: arrowImage.size)
+                        let arrowNodeFrame = CGRect(origin: CGPoint(x: params.width - params.rightInset - 15.0 - arrowImage.size.width, y: floor((layout.contentSize.height - arrowImage.size.height) / 2.0)), size: arrowImage.size)
+                        strongSelf.arrowNode.frame = arrowNodeFrame
+                        strongSelf.qrCodeButton.frame = CGRect(x: arrowNodeFrame.origin.x - 10, y: arrowNodeFrame.origin.y - 10, width: arrowNodeFrame.width + 20, height: arrowNodeFrame.height + 20)
                     } else if strongSelf.arrowNode.supernode != nil {
                         strongSelf.arrowNode.removeFromSupernode()
                     }
@@ -1113,6 +1137,10 @@ public class ItemListAvatarAndNameInfoItemNode: ListViewItemNode, ItemListItemNo
         self.updateClearButtonVisibility(self.inputSecondClearButton, textField: self.inputSecondField)
     }
     
+    @objc func clickQRCode() {
+        self.item?.qrCodeAction?()
+    }
+    
     public func focus() {
         self.inputFirstField?.becomeFirstResponder()
     }
@@ -1124,4 +1152,5 @@ public class ItemListAvatarAndNameInfoItemNode: ListViewItemNode, ItemListItemNo
     override public var canBeLongTapped: Bool {
         return self.item?.longTapAction != nil
     }
+    
 }
