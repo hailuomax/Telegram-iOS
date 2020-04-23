@@ -11,6 +11,8 @@ import TelegramPresentationData
 import AccountContext
 import ShareController
 
+import Config
+
 private class WeakGameScriptMessageHandler: NSObject, WKScriptMessageHandler {
     private let f: (WKScriptMessage) -> ()
     
@@ -156,7 +158,7 @@ final class GameControllerNode: ViewControllerTracingNode {
     
     func shareWithoutScore() {
         if let (botPeer, gameName) = self.shareData(), let addressName = botPeer.addressName, !addressName.isEmpty, !gameName.isEmpty {
-            let url = "https://t.me/\(addressName)?game=\(gameName)"
+            let url = "https://\(Scheme.i7_app)/\(addressName)?game=\(gameName)"
             self.present(ShareController(context: self.context, subject: .url(url), showInChat: nil, externalShare: true), nil)
         }
     }

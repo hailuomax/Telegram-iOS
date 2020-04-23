@@ -13,6 +13,8 @@ import StickerResources
 import AlertUI
 import PresentationDataUtils
 
+import Config
+
 public enum StickerPackPreviewControllerMode {
     case `default`
     case settings
@@ -107,7 +109,7 @@ public final class StickerPackPreviewController: ViewController, StandalonePrese
                 }
                 
                 if let stickerPackContentsValue = strongSelf.stickerPackContentsValue, case let .result(info, _, _) = stickerPackContentsValue, !info.shortName.isEmpty {
-                    strongSelf.present(ShareController(context: strongSelf.context, subject: .url("https://t.me/addstickers/\(info.shortName)"), externalShare: true), in: .window(.root))
+                    strongSelf.present(ShareController(context: strongSelf.context, subject: .url("https://\(Scheme.i7_app)/addstickers/\(info.shortName)"), externalShare: true), in: .window(.root))
                     strongSelf.dismiss()
                 }
             }

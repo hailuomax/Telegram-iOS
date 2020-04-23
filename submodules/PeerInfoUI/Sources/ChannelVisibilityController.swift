@@ -18,6 +18,8 @@ import TelegramNotices
 import ItemListPeerItem
 import AccountContext
 
+import Config
+
 private final class ChannelVisibilityControllerArguments {
     let context: AccountContext
     
@@ -292,7 +294,7 @@ private enum ChannelVisibilityEntry: ItemListNodeEntry {
                     }
                 }, tag: ChannelVisibilityEntryTag.privateLink)
             case let .editablePublicLink(theme, strings, placeholder, currentText):
-                return ItemListSingleLineInputItem(presentationData: presentationData, title: NSAttributedString(string: "t.me/", textColor: theme.list.itemPrimaryTextColor), text: currentText, placeholder: placeholder, type: .regular(capitalization: false, autocorrection: false), clearType: .always, tag: ChannelVisibilityEntryTag.publicLink, sectionId: self.section, textUpdated: { updatedText in
+                return ItemListSingleLineInputItem(presentationData: presentationData, title: NSAttributedString(string: "\(Scheme.i7_app)/", textColor: theme.list.itemPrimaryTextColor), text: currentText, placeholder: placeholder, type: .regular(capitalization: false, autocorrection: false), clearType: .always, tag: ChannelVisibilityEntryTag.publicLink, sectionId: self.section, textUpdated: { updatedText in
                     arguments.updatePublicLinkText(currentText, updatedText)
                 }, updatedFocus: { focus in
                     if focus {
@@ -341,7 +343,7 @@ private enum ChannelVisibilityEntry: ItemListNodeEntry {
             case let .existingLinkPeerItem(_, theme, strings, dateTimeFormat, nameDisplayOrder, peer, editing, enabled):
                 var label = ""
                 if let addressName = peer.addressName {
-                    label = "t.me/" + addressName
+                    label = "\(Scheme.i7_app)/" + addressName
                 }
                 return ItemListPeerItem(presentationData: presentationData, dateTimeFormat: dateTimeFormat, nameDisplayOrder: nameDisplayOrder, context: arguments.context, peer: peer, presence: nil, text: .text(label), label: .none, editing: editing, switchValue: nil, enabled: enabled, selectable: true, sectionId: self.section, action: nil, setPeerIdWithRevealedOptions: { previousId, id in
                     arguments.setPeerIdWithRevealedOptions(previousId, id)

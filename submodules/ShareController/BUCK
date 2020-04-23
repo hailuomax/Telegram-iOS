@@ -25,6 +25,7 @@ static_library(
         "//submodules/TelegramStringFormatting:TelegramStringFormatting",
         "//submodules/TelegramIntents:TelegramIntents",
         "//submodules/AccountContext:AccountContext",
+        "//submodules/HL/Config:Config",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

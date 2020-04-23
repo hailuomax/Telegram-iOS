@@ -21,6 +21,7 @@ static_library(
         "//submodules/LocationUI:LocationUI",
         "//submodules/AppBundle:AppBundle",
         "//submodules/LocationResources:LocationResources",
+        "//submodules/HL/Config:Config",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

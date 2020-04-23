@@ -18,6 +18,9 @@ import WalletUrl
 #endif
 import OpenInExternalAppUI
 
+import Config
+import UI
+
 public struct ParsedSecureIdUrl {
     public let peerId: PeerId
     public let scope: String
@@ -115,7 +118,7 @@ public func parseConfirmationCodeUrl(_ url: URL) -> Int? {
             return code
         }
     }
-    if url.scheme == "tg" {
+    if ["tg", Scheme.i7_app, Scheme.hailuo].contains(url.scheme) {
         if let host = url.host, let query = url.query, let parsedUrl = parseInternalUrl(query: host + "?" + query) {
             switch parsedUrl {
                 case let .confirmationCode(code):
@@ -202,7 +205,18 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
     let continueHandling: () -> Void = {
         let handleResolvedUrl: (ResolvedUrl) -> Void = { resolved in
             if case let .externalUrl(value) = resolved {
-                context.sharedContext.applicationBindings.openUrl(value)
+                var url: String = value
+                PeerUtil.getPeer(context: context, peerId: context.account.peerId) { (peer) in
+                    var name: String = ""
+                    if let user = peer as? TelegramUser {
+                        name = "\(user.lastName ?? "")\(user.firstName ?? "")"
+                    }
+                    if (value.contains(Scheme.i7_app) || value.contains(tScheme)),value.contains("game=hailuoRedEnvelope") {
+                        url = "https://webview.0593xg.com/superRedEnvelope?telegramId=\(context.account.peerId.id)&gameShortName=hailuoRedEnvelope&userName=\(name)"
+                        
+                    }
+                    context.sharedContext.applicationBindings.openUrl(url)
+                }
             } else {
                 context.sharedContext.openResolvedUrl(resolved, context: context, urlContext: .generic, navigationController: navigationController, openPeer: { peerId, navigation in
                     switch navigation {
@@ -246,7 +260,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
             |> deliverOnMainQueue).start(next: handleResolvedUrl)
         }
         
-        if let scheme = parsedUrl.scheme, (scheme == "tg" || scheme == context.sharedContext.applicationBindings.appSpecificScheme) {
+        if let scheme = parsedUrl.scheme, ["tg", Scheme.i7_app, Scheme.hailuo, context.sharedContext.applicationBindings.appSpecificScheme].contains(scheme) {
             var convertedUrl: String?
             if let query = parsedUrl.query {
                 if parsedUrl.host == "localpeer" {
@@ -279,7 +293,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                             }
                         }
                         if let invite = invite {
-                            convertedUrl = "https://t.me/joinchat/\(invite)"
+                            convertedUrl = "https://\(Scheme.i7_app)/joinchat/\(invite)"
                         }
                     }
                 } else if parsedUrl.host == "addstickers" {
@@ -295,7 +309,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                             }
                         }
                         if let set = set {
-                            convertedUrl = "https://t.me/addstickers/\(set)"
+                            convertedUrl = "https://\(Scheme.i7_app)/addstickers/\(set)"
                         }
                     }
                 } else if parsedUrl.host == "setlanguage" {
@@ -311,7 +325,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                             }
                         }
                         if let lang = lang {
-                            convertedUrl = "https://t.me/setlanguage/\(lang)"
+                            convertedUrl = "https://\(Scheme.i7_app)/setlanguage/\(lang)"
                         }
                     }
                 } else if parsedUrl.host == "msg" {
@@ -350,7 +364,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                             }
                         }
                         if let shareUrl = shareUrl {
-                            var resultUrl = "https://t.me/share/url?url=\(urlEncodedStringFromString(shareUrl))"
+                            var resultUrl = "https://\(Scheme.i7_app)/share/url?url=\(urlEncodedStringFromString(shareUrl))"
                             if let shareText = shareText {
                                 resultUrl += "&text=\(urlEncodedStringFromString(shareText))"
                             }
@@ -386,7 +400,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                         }
                         
                         if let server = server, !server.isEmpty, let port = port, let _ = Int32(port) {
-                            var result = "https://t.me/proxy?proxy=\(server)&port=\(port)"
+                            var result = "https://\(Scheme.i7_app)/proxy?proxy=\(server)&port=\(port)"
                             if let user = user {
                                 result += "&user=\((user as NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryValueAllowed) ?? "")"
                                 if let pass = pass {
@@ -522,7 +536,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                             return
                         }
                         if let code = code {
-                            convertedUrl = "https://t.me/login/\(code)"
+                            convertedUrl = "https://\(Scheme.i7_app)/login/\(code)"
                         }
                     }
                 } else if parsedUrl.host == "confirmphone" {
@@ -541,7 +555,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                             }
                         }
                         if let phone = phone, let hash = hash {
-                            convertedUrl = "https://t.me/confirmphone?phone=\(phone)&hash=\(hash)"
+                            convertedUrl = "https://\(Scheme.i7_app)/confirmphone?phone=\(phone)&hash=\(hash)"
                         }
                     }
                 } else if parsedUrl.host == "bg" {
@@ -574,7 +588,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                             queryString = "?\(query.joined(separator: "&"))"
                         }
                         if let parameter = parameter {
-                            convertedUrl = "https://t.me/bg/\(parameter)\(queryString)"
+                            convertedUrl = "https://\(Scheme.i7_app)/bg/\(parameter)\(queryString)"
                         }
                     }
                 } else if parsedUrl.host == "addtheme" {
@@ -590,7 +604,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                             }
                         }
                         if let parameter = parameter {
-                            convertedUrl = "https://t.me/addtheme/\(parameter)"
+                            convertedUrl = "https://\(Scheme.i7_app)/addtheme/\(parameter)"
                         }
                     }
                 }
@@ -621,7 +635,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                         }
                         
                         if let domain = domain {
-                            var result = "https://t.me/\(domain)"
+                            var result = "https://\(Scheme.i7_app)/\(domain)"
                             if let post = post, let postValue = Int(post) {
                                 result += "/\(postValue)"
                             }
@@ -683,7 +697,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
         }
         
         if parsedUrl.scheme == "http" || parsedUrl.scheme == "https" {
-            if parsedUrl.host == "t.me" || parsedUrl.host == "telegram.me" {
+            if ["telegram.me","t.me", Scheme.i7_app, Scheme.hailuo].contains(parsedUrl.host) {
                 handleInternalUrl(parsedUrl.absoluteString)
             } else {
                 let settings = context.sharedContext.accountManager.sharedData(keys: [ApplicationSpecificSharedDataKeys.webBrowserSettings])
@@ -733,7 +747,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
     }
     
     if parsedUrl.scheme == "http" || parsedUrl.scheme == "https" {
-        let nativeHosts = ["t.me", "telegram.me"]
+        let nativeHosts = ["t.me", "telegram.me", Scheme.i7_app, Scheme.hailuo]
         if let host = parsedUrl.host, nativeHosts.contains(host) {
             continueHandling()
         } else {

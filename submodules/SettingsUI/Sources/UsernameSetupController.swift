@@ -11,6 +11,8 @@ import PresentationDataUtils
 import AccountContext
 import ShareController
 
+import Config
+
 private final class UsernameSetupControllerArguments {
     let account: Account
     
@@ -277,7 +279,7 @@ public func usernameSetupController(context: AccountContext) -> ViewController {
                 return state
             }
             if !currentAddressName.isEmpty {
-                presentControllerImpl?(ShareController(context: context, subject: .url("https://t.me/\(currentAddressName)")), nil)
+                presentControllerImpl?(ShareController(context: context, subject: .url("https://\(Scheme.i7_app)/\(currentAddressName)")), nil)
             }
         })
     })

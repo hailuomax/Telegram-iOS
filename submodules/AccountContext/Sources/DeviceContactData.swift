@@ -3,6 +3,7 @@ import Contacts
 import Postbox
 import TelegramCore
 import SyncCore
+import Config
 
 public final class DeviceContactPhoneNumberData: Equatable {
     public let label: String
@@ -188,7 +189,7 @@ public final class DeviceContactInstantMessagingProfileData: Equatable, Hashable
 }
 
 public let phonebookUsernamePathPrefix = "@id"
-private let phonebookUsernamePrefix = "https://t.me/" + phonebookUsernamePathPrefix
+private let phonebookUsernamePrefix = "https://\(Scheme.i7_app)/" + phonebookUsernamePathPrefix
 
 public extension DeviceContactUrlData {
     convenience init(appProfile: PeerId) {
