@@ -105,13 +105,16 @@ public final class TelegramRootController: NavigationController {
         
         let accountSettingsController = restoreSettignsController ?? hlSettingsController(context: self.context, accountManager: context.sharedContext.accountManager, enableDebugActions: !GlobalExperimentalSettings.isAppStoreBuild)
         
+        let discoverVC = DiscoverVC(context: self.context)
+        
+        
+        
+        tabBarController.setControllers([chatListController,contactsController,discoverVC,accountSettingsController], selectedIndex: restoreSettignsController != nil ? 3 : 0)
+        
         self.contactsController = contactsController
         self.callListController = callListController
         self.chatListController = chatListController
-        self.discoverController = DiscoverVC(context: self.context)
-        
-        tabBarController.setControllers(hactoryControllers(), selectedIndex: restoreSettignsController != nil ? 3 : 0)
-        
+        self.discoverController = discoverVC
         self.accountSettingsController = accountSettingsController
         self.rootTabController = tabBarController
         self.pushViewController(tabBarController, animated: false)
@@ -135,11 +138,6 @@ public final class TelegramRootController: NavigationController {
             return
         }
        
-        rootTabController.setControllers(hactoryControllers(), selectedIndex: nil)
-    }
-    
-    private func hactoryControllers() -> [ViewController]{
-        
         var controllers: [ViewController] = []
         //调整顺序
         controllers.append(self.chatListController!)
@@ -151,8 +149,7 @@ public final class TelegramRootController: NavigationController {
         controllers.append(self.discoverController!)
         controllers.append(self.accountSettingsController!)
         
-        
-        return controllers
+        rootTabController.setControllers(controllers, selectedIndex: nil)
     }
     
     public func openChatsController(activateSearch: Bool) {
