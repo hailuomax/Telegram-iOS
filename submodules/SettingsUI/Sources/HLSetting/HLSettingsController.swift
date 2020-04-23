@@ -111,6 +111,7 @@ private final class SettingsItemArguments {
     let openInvite: () -> Void
     let openSetting: () -> Void
     let openAboutMe: () -> Void
+    let openQRCode: (Peer?) -> Void
     
     init(
         sharedContext: SharedAccountContext,
@@ -126,7 +127,8 @@ private final class SettingsItemArguments {
         openProxy:@escaping () -> Void,
         openInvite:@escaping ()-> Void,
         openSetting:@escaping () -> Void,
-        openAboutMe:@escaping () -> Void
+        openAboutMe:@escaping () -> Void,
+        openQRCode:@escaping (Peer?) -> Void
     ) {
         self.sharedContext = sharedContext
         self.avatarAndNameInfoContext = avatarAndNameInfoContext
@@ -143,7 +145,7 @@ private final class SettingsItemArguments {
         self.openInvite = openInvite
         self.openSetting = openSetting
         self.openAboutMe = openAboutMe
-
+        self.openQRCode = openQRCode
 
     }
 }
@@ -304,6 +306,8 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
                     arguments.openEditing()
                 }, longTapAction: {
                     arguments.displayCopyContextMenu()
+                }, qrCodeAction: {
+                    arguments.openQRCode(peer)
                 })
             
         case let .myWallet(_, image, text):
@@ -826,6 +830,20 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         })
     }, openAboutMe: {
         
+    }, openQRCode: { peer in
+        let _ = (contextValue.get()
+        |> deliverOnMainQueue
+        |> take(1)).start(next: { context in
+            guard let peer = peer else { return }
+            if peer.addressName == nil || peer.addressName!.isEmpty   {
+                presentControllerImpl?(usernameSetupController(context: context) , nil)
+            }else {
+                //弹出二维码页面
+                let vc = QRCodeViewController(context: context, peerId: peer.id , type: .user)
+                pushControllerImpl?(vc)
+                
+            }
+        })
     })
     
     changeProfilePhotoImpl = {

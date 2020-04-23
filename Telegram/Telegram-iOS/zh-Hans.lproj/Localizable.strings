@@ -2689,3 +2689,5 @@
 "Your_cards_expiration_year_is_invalid" = "您输入的过期年份无效。";
 "Your_cards_number_is_invalid" = "您输入的卡号无效。";
 "Your_cards_security_code_is_invalid" = "您输入的安全码无效。";
+"PeerInfo.ButtonAddMember" = "新增成员";
+"Settings.AddAccount" = "新增账号";
