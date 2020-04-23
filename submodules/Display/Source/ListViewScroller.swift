@@ -1,6 +1,10 @@
 import UIKit
 
 public final class ListViewScroller: UIScrollView, UIGestureRecognizerDelegate {
+    
+    // 做手势穿透
+    var hl_shouldRecognize = false
+    
     override public init(frame: CGRect) {
         super.init(frame: frame)
         

@@ -1750,7 +1750,7 @@ final class SharedApplicationContext {
         return true
     }
     
-    private func openUrl(url: URL) {
+    func openUrl(url: URL) {
         let _ = (self.sharedContextPromise.get()
         |> take(1)
         |> mapToSignal { sharedApplicationContext -> Signal<(SharedAccountContextImpl, AuthorizedApplicationContext?, UnauthorizedApplicationContext?), NoError> in

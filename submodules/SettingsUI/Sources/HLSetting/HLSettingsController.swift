@@ -106,7 +106,6 @@ private final class SettingsItemArguments {
     let openUsername: () -> Void
     let openMyWallet: () -> Void
     let openAuthentication: () -> Void
-    let openAccountEncrypted: () -> Void
     let openTradePassword: () -> Void
     let openProxy: () -> Void
     let openInvite: () -> Void
@@ -124,7 +123,6 @@ private final class SettingsItemArguments {
         openUsername:@escaping () -> Void,
         openMyWallet:@escaping () -> Void,
         openAuthentication:@escaping () -> Void,
-        openAccountEncrypted:@escaping () -> Void,
         openTradePassword:@escaping () -> Void,
         openProxy:@escaping () -> Void,
         openInvite:@escaping ()-> Void,
@@ -142,7 +140,6 @@ private final class SettingsItemArguments {
         self.openUsername = openUsername
         self.openMyWallet = openMyWallet
         self.openAuthentication = openAuthentication
-        self.openAccountEncrypted = openAccountEncrypted
         self.openTradePassword = openTradePassword
         self.openProxy = openProxy
         self.openInvite = openInvite
@@ -166,8 +163,6 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
     case myWallet(PresentationTheme, UIImage?, String)
     
     case authentication(PresentationTheme,UIImage?, String, String)
-    /// 账户密保
-    case accountEncrypted(PresentationTheme,UIImage?, String, String)
     case tradePassword(PresentationTheme,UIImage?, String, String)
     case inviteFriends(PresentationTheme,UIImage?, String)
     case proxy(PresentationTheme, UIImage?, String)
@@ -179,7 +174,7 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         switch self {
             case .userInfo:
                 return SettingsSection.info.rawValue
-        case .myWallet, .authentication, .accountEncrypted, .tradePassword, .proxy, .inviteFriends:
+        case .myWallet, .authentication, .tradePassword, .proxy, .inviteFriends:
                 return SettingsSection.wallet.rawValue
             case .settings, .aboutMe:
                 return SettingsSection.settings.rawValue
@@ -196,16 +191,14 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
             return 2
         case .tradePassword:
             return 3
-        case .accountEncrypted:
-            return 4
         case .inviteFriends:
-            return 5
+            return 4
         case .proxy:
-            return 6
+            return 5
         case .settings:
-            return 7
+            return 6
         case .aboutMe:
-            return 8
+            return 7
         }
     }
     
@@ -271,12 +264,6 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
                     } else {
                         return false
                     }
-            case let .accountEncrypted(lhsTheme,_,lhsTitle, lhsText):
-                if case let .accountEncrypted(rhsTheme,_,rhsTitle, rhsText) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle, lhsText == rhsText {
-                    return true
-                } else {
-                    return false
-                }
             case let .proxy(lhsTheme,_,lhsTitle):
                 if case let .proxy(rhsTheme,_,rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
                         return true
@@ -331,10 +318,6 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         case let .authentication(_, image, text, value):
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks , action: {
                 arguments.openAuthentication()
-            })
-        case let .accountEncrypted(_,  image, text, value):
-            return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks , action: {
-                arguments.openAccountEncrypted()
             })
         case let .tradePassword(_,image, text, value):
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks , action: {
@@ -423,8 +406,6 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
             //entries.append(.authentication(presentationData.theme, PresentationResourcesSettings.authentication, HL.RealNameAuthentication.localized(), certificate))
             //交易密码
             entries.append(.tradePassword(presentationData.theme, PresentationResourcesSettings.tradePassword, HLLanguage.TransactionPassword.localized(), pwdStatus))
-            //账户密保
-            entries.append(.accountEncrypted(presentationData.theme, PresentationResourcesSettings.accountProtection, HLLanguage.AccountSecurity.localized(), gestureStatus))
             //邀請好友
             entries.append(.inviteFriends(presentationData.theme, PresentationResourcesSettings.inviteFriends, HLLanguage.InviteNewUser.localized()))
         }
@@ -784,7 +765,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                 if HLAccountManager.shareAccount.token == nil || HLAccountManager.shareAccount.token!.isEmpty {
                     
                     let pushAccountValidationVC : (Bool, Phone)->() = { (showPwdView, phone) in
-                        let vc = AccountValidationVC(context: context, isLogin: true,showPwdView: showPwdView, onValidateSuccess: {
+                        let vc = AccountValidationVC(context: context,showPwdView: showPwdView, onValidateSuccess: {
                             //手势设置页面设置好手势密保，或者点击跳过，会有此回调
                             pushControllerImpl?(assetVC)
                         })
@@ -797,25 +778,16 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                         currentVC = nv.topViewController
                     }
                     
-                    let assetVerificationVC = AssetVerificationViewController(context: context)
-                    assetVerificationVC.bindAssetBlock = {(code , phone) in
-                        AccountRepo.userStatusCheck(code: code.replacingOccurrences(of: "+", with: ""),phone: phone, currentVC: currentVC, onPushAccountLockVC: {
-                            let disableVC = AccountLockVC(context: context, title: $0)
-                            pushControllerImpl?(disableVC)
-                        }, onPushGesturesUnlockVC: {
-                            let unlockVC = GesturesUnlockVC(context: context, status: .unlock, onValidateSuccess:{
-                                pushControllerImpl?(assetVC)
-                            })
-                            pushControllerImpl?(unlockVC)
-                        }, onPushAccountValidationVC: {
-                            pushAccountValidationVC($0,$1)
-                        }, onPushBindExceptionVC: {
-                            let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
-                            let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)
-                            pushControllerImpl?(exceptionVC)
-                        })
-                    }
-                    currentVC?.navigationController?.pushViewController(assetVerificationVC, animated: true)
+                    AssetVerificationViewController.show(context: context, currentVC: currentVC, onPushAccountLockVC: {
+                        let disableVC = AccountLockVC(context: context, title: $0)
+                        pushControllerImpl?(disableVC)
+                    }, onPushAccountValidationVC: {
+                        pushAccountValidationVC($0,$1)
+                    }, onPushBindExceptionVC: {
+                        let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
+                        let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)
+                        pushControllerImpl?(exceptionVC)
+                    })
 
                 }else{
                     pushControllerImpl?(assetVC)
@@ -824,15 +796,6 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
     }, openAuthentication: {
         //MARK: 实名认证
 
-    }, openAccountEncrypted: {
-        //MARK: 资产验证
-        let _ = (contextValue.get()
-        |> deliverOnMainQueue
-        |> take(1)).start(next: { context in
-            
-            let nextVC = AccountValidationVC(context: context, isLogin: false, onValidateSuccess: {})
-            pushControllerImpl?(nextVC)
-        })
     }, openTradePassword: {
         //MARK: 交易密码
         let _ = (contextValue.get()

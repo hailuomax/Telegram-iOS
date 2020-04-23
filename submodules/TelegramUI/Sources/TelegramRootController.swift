@@ -21,6 +21,7 @@ public final class TelegramRootController: NavigationController {
     public var contactsController: ContactsController?
     public var callListController: CallListController?
     public var chatListController: ChatListController?
+    var discoverController: DiscoverVC?
     public var accountSettingsController: ViewController?
     
     private var permissionsDisposable: Disposable?
@@ -87,8 +88,6 @@ public final class TelegramRootController: NavigationController {
         }
         let callListController = CallListController(context: self.context, mode: .tab)
         
-        var controllers: [ViewController] = []
-        
         let contactsController = ContactsController(context: self.context)
         contactsController.switchToChatsController = {  [weak self] in
             self?.openChatsController(activateSearch: false)
@@ -106,20 +105,20 @@ public final class TelegramRootController: NavigationController {
         
         let accountSettingsController = restoreSettignsController ?? hlSettingsController(context: self.context, accountManager: context.sharedContext.accountManager, enableDebugActions: !GlobalExperimentalSettings.isAppStoreBuild)
         
-        //调整顺序
-        controllers.append(chatListController)
-        controllers.append(contactsController)
-        //隐藏通话列表页面
-//        if showCallsTab {
-//            controllers.append(callListController)
-//        }
-        controllers.append(accountSettingsController)
+        let discoverVC = DiscoverVC(context: self.context)
         
-        tabBarController.setControllers(controllers, selectedIndex: restoreSettignsController != nil ? (controllers.count - 1) : 0)
+        let viewControllers = [chatListController,contactsController,discoverVC,accountSettingsController]
+        
+        //下标
+        let chatListIndex = viewControllers.firstIndex(of: chatListController)
+        let settingIndex = viewControllers.firstIndex(of: accountSettingsController)
+        
+        tabBarController.setControllers(viewControllers, selectedIndex: restoreSettignsController != nil ? settingIndex : chatListIndex)
         
         self.contactsController = contactsController
         self.callListController = callListController
         self.chatListController = chatListController
+        self.discoverController = discoverVC
         self.accountSettingsController = accountSettingsController
         self.rootTabController = tabBarController
         self.pushViewController(tabBarController, animated: false)
@@ -142,14 +141,16 @@ public final class TelegramRootController: NavigationController {
         guard let rootTabController = self.rootTabController else {
             return
         }
+       
         var controllers: [ViewController] = []
         //调整顺序
         controllers.append(self.chatListController!)
         controllers.append(self.contactsController!)
         //隐藏通话列表页面
-//        if showCallsTab {
-//            controllers.append(self.callListController!)
-//        }
+        //        if showCallsTab {
+        //            controllers.append(self.callListController!)
+        //        }
+        controllers.append(self.discoverController!)
         controllers.append(self.accountSettingsController!)
         
         rootTabController.setControllers(controllers, selectedIndex: nil)
