@@ -124,7 +124,7 @@ open class NavigationBar: ASDisplayNode {
         }
     }
     
-    private let stripeNode: ASDisplayNode
+    public let stripeNode: ASDisplayNode
     private let clippingNode: ASDisplayNode
     
     public private(set) var contentNode: NavigationBarContentNode?

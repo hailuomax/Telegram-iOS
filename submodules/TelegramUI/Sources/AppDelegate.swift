@@ -247,7 +247,7 @@ final class SharedApplicationContext {
             .notification(HLAccountManager.kTelegramUserDidChangeNotificationName)
             .observeOn(MainScheduler.instance)
             .takeUntil(self.rx.deallocated)
-            .subscribe(onNext: {_ in
+            .subscribe(onNext: { _ in
                 //有用户，获取用户相关状态（主要是开车开关）
                 AccountRepo.sensitiveGet()
             })
@@ -1750,7 +1750,7 @@ final class SharedApplicationContext {
         return true
     }
     
-    func openUrl(url: URL) {
+    private func openUrl(url: URL) {
         let _ = (self.sharedContextPromise.get()
         |> take(1)
         |> mapToSignal { sharedApplicationContext -> Signal<(SharedAccountContextImpl, AuthorizedApplicationContext?, UnauthorizedApplicationContext?), NoError> in
