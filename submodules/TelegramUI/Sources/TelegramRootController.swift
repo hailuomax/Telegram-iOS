@@ -107,9 +107,13 @@ public final class TelegramRootController: NavigationController {
         
         let discoverVC = DiscoverVC(context: self.context)
         
+        let viewControllers = [chatListController,contactsController,discoverVC,accountSettingsController]
         
+        //下标
+        let chatListIndex = viewControllers.firstIndex(of: chatListController)
+        let settingIndex = viewControllers.firstIndex(of: accountSettingsController)
         
-        tabBarController.setControllers([chatListController,contactsController,discoverVC,accountSettingsController], selectedIndex: restoreSettignsController != nil ? 3 : 0)
+        tabBarController.setControllers(viewControllers, selectedIndex: restoreSettignsController != nil ? settingIndex : chatListIndex)
         
         self.contactsController = contactsController
         self.callListController = callListController

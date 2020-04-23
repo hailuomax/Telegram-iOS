@@ -68,10 +68,10 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
     override init(context: AccountContext?, presentationData: PresentationData? = nil) {
         super.init(context: context, presentationData: presentationData)
         
-//        let icon = UIImage(bundleImageName: "Chat List/Tabs/IconRedpacket")?.withRenderingMode(.alwaysOriginal)
         let icon = UIImage(bundleImageName: "Chat List/Tabs/IconFound")
         self.tabBarItem.image = icon
         self.tabBarItem.selectedImage = icon
+        self.tabBarItem.title = HLLanguage.Tabbar.Discover.str
         
         self.viewModel = DiscoverVM(onUpdateBadge: {[weak self] in
             self?.tabBarItem.badgeValue = $0
@@ -138,7 +138,7 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
         self.contentView.tableView.delegate = self
        
         let name = String(describing: DiscoverItemCell.self)
-        let nib = UINib(nibName: name, bundle: Bundle(for: DiscoverItemCell.self))
+        let nib = UINib(nibName: name, bundle: Bundle.getAppBundle()/*Bundle(for: DiscoverItemCell.self)*/)
         self.contentView.tableView.register(nib, forCellReuseIdentifier: kDiscoverItemCell)
         self.contentView.tableView.register(DiscoverSectionHeader.self, forHeaderFooterViewReuseIdentifier: kDiscoverSectionHeader)
          self.contentView.tableView.register(DiscoverSectionFooter.self, forHeaderFooterViewReuseIdentifier: kDiscoverSectionFooter)
@@ -190,7 +190,7 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
                 self.navigationController?.pushViewController(vc, animated: true)
             }
 
-            AccountRepo.userStatusCheck(context: self.context!, currentVC: self, onPushAccountLockVC: {[weak self] in
+            AssetVerificationViewController.show(context: self.context!, currentVC: self, onPushAccountLockVC: {[weak self] in
                 guard let self = self else {return}
                 let disableVC = AccountLockVC(context: self.context!, title: $0)
                 self.navigationController?.pushViewController(disableVC, animated: true)
