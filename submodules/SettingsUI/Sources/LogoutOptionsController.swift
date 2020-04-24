@@ -162,7 +162,19 @@ func logoutOptionsController(context: AccountContext, navigationController: Navi
         dismissImpl?()
     }, contactSupport: { [weak navigationController] in
         
-        AccountRepo.getCustomerService(context.account)
+        AccountRepo.getCustomerService()
+            .value({
+                guard let urlString = $0.groupId else {return}
+                
+                let _ = (resolveUrlImpl(account: context.account, url: urlString)
+                    |> deliverOnMainQueue).start(next: { resolvedUrl in
+                        print(resolvedUrl)
+                        guard case .peer(let p, _) = resolvedUrl , let peerId = p, let navigationController = navigationController else {return}
+                        
+                        context.sharedContext.navigateToChatController(NavigateToChatControllerParams(navigationController: navigationController, context: context, chatLocation: .peer(peerId)))
+                        
+                    })
+            })
         
         /*
         let supportPeer = Promise<PeerId?>()
