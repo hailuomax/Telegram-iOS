@@ -10,6 +10,8 @@ import SwiftSignalKit
 import TelegramPresentationData
 import AccountContext
 
+import Config
+
 final class ChannelStatsControllerNode: ViewControllerTracingNode, WKNavigationDelegate {
     private var webView: WKWebView?
     
@@ -77,7 +79,7 @@ final class ChannelStatsControllerNode: ViewControllerTracingNode, WKNavigationD
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
-        if let url = navigationAction.request.url, url.scheme == "tg" {
+        if let url = navigationAction.request.url, ["tg", Scheme.i7_app, Scheme.hailuo].contains(url.scheme) {
             if url.host == "statsrefresh" {
                 var params = ""
                 if let query = url.query, let components = URLComponents(string: "/?" + query) {

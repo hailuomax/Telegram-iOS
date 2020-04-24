@@ -17,6 +17,8 @@ import StickerResources
 import SaveToCameraRoll
 import TelegramStringFormatting
 
+import Config
+
 public struct ShareControllerAction {
     let title: String
     let action: () -> Void
@@ -628,7 +630,7 @@ public final class ShareController: ViewController {
                             }
                             if let chatPeer = message.peers[message.id.peerId] as? TelegramChannel {
                                 if message.id.namespace == Namespaces.Message.Cloud, let addressName = chatPeer.addressName, !addressName.isEmpty {
-                                    url = "https://t.me/\(addressName)/\(message.id.id)"
+                                    url = "https://\(Scheme.i7_app)/\(addressName)/\(message.id.id)"
                                 }
                             }
                             let accountPeerId = strongSelf.currentAccount.peerId

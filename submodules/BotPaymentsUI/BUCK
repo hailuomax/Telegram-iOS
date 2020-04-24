@@ -21,6 +21,7 @@ static_library(
         "//submodules/CountrySelectionUI:CountrySelectionUI",
         "//submodules/AppBundle:AppBundle",
         "//submodules/PresentationDataUtils:PresentationDataUtils",
+        "//submodules/HL/Config:Config",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

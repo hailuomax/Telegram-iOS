@@ -38,6 +38,8 @@ import Geocoding
 import TextFormat
 import StatisticsUI
 
+import Config
+
 protocol PeerInfoScreenItem: class {
     var id: AnyHashable { get }
     func node() -> PeerInfoScreenItemNode
@@ -687,7 +689,7 @@ private func infoItems(data: PeerInfoScreenData?, context: AccountContext, prese
         }
         
         if let username = channel.username {
-            items[.peerInfo]!.append(PeerInfoScreenLabeledValueItem(id: ItemUsername, label: presentationData.strings.Channel_LinkItem, text: "https://t.me/\(username)", textColor: .accent, action: {
+            items[.peerInfo]!.append(PeerInfoScreenLabeledValueItem(id: ItemUsername, label: presentationData.strings.Channel_LinkItem, text: "https://\(Scheme.i7_app)/\(username)", textColor: .accent, action: {
                 interaction.openUsername(username)
             }, longTapAction: { sourceNode in
                 interaction.openPeerInfoContextMenu(.link, sourceNode)
@@ -2421,7 +2423,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
     }
     
     private func openUsername(value: String) {
-        let shareController = ShareController(context: self.context, subject: .url("https://t.me/\(value)"))
+        let shareController = ShareController(context: self.context, subject: .url("https://\(Scheme.i7_app)/\(value)"))
         self.view.endEditing(true)
         self.controller?.present(shareController, in: .window(.root))
     }
@@ -2758,7 +2760,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                 return
             }
             if let peer = peer as? TelegramUser, let username = peer.username {
-                let shareController = ShareController(context: strongSelf.context, subject: .url("https://t.me/\(username)"))
+                let shareController = ShareController(context: strongSelf.context, subject: .url("https://\(Scheme.i7_app)/\(username)"))
                 strongSelf.view.endEditing(true)
                 strongSelf.controller?.present(shareController, in: .window(.root))
             }
@@ -2974,7 +2976,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
             if let addressName = peer.addressName {
                 let text: String
                 if peer is TelegramChannel {
-                    text = "https://t.me/\(addressName)"
+                    text = "https://\(Scheme.i7_app)/\(addressName)"
                 } else {
                     text = "@" + addressName
                 }

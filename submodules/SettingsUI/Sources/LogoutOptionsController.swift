@@ -14,6 +14,7 @@ import AccountContext
 import AlertUI
 import PresentationDataUtils
 import UrlHandling
+import Repo
 
 private struct LogoutOptionsItemArguments {
     let addAccount: () -> Void
@@ -160,6 +161,10 @@ func logoutOptionsController(context: AccountContext, navigationController: Navi
         pushControllerImpl?(ChangePhoneNumberIntroController(context: context, phoneNumber: phoneNumber))
         dismissImpl?()
     }, contactSupport: { [weak navigationController] in
+        
+        AccountRepo.getCustomerService(context.account)
+        
+        /*
         let supportPeer = Promise<PeerId?>()
         supportPeer.set(supportPeerId(account: context.account))
         let presentationData = context.sharedContext.currentPresentationData.with { $0 }
@@ -205,7 +210,7 @@ func logoutOptionsController(context: AccountContext, navigationController: Navi
                     }
                 }))
             })
-        ]), nil)
+        ]), nil)*/
     }, logout: {
         let presentationData = context.sharedContext.currentPresentationData.with { $0 }
         let alertController = textAlertController(context: context, title: presentationData.strings.Settings_LogoutConfirmationTitle, text: presentationData.strings.Settings_LogoutConfirmationText, actions: [

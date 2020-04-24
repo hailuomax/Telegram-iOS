@@ -17,6 +17,8 @@ import PresentationDataUtils
 import PhoneNumberFormat
 import AccountUtils
 
+import Repo
+
 enum SettingsSearchableItemIcon {
     case profile
     case proxy
@@ -891,12 +893,13 @@ func settingsSearchableItems(context: AccountContext, notificationExceptionsList
         #endif
         
         let support = SettingsSearchableItem(id: .support(0), title: strings.Settings_Support, alternate: synonyms(strings.SettingsSearch_Synonyms_Support), icon: .support, breadcrumbs: [], present: { context, _, present in
-            let _ = (supportPeerId(account: context.account)
-            |> deliverOnMainQueue).start(next: { peerId in
-                if let peerId = peerId {
-                    present(.push, context.sharedContext.makeChatController(context: context, chatLocation: .peer(peerId), subject: nil, botStart: nil, mode: .standard(previewing: false)))
-                }
-            })
+            AccountRepo.getCustomerService(context.account)
+//            let _ = (supportPeerId(account: context.account)
+//            |> deliverOnMainQueue).start(next: { peerId in
+//                if let peerId = peerId {
+//                    present(.push, context.sharedContext.makeChatController(context: context, chatLocation: .peer(peerId), subject: nil, botStart: nil, mode: .standard(previewing: false)))
+//                }
+//            })
         })
         allItems.append(support)
         

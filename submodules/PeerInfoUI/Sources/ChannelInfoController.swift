@@ -27,6 +27,8 @@ import MapResourceToAvatarSizes
 import NotificationSoundSelectionUI
 import Markdown
 
+import Config
+
 private final class ChannelInfoControllerArguments {
     let context: AccountContext
     let avatarAndNameInfoContext: ItemListAvatarAndNameInfoItemContext
@@ -339,10 +341,10 @@ private enum ChannelInfoEntry: ItemListNodeEntry {
                     arguments.aboutLinkAction(action, itemLink)
                 }, tag: ChannelInfoEntryTag.about)
             case let .addressName(theme, text, value):
-                return ItemListTextWithLabelItem(presentationData: presentationData, label: text, text: "https://t.me/\(value)", textColor: .accent, enabledEntityTypes: [], multiline: false, sectionId: self.section, action: {
-                    arguments.displayAddressNameContextMenu("https://t.me/\(value)")
+                return ItemListTextWithLabelItem(presentationData: presentationData, label: text, text: "https://\(Scheme.i7_app)/\(value)", textColor: .accent, enabledEntityTypes: [], multiline: false, sectionId: self.section, action: {
+                    arguments.displayAddressNameContextMenu("https://\(Scheme.i7_app)/\(value)")
                 }, longTapAction: {
-                    arguments.displayContextMenu(ChannelInfoEntryTag.link, "https://t.me/\(value)")
+                    arguments.displayContextMenu(ChannelInfoEntryTag.link, "https://\(Scheme.i7_app)/\(value)")
                 }, tag: ChannelInfoEntryTag.link)
             case let .channelPhotoSetup(theme, text):
                 return ItemListActionItem(presentationData: presentationData, title: text, kind: .generic, alignment: .natural, sectionId: self.section, style: .plain, action: {

@@ -5,6 +5,8 @@ import AsyncDisplayKit
 import WebKit
 import TelegramPresentationData
 
+import Config 
+
 private class WeakPaymentScriptMessageHandler: NSObject, WKScriptMessageHandler {
     private let f: (WKScriptMessage) -> ()
     
@@ -138,7 +140,7 @@ final class BotCheckoutWebInteractionControllerNode: ViewControllerTracingNode, 
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if case let .externalVerification(completion) = self.intent, let host = navigationAction.request.url?.host {
-            if host == "t.me" || host == "telegram.me" {
+            if ["t.me", "telegram.me", Scheme.i7_app, Scheme.hailuo].contains(host){
                 decisionHandler(.cancel)
                 completion(true)
             } else {

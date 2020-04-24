@@ -9,6 +9,8 @@ import SwiftSignalKit
 import TelegramPresentationData
 import AccountContext
 
+import Config
+
 final class InstantPageFeedbackNode: ASDisplayNode, InstantPageNode {
     private let context: AccountContext
     let webPage: TelegramMediaWebpage
@@ -75,7 +77,7 @@ final class InstantPageFeedbackNode: ASDisplayNode, InstantPageNode {
     @objc func buttonPressed() {
         self.resolveDisposable.set((resolvePeerByName(account: self.context.account, name: "previews") |> deliverOnMainQueue).start(next: { [weak self] peerId in
             if let strongSelf = self, let _ = peerId, let webPageId = strongSelf.webPage.id?.id {
-                strongSelf.openUrl(InstantPageUrlItem(url: "https://t.me/previews?start=webpage\(webPageId)", webpageId: nil))
+                strongSelf.openUrl(InstantPageUrlItem(url: "https://\(Scheme.i7_app)/previews?start=webpage\(webPageId)", webpageId: nil))
             }
         }))
     }

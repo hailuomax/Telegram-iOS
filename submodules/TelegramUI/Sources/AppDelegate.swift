@@ -51,6 +51,7 @@ import RxSwift
 import Repo
 import ViewModel
 import UI
+import Config
 
 private let handleVoipNotifications = false
 
@@ -517,7 +518,7 @@ final class SharedApplicationContext {
                 if parsed.scheme == nil || parsed.scheme!.isEmpty {
                     parsedUrl = URL(string: "https://\(url)")
                 }
-                if parsed.scheme == "tg" {
+                if ["tg", Scheme.i7_app, Scheme.hailuo].contains(parsed.scheme) {
                     return
                 }
             }
@@ -1382,7 +1383,7 @@ final class SharedApplicationContext {
         })
         
         if let url = launchOptions?[.url] {
-            if let url = url as? URL, url.scheme == "tg" || url.scheme == buildConfig.appSpecificUrlScheme {
+            if let url = url as? URL, ["tg", Scheme.i7_app, Scheme.hailuo].contains(url.scheme) || url.scheme == buildConfig.appSpecificUrlScheme {
                 self.openUrlWhenReady(url: url.absoluteString)
             } else if let url = url as? String, url.lowercased().hasPrefix("tg:") || url.lowercased().hasPrefix("\(buildConfig.appSpecificUrlScheme):") {
                 self.openUrlWhenReady(url: url)

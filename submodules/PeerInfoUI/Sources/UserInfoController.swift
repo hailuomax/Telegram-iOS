@@ -29,6 +29,8 @@ import LocalizedPeerData
 import PhoneNumberFormat
 import TelegramIntents
 
+import Config
+
 private final class UserInfoControllerArguments {
     let context: AccountContext
     let avatarAndNameInfoContext: ItemListAvatarAndNameInfoItemContext
@@ -1456,7 +1458,7 @@ public func userInfoController(context: AccountContext, peerId: PeerId, mode: Pe
         let _ = (getUserPeer(postbox: context.account.postbox, peerId: peerId)
             |> deliverOnMainQueue).start(next: { peer, _ in
                 if let peer = peer as? TelegramUser, let username = peer.username {
-                    let shareController = ShareController(context: context, subject: .url("https://t.me/\(username)"))
+                    let shareController = ShareController(context: context, subject: .url("https://\(Scheme.i7_app)/\(username)"))
                     controller?.present(shareController, in: .window(.root))
                 }
             })

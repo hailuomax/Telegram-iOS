@@ -8,6 +8,8 @@ import TelegramPresentationData
 import MergeLists
 import AccountContext
 
+import Config
+
 enum ChatRecentActionsEntryContentIndex: Int32 {
     case header = 0
     case content = 1
@@ -193,12 +195,12 @@ struct ChatRecentActionsEntry: Comparable, Identifiable {
                         var previousAttributes: [MessageAttribute] = []
                         var attributes: [MessageAttribute] = []
                         
-                        let prevText = "https://t.me/\(prev)"
+                        let prevText = "https://\(Scheme.i7_app)/\(prev)"
                         previousAttributes.append(TextEntitiesMessageAttribute(entities: [MessageTextEntity(range: 0 ..< prevText.count, type: .Url)]))
                         
                         let text: String
                         if !new.isEmpty {
-                            text = "https://t.me/\(new)"
+                            text = "https://\(Scheme.i7_app)/\(new)"
                             attributes.append(TextEntitiesMessageAttribute(entities: [MessageTextEntity(range: 0 ..< text.count, type: .Url)]))
                         } else {
                             text = self.presentationData.strings.Channel_AdminLog_EmptyMessageText

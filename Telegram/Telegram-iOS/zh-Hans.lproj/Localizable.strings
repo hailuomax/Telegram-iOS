@@ -490,7 +490,7 @@
 "Channel.Username.InvalidStartsWithNumber" = "用户名不能以数字开头。";
 "Channel.Username.InvalidTaken" = "抱歉，此用户名已被占用。";
 "Channel.Username.InvalidTooShort" = "用户名必须包含至少 5 个字符。";
-"Channel.Username.LinkHint" = "通过这个链接可以打开您的频道：[\nhttps://t.me/%@]";
+"Channel.Username.LinkHint" = "通过这个链接可以打开您的频道：[\nhttps://i7.app/%@]";
 "Channel.Username.RevokeExistingUsernamesInfo" = "您可以撤消其中一个较旧群组或频道的链接，也可以创建私人频道。";
 "Channel.Username.Title" = "链接";
 "Channel.Username.UsernameIsAvailable" = "%@ 可用。";
@@ -1033,7 +1033,7 @@
 "Embed.PlayingInPIP" = "此视频正在以「画中画」模式播放";
 "EmptyGroupInfo.Line1" = "成员上限为 20 万人";
 "EmptyGroupInfo.Line2" = "永久聊天记录";
-"EmptyGroupInfo.Line3" = "公开链接，例如：t.me/title";
+"EmptyGroupInfo.Line3" = "公开链接，例如：i7.app/title";
 "EmptyGroupInfo.Line4" = "具备不同权限的管理员";
 "EmptyGroupInfo.Subtitle" = "群组可以拥有：";
 "EmptyGroupInfo.Title" = "您已创建了一个群组";
@@ -2567,7 +2567,7 @@
 "Username.InvalidTaken" = "抱歉，此用户名已被使用。";
 "Username.InvalidTooShort" = "用户名必须包含至少 5 个字符。";
 "Username.LinkCopied" = "链接已复制到剪贴板";
-"Username.LinkHint" = "通过此链接可以与您进行对话：[\nhttps://t.me/%@]";
+"Username.LinkHint" = "通过此链接可以与您进行对话：[\nhttps://i7.app/%@]";
 "Username.Placeholder" = "您的用户名";
 "Username.Title" = "用户名";
 "Username.TooManyPublicUsernamesError" = "抱歉，您保留了太多公共用户名。";

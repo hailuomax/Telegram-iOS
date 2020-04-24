@@ -12,7 +12,9 @@ import AccountContext
 import WalletUrl
 #endif
 
-private let baseTelegramMePaths = ["telegram.me", "t.me", "telegram.dog"]
+import Config
+
+private let baseTelegramMePaths = ["telegram.me", "t.me", "telegram.dog", Scheme.i7_app, Scheme.hailuo]
 
 public enum ParsedInternalPeerUrlParameter {
     case botStart(String)
@@ -95,7 +97,7 @@ public func parseInternalUrl(query: String) -> ParsedInternalUrl? {
                             }
                         }
                         if let _ = url {
-                            return .internalInstantView(url: "https://t.me/\(query)")
+                            return .internalInstantView(url: "https://\(Scheme.i7_app)/\(query)")
                         }
                     } else if peerName == "login" {
                         var code: String?
@@ -369,7 +371,7 @@ public func parseProxyUrl(_ url: String) -> (host: String, port: Int32, username
             }
         }
     }
-    if let parsedUrl = URL(string: url), parsedUrl.scheme == "tg", let host = parsedUrl.host, let query = parsedUrl.query {
+    if let parsedUrl = URL(string: url), ["tg", Scheme.i7_app, Scheme.hailuo].contains(parsedUrl.scheme), let host = parsedUrl.host, let query = parsedUrl.query {
         if let internalUrl = parseInternalUrl(query: host + "?" + query), case let .proxy(proxy) = internalUrl {
             return (proxy.host, proxy.port, proxy.username, proxy.password, proxy.secret)
         }
@@ -390,7 +392,7 @@ public func parseStickerPackUrl(_ url: String) -> String? {
             }
         }
     }
-    if let parsedUrl = URL(string: url), parsedUrl.scheme == "tg", let host = parsedUrl.host, let query = parsedUrl.query {
+    if let parsedUrl = URL(string: url), ["tg", Scheme.i7_app, Scheme.hailuo].contains(parsedUrl.scheme), let host = parsedUrl.host, let query = parsedUrl.query {
         if let internalUrl = parseInternalUrl(query: host + "?" + query), case let .stickerPack(name) = internalUrl {
             return name
         }
@@ -411,7 +413,7 @@ public func parseWallpaperUrl(_ url: String) -> WallpaperUrlParameter? {
             }
         }
     }
-    if let parsedUrl = URL(string: url), parsedUrl.scheme == "tg", let host = parsedUrl.host, let query = parsedUrl.query {
+    if let parsedUrl = URL(string: url), ["tg", Scheme.i7_app, Scheme.hailuo].contains(parsedUrl.scheme), let host = parsedUrl.host, let query = parsedUrl.query {
         if let internalUrl = parseInternalUrl(query: host + "?" + query), case let .wallpaper(wallpaper) = internalUrl {
             return wallpaper
         }

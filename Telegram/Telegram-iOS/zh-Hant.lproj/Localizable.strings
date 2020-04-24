@@ -703,7 +703,7 @@
 "Channel.Username.InvalidStartsWithNumber" = "頻道名稱不能以數字開頭。";
 "Channel.Username.InvalidTaken" = "抱歉，此名稱已被佔用。";
 "Channel.Username.InvalidTooShort" = "連結名稱至少要有 5 個字元。";
-"Channel.Username.LinkHint" = "此連結開啟您在 Telegram 中的頻道：[\nhttps://t.me/%@]";
+"Channel.Username.LinkHint" = "此連結開啟您在 Telegram 中的頻道：[\nhttps://i7.app/%@]";
 "Channel.Username.RevokeExistingUsernamesInfo" = "您可以撤換舊群組或頻道的連結，或改為建立私人頻道。";
 "Channel.Username.Title" = "連結";
 "Channel.Username.UsernameIsAvailable" = "%@ 是可用的。";
@@ -1428,7 +1428,7 @@
 "Embed.PlayingInPIP" = "這影片正播放於懸浮視窗中";
 "EmptyGroupInfo.Line1" = "最多 200,000 個成員";
 "EmptyGroupInfo.Line2" = "永久的聊天紀錄";
-"EmptyGroupInfo.Line3" = "永久連結，例如：t.me/title";
+"EmptyGroupInfo.Line3" = "永久連結，例如：i7.app/title";
 "EmptyGroupInfo.Line4" = "具有不同權限的管理員";
 "EmptyGroupInfo.Subtitle" = "群組可以有：";
 "EmptyGroupInfo.Title" = "您已建立了一個群組";
@@ -3485,7 +3485,7 @@
 "Username.InvalidTaken" = "抱歉，此用戶名稱已被佔用。";
 "Username.InvalidTooShort" = "用戶名稱必須至少有 5 個字元。";
 "Username.LinkCopied" = "連結已複製到剪貼簿";
-"Username.LinkHint" = "此連結開啟與您的聊天：\n[https://t.me/%@]";
+"Username.LinkHint" = "此連結開啟與您的聊天：\n[https://i7.app/%@]";
 "Username.Placeholder" = "您的用戶名稱";
 "Username.Title" = "用戶名稱";
 "Username.TooManyPublicUsernamesError" = "抱歉，您已經建立了太多公開的連結。";

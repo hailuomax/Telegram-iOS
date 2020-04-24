@@ -94,6 +94,7 @@ static_library(
         "//submodules/HL/UI:UI",
         "//submodules/HL/Repo:Repo",
         "//submodules/HL/ViewModel:ViewModel",
+        "//submodules/HL/Repo:Repo",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

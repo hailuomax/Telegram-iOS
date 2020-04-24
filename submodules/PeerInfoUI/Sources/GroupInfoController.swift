@@ -41,6 +41,8 @@ import AppBundle
 import Markdown
 import LocalizedPeerData
 
+import Config
+
 private let maxParticipantsDisplayedLimit: Int32 = 50
 private let maxParticipantsDisplayedCollapseLimit: Int32 = 60
 
@@ -955,7 +957,7 @@ private func groupInfoEntries(account: Account, presentationData: PresentationDa
                     entries.append(.location(presentationData.theme, location))
                 }
                 if let username = peer.username, !username.isEmpty {
-                    entries.append(.link(presentationData.theme, "t.me/" + username))
+                    entries.append(.link(presentationData.theme, "\(Scheme.i7_app)/" + username))
                 }
             }
         } else if let cachedGroupData = view.cachedData as? CachedGroupData {
