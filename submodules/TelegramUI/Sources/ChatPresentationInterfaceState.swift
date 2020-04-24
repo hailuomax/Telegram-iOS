@@ -89,12 +89,14 @@ enum ChatMediaInputExpanded: Equatable {
     case content
     case search(ChatMediaInputSearchMode)
 }
-
+//MARK: 聊天页弹起框的类型
 enum ChatInputMode: Equatable {
     case none
     case text
     case media(mode: ChatMediaInputMode, expanded: ChatMediaInputExpanded?)
     case inputButtons
+    //海螺菜单
+    case hlMenu
 }
 
 enum ChatTitlePanelContext: Equatable, Comparable {

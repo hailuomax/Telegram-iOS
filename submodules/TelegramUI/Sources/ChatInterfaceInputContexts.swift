@@ -200,6 +200,10 @@ func inputContextQueriesForChatPresentationIntefaceState(_ chatPresentationInter
     return result
 }
 
+/// 输入栏按钮的样式显示
+/// - Parameters:
+///   - chatPresentationInterfaceState: 聊天表示接口状态
+///   - context: 上下文，应该是配置样式
 func inputTextPanelStateForChatPresentationInterfaceState(_ chatPresentationInterfaceState: ChatPresentationInterfaceState, context: AccountContext) -> ChatTextInputPanelState {
     var contextPlaceholder: NSAttributedString?
     loop: for (_, result) in chatPresentationInterfaceState.inputQueryResults {
@@ -236,7 +240,7 @@ func inputTextPanelStateForChatPresentationInterfaceState(_ chatPresentationInte
     }
     
     switch chatPresentationInterfaceState.inputMode {
-        case .media:
+    case .media ,.hlMenu:
             accessoryItems.append(.keyboard)
             return ChatTextInputPanelState(accessoryItems: accessoryItems, contextPlaceholder: contextPlaceholder, mediaRecordingState: chatPresentationInterfaceState.inputTextPanelState.mediaRecordingState)
         case .inputButtons:

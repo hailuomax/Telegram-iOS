@@ -203,6 +203,9 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
     
     private var onLayoutCompletions: [(ContainedViewLayoutTransition) -> Void] = []
     
+    //MARK: 海螺定制InputNode
+    var inputMenuNode : ChatMenuInputNode
+    
     init(context: AccountContext, chatLocation: ChatLocation, subject: ChatControllerSubject?, controllerInteraction: ChatControllerInteraction, chatPresentationInterfaceState: ChatPresentationInterfaceState, automaticMediaDownloadSettings: MediaAutoDownloadSettings, navigationBar: NavigationBar?, controller: ChatControllerImpl?) {
         self.context = context
         self.chatLocation = chatLocation
@@ -246,6 +249,8 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         
         self.navigateButtons = ChatHistoryNavigationButtons(theme: self.chatPresentationInterfaceState.theme)
         self.navigateButtons.accessibilityElementsHidden = true
+        
+        self.inputMenuNode = ChatMenuInputNode(context: context)
         
         super.init()
         
@@ -621,7 +626,8 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         var dismissedInputNode: ChatInputNode?
         var immediatelyLayoutInputNodeAndAnimateAppearance = false
         var inputNodeHeightAndOverflow: (CGFloat, CGFloat)?
-        if let inputNode = inputNodeForChatPresentationIntefaceState(self.chatPresentationInterfaceState, context: self.context, currentNode: self.inputNode, interfaceInteraction: self.interfaceInteraction, inputMediaNode: self.inputMediaNode, controllerInteraction: self.controllerInteraction, inputPanelNode: self.inputPanelNode) {
+        //MARK: ---判断弹起那个inputNode
+        if let inputNode = inputNodeForChatPresentationIntefaceState(self.chatPresentationInterfaceState, context: self.context, currentNode: self.inputNode, interfaceInteraction: self.interfaceInteraction, inputMediaNode: self.inputMediaNode, controllerInteraction: self.controllerInteraction, inputPanelNode: self.inputPanelNode,inputMenuNode: self.inputMenuNode) {
             if let inputPanelNode = self.inputPanelNode as? ChatTextInputPanelNode {
                 if inputPanelNode.isFocused {
                     self.context.sharedContext.mainWindow?.simulateKeyboardDismiss(transition: .animated(duration: 0.5, curve: .spring))
@@ -750,6 +756,11 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
                 
         if let inputMediaNode = self.inputMediaNode, inputMediaNode != self.inputNode {
             let _ = inputMediaNode.updateLayout(width: layout.size.width, leftInset: layout.safeInsets.left, rightInset: layout.safeInsets.right, bottomInset: cleanInsets.bottom, standardInputHeight: layout.standardInputHeight, inputHeight: layout.inputHeight ?? 0.0, maximumHeight: maximumInputNodeHeight, inputPanelHeight: inputPanelSize?.height ?? 0.0, transition: .immediate, interfaceState: self.chatPresentationInterfaceState, deviceMetrics: layout.deviceMetrics, isVisible: false)
+        }
+        
+        //MARK: 更新inputMenuNode layout
+        if  self.inputMenuNode != self.inputNode {
+            let _ = inputMenuNode.updateLayout(width: layout.size.width, leftInset: layout.safeInsets.left, rightInset: layout.safeInsets.right, bottomInset: cleanInsets.bottom, standardInputHeight: layout.standardInputHeight, inputHeight: layout.inputHeight ?? 0.0, maximumHeight: maximumInputNodeHeight, inputPanelHeight: inputPanelSize?.height ?? 0.0, transition: .immediate, interfaceState: self.chatPresentationInterfaceState, deviceMetrics: layout.deviceMetrics, isVisible: false)
         }
         
         transition.updateFrame(node: self.titleAccessoryPanelContainer, frame: CGRect(origin: CGPoint(x: 0.0, y: insets.top), size: CGSize(width: layout.size.width, height: 56.0)))
@@ -2203,15 +2214,16 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
             self.keyboardGestureBeginLocation = nil
         }
     }
-    
-    func openStickers() {
+    //MARK: 是否打开海螺菜单
+    func openStickers(ishlMenu: Bool) {
         if let inputMediaNode = self.inputMediaNode, self.openStickersDisposable == nil {
             self.openStickersDisposable = (inputMediaNode.ready
             |> take(1)
             |> deliverOnMainQueue).start(next: { [weak self] in
                 self?.openStickersDisposable = nil
                 self?.interfaceInteraction?.updateInputModeAndDismissedButtonKeyboardMessageId({ state in
-                    return (.media(mode: .other, expanded: nil), state.interfaceState.messageActionsState.closedButtonKeyboardMessageId)
+                    let inputMode: ChatInputMode = ishlMenu ? .hlMenu : .media(mode: .other, expanded: nil)
+                    return (inputMode, state.interfaceState.messageActionsState.closedButtonKeyboardMessageId)
                 })
             })
         }

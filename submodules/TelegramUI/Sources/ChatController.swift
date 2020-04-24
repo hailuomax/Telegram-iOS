@@ -3414,11 +3414,11 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                     })
                 })
             }
-        }, openStickers: { [weak self] in
+        }, openStickers: { [weak self] ishlMenu in
             guard let strongSelf = self else {
                 return
             }
-            strongSelf.chatDisplayNode.openStickers()
+            strongSelf.chatDisplayNode.openStickers(ishlMenu:ishlMenu)
             strongSelf.mediaRecordingModeTooltipController?.dismissImmediately()
         }, editMessage: { [weak self] in
             if let strongSelf = self, let editMessage = strongSelf.presentationInterfaceState.interfaceState.editMessage {
@@ -4677,8 +4677,12 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                         if strongSelf.context.sharedContext.immediateHasOngoingCall {
                             return false
                         }
+                        let inputMode = strongSelf.presentationInterfaceState.inputMode
+                        if case let .media(_, expanded) = inputMode, expanded != nil {
+                            return false
+                        }
                         
-                        if case let .media(_, expanded) = strongSelf.presentationInterfaceState.inputMode, expanded != nil {
+                        if inputMode == .hlMenu{
                             return false
                         }
                         
@@ -5707,8 +5711,31 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             self?.editMessageMediaWithMessages(messages)
         })
     }
-    
+    //MARK: 弹出菜单Menu
     private func presentAttachmentMenu(editMediaOptions: MessageMediaEditingOptions?, editMediaReference: AnyMediaReference?) {
+        
+        //MARK: 弹出功能框
+        let _ = (self.context.sharedContext.accountManager.transaction { transaction -> GeneratedMediaStoreSettings in
+            let entry = transaction.getSharedData(ApplicationSpecificSharedDataKeys.generatedMediaStoreSettings) as? GeneratedMediaStoreSettings
+            return entry ?? GeneratedMediaStoreSettings.defaultSettings
+            }
+            |> deliverOnMainQueue).start(next: { [weak self] settings in
+                guard let self = self else{return}
+                let isMenu = self.chatDisplayNode.chatPresentationInterfaceState.inputMode == .hlMenu
+                if !isMenu {//有键盘或者菜单隐藏时
+                    self.chatDisplayNode.interfaceInteraction?.updateTextInputStateAndMode { (status,input) in
+                        return (status, .hlMenu)
+                    }
+                    self.chatDisplayNode.interfaceInteraction?.openStickers(true)
+                }else {
+                    self.interfaceInteraction?.updateInputModeAndDismissedButtonKeyboardMessageId({ state in
+                        return (.text, state.keyboardButtonsMessage?.id)
+                    })
+                }
+                
+            })
+        return
+        //电报原逻辑
         let _ = (self.context.sharedContext.accountManager.transaction { transaction -> GeneratedMediaStoreSettings in
             let entry = transaction.getSharedData(ApplicationSpecificSharedDataKeys.generatedMediaStoreSettings) as? GeneratedMediaStoreSettings
             return entry ?? GeneratedMediaStoreSettings.defaultSettings
@@ -5801,7 +5828,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             if let channel = peer as? TelegramChannel, channel.isRestrictedBySlowmode {
                 slowModeEnabled = true
             }
-            
+           
             let controller = legacyAttachmentMenu(context: strongSelf.context, peer: peer, editMediaOptions: menuEditMediaOptions, saveEditedPhotos: settings.storeEditedPhotos, allowGrouping: true, hasSchedule: !strongSelf.presentationInterfaceState.isScheduledMessages && peer.id.namespace != Namespaces.Peer.SecretChat, canSendPolls: canSendPolls, presentationData: strongSelf.presentationData, parentController: legacyController, recentlyUsedInlineBots: strongSelf.recentlyUsedInlineBotsValue, initialCaption: inputText.string, openGallery: {
                 self?.presentMediaPicker(fileMode: false, editingMedia: editMediaOptions != nil, completion: { signals, silentPosting, scheduleTime in
                     if !inputText.string.isEmpty {
