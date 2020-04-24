@@ -1732,7 +1732,7 @@ class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDelegate {
                 switch item {
                     case let .stickers(enabled):
                         if enabled {
-                            self.interfaceInteraction?.openStickers()
+                            self.interfaceInteraction?.openStickers(false)
                         } else {
                             self.interfaceInteraction?.displayRestrictedInfo(.stickers, .tooltip)
                         }

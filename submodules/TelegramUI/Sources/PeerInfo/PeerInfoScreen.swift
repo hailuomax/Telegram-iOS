@@ -358,7 +358,7 @@ final class PeerInfoSelectionPanelNode: ASDisplayNode {
             shareMessages()
         }, updateTextInputStateAndMode: { _ in
         }, updateInputModeAndDismissedButtonKeyboardMessageId: { _ in
-        }, openStickers: {
+        }, openStickers: {_ in
         }, editMessage: {
         }, beginMessageSearch: { _, _ in
         }, dismissMessageSearch: {
