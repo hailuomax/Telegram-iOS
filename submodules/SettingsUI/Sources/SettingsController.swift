@@ -33,6 +33,7 @@ import PeerAvatarGalleryUI
 import MapResourceToAvatarSizes
 import AppBundle
 import ContextUI
+import UrlHandling
 #if ENABLE_WALLET
 import WalletUI
 #endif
@@ -1137,7 +1138,18 @@ public func settingsController(context: AccountContext, accountManager: AccountM
         |> deliverOnMainQueue
         |> take(1)).start(next: { context in
             
-            AccountRepo.getCustomerService(context.account)
+            AccountRepo.getCustomerService()
+                .value({
+                    guard let urlString = $0.groupId else {return}
+                    
+                    let _ = (resolveUrlImpl(account: context.account, url: urlString)
+                        |> deliverOnMainQueue).start(next: { resolvedUrl in
+                            print(resolvedUrl)
+                            guard case .peer(let p, _) = resolvedUrl , let peerId = p else {return}
+                            
+                            pushControllerImpl?(context.sharedContext.makeChatController(context: context, chatLocation: .peer(peerId), subject: nil, botStart: nil, mode: .standard(previewing: false)))
+                    })
+                })
             
             /*
             let supportPeer = Promise<PeerId?>()

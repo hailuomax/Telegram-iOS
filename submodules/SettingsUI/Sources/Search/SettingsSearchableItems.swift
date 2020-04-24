@@ -16,6 +16,7 @@ import NotificationSoundSelectionUI
 import PresentationDataUtils
 import PhoneNumberFormat
 import AccountUtils
+import UrlHandling
 
 import Repo
 
@@ -893,7 +894,18 @@ func settingsSearchableItems(context: AccountContext, notificationExceptionsList
         #endif
         
         let support = SettingsSearchableItem(id: .support(0), title: strings.Settings_Support, alternate: synonyms(strings.SettingsSearch_Synonyms_Support), icon: .support, breadcrumbs: [], present: { context, _, present in
-            AccountRepo.getCustomerService(context.account)
+            AccountRepo.getCustomerService()
+            .value({
+                guard let urlString = $0.groupId else {return}
+                
+                let _ = (resolveUrlImpl(account: context.account, url: urlString)
+                    |> deliverOnMainQueue).start(next: { resolvedUrl in
+                        print(resolvedUrl)
+                        guard case .peer(let p, _) = resolvedUrl , let peerId = p else {return}
+                        
+                        present(.push, context.sharedContext.makeChatController(context: context, chatLocation: .peer(peerId), subject: nil, botStart: nil, mode: .standard(previewing: false)))
+                })
+            })
 //            let _ = (supportPeerId(account: context.account)
 //            |> deliverOnMainQueue).start(next: { peerId in
 //                if let peerId = peerId {
