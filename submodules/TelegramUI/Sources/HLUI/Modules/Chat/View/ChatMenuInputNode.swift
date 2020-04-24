@@ -13,27 +13,27 @@ import AsyncDisplayKit
 import Postbox
 import TelegramCore
 import SwiftSignalKit
-import class SwiftSignalKit.Signal
-import class SwiftSignalKit.Timer
-import class SwiftSignalKit.Bag
-import class SwiftSignalKit.Queue
-import enum SwiftSignalKit.NoError
-import protocol SwiftSignalKit.Disposable
 import TelegramPresentationData
 import AccountContext
+import SyncCore
+import LegacyUI
+import TelegramPresentationData
  
 final class ChatMenuInputNode: ChatInputNode {
     private let context: AccountContext
-//    private let controllerInteraction: ChatControllerInteraction
+    private let menuInteraction: HLMenuInteraction
     // 公开给ChatViewController使用
-//    let menuNode: ChatMediaInputMenuPane
+    let menuNode: ChatMediaInputMenuPane
     
-    init(context: AccountContext ) {
+    private var menus: [ChatMediaInputMenu] = []
+    
+    init(context: AccountContext, interaction: HLMenuInteraction ) {
         self.context = context
-//        self.menuNode = ChatMediaInputMenuPane(menus: [], onSelect: {_ in })
+        self.menuInteraction = interaction
+        self.menuNode = ChatMediaInputMenuPane(menus: [], onSelect: {_ in })
 
         super.init()
-//        self.addSubnode(self.menuNode)
+        self.addSubnode(self.menuNode)
         self.view.disablesInteractiveTransitionGestureRecognizer = true
     }
 
@@ -41,10 +41,98 @@ final class ChatMenuInputNode: ChatInputNode {
     override func updateLayout(width: CGFloat, leftInset: CGFloat, rightInset: CGFloat, bottomInset: CGFloat, standardInputHeight: CGFloat, inputHeight: CGFloat, maximumHeight: CGFloat, inputPanelHeight: CGFloat, transition: ContainedViewLayoutTransition, interfaceState: ChatPresentationInterfaceState, deviceMetrics: DeviceMetrics, isVisible: Bool) -> (CGFloat, CGFloat) {
         
         self.backgroundColor = interfaceState.theme.chat.inputPanel.panelBackgroundColor
-//        self.menuNode.backgroundColor = self.backgroundColor
-//        transition.updateFrame(node: self.menuNode, frame: CGRect(origin: CGPoint(), size: CGSize(width: width, height: standardInputHeight)))
+        self.menuNode.backgroundColor = self.backgroundColor
+        transition.updateFrame(node: self.menuNode, frame: CGRect(origin: CGPoint(), size: CGSize(width: width, height: standardInputHeight)))
         
         return (380 + bottomInset, 0)
+    }
+    
+    func updateData(peer: Peer,editMediaOptions: MessageMediaEditingOptions?, saveEditedPhotos: Bool, presentationData: PresentationData, parentController: LegacyController, initialCaption: String) {
+        factoryMenus(with: peer,editMediaOptions:editMediaOptions)
+        menuNode.contentView.updateWith(presentationData: presentationData, context: context, peer: peer, editMediaOptions: editMediaOptions, saveEditedPhotos: saveEditedPhotos, allowGrouping: true, theme: presentationData.theme, strings: presentationData.strings, parentController: parentController, initialCaption: initialCaption, menus: menus, onSelect: { _ in
+            
+        }, sendMessagesWithSignals: {(_ , _) in}, openGallery: {}, openMediaPicker: {}, closeMediaPicker: {})
+    }
+    
+    ///组装menus
+    private func factoryMenus(with peer: Peer, editMediaOptions: MessageMediaEditingOptions?){
+        
+        guard menus.count == 0 else {return}
+        
+        var channelGroup = false
+               if let tmp = peer as? TelegramChannel { //有可能是一个与频道绑定的群
+                   switch tmp.info {
+                   case .group:
+                       channelGroup = true
+                   case .broadcast:
+                       channelGroup = false
+                   }
+               }
+        if peer is TelegramUser || peer is TelegramSecretChat || peer is TelegramGroup || channelGroup{
+            if peer is TelegramGroup || channelGroup {
+                menus.append(.superRedPacket)
+            }
+            
+            //只有在个人聊天，私密聊天，群里面才有以下交易功能
+            menus += [.redPacket, .exchange]
+            
+            if peer is TelegramUser {
+                menus.append(.transfer)
+            }
+        }
+        
+        var bannedSendMedia: (Int32, Bool)?
+        var canSendPolls = true
+        if let channel = peer as? TelegramChannel {
+            if let value = channel.hasBannedPermission(.banSendMedia) {
+                bannedSendMedia = value
+            }
+            if channel.hasBannedPermission(.banSendPolls) != nil {
+                canSendPolls = false
+            }
+        } else if let group = peer as? TelegramGroup {
+            if group.hasBannedPermission(.banSendMedia) {
+                bannedSendMedia = (Int32.max, false)
+            }
+            if group.hasBannedPermission(.banSendPolls) {
+                canSendPolls = false
+            }
+        }
+        if editMediaOptions == nil, bannedSendMedia != nil{
+            
+            menus += [.location,.contact]
+            if canSendPolls {
+                menus.append(.poll)
+            }
+            return
+        }
+        
+        
+        var editing = false
+        var canEditCurrent = false
+        if let editMediaOptions = editMediaOptions {
+            canEditCurrent = true
+            if editMediaOptions.contains(.imageOrVideo) {
+                
+                editing = true
+            }
+        }
+        
+        menus += [.shooting, .photo, ]
+        
+        
+        if !editing || canEditCurrent {
+            menus.append(.file)
+        }
+        if editMediaOptions == nil {
+            menus += [.location,.contact]
+            if (peer is TelegramGroup || peer is TelegramChannel) && canSendMessagesToPeer(peer) {
+                menus.append(.poll)
+            }
+        }
+        
+        menus = menus.sorted(by: {return $0.index() < $1.index()})
+        
     }
     
     

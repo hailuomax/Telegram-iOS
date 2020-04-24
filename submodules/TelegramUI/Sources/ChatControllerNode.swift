@@ -205,8 +205,10 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
     
     //MARK: 海螺定制InputNode
     var inputMenuNode : ChatMenuInputNode
+    //MARK: 海螺菜单事件
+    var menuInteraction : HLMenuInteraction
     
-    init(context: AccountContext, chatLocation: ChatLocation, subject: ChatControllerSubject?, controllerInteraction: ChatControllerInteraction, chatPresentationInterfaceState: ChatPresentationInterfaceState, automaticMediaDownloadSettings: MediaAutoDownloadSettings, navigationBar: NavigationBar?, controller: ChatControllerImpl?) {
+    init(context: AccountContext, chatLocation: ChatLocation, subject: ChatControllerSubject?, controllerInteraction: ChatControllerInteraction, chatPresentationInterfaceState: ChatPresentationInterfaceState, automaticMediaDownloadSettings: MediaAutoDownloadSettings, navigationBar: NavigationBar?, controller: ChatControllerImpl? , menuInteraction:HLMenuInteraction) {
         self.context = context
         self.chatLocation = chatLocation
         self.controllerInteraction = controllerInteraction
@@ -214,7 +216,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         self.automaticMediaDownloadSettings = automaticMediaDownloadSettings
         self.navigationBar = navigationBar
         self.controller = controller
-        
+        self.menuInteraction = menuInteraction
         self.backgroundNode = WallpaperBackgroundNode()
         self.backgroundNode.displaysAsynchronously = false
         
@@ -250,7 +252,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         self.navigateButtons = ChatHistoryNavigationButtons(theme: self.chatPresentationInterfaceState.theme)
         self.navigateButtons.accessibilityElementsHidden = true
         
-        self.inputMenuNode = ChatMenuInputNode(context: context)
+        self.inputMenuNode = ChatMenuInputNode(context: context, interaction: menuInteraction)
         
         super.init()
         
@@ -627,7 +629,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         var immediatelyLayoutInputNodeAndAnimateAppearance = false
         var inputNodeHeightAndOverflow: (CGFloat, CGFloat)?
         //MARK: ---判断弹起那个inputNode
-        if let inputNode = inputNodeForChatPresentationIntefaceState(self.chatPresentationInterfaceState, context: self.context, currentNode: self.inputNode, interfaceInteraction: self.interfaceInteraction, inputMediaNode: self.inputMediaNode, controllerInteraction: self.controllerInteraction, inputPanelNode: self.inputPanelNode,inputMenuNode: self.inputMenuNode) {
+        if let inputNode = inputNodeForChatPresentationIntefaceState(self.chatPresentationInterfaceState, context: self.context, currentNode: self.inputNode, interfaceInteraction: self.interfaceInteraction, inputMediaNode: self.inputMediaNode, controllerInteraction: self.controllerInteraction, inputPanelNode: self.inputPanelNode,inputMenuNode: self.inputMenuNode, menuInteraction: self.menuInteraction) {
             if let inputPanelNode = self.inputPanelNode as? ChatTextInputPanelNode {
                 if inputPanelNode.isFocused {
                     self.context.sharedContext.mainWindow?.simulateKeyboardDismiss(transition: .animated(duration: 0.5, curve: .spring))

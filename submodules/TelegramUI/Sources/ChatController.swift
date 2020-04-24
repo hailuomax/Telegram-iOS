@@ -323,6 +323,11 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     
     var purposefulAction: (() -> Void)?
     
+    //MARK: 海螺菜单事件管理对象
+    var menuInteraction : HLMenuInteraction?
+    //MARK: 打开照片的容器
+    var phoneLegacyController : LegacyController?
+    
     public init(context: AccountContext, chatLocation: ChatLocation, subject: ChatControllerSubject? = nil, botStart: ChatControllerInitialBotStart? = nil, mode: ChatControllerPresentationMode = .standard(previewing: false)) {
         let _ = ChatControllerCount.modify { value in
             return value + 1
@@ -1942,6 +1947,8 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
         }, automaticMediaDownloadSettings: self.automaticMediaDownloadSettings, pollActionState: ChatInterfacePollActionState(), stickerSettings: self.stickerSettings)
         
         self.controllerInteraction = controllerInteraction
+        self.createMenuInteraction()
+        
         
         if case let .peer(peerId) = chatLocation, peerId != context.account.peerId, subject != .scheduledMessages {
             self.navigationBar?.userInfo = PeerInfoNavigationSourceTag(peerId: peerId)
@@ -2643,7 +2650,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     }
     
     override public func loadDisplayNode() {
-        self.displayNode = ChatControllerNode(context: self.context, chatLocation: self.chatLocation, subject: self.subject, controllerInteraction: self.controllerInteraction!, chatPresentationInterfaceState: self.presentationInterfaceState, automaticMediaDownloadSettings: self.automaticMediaDownloadSettings, navigationBar: self.navigationBar, controller: self)
+        self.displayNode = ChatControllerNode(context: self.context, chatLocation: self.chatLocation, subject: self.subject, controllerInteraction: self.controllerInteraction!, chatPresentationInterfaceState: self.presentationInterfaceState, automaticMediaDownloadSettings: self.automaticMediaDownloadSettings, navigationBar: self.navigationBar, controller: self, menuInteraction: self.menuInteraction!)
         
         self.chatDisplayNode.peerView = self.peerView
         
@@ -5720,7 +5727,26 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             return entry ?? GeneratedMediaStoreSettings.defaultSettings
             }
             |> deliverOnMainQueue).start(next: { [weak self] settings in
-                guard let self = self else{return}
+                guard let self = self ,let peer = self.presentationInterfaceState.renderedPeer?.peer else{return}
+                
+                let inputText = self.presentationInterfaceState.interfaceState.effectiveInputState.inputText
+                if self.phoneLegacyController == nil {
+                    let legacyController = LegacyController(presentation: .custom, theme: self.presentationData.theme, initialLayout: self.validLayout)
+                    legacyController.blocksBackgroundWhenInOverlay = true
+                    legacyController.statusBar.statusBarStyle = .Ignore
+                    legacyController.controllerLoaded = { [weak legacyController] in
+                        legacyController?.view.disablesInteractiveTransitionGestureRecognizer = true
+                    }
+                    let emptyController = LegacyEmptyController(context: legacyController.context)!
+                    let navigationController = makeLegacyNavigationController(rootController: emptyController)
+                    legacyController.bind(controller: navigationController)
+                    legacyController.enableSizeClassSignal = true
+                    emptyController.navigationBarShouldBeHidden = true
+                    self.phoneLegacyController = legacyController
+                }
+                
+                self.chatDisplayNode.inputMenuNode.updateData(peer: peer, editMediaOptions: editMediaOptions, saveEditedPhotos: settings.storeEditedPhotos, presentationData: self.presentationData, parentController: self.phoneLegacyController!, initialCaption: inputText.string)
+                
                 let isMenu = self.chatDisplayNode.chatPresentationInterfaceState.inputMode == .hlMenu
                 if !isMenu {//有键盘或者菜单隐藏时
                     self.chatDisplayNode.interfaceInteraction?.updateTextInputStateAndMode { (status,input) in
@@ -8613,6 +8639,14 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
         self.focusOnSearchAfterAppearance = true
         self.interfaceInteraction?.beginMessageSearch(.everything, "")
     }
+    
+    //MARK:---海螺菜单回调----
+    func createMenuInteraction(){
+        let menuInteraction = HLMenuInteraction()
+        
+        self.menuInteraction = menuInteraction
+    }
+    
 }
 
 private final class ContextControllerContentSourceImpl: ContextControllerContentSource {
