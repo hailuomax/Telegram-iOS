@@ -33,7 +33,7 @@
 #import <LegacyComponents/TGVideoEditAdjustments.h>
 #import <LegacyComponents/TGMediaAsset+TGMediaEditableItem.h>
 
-const CGSize TGAttachmentCellSize = { 84.0f, 84.0f };
+const CGSize TGAttachmentCellSize = { 80.0f, 80.0f };
 const CGFloat TGAttachmentEdgeInset = 8.0f;
 
 const CGFloat TGAttachmentZoomedPhotoRemainer = 32.0f;
@@ -239,7 +239,7 @@ const NSUInteger TGAttachmentDisplayedAssetLimit = 500;
             };
         }
         
-        _collectionView = [[TGAttachmentCarouselCollectionView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, TGAttachmentZoomedPhotoHeight + TGAttachmentEdgeInset * 2) collectionViewLayout:_smallLayout];
+        _collectionView = [[TGAttachmentCarouselCollectionView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, TGAttachmentCellSize.height + TGAttachmentEdgeInset * 2) collectionViewLayout:_smallLayout];
         if (iosMajorVersion() >= 11)
             _collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
         _collectionView.backgroundColor = [UIColor clearColor];
@@ -268,7 +268,7 @@ const NSUInteger TGAttachmentDisplayedAssetLimit = 500;
             }
         }];
         [_sendMediaItemView setHidden:true animated:false];
-        [self addSubview:_sendMediaItemView];
+//        [self addSubview:_sendMediaItemView];
         
         if (!_document)
         {
@@ -280,7 +280,7 @@ const NSUInteger TGAttachmentDisplayedAssetLimit = 500;
             }];
             _sendFileItemView.requiresDivider = false;
             [_sendFileItemView setHidden:true animated:false];
-            [self addSubview:_sendFileItemView];
+//            [self addSubview:_sendFileItemView];
         }
         
         [self setSignal:[[TGMediaAssetsLibrary authorizationStatusSignal] mapToSignal:^SSignal *(NSNumber *statusValue)
@@ -348,6 +348,17 @@ const NSUInteger TGAttachmentDisplayedAssetLimit = 500;
     [_sendMediaItemView setPallete:pallete];
     [_sendFileItemView setPallete:pallete];
 }
+
+//MARK: 发送照片
+- (void)sendImgs {
+    if (self->_selectionContext.allowGrouping)
+    [[NSUserDefaults standardUserDefaults] setObject:@(!self->_selectionContext.grouping) forKey:@"TG_mediaGroupingDisabled_v0"];
+    self.sendPressed(nil, false, false, 0);
+    [_fetchResult removeAllAsset];
+    [_selectionContext clear];
+    [self updateSelectionIndexes];
+}
+
 
 - (void)setRemainingHeight:(CGFloat)remainingHeight
 {
@@ -485,12 +496,13 @@ const NSUInteger TGAttachmentDisplayedAssetLimit = 500;
     else
         _pivotOutItemIndex = index;
     
-    UICollectionViewFlowLayout *toLayout = _zoomedIn ? _largeLayout : _smallLayout;
+//    UICollectionViewFlowLayout *toLayout = _zoomedIn ? _largeLayout : _smallLayout;
+    UICollectionViewFlowLayout *toLayout = _smallLayout;
 
     [self _updateImageSize];
     
     __weak TGAttachmentCarouselItemView *weakSelf = self;
-    TGTransitionLayout *layout = (TGTransitionLayout *)[_collectionView transitionToCollectionViewLayout:toLayout duration:0.3f completion:^(__unused BOOL completed, __unused BOOL finished)
+    TGTransitionLayout *layout = (TGTransitionLayout *)[_collectionView transitionToCollectionViewLayout:toLayout duration:0.1f completion:^(__unused BOOL completed, __unused BOOL finished)
     {
         __strong TGAttachmentCarouselItemView *strongSelf = weakSelf;
         if (strongSelf == nil)
@@ -599,6 +611,10 @@ const NSUInteger TGAttachmentDisplayedAssetLimit = 500;
         _sendMediaItemView.title = [NSString stringWithFormat:format, [NSString stringWithFormat:@"%ld", totalCount]];
     }
     
+    if (self.selectImgBlock) {
+        self.selectImgBlock(totalCount);
+    }
+
     if (totalCount == 1)
         _sendFileItemView.title = TGLocalized(@"AttachmentMenu.SendAsFile");
     else
@@ -772,6 +788,9 @@ const NSUInteger TGAttachmentDisplayedAssetLimit = 500;
         [strongSelf updateHiddenCellAnimated:true];
         
         strongSelf->_galleryMixin = nil;
+        if (strongSelf.pickerDidDissmis != nil) {
+            strongSelf.pickerDidDissmis();
+        }
     };
     
     mixin.completeWithItem = ^(TGMediaPickerGalleryItem *item, bool silentPosting, int32_t scheduleTime)
@@ -832,6 +851,13 @@ const NSUInteger TGAttachmentDisplayedAssetLimit = 500;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    id<LegacyComponentsOverlayWindowManager> windowManager = [_context makeOverlayWindowManager];
+    CGRect rect = [[windowManager context] fullscreenBounds];
+    if(CGRectEqualToRect(rect, CGRectMake(0, 0, 0, 0))) {// 两个区域相等
+//        return;
+    }
+
     NSInteger index = indexPath.row;
     TGMediaAsset *asset = [_fetchResult assetAtIndex:index];
     
@@ -859,10 +885,12 @@ const NSUInteger TGAttachmentDisplayedAssetLimit = 500;
         
         return nil;
     };
-    
+    if (self.didSelectRow != nil){
+        self.didSelectRow();
+    }
     if (self.openEditor)
     {
-        id<LegacyComponentsOverlayWindowManager> windowManager = [_context makeOverlayWindowManager];
+//        id<LegacyComponentsOverlayWindowManager> windowManager = [_context makeOverlayWindowManager];
         
         TGPhotoEditorController *controller = [[TGPhotoEditorController alloc] initWithContext:[windowManager context] item:asset intent:_disableStickers ? TGPhotoEditorControllerSignupAvatarIntent : TGPhotoEditorControllerAvatarIntent adjustments:nil caption:nil screenImage:thumbnailImage availableTabs:[TGPhotoEditorController defaultTabsForAvatarIntent] selectedTab:TGPhotoEditorCropTab];
         controller.editingContext = _editingContext;
@@ -1044,41 +1072,42 @@ const NSUInteger TGAttachmentDisplayedAssetLimit = 500;
 
 - (CGSize)collectionView:(UICollectionView *)__unused collectionView layout:(UICollectionViewLayout *)__unused collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_zoomedIn)
-    {
-        CGSize maxPhotoSize = _maxPhotoSize;
-        if (_smallActivated)
-            maxPhotoSize = _smallMaxPhotoSize;
-        
-        if (_pivotInItemIndex != NSNotFound && (indexPath.row < _pivotInItemIndex - 2 || indexPath.row > _pivotInItemIndex + 2))
-            return CGSizeMake(maxPhotoSize.height, maxPhotoSize.height);
-        
-        TGMediaAsset *asset = [_fetchResult assetAtIndex:indexPath.row];
-        if (asset != nil)
-        {
-            CGSize dimensions = asset.dimensions;
-            if (dimensions.width < 1.0f)
-                dimensions.width = 1.0f;
-            if (dimensions.height < 1.0f)
-                dimensions.height = 1.0f;
-            
-            id<TGMediaEditAdjustments> adjustments = [_editingContext adjustmentsForItem:asset];
-            if ([adjustments cropAppliedForAvatar:false])
-            {
-                dimensions = adjustments.cropRect.size;
-                
-                bool sideward = TGOrientationIsSideward(adjustments.cropOrientation, NULL);
-                if (sideward)
-                    dimensions = CGSizeMake(dimensions.height, dimensions.width);
-            }
-            
-            CGFloat width = MIN(maxPhotoSize.width, ceil(dimensions.width * maxPhotoSize.height / dimensions.height));
-            return CGSizeMake(width, maxPhotoSize.height);
-        }
-        
-        return CGSizeMake(maxPhotoSize.height, maxPhotoSize.height);
-    }
-    
+//    if (_zoomedIn)
+//    {
+//        CGSize maxPhotoSize = _maxPhotoSize;
+//        if (_smallActivated)
+//            maxPhotoSize = _smallMaxPhotoSize;
+//
+//        if (_pivotInItemIndex != NSNotFound && (indexPath.row < _pivotInItemIndex - 2 || indexPath.row > _pivotInItemIndex + 2))
+//            return CGSizeMake(maxPhotoSize.height, maxPhotoSize.height);
+//
+//        TGMediaAsset *asset = [_fetchResult assetAtIndex:indexPath.row];
+//        if (asset != nil)
+//        {
+//            CGSize dimensions = asset.dimensions;
+//            if (dimensions.width < 1.0f)
+//                dimensions.width = 1.0f;
+//            if (dimensions.height < 1.0f)
+//                dimensions.height = 1.0f;
+//
+//            id<TGMediaEditAdjustments> adjustments = [_editingContext adjustmentsForItem:asset];
+//            if ([adjustments cropAppliedForAvatar:false])
+//            {
+//                dimensions = adjustments.cropRect.size;
+//
+//                bool sideward = TGOrientationIsSideward(adjustments.cropOrientation, NULL);
+//                if (sideward)
+//                    dimensions = CGSizeMake(dimensions.height, dimensions.width);
+//            }
+//
+//            CGFloat width = MIN(maxPhotoSize.width, ceil(dimensions.width * maxPhotoSize.height / dimensions.height));
+//            return CGSizeMake(width, maxPhotoSize.height);
+//        }
+//
+//        return CGSizeMake(maxPhotoSize.height, maxPhotoSize.height);
+//    }
+//
+//    return TGAttachmentCellSize;
     return TGAttachmentCellSize;
 }
 

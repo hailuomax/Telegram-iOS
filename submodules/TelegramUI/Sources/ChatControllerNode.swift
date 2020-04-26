@@ -205,10 +205,9 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
     
     //MARK: 海螺定制InputNode
     var inputMenuNode : ChatMenuInputNode
-    //MARK: 海螺菜单事件
-    var menuInteraction : HLMenuInteraction
+    private var selectImgsCount: Int = 0
     
-    init(context: AccountContext, chatLocation: ChatLocation, subject: ChatControllerSubject?, controllerInteraction: ChatControllerInteraction, chatPresentationInterfaceState: ChatPresentationInterfaceState, automaticMediaDownloadSettings: MediaAutoDownloadSettings, navigationBar: NavigationBar?, controller: ChatControllerImpl? , menuInteraction:HLMenuInteraction) {
+    init(context: AccountContext, chatLocation: ChatLocation, subject: ChatControllerSubject?, controllerInteraction: ChatControllerInteraction, chatPresentationInterfaceState: ChatPresentationInterfaceState, automaticMediaDownloadSettings: MediaAutoDownloadSettings, navigationBar: NavigationBar?, controller: ChatControllerImpl? ) {
         self.context = context
         self.chatLocation = chatLocation
         self.controllerInteraction = controllerInteraction
@@ -216,7 +215,6 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         self.automaticMediaDownloadSettings = automaticMediaDownloadSettings
         self.navigationBar = navigationBar
         self.controller = controller
-        self.menuInteraction = menuInteraction
         self.backgroundNode = WallpaperBackgroundNode()
         self.backgroundNode.displaysAsynchronously = false
         
@@ -252,7 +250,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         self.navigateButtons = ChatHistoryNavigationButtons(theme: self.chatPresentationInterfaceState.theme)
         self.navigateButtons.accessibilityElementsHidden = true
         
-        self.inputMenuNode = ChatMenuInputNode(context: context, interaction: menuInteraction)
+        self.inputMenuNode = ChatMenuInputNode(context: context)
         
         super.init()
         
@@ -434,6 +432,22 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
                 }
             }
         })
+        
+        //MARK: 菜单点击了照片
+        self.inputMenuNode.menuNode.contentView.selectImgs = { [weak self] selectCount in
+            guard let strongSelf = self else { return }
+            strongSelf.selectImgsCount = selectCount
+            if selectCount > 0 {
+                strongSelf.textInputPanelNode?.actionButtons.sendButton.alpha = 1.0
+                strongSelf.textInputPanelNode?.actionButtons.sendButtonRadialStatusNode?.alpha = 1.0
+                strongSelf.textInputPanelNode?.actionButtons.expandMediaInputButton.alpha = 0.0
+            } else {
+                strongSelf.textInputPanelNode?.actionButtons.sendButton.alpha = 0.0
+                strongSelf.textInputPanelNode?.actionButtons.sendButtonRadialStatusNode?.alpha = 0.0
+                strongSelf.textInputPanelNode?.actionButtons.expandMediaInputButton.alpha = 1.0
+            }
+            strongSelf.textInputPanelNode?.actionButtons.updateAccessibility()
+        }
     }
     
     private func updateIsEmpty(_ isEmpty: Bool, animated: Bool) {
@@ -629,7 +643,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         var immediatelyLayoutInputNodeAndAnimateAppearance = false
         var inputNodeHeightAndOverflow: (CGFloat, CGFloat)?
         //MARK: ---判断弹起那个inputNode
-        if let inputNode = inputNodeForChatPresentationIntefaceState(self.chatPresentationInterfaceState, context: self.context, currentNode: self.inputNode, interfaceInteraction: self.interfaceInteraction, inputMediaNode: self.inputMediaNode, controllerInteraction: self.controllerInteraction, inputPanelNode: self.inputPanelNode,inputMenuNode: self.inputMenuNode, menuInteraction: self.menuInteraction) {
+        if let inputNode = inputNodeForChatPresentationIntefaceState(self.chatPresentationInterfaceState, context: self.context, currentNode: self.inputNode, interfaceInteraction: self.interfaceInteraction, inputMediaNode: self.inputMediaNode, controllerInteraction: self.controllerInteraction, inputPanelNode: self.inputPanelNode,inputMenuNode: self.inputMenuNode) {
             if let inputPanelNode = self.inputPanelNode as? ChatTextInputPanelNode {
                 if inputPanelNode.isFocused {
                     self.context.sharedContext.mainWindow?.simulateKeyboardDismiss(transition: .animated(duration: 0.5, curve: .spring))

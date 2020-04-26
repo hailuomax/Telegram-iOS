@@ -6,7 +6,7 @@ import SyncCore
 import Postbox
 import AccountContext
 
-func inputNodeForChatPresentationIntefaceState(_ chatPresentationInterfaceState: ChatPresentationInterfaceState, context: AccountContext, currentNode: ChatInputNode?, interfaceInteraction: ChatPanelInterfaceInteraction?, inputMediaNode: ChatMediaInputNode?, controllerInteraction: ChatControllerInteraction, inputPanelNode: ChatInputPanelNode?, inputMenuNode: ChatMenuInputNode?, menuInteraction: HLMenuInteraction) -> ChatInputNode? {
+func inputNodeForChatPresentationIntefaceState(_ chatPresentationInterfaceState: ChatPresentationInterfaceState, context: AccountContext, currentNode: ChatInputNode?, interfaceInteraction: ChatPanelInterfaceInteraction?, inputMediaNode: ChatMediaInputNode?, controllerInteraction: ChatControllerInteraction, inputPanelNode: ChatInputPanelNode?, inputMenuNode: ChatMenuInputNode?) -> ChatInputNode? {
     if !(inputPanelNode is ChatTextInputPanelNode) {
         return nil
     }
@@ -53,7 +53,7 @@ func inputNodeForChatPresentationIntefaceState(_ chatPresentationInterfaceState:
             } else if let inputMenuNode = inputMenuNode {
                 return inputMenuNode
             } else {
-                return ChatMenuInputNode(context: context, interaction: menuInteraction)
+                return ChatMenuInputNode(context: context)
             }
         case .none, .text:
             return nil

@@ -1947,8 +1947,6 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
         }, automaticMediaDownloadSettings: self.automaticMediaDownloadSettings, pollActionState: ChatInterfacePollActionState(), stickerSettings: self.stickerSettings)
         
         self.controllerInteraction = controllerInteraction
-        self.createMenuInteraction()
-        
         
         if case let .peer(peerId) = chatLocation, peerId != context.account.peerId, subject != .scheduledMessages {
             self.navigationBar?.userInfo = PeerInfoNavigationSourceTag(peerId: peerId)
@@ -2650,7 +2648,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     }
     
     override public func loadDisplayNode() {
-        self.displayNode = ChatControllerNode(context: self.context, chatLocation: self.chatLocation, subject: self.subject, controllerInteraction: self.controllerInteraction!, chatPresentationInterfaceState: self.presentationInterfaceState, automaticMediaDownloadSettings: self.automaticMediaDownloadSettings, navigationBar: self.navigationBar, controller: self, menuInteraction: self.menuInteraction!)
+        self.displayNode = ChatControllerNode(context: self.context, chatLocation: self.chatLocation, subject: self.subject, controllerInteraction: self.controllerInteraction!, chatPresentationInterfaceState: self.presentationInterfaceState, automaticMediaDownloadSettings: self.automaticMediaDownloadSettings, navigationBar: self.navigationBar, controller: self)
         
         self.chatDisplayNode.peerView = self.peerView
         
@@ -5718,10 +5716,9 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             self?.editMessageMediaWithMessages(messages)
         })
     }
-    //MARK: 弹出菜单Menu
+    //MARK: --弹出菜单Menu--
     private func presentAttachmentMenu(editMediaOptions: MessageMediaEditingOptions?, editMediaReference: AnyMediaReference?) {
         
-        //MARK: 弹出功能框
         let _ = (self.context.sharedContext.accountManager.transaction { transaction -> GeneratedMediaStoreSettings in
             let entry = transaction.getSharedData(ApplicationSpecificSharedDataKeys.generatedMediaStoreSettings) as? GeneratedMediaStoreSettings
             return entry ?? GeneratedMediaStoreSettings.defaultSettings
@@ -5745,7 +5742,8 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                     self.phoneLegacyController = legacyController
                 }
                 
-                self.chatDisplayNode.inputMenuNode.updateData(peer: peer, editMediaOptions: editMediaOptions, saveEditedPhotos: settings.storeEditedPhotos, presentationData: self.presentationData, parentController: self.phoneLegacyController!, initialCaption: inputText.string)
+                let menuInteraction = self.createMenuInteraction(editMediaOptions:editMediaOptions)
+                self.chatDisplayNode.inputMenuNode.updateData(peer: peer, editMediaOptions: editMediaOptions, saveEditedPhotos: settings.storeEditedPhotos, presentationData: self.presentationData, parentController: self.phoneLegacyController!, initialCaption: inputText.string, menuInteraction: menuInteraction)
                 
                 let isMenu = self.chatDisplayNode.chatPresentationInterfaceState.inputMode == .hlMenu
                 if !isMenu {//有键盘或者菜单隐藏时
@@ -8641,10 +8639,65 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     }
     
     //MARK:---海螺菜单回调----
-    func createMenuInteraction(){
-        let menuInteraction = HLMenuInteraction()
+    func createMenuInteraction(editMediaOptions: MessageMediaEditingOptions?) -> HLMenuInteraction{
+        let menuInteraction = HLMenuInteraction(sendMessageWithSignal: {[weak self] (signals,istrue) in
+            if let self = self {
+                if editMediaOptions != nil {
+                    self.editMessageMediaWithLegacySignals(signals!)
+                } else {
+                    self.enqueueMediaMessages(signals: signals, silentPosting: false)
+                }
+                let inputText = self.presentationInterfaceState.interfaceState.effectiveInputState.inputText
+                if !inputText.string.isEmpty {
+                    self.clearInputText()
+                }
+            }
+        }, openGallery: { [weak self] in
+            self?.presentMediaPicker(fileMode: false, editingMedia: editMediaOptions != nil, completion: { (signals, silentPosting , scheduleTime) in
+                
+                if editMediaOptions != nil {
+                    self?.editMessageMediaWithLegacySignals(signals)
+                } else {
+                    self?.enqueueMediaMessages(signals: signals, silentPosting: silentPosting)
+                }
+            })
+
+        }, mediaPickerWillOpen: {[weak self] in
+            guard let self = self , let legacyController = self.phoneLegacyController else {return}
+            self.present(legacyController, in: .window(.root))
+        }, mediaPickerWillClose: {[weak self] in
+            self?.phoneLegacyController?.dismiss()
+        }, openCamera: {[weak self] in
+            guard let self = self else {return}
+            presentedLegacyShortcutCamera(context: self.context, saveCapturedMedia: false, saveEditedPhotos: false, mediaGrouping: true, parentController: self)
+        }, openPhoto: {
+            self.presentMediaPicker(fileMode: false, editingMedia: editMediaOptions != nil, completion: { signals, silentPosting, _ in
+                    
+                    if editMediaOptions != nil {
+                        self.editMessageMediaWithLegacySignals(signals)
+                    } else {
+                        self.enqueueMediaMessages(signals: signals, silentPosting: silentPosting)
+                    }
+                })
+        }, openLocation: {[weak self] in
+            self?.presentLocationPicker()
+        }, openContact: {[weak self] in
+            self?.presentContactPicker()
+        }, openFile: {[weak self] in
+            self?.presentFileMediaPickerOptions(editingMessage: editMediaOptions != nil)
+        }, openRedPacket: {
+            
+        }, openSuperRedRacket: {
+            
+        }, openTransfer: {
+            
+        }, openExchange: {
+            
+        }, openPoll: {
+            
+        })
         
-        self.menuInteraction = menuInteraction
+        return menuInteraction
     }
     
 }

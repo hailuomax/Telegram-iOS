@@ -21,17 +21,14 @@ import TelegramPresentationData
  
 final class ChatMenuInputNode: ChatInputNode {
     private let context: AccountContext
-    private let menuInteraction: HLMenuInteraction
     // 公开给ChatViewController使用
     let menuNode: ChatMediaInputMenuPane
     
     private var menus: [ChatMediaInputMenu] = []
     
-    init(context: AccountContext, interaction: HLMenuInteraction ) {
+    init(context: AccountContext ) {
         self.context = context
-        self.menuInteraction = interaction
         self.menuNode = ChatMediaInputMenuPane(menus: [], onSelect: {_ in })
-
         super.init()
         self.addSubnode(self.menuNode)
         self.view.disablesInteractiveTransitionGestureRecognizer = true
@@ -47,11 +44,42 @@ final class ChatMenuInputNode: ChatInputNode {
         return (380 + bottomInset, 0)
     }
     
-    func updateData(peer: Peer,editMediaOptions: MessageMediaEditingOptions?, saveEditedPhotos: Bool, presentationData: PresentationData, parentController: LegacyController, initialCaption: String) {
-        factoryMenus(with: peer,editMediaOptions:editMediaOptions)
-        menuNode.contentView.updateWith(presentationData: presentationData, context: context, peer: peer, editMediaOptions: editMediaOptions, saveEditedPhotos: saveEditedPhotos, allowGrouping: true, theme: presentationData.theme, strings: presentationData.strings, parentController: parentController, initialCaption: initialCaption, menus: menus, onSelect: { _ in
-            
-        }, sendMessagesWithSignals: {(_ , _) in}, openGallery: {}, openMediaPicker: {}, closeMediaPicker: {})
+    func updateData(peer: Peer,editMediaOptions: MessageMediaEditingOptions?, saveEditedPhotos: Bool, presentationData: PresentationData, parentController: LegacyController, initialCaption: String, menuInteraction: HLMenuInteraction) {
+        
+        factoryMenus(with: peer,editMediaOptions:editMediaOptions )
+        
+        menuNode.contentView.updateWith(presentationData: presentationData, context: context, peer: peer, editMediaOptions: editMediaOptions, saveEditedPhotos: saveEditedPhotos, allowGrouping: true, theme: presentationData.theme, strings: presentationData.strings, parentController: parentController, initialCaption: initialCaption, menus: menus, onSelect: { type in
+            switch type {
+            case .shooting:
+                menuInteraction.openCamera()
+            case .photo:
+                menuInteraction.openPhoto()
+            case .location:
+                menuInteraction.openLocation()
+            case .contact:
+                menuInteraction.openContact()
+            case .file:
+                menuInteraction.openFile()
+            case .redPacket:
+                menuInteraction.openRedPacket()
+            case .superRedPacket:
+                menuInteraction.openSuperRedRacket()
+            case .transfer:
+                menuInteraction.openTransfer()
+            case .exchange:
+                menuInteraction.openExchange()
+            case .poll:
+                menuInteraction.openPoll()
+            }
+        }, sendMessagesWithSignals: {
+            menuInteraction.sendMessageWithSignal($0, $1)
+        }, openGallery: {
+            menuInteraction.openGallery()
+        }, openMediaPicker: {
+            menuInteraction.mediaPickerWillOpen()
+        }, closeMediaPicker: {
+            menuInteraction.mediaPickerWillClose()
+        })
     }
     
     ///组装menus

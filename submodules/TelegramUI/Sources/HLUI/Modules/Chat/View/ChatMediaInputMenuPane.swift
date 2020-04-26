@@ -22,6 +22,7 @@ import Config
 import Extension
 import LegacyUI
 import Language
+import LegacyMediaPickerUI
 
 enum ChatMediaInputMenu: String, Equatable{
     
@@ -53,7 +54,6 @@ final class ChatMediaInputMenuPane: ChatMediaInputPane {
     init(menus: [ChatMediaInputMenu], onSelect: @escaping (ChatMediaInputMenu)->()){
         
         let view = Bundle.getAppBundle().loadNibNamed("ChatMediaInputMenu", owner: nil, options: nil)![0] as! ChatMediaInputMenuView
-//        view.updateWith(menus: menus, onSelect: onSelect)
         self.contentView = view
         super.init()
         self.setViewBlock { return self.contentView }
@@ -62,12 +62,12 @@ final class ChatMediaInputMenuPane: ChatMediaInputPane {
     func sendImgs() {
         if let carouselItem = self.contentView.carouselItem {
             let intent: TGMediaAssetsControllerIntent = TGMediaAssetsControllerSendMediaIntent
-//            let signals = TGMediaAssetsController.resultSignals(for: carouselItem.selectionContext, editingContext: carouselItem.editingContext, intent: intent, currentItem: nil, storeAssets: true, useMediaCache: false, descriptionGenerator: legacyAssetPickerItemGenerator(), saveEditedPhotos: false)
-//            if let sendMessagesWithSignals = self.contentView.sendMessagesWithSignals {
-//                sendMessagesWithSignals(signals, false)
-//            }
+            let signals = TGMediaAssetsController.resultSignals(for: carouselItem.selectionContext, editingContext: carouselItem.editingContext, intent: intent, currentItem: nil, storeAssets: true, useMediaCache: false, descriptionGenerator: legacyAssetPickerItemGenerator(), saveEditedPhotos: false)
+            if let sendMessagesWithSignals = self.contentView.sendMessagesWithSignals {
+                sendMessagesWithSignals(signals, false)
+            }
         }
-//        self.contentView.carouselItem?.clearImgs()
+        self.contentView.carouselItem?.clearImgs()
     }
 }
 
@@ -94,13 +94,13 @@ final class ChatMediaInputMenuView: UIView{
         }).disposed(by: disposeBag)
     }
     
-    private func addCarouseView(context: AccountContext, peer: Peer, editMediaOptions: MessageMediaEditingOptions?, saveEditedPhotos: Bool, allowGrouping: Bool, theme: PresentationTheme, strings: PresentationStrings, parentController: LegacyController, initialCaption: String, sendMessagesWithSignals: @escaping ([Any]?, Bool) -> (), openGallery: @escaping () -> () , openMediaPicker: @escaping () -> () , closeMediaPicker: @escaping () -> () )  {
+    private func addCarouseView(context: AccountContext,presentationData: PresentationData , peer: Peer, editMediaOptions: MessageMediaEditingOptions?, saveEditedPhotos: Bool, allowGrouping: Bool, theme: PresentationTheme, strings: PresentationStrings, parentController: LegacyController, initialCaption: String, sendMessagesWithSignals: @escaping ([Any]?, Bool) -> (), openGallery: @escaping () -> () , openMediaPicker: @escaping () -> () , closeMediaPicker: @escaping () -> () )  {
         self.sendMessagesWithSignals = sendMessagesWithSignals
-        let controller = TGMenuSheetController(context: parentController.context, dark: false)!
-        controller.dismissesByOutsideTap = true
-        controller.hasSwipeGesture = true
-        controller.maxHeight = 445.0
-        controller.forceFullScreen = true
+//        let controller = TGMenuSheetController(context: parentController.context, dark: false)!
+//        controller.dismissesByOutsideTap = true
+//        controller.hasSwipeGesture = true
+//        controller.maxHeight = 445.0
+//        controller.forceFullScreen = true
         let isSecretChat = peer.id.namespace == Namespaces.Peer.SecretChat
         var selectionLimit: Int32 = 30
         var slowModeEnabled = false
@@ -109,21 +109,22 @@ final class ChatMediaInputMenuView: UIView{
             selectionLimit = 10
         }
         carouselItem = TGAttachmentCarouselItemView(context: parentController.context, camera: false, selfPortrait: false, forProfilePhoto: false, assetType: TGMediaAssetAnyType, saveEditedPhotos: !isSecretChat && saveEditedPhotos, allowGrouping: editMediaOptions == nil && allowGrouping, allowSelection: editMediaOptions == nil, allowEditing: true, document: false, selectionLimit: selectionLimit)!
-//        carouselItem?.suggestionContext = legacySuggestionContext(account: context.account, peerId: peer.id)
-//        carouselItem?.recipientName = peer.displayTitle
+        carouselItem?.suggestionContext = legacySuggestionContext(context: context, peerId: peer.id)
+        carouselItem?.recipientName = peer.displayTitle(strings: presentationData.strings, displayOrder: presentationData.nameDisplayOrder)
         carouselItem?.openEditor = false
         carouselItem?.allowCaptions = false
         carouselItem?.allowCaptionEntities = false
         carouselItem?.screenHeight = 96;
         carouselItem?.frame = CGRect(x:0, y:0, width:kScreenWidth, height:96);
-//        carouselItem?.pickerDidDissmis = closeMediaPicker
-//        carouselItem?.didSelectRow = openMediaPicker
-//        carouselItem?.selectImgBlock = { [weak self] selectCount in
-//            if let selectImgBlock = self?.selectImgs {
-//                selectImgBlock(selectCount)
-//            }
-//        }
-  
+        carouselItem?.pickerDidDissmis = closeMediaPicker
+        carouselItem?.didSelectRow = openMediaPicker
+        carouselItem?.selectImgBlock = { [weak self] selectCount in
+            if let selectImgBlock = self?.selectImgs {
+                selectImgBlock(selectCount)
+            }
+        }
+
+        
         if peer.id != context.account.peerId {
             if peer is TelegramUser {
                 carouselItem?.hasTimer = true
@@ -152,7 +153,7 @@ final class ChatMediaInputMenuView: UIView{
         for child in self.CarouseItemView.subviews {
             child.removeFromSuperview()
         }
-        self.addCarouseView(context: context, peer: peer, editMediaOptions: editMediaOptions, saveEditedPhotos: saveEditedPhotos, allowGrouping: allowGrouping, theme: theme, strings: strings, parentController: parentController, initialCaption: initialCaption,sendMessagesWithSignals:sendMessagesWithSignals, openGallery: openGallery ,openMediaPicker : openMediaPicker ,closeMediaPicker : closeMediaPicker)
+        self.addCarouseView(context: context, presentationData: presentationData , peer: peer, editMediaOptions: editMediaOptions, saveEditedPhotos: saveEditedPhotos, allowGrouping: allowGrouping, theme: theme, strings: strings, parentController: parentController, initialCaption: initialCaption,sendMessagesWithSignals:sendMessagesWithSignals, openGallery: openGallery ,openMediaPicker : openMediaPicker ,closeMediaPicker : closeMediaPicker)
         
         var menus = menus
         

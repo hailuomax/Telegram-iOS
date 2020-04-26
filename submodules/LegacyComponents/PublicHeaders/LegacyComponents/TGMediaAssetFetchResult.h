@@ -19,4 +19,7 @@
 
 - (void)_appendALAsset:(ALAsset *)asset;
 
+//MAKR: 删除图片
+-(void)removeAllAsset;
+
 @end

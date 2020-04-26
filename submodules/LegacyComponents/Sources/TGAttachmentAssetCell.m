@@ -20,6 +20,8 @@
         _imageView = [[TGImageView alloc] initWithFrame:self.bounds];
         _imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _imageView.layer.cornerRadius = 8;
+        _imageView.layer.maskedCorners = YES;
         [self addSubview:_imageView];
         
         static dispatch_once_t onceToken;

@@ -100,4 +100,8 @@
     [_assets addObject:[[TGMediaAsset alloc] initWithALAsset:asset]];
 }
 
+- (void)removeAllAsset {
+    [_assets removeAllObjects];
+}
+
 @end

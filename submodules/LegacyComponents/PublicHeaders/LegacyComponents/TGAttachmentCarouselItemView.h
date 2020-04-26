@@ -57,4 +57,13 @@
 
 - (instancetype)initWithContext:(id<LegacyComponentsContext>)context camera:(bool)hasCamera selfPortrait:(bool)selfPortrait forProfilePhoto:(bool)forProfilePhoto assetType:(TGMediaAssetType)assetType saveEditedPhotos:(bool)saveEditedPhotos allowGrouping:(bool)allowGrouping allowSelection:(bool)allowSelection allowEditing:(bool)allowEditing document:(bool)document selectionLimit:(int)selectionLimit;
 
+//MARK--
+- (void)clearImgs;
+//添加两个回调来控制LegacyController 显示和消失
+@property (nonatomic, copy) void (^didSelectRow)(void);
+@property (nonatomic, copy) void (^pickerDidDissmis)(void);
+// 选择照片的数量
+@property (nonatomic, copy) void (^selectImgBlock)(NSInteger selectNum);
+
+
 @end
