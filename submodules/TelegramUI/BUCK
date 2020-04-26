@@ -212,6 +212,7 @@ framework(
         "//submodules/Svg:Svg",
         "//submodules/StatisticsUI:StatisticsUI",
         "//submodules/ManagedAnimationNode:ManagedAnimationNode",
+        "//submodules/TooltipUI:TooltipUI",
 
         "//submodules/HL/HL:HL",
         "//submodules/HL/Account:Account",
@@ -230,6 +231,7 @@ framework(
          "//submodules/HL/Translate:Translate",
          "//submodules/HL/Theme:Theme",
          ":AssetXib",
+
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",
