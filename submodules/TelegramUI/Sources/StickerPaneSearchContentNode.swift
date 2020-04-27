@@ -250,14 +250,14 @@ final class StickerPaneSearchContentNode: ASDisplayNode, PaneSearchContentNode {
                             return preloadedStickerPackThumbnail(account: account, info: info, items: items)
                             |> filter { $0 }
                             |> ignoreValues
-                            |> then(
+                            |> SwiftSignalKit.then(
                                 addStickerPackInteractively(postbox: strongSelf.context.account.postbox, info: info, items: items)
                                 |> ignoreValues
                             )
                             |> mapToSignal { _ -> Signal<(StickerPackCollectionInfo, [ItemCollectionItem]), NoError> in
                                 return .complete()
                             }
-                            |> then(.single((info, items)))
+                            |> SwiftSignalKit.then(.single((info, items)))
                         }
                     case .fetching:
                         break
@@ -357,7 +357,7 @@ final class StickerPaneSearchContentNode: ASDisplayNode, PaneSearchContentNode {
                         signal = signal
                         |> mapToSignal { keywords in
                             return .single(keywords)
-                            |> then(
+                            |> SwiftSignalKit.then(
                                 searchEmojiKeywords(postbox: account.postbox, inputLanguageCode: "en-US", query: query.lowercased(), completeMatch: query.count < 3)
                                 |> map { englishKeywords in
                                     return keywords + englishKeywords
@@ -405,7 +405,7 @@ final class StickerPaneSearchContentNode: ASDisplayNode, PaneSearchContentNode {
                     localResult = localResult.merge(with: currentRemote)
                 }
                 return .single((localResult, false, nil))
-                |> then(
+                |> SwiftSignalKit.then(
                     remote
                     |> map { remote -> (FoundStickerSets, Bool, FoundStickerSets?) in
                         return (result.merge(with: remote), true, remote)
