@@ -44,7 +44,7 @@ export BUILD_NUMBER=60
 
 include Utils.makefile
 
-APP_VERSION="1.2.9"
+APP_VERSION="1.3.0"
 CORE_COUNT=$(shell sysctl -n hw.logicalcpu)
 CORE_COUNT_MINUS_ONE=$(shell expr ${CORE_COUNT} \- 1)
 
