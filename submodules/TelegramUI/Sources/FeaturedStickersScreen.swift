@@ -1278,7 +1278,7 @@ private final class FeaturedPaneSearchContentNode: ASDisplayNode {
                         signal = signal
                         |> mapToSignal { keywords in
                             return .single(keywords)
-                            |> then(
+                                |> SwiftSignalKit.then(
                                 searchEmojiKeywords(postbox: account.postbox, inputLanguageCode: "en-US", query: query.lowercased(), completeMatch: query.count < 3)
                                 |> map { englishKeywords in
                                     return keywords + englishKeywords
@@ -1326,7 +1326,7 @@ private final class FeaturedPaneSearchContentNode: ASDisplayNode {
                     localResult = localResult.merge(with: currentRemote)
                 }
                 return .single((localResult, false, nil))
-                |> then(
+                |> SwiftSignalKit.then(
                     remote
                     |> map { remote -> (FoundStickerSets, Bool, FoundStickerSets?) in
                         return (result.merge(with: remote), true, remote)
