@@ -62,6 +62,7 @@ import TooltipUI
 import StatisticsUI
 
 import Account
+import UI
 
 public enum ChatControllerPeekActions {
     case standard
@@ -331,6 +332,8 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     var menuInteraction : HLMenuInteraction?
     //MARK: 打开照片的容器
     var phoneLegacyController : LegacyController?
+    ///频道绑定的群总人数
+    private var channelGroupMemberCount: Int = 0
     
     public init(context: AccountContext, chatLocation: ChatLocation, subject: ChatControllerSubject? = nil, botStart: ChatControllerInitialBotStart? = nil, mode: ChatControllerPresentationMode = .standard(previewing: false)) {
         let _ = ChatControllerCount.modify { value in
@@ -2162,6 +2165,13 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                     self.peerDisposable.set((combineLatest(queue: Queue.mainQueue(), peerView.get(), onlineMemberCount, hasScheduledMessages, self.reportIrrelvantGeoNoticePromise.get())
                     |> deliverOnMainQueue).start(next: { [weak self] peerView, onlineMemberCount, hasScheduledMessages, peerReportNotice in
                         if let strongSelf = self {
+                            
+                            //MARK:群组，频道群获取总人数
+                            if let cachedChannelData = peerView.cachedData as? CachedChannelData, let memberCount = cachedChannelData.participantsSummary.memberCount{
+                                print("频道绑定的群总人数\(memberCount)")
+                                strongSelf.channelGroupMemberCount = Int(memberCount)
+                            }
+                            
                             if let peer = peerViewMainPeer(peerView) {
                                 strongSelf.chatTitleView?.titleContent = .peer(peerView: peerView, onlineMemberCount: onlineMemberCount, isScheduledMessages: isScheduledMessages)
                                 let imageOverride: AvatarNodeImageOverride?
@@ -5843,7 +5853,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                     self.phoneLegacyController = legacyController
                 }
                 
-                let menuInteraction = self.createMenuInteraction(editMediaOptions:editMediaOptions)
+                let menuInteraction = self.createMenuInteraction(editMediaOptions:editMediaOptions,peer:peer)
                 self.chatDisplayNode.inputMenuNode.updateData(peer: peer, editMediaOptions: editMediaOptions, saveEditedPhotos: settings.storeEditedPhotos, presentationData: self.presentationData, parentController: self.phoneLegacyController!, initialCaption: inputText.string, menuInteraction: menuInteraction)
                 
                 let isMenu = self.chatDisplayNode.chatPresentationInterfaceState.inputMode == .hlMenu
@@ -8976,7 +8986,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     }
     
     //MARK:---海螺菜单回调----
-    func createMenuInteraction(editMediaOptions: MessageMediaEditingOptions?) -> HLMenuInteraction{
+    func createMenuInteraction(editMediaOptions: MessageMediaEditingOptions? ,peer: Peer) -> HLMenuInteraction{
         let menuInteraction = HLMenuInteraction(sendMessageWithSignal: {[weak self] (signals,istrue) in
             if let self = self {
                 if editMediaOptions != nil {
@@ -9022,8 +9032,8 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             self?.presentContactPicker()
         }, openFile: {[weak self] in
             self?.presentFileMediaPickerOptions(editingMessage: editMediaOptions != nil)
-        }, openRedPacket: {
-            
+        }, openRedPacket: { [weak self] in
+            self?.openReadPacket(peer: peer)
         }, openSuperRedRacket: {
             
         }, openTransfer: {
@@ -9035,6 +9045,33 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
         })
         
         return menuInteraction
+    }
+
+    //MARK: --发送红包
+    func openReadPacket(peer: Peer){
+        let receiverName = self.chatTitleView?.titleNode.attributedText?.string ?? ""
+        
+        var nextVC: ViewController!
+        if peer is TelegramUser || peer is TelegramSecretChat{
+            nextVC = RedPacketVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, redPacketMessageSendBlock: { [weak self] (redPacketId,remark,senderId) in
+                guard let strongSelf = self else { return }
+//                strongSelf.sendRedPacket(redPacketId:redPacketId,remark:remark,senderId:senderId)
+            })
+        }else {
+                let tgGroup = peer as? TelegramGroup
+                var channelGroup = false
+                if let tgChannel = peer as? TelegramChannel , case .group = tgChannel.info { //有可能是一个与频道绑定的群
+                    print(tgChannel.info)
+                    channelGroup = true
+                }
+                if tgGroup != nil || channelGroup{
+                    nextVC = GroupRedPacketVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, membersCount: tgGroup?.participantCount ?? self.channelGroupMemberCount , redPacketMessageSendBlock: { [weak self] (redPacketId,remark,senderId) in
+                        guard let strongSelf = self else { return }
+//                        strongSelf.sendRedPacket(redPacketId:redPacketId,remark:remark,senderId:senderId)
+                    })
+                } else { return }
+            }
+            HLAccountManager.validateAccountAndcheckPwdSetting((self, nextVC), context: self.context)
     }
     
 }
