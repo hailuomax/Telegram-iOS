@@ -9034,14 +9034,14 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             self?.presentFileMediaPickerOptions(editingMessage: editMediaOptions != nil)
         }, openRedPacket: { [weak self] in
             self?.openReadPacket(peer: peer)
-        }, openSuperRedRacket: {
-            
+        }, openSuperRedRacket: {[weak self] in
+            self?.openSuperRedPacket(peer: peer)
         }, openTransfer: {
             
         }, openExchange: {
             
-        }, openPoll: {
-            
+        }, openPoll: {[weak self] in
+            self?.presentPollCreation()
         })
         
         return menuInteraction
@@ -9072,6 +9072,27 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                 } else { return }
             }
             HLAccountManager.validateAccountAndcheckPwdSetting((self, nextVC), context: self.context)
+    }
+    
+    //MARK:-- 发送超级红包
+    func openSuperRedPacket(peer: Peer){
+        let receiverName = self.chatTitleView?.titleNode.attributedText?.string ?? ""
+        
+        var nextVC: ViewController!
+        let tgGroup = peer as? TelegramGroup
+        var channelGroup = false
+        if let tgChannel = peer as? TelegramChannel , case .group = tgChannel.info { //MARK:有可能是一个与频道绑定的群
+            print(tgChannel.info)
+            channelGroup = true
+        }
+        if tgGroup != nil || channelGroup{
+            nextVC = GroupRedPacketVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, membersCount: tgGroup?.participantCount ?? self.channelGroupMemberCount ,isSuper: true, superRedPacketMessageSendBlock:{ [weak self] (model) in
+                guard let self = self else { return }
+                //                    self.sendSuperRedpacket(model)
+            })
+        } else { return }
+        
+        HLAccountManager.validateAccountAndcheckPwdSetting((self, nextVC), context: self.context)
     }
     
 }
