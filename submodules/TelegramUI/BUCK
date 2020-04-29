@@ -213,6 +213,7 @@ framework(
         "//submodules/StatisticsUI:StatisticsUI",
         "//submodules/ManagedAnimationNode:ManagedAnimationNode",
         "//submodules/TooltipUI:TooltipUI",
+        "//submodules/TelegramApi:TelegramApi#shared",
 
         "//submodules/HL/HL:HL",
         "//submodules/HL/Account:Account",

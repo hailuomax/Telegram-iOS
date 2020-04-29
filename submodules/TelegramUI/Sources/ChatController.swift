@@ -60,9 +60,15 @@ import UrlWhitelist
 import TelegramIntents
 import TooltipUI
 import StatisticsUI
+import TelegramApi
 
 import Account
 import UI
+import ViewModel
+import Config
+import Model
+import HL
+import Language
 
 public enum ChatControllerPeekActions {
     case standard
@@ -331,7 +337,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     //MARK: 海螺菜单事件管理对象
     var menuInteraction : HLMenuInteraction?
     //MARK: 打开照片的容器
-    var phoneLegacyController : LegacyController?
+    var photoLegacyController : LegacyController?
     ///频道绑定的群总人数
     private var channelGroupMemberCount: Int = 0
     
@@ -5838,7 +5844,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                 guard let self = self ,let peer = self.presentationInterfaceState.renderedPeer?.peer else{return}
                 
                 let inputText = self.presentationInterfaceState.interfaceState.effectiveInputState.inputText
-                if self.phoneLegacyController == nil {
+                if self.photoLegacyController == nil {
                     let legacyController = LegacyController(presentation: .custom, theme: self.presentationData.theme, initialLayout: self.validLayout)
                     legacyController.blocksBackgroundWhenInOverlay = true
                     legacyController.statusBar.statusBarStyle = .Ignore
@@ -5850,11 +5856,11 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                     legacyController.bind(controller: navigationController)
                     legacyController.enableSizeClassSignal = true
                     emptyController.navigationBarShouldBeHidden = true
-                    self.phoneLegacyController = legacyController
+                    self.photoLegacyController = legacyController
                 }
                 
                 let menuInteraction = self.createMenuInteraction(editMediaOptions:editMediaOptions,peer:peer)
-                self.chatDisplayNode.inputMenuNode.updateData(peer: peer, editMediaOptions: editMediaOptions, saveEditedPhotos: settings.storeEditedPhotos, presentationData: self.presentationData, parentController: self.phoneLegacyController!, initialCaption: inputText.string, menuInteraction: menuInteraction)
+                self.chatDisplayNode.inputMenuNode.updateData(peer: peer, editMediaOptions: editMediaOptions, saveEditedPhotos: settings.storeEditedPhotos, presentationData: self.presentationData, parentController: self.photoLegacyController!, initialCaption: inputText.string, menuInteraction: menuInteraction)
                 
                 let isMenu = self.chatDisplayNode.chatPresentationInterfaceState.inputMode == .hlMenu
                 if !isMenu {//有键盘或者菜单隐藏时
@@ -9010,10 +9016,10 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             })
 
         }, mediaPickerWillOpen: {[weak self] in
-            guard let self = self , let legacyController = self.phoneLegacyController else {return}
+            guard let self = self , let legacyController = self.photoLegacyController else {return}
             self.present(legacyController, in: .window(.root))
         }, mediaPickerWillClose: {[weak self] in
-            self?.phoneLegacyController?.dismiss()
+            self?.photoLegacyController?.dismiss()
         }, openCamera: {[weak self] in
             guard let self = self else {return}
             presentedLegacyShortcutCamera(context: self.context, saveCapturedMedia: false, saveEditedPhotos: false, mediaGrouping: true, parentController: self)
@@ -9036,10 +9042,10 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             self?.openReadPacket(peer: peer)
         }, openSuperRedRacket: {[weak self] in
             self?.openSuperRedPacket(peer: peer)
-        }, openTransfer: {
-            
-        }, openExchange: {
-            
+        }, openTransfer: {[weak self] in
+            self?.openTransfer()
+        }, openExchange: {[weak self] in
+            self?.openExchange()
         }, openPoll: {[weak self] in
             self?.presentPollCreation()
         })
@@ -9055,7 +9061,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
         if peer is TelegramUser || peer is TelegramSecretChat{
             nextVC = RedPacketVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, redPacketMessageSendBlock: { [weak self] (redPacketId,remark,senderId) in
                 guard let strongSelf = self else { return }
-//                strongSelf.sendRedPacket(redPacketId:redPacketId,remark:remark,senderId:senderId)
+                strongSelf.sendRedPacket(redPacketId:redPacketId,remark:remark,recipientId:senderId)
             })
         }else {
                 let tgGroup = peer as? TelegramGroup
@@ -9067,12 +9073,30 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                 if tgGroup != nil || channelGroup{
                     nextVC = GroupRedPacketVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, membersCount: tgGroup?.participantCount ?? self.channelGroupMemberCount , redPacketMessageSendBlock: { [weak self] (redPacketId,remark,senderId) in
                         guard let strongSelf = self else { return }
-//                        strongSelf.sendRedPacket(redPacketId:redPacketId,remark:remark,senderId:senderId)
+                        strongSelf.sendRedPacket(redPacketId:redPacketId,remark:remark,recipientId:senderId)
                     })
                 } else { return }
             }
             HLAccountManager.validateAccountAndcheckPwdSetting((self, nextVC), context: self.context)
     }
+    
+    private func sendRedPacket(redPacketId: String, remark: String, recipientId: String) {
+        
+        //版本号-类型-红包id-发送人id-接受人id
+        //let bodyStr = "\(ChatMsgConfig.V1.version)-" + MessageTypeModel.typeEnum.redPacket.rawValue + "-" + redPacketId + "-\(HLAccountManager.shareTgUser.id.id)-" + senderId
+        
+        let replyMessageId = self.presentationInterfaceState.interfaceState.replyMessageId
+        let senderId = "\(HLAccountManager.shareTgUser.id.id)"
+        let msgType = ChatMsgEnum.redPacket(version: ChatMsgConfig.V1.version,
+                                           type: MessageTypeModel.typeEnum.redPacket.rawValue,
+                                           id: redPacketId,
+                                           senderId: senderId,
+                                           recipientId: recipientId,
+                                           remark: remark)
+        
+        self.sendMessages([.message(text: msgType.generateChatMsg(), attributes: [], mediaReference: nil, replyToMessageId: replyMessageId, localGroupingKey: nil)])
+    }
+    
     
     //MARK:-- 发送超级红包
     func openSuperRedPacket(peer: Peer){
@@ -9088,11 +9112,96 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
         if tgGroup != nil || channelGroup{
             nextVC = GroupRedPacketVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, membersCount: tgGroup?.participantCount ?? self.channelGroupMemberCount ,isSuper: true, superRedPacketMessageSendBlock:{ [weak self] (model) in
                 guard let self = self else { return }
-                //                    self.sendSuperRedpacket(model)
+                self.sendSuperRedpacket(model)
             })
         } else { return }
         
         HLAccountManager.validateAccountAndcheckPwdSetting((self, nextVC), context: self.context)
+    }
+    
+    ///- 发送超级红包
+    private func sendSuperRedpacket(_ model : SuperRedPacketSendModel){
+        //根据机器人的名字获取对应的机器人PeerId
+        (resolvePeerByName(account: self.context.account, name: model.botName)
+        |> mapToSignal { peerId -> Signal<Peer?, NoError> in
+            if let peerId = peerId {
+                //根据peerId获取Peer
+                return self.context.account.postbox.loadedPeerWithId(peerId)
+                |> map { peer -> Peer? in
+                    return peer
+                }
+                |> take(1)
+            } else {
+                return .single(nil)
+            }
+        }
+        |> deliverOnMainQueue).start(next: { botPeer in
+            guard let botPeer = botPeer else { return }
+            //将机器人Peer转换为apiInputPeer
+            guard let inputPeer = apiInputPeer(botPeer) else { return }
+            if case let .inputPeerUser(userId: userId, accessHash: hash) = inputPeer {
+                let inputMedia: Api.InputMedia = .inputMediaGame(id: .inputGameShortName(botId: .inputUser(userId: userId, accessHash: hash), shortName: model.shortName))
+                if case let .peer(peerId) = self.chatLocation {
+                    PeerUtil.getPeer(context: self.context, peerId: peerId) { (newPeer) in
+                        guard let newPeer = newPeer else {
+                            return
+                        }
+                        if let apiPeer = apiInputPeer(newPeer) { (self.context.account.network.request(Api.functions.messages.sendMedia(flags: 0, peer: apiPeer, replyToMsgId: nil, media: inputMedia, message: "", randomId: arc4random64(), replyMarkup: nil, entities: nil, scheduleDate: nil))
+                            |> `catch` { _ -> Signal<Api.Updates, NoError> in
+                                HUD.flash(.labeledError(title: "", subtitle: HLLanguage.SendSuperPacketFail.localized()), delay: 1)
+                                return .complete()
+                            }
+                            |> deliverOnMainQueue).start(next: { value in
+                                self.sendSuperRedpacketCode(code: "\(HLLanguage.SuperPacketReward.localized())\(model.command ?? "")")
+                            },error: { error in
+                                HUD.flash(.labeledError(title: "", subtitle: HLLanguage.SendSuperPacketFail.localized()), delay: 1)
+                            },completed: {
+                            })
+                        }
+                    }
+                }
+            }
+        },error: { error in
+            HUD.flash(.labeledError(title: "", subtitle: HLLanguage.SendSuperPacketFail.localized()), delay: 1)
+        },completed: {
+            
+        })
+    }
+    
+    private func sendSuperRedpacketCode(code:String){
+        let attributes: [MessageAttribute] = []
+        self.sendMessages([.message(text: code, attributes: attributes, mediaReference: nil, replyToMessageId: nil, localGroupingKey: nil)])
+    }
+    
+    //MARK:-- 转账
+    func openTransfer(){
+        let receiverName = self.chatTitleView?.titleNode.attributedText?.string ?? ""
+
+        let transferVC = TransferVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, redPacketMessageSendBlock: { [weak self] (redPacketId,remark,senderId) in
+            guard let strongSelf = self else { return }
+//            strongSelf.sendTranser(transferId:redPacketId,remark:remark,senderId:senderId)
+        })
+        HLAccountManager.validateAccountAndcheckPwdSetting((self, transferVC), context: self.context)
+    }
+
+    //MARK:-- 闪兑
+    func openExchange(){
+        let receiverName = self.chatTitleView?.titleNode.attributedText?.string ?? ""
+        var peerId = ""
+        switch self.chatLocation {
+        case let .peer(id):
+            peerId = "\(id.toInt64())"
+        }
+
+        let viewModel = ExchangeVM()
+        viewModel.receiverName = receiverName
+        viewModel.receiverTelegramId = peerId
+
+        let exchangeVC = ExchangeCreateVC(context: self.context, viewModel: viewModel) {[weak self] (messageJson, rateStr)  in
+            guard let self = self else { return }
+//            self.sendFastExchange(messageJson, rateStr: rateStr)
+        }
+        HLAccountManager.validateAccountAndcheckPwdSetting((self, exchangeVC), context: self.context)
     }
     
 }

@@ -63,7 +63,7 @@ func forceApiInputPeer(_ peer: Peer) -> Api.InputPeer? {
     }
 }
 
-func apiInputPeer(_ peer: Peer) -> Api.InputPeer? {
+public func apiInputPeer(_ peer: Peer) -> Api.InputPeer? {
     switch peer {
     case let user as TelegramUser where user.accessHash != nil:
         return Api.InputPeer.inputPeerUser(userId: user.id.id, accessHash: user.accessHash!.value)
