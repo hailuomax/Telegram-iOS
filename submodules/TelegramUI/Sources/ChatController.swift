@@ -9177,9 +9177,14 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     func openTransfer(){
         let receiverName = self.chatTitleView?.titleNode.attributedText?.string ?? ""
 
-        let transferVC = TransferVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, redPacketMessageSendBlock: { [weak self] (redPacketId,remark,senderId) in
-            guard let strongSelf = self else { return }
-//            strongSelf.sendTranser(transferId:redPacketId,remark:remark,senderId:senderId)
+        let transferVC = TransferVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, redPacketMessageSendBlock: { [weak self] (redPacketId,remark,recipientId) in
+            guard let self = self else { return }
+            
+            let replyMessageId = self.presentationInterfaceState.interfaceState.replyMessageId
+            let senderId = "\(HLAccountManager.shareTgUser.id.id)"
+            let msgType = ChatMsgEnum.transfer(version: ChatMsgConfig.V1.version, type: MessageTypeModel.typeEnum.transfer.rawValue, id: redPacketId, senderId: senderId, recipientId: recipientId, remark: remark)
+            self.sendMessages([.message(text: msgType.generateChatMsg(), attributes: [], mediaReference: nil, replyToMessageId: replyMessageId, localGroupingKey: nil)])
+            
         })
         HLAccountManager.validateAccountAndcheckPwdSetting((self, transferVC), context: self.context)
     }
@@ -9199,9 +9204,19 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
 
         let exchangeVC = ExchangeCreateVC(context: self.context, viewModel: viewModel) {[weak self] (messageJson, rateStr)  in
             guard let self = self else { return }
-//            self.sendFastExchange(messageJson, rateStr: rateStr)
+            self.sendFastExchange(messageJson, rateStr: rateStr)
         }
         HLAccountManager.validateAccountAndcheckPwdSetting((self, exchangeVC), context: self.context)
+    }
+    
+    //
+    private func sendFastExchange(_ messageJson: String, rateStr: String?) {
+        guard let msgTypeModel = messageJson.jy.toModel(MessageTypeModel.self),
+        let msgExchangeM = msgTypeModel.data.jy.toModel(MessageExchangeModel.self) else {return}
+        let replyMessageId = self.presentationInterfaceState.interfaceState.replyMessageId
+        let senderId = "\(HLAccountManager.shareTgUser.id.id)"
+        let msgType = ChatMsgEnum.exchange(version: ChatMsgConfig.V1.version, type: MessageTypeModel.typeEnum.exchange.rawValue, id: msgExchangeM.id, senderId: senderId, recipientId: msgExchangeM.senderId, payCoin: msgExchangeM.outCoin, getCoin: msgExchangeM.inCoin)
+        sendMessages([.message(text: msgType.generateChatMsg(), attributes: [], mediaReference: nil, replyToMessageId: replyMessageId, localGroupingKey: nil)])
     }
     
 }
