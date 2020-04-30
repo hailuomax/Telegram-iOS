@@ -49,6 +49,14 @@ struct ChatMessageItemImageLayoutConstants {
     var minDimensions: CGSize
 }
 
+//MARK: 红包类型
+struct ChatMessageItemRedPacketLayoutConstants {
+    let bubbleInsets: UIEdgeInsets
+    let defaultCornerRadius: CGFloat
+    let mergedCornerRadius: CGFloat
+    let contentMergedCornerRadius: CGFloat
+}
+
 struct ChatMessageItemVideoLayoutConstants {
     var maxHorizontalHeight: CGFloat
     var maxVerticalHeight: CGFloat
@@ -78,6 +86,7 @@ struct ChatMessageItemLayoutConstants {
     var file: ChatMessageItemFileLayoutConstants
     var instantVideo: ChatMessageItemInstantVideoConstants
     var wallpapers: ChatMessageItemWallpaperLayoutConstants
+    let redpacket: ChatMessageItemRedPacketLayoutConstants
     
     static var `default`: ChatMessageItemLayoutConstants {
         return self.compact
@@ -92,7 +101,10 @@ struct ChatMessageItemLayoutConstants {
         let instantVideo = ChatMessageItemInstantVideoConstants(insets: UIEdgeInsets(top: 4.0, left: 0.0, bottom: 4.0, right: 0.0), dimensions: CGSize(width: 212.0, height: 212.0))
         let wallpapers = ChatMessageItemWallpaperLayoutConstants(maxTextWidth: 180.0)
         
-        return ChatMessageItemLayoutConstants(avatarDiameter: 37.0, timestampHeaderHeight: 34.0, bubble: bubble, image: image, video: video, text: text, file: file, instantVideo: instantVideo, wallpapers: wallpapers)
+        //红包类型的约束
+        let redpacket = ChatMessageItemRedPacketLayoutConstants(bubbleInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), defaultCornerRadius: 5.0, mergedCornerRadius: 5.0, contentMergedCornerRadius: 5.0)
+        
+        return ChatMessageItemLayoutConstants(avatarDiameter: 37.0, timestampHeaderHeight: 34.0, bubble: bubble, image: image, video: video, text: text, file: file, instantVideo: instantVideo, wallpapers: wallpapers, redpacket: redpacket)
     }
     
     fileprivate static var regular: ChatMessageItemLayoutConstants {
@@ -104,7 +116,10 @@ struct ChatMessageItemLayoutConstants {
         let instantVideo = ChatMessageItemInstantVideoConstants(insets: UIEdgeInsets(top: 4.0, left: 0.0, bottom: 4.0, right: 0.0), dimensions: CGSize(width: 240.0, height: 240.0))
         let wallpapers = ChatMessageItemWallpaperLayoutConstants(maxTextWidth: 180.0)
         
-        return ChatMessageItemLayoutConstants(avatarDiameter: 37.0, timestampHeaderHeight: 34.0, bubble: bubble, image: image, video: video, text: text, file: file, instantVideo: instantVideo, wallpapers: wallpapers)
+        //红包类型的约束
+        let redpacket = ChatMessageItemRedPacketLayoutConstants(bubbleInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), defaultCornerRadius: 5.0, mergedCornerRadius: 5.0, contentMergedCornerRadius: 5.0)
+        
+        return ChatMessageItemLayoutConstants(avatarDiameter: 37.0, timestampHeaderHeight: 34.0, bubble: bubble, image: image, video: video, text: text, file: file, instantVideo: instantVideo, wallpapers: wallpapers, redpacket: redpacket)
     }
 }
 

@@ -23,6 +23,9 @@ import GridMessageSelectionNode
 import AppBundle
 import Markdown
 
+import HL
+import Config
+
 enum InternalBubbleTapAction {
     case action(() -> Void)
     case optionalAction(() -> Void)
@@ -92,7 +95,53 @@ private func contentNodeMessagesAndClassesForItem(_ item: ChatMessageItem) -> [(
                 if case .group = item.content {
                     messageWithCaptionToAdd = (message, itemAttributes)
                     skipText = true
-                } else {
+                }
+                else if message.text.contains(ChatMsgConfig.V1.RedPacket){//新红包解析
+                    let item = AnalyseMessageUtil.V1.analyse(message: message)
+                    result.append((item.0 ,item.1, itemAttributes))
+                }
+                else { //旧红包解析
+                    //在这里要拿到text文本的值，判断是否可转换成红包的模型，假如可以，不插入文本，组装红包的message
+//                    let encryStr = message.text.replacingOccurrences(of: ChatMsgConfig.V0.RedPacket, with: "")
+//                        .replacingOccurrences(of: ChatMsgConfig.V0.Transfer, with: "")
+//                        .replacingOccurrences(of: ChatMsgConfig.V0.Exchange, with: "")
+//
+//                    let messageBase64Key: String = APPConfig.environment.getSignKeyAndIv().kMessageBase64Key
+//                    let messageBase64Iv: String = APPConfig.environment.getSignKeyAndIv().kMessageBase64Iv
+//
+//                    if let encryBase64 = Data(base64Encoded: encryStr) {
+//                        do {
+//                            let decrypted = try AES(key: messageBase64Key.jy.base64Data(), blockMode: CBC(iv: messageBase64Iv.jy.base64Data()),padding: .pkcs7).decrypt([UInt8](encryBase64))
+//                            let messageTypeData: Data = Data(bytes: decrypted, count: decrypted.count)
+//                            let messageTypeStr = String(data: messageTypeData, encoding: .utf8) ?? ""
+//                            print("messageTypeStr---->\(messageTypeStr)")
+//                            guard let messageTypeModel = messageTypeStr.jy.toModel(MessageTypeModel.self) else {
+//                                throw MyError.modelError
+//                            }
+//                            let dataStr = messageTypeModel.data
+//                            let type = Int(messageTypeModel.type) ?? 0
+//                            switch type {
+//                            case 1:
+//                                guard let messageRedPacketModel = dataStr.jy.toModel(MessageRedPacketModel.self) else {
+//                                    throw MyError.modelError
+//                                }
+//                                let redPacket = TelegramMediaRedPackets(redPacketId: messageRedPacketModel.id, senderId: messageRedPacketModel.senderId, remark: messageRedPacketModel.remark)
+//                                let messageNew = message.withUpdatedMedia([redPacket])
+//                                result.append((messageNew, ChatMessageRedPacketBubbleContentNode.self))
+//                                break
+//
+//                            default:
+//                                result.append((message, ChatMessageTextBubbleContentNode.self, itemAttributes))
+//                            }
+//                            //将字符串转换成MessageTypeModel{type,data,version}
+//                            //获取data的值，根据type，将对应data的值转换为对应的model
+//                            //更新对应的model
+//                        } catch _ {
+//                            result.append((message, ChatMessageTextBubbleContentNode.self, itemAttributes))
+//                        }
+//                    } else {
+//                       result.append((message, ChatMessageTextBubbleContentNode.self, itemAttributes))
+//                    }
                     result.append((message, ChatMessageTextBubbleContentNode.self, itemAttributes))
                 }
             } else {

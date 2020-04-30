@@ -28,11 +28,11 @@ class ChannelVC: UIViewController {
         func headerTitle() -> String{
             switch self{
             case .myCreate:
-                return Language.ChannelsIcreated.localized()
+                return HLLanguage.ChannelsIcreated.localized()
             case .myManager :
-                return Language.ChannelsImanage.localized()
+                return HLLanguage.ChannelsImanage.localized()
             case .myJoin :
-                return Language.ChannelsIjoined.localized()
+                return HLLanguage.ChannelsIjoined.localized()
             }
         }
     }

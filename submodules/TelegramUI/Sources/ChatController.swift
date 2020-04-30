@@ -159,7 +159,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     public var peekActions: ChatControllerPeekActions = .standard
     private var didSetup3dTouch: Bool = false
     
-    private let context: AccountContext
+    public var context: AccountContext
     public let chatLocation: ChatLocation
     public let subject: ChatControllerSubject?
     private let botStart: ChatControllerInitialBotStart?
