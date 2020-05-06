@@ -200,7 +200,7 @@ final class ChatMessageInteractiveExchangeNode: ASDisplayNode {
                             } else {
                                 iconNode = ASImageNode()
                                 self.iconNode = iconNode
-                                self.iconNode?.image = UIImage(bundleImageName: "Chat/Message/\(iconName)")
+                                self.iconNode?.image = UIImage(bundleImageName: "Chat/\(iconName)")
                                 self.insertSubnode(iconNode, at: 0)
                                 
                             }

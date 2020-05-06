@@ -289,44 +289,8 @@ final class ChatMessageRedPacketBubbleContentNode: ChatMessageBubbleContentNode 
             block()
             return
         }
-        let pushAccountValidationVC : (Bool,Phone)->() = {  (showPwdView,phone) in
-            let vc = AccountValidationVC(context: currentVC.context ,showPwdView: showPwdView, onValidateSuccess: {[weak currentVC] in
-                currentVC?.navigationController?.popViewController(animated: true)
-            })
-            currentVC.navigationController?.pushViewController(vc, animated: true)
-        }
         
-        let pushControllerImpl: (ViewController) -> () = { vc in
-            currentVC.navigationController?.pushViewController(vc, animated: true)
-        }
-        
-        let context = currentVC.context
-        
-        //没有token，需要跳转到用户验证的vc
-        AssetVerificationViewController.show(context: context, currentVC: currentVC, onPushAccountLockVC: {
-            let disableVC = AccountLockVC(context: context, title: $0)
-            pushControllerImpl(disableVC)
-        }, onPushAccountValidationVC: {
-            pushAccountValidationVC($0,$1)
-        }, onPushBindExceptionVC: {
-            let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
-            let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)
-            pushControllerImpl(exceptionVC)
-        })
-//        AccountRepo.userStatusCheck(context: currentVC.context, currentVC: currentVC, onPushAccountLockVC: {
-//            
-//            let disableVC = AccountLockVC(context: currentVC.context, title: $0)
-//            currentVC.navigationController?.pushViewController(disableVC, animated: true)
-//            
-//        }, onPushAccountValidationVC: {
-//            pushAccountValidationVC($0,$1)
-//        }, onPushBindExceptionVC: {
-//            let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
-//            
-//            let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: currentVC.context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: currentVC.context, viewModel: exceptionVM)
-//            
-//            currentVC.navigationController?.pushViewController(exceptionVC, animated: true)
-//        })
+        assetVerification(currentVC: currentVC)
         
     }
 }

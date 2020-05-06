@@ -202,19 +202,7 @@ final class ChatMessageTransferBubbleContentNode: ChatMessageBubbleContentNode {
             return
         }
         
-        let pushAccountValidationVC : (Bool,Phone)->() = { (showPwdView,phone) in
-            
-//            let vc = AccountValidationVC(phoneStr:phone.num,phoneCode:phone.code,context: currentVC.context, isLogin: true,showPwdView: showPwdView, onValidateSuccess: {[weak currentVC] in
-//                let code = phone.code
-//                let phone = phone.num
-//                HLAccountManager.sharePhone = "\(code.replacingOccurrences(of: "+", with: ""))\(phone)"
-//                    currentVC?.navigationController?.popViewController(animated: true)
-//                })
-//            currentVC.navigationController?.pushViewController(vc, animated: true)
-        }
-        
-        //没有token，需要跳转到用户验证的vc
-        
+        assetVerification(currentVC: currentVC)
     }
 }
 
