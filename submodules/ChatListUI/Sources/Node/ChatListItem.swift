@@ -19,6 +19,11 @@ import PhotoResources
 import ChatListSearchItemNode
 import ContextUI
 
+import Config
+import HL
+import Model
+import Language
+
 public enum ChatListItemContent {
     case peer(message: Message?, peer: RenderedPeer, combinedReadState: CombinedPeerReadState?, isRemovedFromTotalUnreadCount: Bool, presence: PeerPresence?, summaryInfo: ChatListMessageTagSummaryInfo, embeddedState: PeerChatListEmbeddedInterfaceState?, inputActivities: [(Peer, PeerInputActivity)]?, promoInfo: ChatListNodeEntryPromoInfo?, ignoreUnreadBadge: Bool, displayAsMessage: Bool, hasFailedMessages: Bool)
     case groupReference(groupId: PeerGroupId, peers: [ChatListGroupReferencePeer], message: Message?, unreadState: PeerGroupUnreadCountersCombinedSummary, hiddenByDefault: Bool)
@@ -868,7 +873,9 @@ class ChatListItemNode: ItemListRevealOptionsItemNode {
                         }
                     }
                     
-                    let messageText: String
+                    //源码文本解析方法
+//                    let messageText: String
+                    var messageText = text.replacingOccurrences(of: "\n\n", with: " ")
                     if let currentChatListText = currentChatListText, currentChatListText.0 == text {
                         messageText = currentChatListText.1
                         chatListText = currentChatListText
@@ -876,6 +883,35 @@ class ChatListItemNode: ItemListRevealOptionsItemNode {
                         messageText = foldLineBreaks(text)
                         chatListText = (text, messageText)
                     }
+                    
+                    //MARK: --ChatList文本解析
+                    if messageText.contains(ChatMsgConfig.V0.RedPacket), let messageTypeModel = ChatMsgConversion.default.decodeV0(messageText) {
+                        //旧版红包的解析
+                        let type = Int(messageTypeModel.type) ?? 0
+                        switch type {
+                        case 1:
+                            messageText =  HLLanguage.RedPacket.localized()
+                        case 2:
+                            messageText = HLLanguage.Transfer.localized()
+                        case 3:
+                            messageText =  HLLanguage.FastExchange.localized()
+                        default:
+                            break
+                        }
+                    }else if messageText.contains(ChatMsgConfig.V1.RedPacket){
+                        let type = ChatMsgConversion.default.transform(input: messageText)
+                        switch type {
+                        case .unknow(type: let type):
+                            break
+                        case .redPacket(_, _, _, _, _, remark: let remark):
+                            messageText = HLLanguage.RedPacket.ChatListRedPacket.localized() + remark
+                        case .transfer(_, _, _, _, _, remark: let remark):
+                            messageText = HLLanguage.RedPacket.ChatListTransfer.localized() + remark
+                        case .exchange:
+                            messageText =  HLLanguage.FastExchange.localized()
+                        }
+                    }
+                    
                     
                     if inlineAuthorPrefix == nil, let embeddedState = embeddedState as? ChatEmbeddedInterfaceState {
                         hasDraft = true

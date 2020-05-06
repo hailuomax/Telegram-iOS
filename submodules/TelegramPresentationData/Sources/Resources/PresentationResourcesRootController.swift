@@ -39,7 +39,7 @@ public struct PresentationResourcesRootController {
         
     public static func navigationComposeIcon(_ theme: PresentationTheme) -> UIImage? {
         return theme.image(PresentationResourceKey.navigationComposeIcon.rawValue, { theme in
-            return generateTintedImage(image: UIImage(bundleImageName: "Chat List/ComposeIcon"), color: theme.rootController.navigationBar.accentTextColor)
+            return generateTintedImage(image: UIImage(bundleImageName: "Chat List/ComposeIcon-hl"), color: theme.rootController.navigationBar.accentTextColor)
         })
     }
     
