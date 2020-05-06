@@ -53,13 +53,26 @@ private func canEditMessage(accountPeerId: PeerId, limitsConfiguration: LimitsCo
         }
     } else if message.id.peerId.namespace == Namespaces.Peer.SecretChat || message.id.namespace != Namespaces.Message.Cloud {
         hasEditRights = false
-    } else if let author = message.author, author.id == accountPeerId {
+    } else if let author = message.author, author.id == accountPeerId, let peer = message.peers[message.id.peerId] {
         hasEditRights = true
+        if let peer = peer as? TelegramChannel {
+            switch peer.info {
+            case .broadcast:
+                if peer.hasPermission(.editAllMessages) || !message.flags.contains(.Incoming) {
+                    unlimitedInterval = true
+                }
+            case .group:
+                if peer.hasPermission(.pinMessages) {
+                    unlimitedInterval = true
+                }
+            }
+        }
     } else if message.author?.id == message.id.peerId, let peer = message.peers[message.id.peerId] {
         if let peer = peer as? TelegramChannel {
             switch peer.info {
             case .broadcast:
                 if peer.hasPermission(.editAllMessages) || !message.flags.contains(.Incoming) {
+                    unlimitedInterval = true
                     hasEditRights = true
                 }
             case .group:
@@ -891,7 +904,7 @@ func updateMessage(context: AccountContext, message: Message, text: String) {
         transaction.updateMessage(message.id, update: { currentMessage in
             var storeForwardInfo: StoreMessageForwardInfo?
             if let forwardInfo = currentMessage.forwardInfo {
-                storeForwardInfo = StoreMessageForwardInfo(authorId: forwardInfo.author?.id, sourceId: forwardInfo.source?.id, sourceMessageId: forwardInfo.sourceMessageId, date: forwardInfo.date, authorSignature: forwardInfo.authorSignature)
+                storeForwardInfo = StoreMessageForwardInfo(authorId: forwardInfo.author?.id, sourceId: forwardInfo.source?.id, sourceMessageId: forwardInfo.sourceMessageId, date: forwardInfo.date, authorSignature: forwardInfo.authorSignature, psaType: forwardInfo.psaType)
             }
 
             return .update(StoreMessage(id: currentMessage.id, globallyUniqueId: currentMessage.globallyUniqueId, groupingKey: currentMessage.groupingKey, timestamp: currentMessage.timestamp, flags: StoreMessageFlags(currentMessage.flags), tags: currentMessage.tags, globalTags: currentMessage.globalTags, localTags: currentMessage.localTags, forwardInfo: storeForwardInfo, authorId: currentMessage.author?.id, text: text, attributes: currentMessage.attributes, media: currentMessage.media))

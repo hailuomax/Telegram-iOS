@@ -368,11 +368,10 @@ public protocol ChatController: ViewController {
     var chatLocation: ChatLocation { get }
     var canReadHistory: ValuePromise<Bool> { get }
     var parentController: ViewController? { get set }
-    var context : AccountContext{get set}
     
     func updatePresentationMode(_ mode: ChatControllerPresentationMode)
     func beginMessageSearch(_ query: String)
-    
+    func displayPromoAnnouncement(text: String)
 }
 
 public protocol ChatMessagePrevewItemNode: class {

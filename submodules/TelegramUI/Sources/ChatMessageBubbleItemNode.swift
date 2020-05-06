@@ -455,7 +455,11 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
                     return .waitForSingleTap
                 }
                 if let forwardInfoNode = strongSelf.forwardInfoNode, forwardInfoNode.frame.contains(point) {
-                    return .waitForSingleTap
+                    if forwardInfoNode.hasAction(at: strongSelf.view.convert(point, to: forwardInfoNode.view)) {
+                        return .fail
+                    } else {
+                        return .waitForSingleTap
+                    }
                 }
                 for contentNode in strongSelf.contentNodes {
                     let tapAction = contentNode.tapActionAtPoint(CGPoint(x: point.x - contentNode.frame.minX, y: point.y - contentNode.frame.minY), gesture: .tap, isEstimating: true)
@@ -787,7 +791,7 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
         currentContentClassesPropertiesAndLayouts: [(Message, AnyClass, Bool, (_ item: ChatMessageBubbleContentItem, _ layoutConstants: ChatMessageItemLayoutConstants, _ preparePosition: ChatMessageBubblePreparePosition, _ messageSelection: Bool?, _ constrainedSize: CGSize) -> (ChatMessageBubbleContentProperties, CGSize?, CGFloat, (CGSize, ChatMessageBubbleContentPosition) -> (CGFloat, (CGFloat) -> (CGSize, (ListViewItemUpdateAnimation, Bool) -> Void))))],
         authorNameLayout: (TextNodeLayoutArguments) -> (TextNodeLayout, () -> TextNode),
         adminBadgeLayout: (TextNodeLayoutArguments) -> (TextNodeLayout, () -> TextNode),
-        forwardInfoLayout: (ChatPresentationData, PresentationStrings, ChatMessageForwardInfoType, Peer?, String?, CGSize) -> (CGSize, () -> ChatMessageForwardInfoNode),
+        forwardInfoLayout: (ChatPresentationData, PresentationStrings, ChatMessageForwardInfoType, Peer?, String?, String?, CGSize) -> (CGSize, (CGFloat) -> ChatMessageForwardInfoNode),
         replyInfoLayout: (ChatPresentationData, PresentationStrings, AccountContext, ChatMessageReplyInfoType, Message, CGSize) -> (CGSize, () -> ChatMessageReplyInfoNode),
         actionButtonsLayout: (AccountContext, ChatPresentationThemeData, PresentationChatBubbleCorners, PresentationStrings, ReplyMarkupMessageAttribute, Message, CGFloat) -> (minWidth: CGFloat, layout: (CGFloat) -> (CGSize, (Bool) -> ChatMessageActionButtonsNode)),
         mosaicStatusLayout: (AccountContext, ChatPresentationData, Bool, Int?, String, ChatMessageDateAndStatusType, CGSize, [MessageReaction]) -> (CGSize, (Bool) -> ChatMessageDateAndStatusNode),
@@ -829,7 +833,7 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
         
         var effectiveAuthor: Peer?
         var ignoreForward = false
-        let displayAuthorInfo: Bool
+        var displayAuthorInfo: Bool
         
         let avatarInset: CGFloat
         var hasAvatar = false
@@ -854,7 +858,10 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
                     displayAuthorInfo = !mergedTop.merged && incoming && effectiveAuthor != nil
                 } else {
                     effectiveAuthor = firstMessage.author
-                    displayAuthorInfo = !mergedTop.merged && incoming && peerId.isGroupOrChannel &&  effectiveAuthor != nil
+                    displayAuthorInfo = !mergedTop.merged && incoming && peerId.isGroupOrChannel && effectiveAuthor != nil
+                    if let forwardInfo = firstMessage.forwardInfo, forwardInfo.psaType != nil {
+                        displayAuthorInfo = false
+                    }
                 }
             
                 if peerId != item.context.account.peerId {
@@ -872,10 +879,6 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
                 } else if incoming {
                     hasAvatar = true
                 }
-            /*case .group:
-                allowFullWidth = true
-                hasAvatar = true
-                displayAuthorInfo = true*/
         }
         
         if let forwardInfo = item.content.firstMessage.forwardInfo, forwardInfo.source == nil, forwardInfo.author?.id.namespace == Namespaces.Peer.CloudUser {
@@ -1030,6 +1033,10 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
             } else if let attribute = attribute as? ReplyMarkupMessageAttribute, attribute.flags.contains(.inline), !attribute.rows.isEmpty {
                 replyMarkup = attribute
             }
+        }
+        
+        if let forwardInfo = firstMessage.forwardInfo, forwardInfo.psaType != nil {
+            inlineBotNameString = nil
         }
         
         var contentPropertiesAndLayouts: [(CGSize?, ChatMessageBubbleContentProperties, ChatMessageBubblePreparePosition, (CGSize, ChatMessageBubbleContentPosition) -> (CGFloat, (CGFloat) -> (CGSize, (ListViewItemUpdateAnimation, Bool) -> Void)))] = []
@@ -1290,7 +1297,7 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
         var replyInfoSizeApply: (CGSize, () -> ChatMessageReplyInfoNode?) = (CGSize(), { nil })
         
         var forwardInfoOriginY: CGFloat = 0.0
-        var forwardInfoSizeApply: (CGSize, () -> ChatMessageForwardInfoNode?) = (CGSize(), { nil })
+        var forwardInfoSizeApply: (CGSize, (CGFloat) -> ChatMessageForwardInfoNode?) = (CGSize(), { _ in nil })
         
         var forwardSource: Peer?
         var forwardAuthorSignature: String?
@@ -1360,6 +1367,8 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
                     headerSize.height += 5.0
                 }
                 
+                let forwardPsaType: String? = forwardInfo.psaType
+                
                 if let source = forwardInfo.source {
                     forwardSource = source
                     if let authorSignature = forwardInfo.authorSignature {
@@ -1378,8 +1387,8 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
                         forwardAuthorSignature = forwardInfo.authorSignature
                     }
                 }
-                let sizeAndApply = forwardInfoLayout(item.presentationData, item.presentationData.strings, .bubble(incoming: incoming), forwardSource, forwardAuthorSignature, CGSize(width: maximumNodeWidth - layoutConstants.text.bubbleInsets.left - layoutConstants.text.bubbleInsets.right, height: CGFloat.greatestFiniteMagnitude))
-                forwardInfoSizeApply = (sizeAndApply.0, { sizeAndApply.1() })
+                let sizeAndApply = forwardInfoLayout(item.presentationData, item.presentationData.strings, .bubble(incoming: incoming), forwardSource, forwardAuthorSignature, forwardPsaType, CGSize(width: maximumNodeWidth - layoutConstants.text.bubbleInsets.left - layoutConstants.text.bubbleInsets.right, height: CGFloat.greatestFiniteMagnitude))
+                forwardInfoSizeApply = (sizeAndApply.0, { width in sizeAndApply.1(width) })
                 
                 forwardInfoOriginY = headerSize.height
                 headerSize.width = max(headerSize.width, forwardInfoSizeApply.0.width + layoutConstants.text.bubbleInsets.left + layoutConstants.text.bubbleInsets.right)
@@ -1661,6 +1670,8 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
                 contentOrigin = CGPoint(x: backgroundFrame.minX + floor(layoutConstants.bubble.contentInsets.right + layoutConstants.bubble.contentInsets.left) / 2.0, y: backgroundFrame.minY + layoutConstants.bubble.contentInsets.top + headerSize.height + contentVerticalOffset)
                 contentUpperRightCorner = CGPoint(x: backgroundFrame.maxX - (incoming ? layoutConstants.bubble.contentInsets.right : layoutConstants.bubble.contentInsets.left), y: backgroundFrame.origin.y + layoutConstants.bubble.contentInsets.top + headerSize.height)
         }
+        
+        let bubbleContentWidth = maxContentWidth - layoutConstants.bubble.edgeInset * 2.0 - (layoutConstants.bubble.contentInsets.right + layoutConstants.bubble.contentInsets.left)
 
         var layoutSize = CGSize(width: params.width, height: layoutBubbleSize.height)
         if let actionButtonsSizeAndApply = actionButtonsSizeAndApply {
@@ -1732,6 +1743,7 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
                 hideBackground: hideBackground,
                 incoming: incoming,
                 graphics: graphics,
+                bubbleContentWidth: bubbleContentWidth,
                 backgroundFrame: backgroundFrame,
                 deliveryFailedInset: deliveryFailedInset,
                 nameNodeSizeApply: nameNodeSizeApply,
@@ -1770,6 +1782,7 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
         hideBackground: Bool,
         incoming: Bool,
         graphics: PrincipalThemeEssentialGraphics,
+        bubbleContentWidth: CGFloat,
         backgroundFrame: CGRect,
         deliveryFailedInset: CGFloat,
         nameNodeSizeApply: (CGSize, () -> TextNode?),
@@ -1779,7 +1792,7 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
         currentCredibilityIconImage: UIImage?,
         adminNodeSizeApply: (CGSize, () -> TextNode?),
         contentUpperRightCorner: CGPoint,
-        forwardInfoSizeApply: (CGSize, () -> ChatMessageForwardInfoNode?),
+        forwardInfoSizeApply: (CGSize, (CGFloat) -> ChatMessageForwardInfoNode?),
         forwardInfoOriginY: CGFloat,
         replyInfoSizeApply: (CGSize, () -> ChatMessageReplyInfoNode?),
         replyInfoOriginY: CGFloat,
@@ -1914,15 +1927,21 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
             strongSelf.adminBadgeNode = nil
         }
         
-        if let forwardInfoNode = forwardInfoSizeApply.1() {
+        if let forwardInfoNode = forwardInfoSizeApply.1(bubbleContentWidth) {
             strongSelf.forwardInfoNode = forwardInfoNode
             var animateFrame = true
             if forwardInfoNode.supernode == nil {
                 strongSelf.contextSourceNode.contentNode.addSubnode(forwardInfoNode)
                 animateFrame = false
+                forwardInfoNode.openPsa = { [weak strongSelf] type, sourceNode in
+                    guard let strongSelf = strongSelf, let item = strongSelf.item else {
+                        return
+                    }
+                    item.controllerInteraction.displayPsa(type, sourceNode)
+                }
             }
             let previousForwardInfoNodeFrame = forwardInfoNode.frame
-            forwardInfoNode.frame = CGRect(origin: CGPoint(x: contentOrigin.x + layoutConstants.text.bubbleInsets.left, y: layoutConstants.bubble.contentInsets.top + forwardInfoOriginY), size: forwardInfoSizeApply.0)
+            forwardInfoNode.frame = CGRect(origin: CGPoint(x: contentOrigin.x + layoutConstants.text.bubbleInsets.left, y: layoutConstants.bubble.contentInsets.top + forwardInfoOriginY), size: CGSize(width: bubbleContentWidth, height: forwardInfoSizeApply.0.height))
             if case let .System(duration) = animation {
                 if animateFrame {
                     forwardInfoNode.layer.animateFrame(from: previousForwardInfoNodeFrame, to: forwardInfoNode.frame, duration: duration, timingFunction: kCAMediaTimingFunctionSpring)
@@ -2486,7 +2505,7 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
                 }
                 if let forwardInfoNode = self.forwardInfoNode, forwardInfoNode.frame.contains(location) {
                     if let item = self.item, let forwardInfo = item.message.forwardInfo {
-                        return .optionalAction({
+                        let performAction: () -> Void = {
                             if let sourceMessageId = forwardInfo.sourceMessageId {
                                 if let channel = forwardInfo.author as? TelegramChannel, channel.username == nil {
                                     if case let .broadcast(info) = channel.info, info.flags.contains(.hasDiscussionGroup) {
@@ -2502,7 +2521,13 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
                             } else if let _ = forwardInfo.authorSignature {
                                 item.controllerInteraction.displayMessageTooltip(item.message.id, item.presentationData.strings.Conversation_ForwardAuthorHiddenTooltip, forwardInfoNode, nil)
                             }
-                        })
+                        }
+                        
+                        if forwardInfoNode.hasAction(at: self.view.convert(location, to: forwardInfoNode.view)) {
+                            return .action({})
+                        } else {
+                            return .optionalAction(performAction)
+                        }
                     }
                 }
                 loop: for contentNode in self.contentNodes {
@@ -3188,5 +3213,14 @@ class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePrevewItemNode 
         animation.isAdditive = true
         
         self.layer.add(animation, forKey: "quizInvalidRotation")
+    }
+    
+    func updatePsaTooltipMessageState(animated: Bool) {
+        guard let item = self.item else {
+            return
+        }
+        if let forwardInfoNode = self.forwardInfoNode {
+            forwardInfoNode.updatePsaButtonDisplay(isVisible: item.controllerInteraction.currentPsaMessageWithTooltip != item.message.id, animated: animated)
+        }
     }
 }
