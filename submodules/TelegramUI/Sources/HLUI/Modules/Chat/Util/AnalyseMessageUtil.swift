@@ -23,8 +23,18 @@ class AnalyseMessageUtil {
             case .transfer(version: let version, type: let type, id: let id, senderId: let senderId, recipientId: let recipientId, remark: let remark):
                 let transfer = TelegramMediaTransfer(transferId: id, senderId: senderId, remark: remark,message.receiveStatus)
                 return (message.withUpdatedMedia([transfer]), ChatMessageTransferBubbleContentNode.self)
-                //                    case .exchange(version: let version, type: let type, id: let id, senderId: let senderId, recipientId: let recipientId, payCoin: let payCoin, getCoin: let getCoin):
-            //                        <#code#>
+            case .exchange(version: let version, type: let type, id: let id, senderId: let senderId, recipientId: let recipientId, payCoin: let payCoin, getCoin: let getCoin):
+                var rateStr: String?
+                
+                //不需要显示汇率，代码暂时注释
+                //            if transactionInfos.count >= 8{
+                //                rateStr = transactionInfos[7]
+                //            }
+                let exchange = TelegramMediaExchange(exchangeId: id,senderId: senderId, inCoin: transactionInfos[6] ,outCoin: transactionInfos[5], rateStr: rateStr)
+                guard transactionInfos.count > 6 else {
+                    return (message, ChatMessageTextBubbleContentNode.self)
+                }
+                
             default:
                 return (message, ChatMessageTextBubbleContentNode.self)
                 
