@@ -47,11 +47,7 @@ static_library(
         "//submodules/SolidRoundedButtonNode:SolidRoundedButtonNode",
         "//submodules/TooltipUI:TooltipUI",
         
-        "//submodules/HL/Config:Config",
-        "//submodules/HL/HL:HL",
-        "//submodules/HL/Model:Model",
         "//submodules/HL/UI:UI",
-        "//submodules/HL/Config:Config",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

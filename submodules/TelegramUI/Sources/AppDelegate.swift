@@ -52,6 +52,7 @@ import Repo
 import ViewModel
 import UI
 import Config
+import HL
 
 private let handleVoipNotifications = false
 
@@ -1055,7 +1056,10 @@ final class SharedApplicationContext {
                         return nil
                         }
                         |> deliverOnMainQueue).start()
-                    
+                    //保存模块间需要的值
+                    PassValuesUtil.default.add(key:.createChanel, value: {
+                        return createChannelController(context: context)
+                    })
                     
                     
                     return AuthorizedApplicationContext(sharedApplicationContext: sharedApplicationContext, mainWindow: self.mainWindow, watchManagerArguments: watchManagerArgumentsPromise.get(), context: context, accountManager: sharedApplicationContext.sharedContext.accountManager, showCallsTab: callListSettings.showTab, reinitializedNotificationSettings: {

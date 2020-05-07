@@ -24,10 +24,7 @@ import LocalizedPeerData
 import TelegramIntents
 import TooltipUI
 
-import HL
 import UI
-import Language
-import Config
 
 private func fixListNodeScrolling(_ listNode: ListView, searchNode: NavigationBarSearchContentNode) -> Bool {
     if listNode.scroller.isDragging {
@@ -99,8 +96,10 @@ private final class ContextControllerContentSourceImpl: ContextControllerContent
     func animatedIn() {
     }
 }
-
-public class ChatListControllerImpl: TelegramBaseController, ChatListController, UIViewControllerPreviewingDelegate {
+/*
+ ShowPopMenuAble : 显示菜单协议
+ */
+public class ChatListControllerImpl: TelegramBaseController, ChatListController, UIViewControllerPreviewingDelegate , ShowPopMenuAble {
     private var validLayout: ContainerViewLayout?
     
     public let context: AccountContext
@@ -150,7 +149,7 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController,
     private let tabContainerNode: ChatListFilterTabContainerNode
     private var tabContainerData: ([ChatListFilterTabEntry], Bool)?
     
-    var popMenu:SwiftPopMenu!
+    public var createActionDisposable = MetaDisposable()
     
     public override func updateNavigationCustomData(_ data: Any?, progress: CGFloat, transition: ContainedViewLayoutTransition) {
         if self.isNodeLoaded {
@@ -1652,65 +1651,11 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController,
         self.composePressed()
     }
     
-
+    //MARK: --点击加号
     @objc private func composePressed() {
-        showMenu()
+        showMenu(context: context, presentationData: presentationData)
 //        let controller = self.context.sharedContext.makeComposeController(context: self.context)
 //        (self.navigationController as? NavigationController)?.pushViewController(controller)
-    }
-    //MARK: --显示菜单
-    @objc func showMenu() {
-        //数据源（icon可不填）
-        let popData = [(icon:"CreateGroupIcon",title:HLLanguage.CreateGroup.localized()),
-                       (icon:"AddFriendIcon",title:HLLanguage.AddFriends.localized()),
-                       (icon:"CreateChannelIcon",title:HLLanguage.CreateChannel.localized()),
-                       (icon:"ScanIcon", title: HLLanguage.RichScan.localized())]
-        //设置参数
-        let parameters:[SwiftPopMenuConfigure] = [
-            .PopMenuTextColor(UIColor.black),
-            .popMenuItemHeight(44),
-            .PopMenuTextFont(UIFont.systemFont(ofSize: 15)),
-            .popMenuIconLeftMargin(8),
-            .popMenuMargin(8),
-            .popMenuAlpha(0.3),
-            .popMenuCellMargin(8.5),
-            .popMenuCellType(PopCellType.center),
-            .popMenuCellIconHeight(25)
-        ]
-        //init  (test随机生成点位置，注意：arrow点是基于屏幕的位置)
-        popMenu = SwiftPopMenu(menuWidth: 150, arrow: CGPoint(x: kScreenWidth - 12, y: kDefaultNavHeight), datas: popData,configures: parameters)
-
-        //click
-        popMenu.didSelectMenuBlock = { [weak self](index:Int)->Void in
-            if index == 0 {
-//                self?.createGroup()
-            } else if index == 1 {
-//                self?.addFriend()
-            } else if index == 2 {
-//                self?.createChannel()
-            } else if index == 3 {
-//                self?.scanQRCode()
-            }
-            self?.popMenu = nil
-        }
-        //show
-        popMenu.show()
-    }
-    
-    func createGroup(){
-        
-    }
-    
-    func addFriend(){
-        
-    }
-    
-    func createChannel() {
-        
-    }
-    
-    func scanQRCode(){
-        
     }
     
     public func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
