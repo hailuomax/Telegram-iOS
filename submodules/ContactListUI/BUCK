@@ -30,9 +30,15 @@ static_library(
         "//submodules/OverlayStatusController:OverlayStatusController",
         "//submodules/PhoneNumberFormat:PhoneNumberFormat",
         "//submodules/SolidRoundedButtonNode:SolidRoundedButtonNode",
+        
+        "//submodules/HL/Language:Language",
+
+        
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",
         "$SDKROOT/System/Library/Frameworks/UIKit.framework",
     ],
 )
+
+

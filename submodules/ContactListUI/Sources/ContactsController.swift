@@ -19,6 +19,8 @@ import SearchUI
 import TelegramPermissionsUI
 import AppBundle
 
+import UI
+
 private func fixListNodeScrolling(_ listNode: ListView, searchNode: NavigationBarSearchContentNode) -> Bool {
     if searchNode.expansionProgress > 0.0 && searchNode.expansionProgress < 1.0 {
         let scrollToItem: ListViewScrollToItem
@@ -62,8 +64,10 @@ private func fixListNodeScrolling(_ listNode: ListView, searchNode: NavigationBa
     }
     return false
 }
-
-public class ContactsController: ViewController {
+/**
+ ShowPopMenuAble : 显示菜单协议
+ */
+public class ContactsController: ViewController, ShowPopMenuAble {
     private let context: AccountContext
     
     private var contactsNode: ContactsControllerNode {
@@ -86,6 +90,8 @@ public class ContactsController: ViewController {
     private var searchContentNode: NavigationBarSearchContentNode?
     
     public var switchToChatsController: (() -> Void)?
+    
+    public var createActionDisposable = MetaDisposable()
     
     public override func updateNavigationCustomData(_ data: Any?, progress: CGFloat, transition: ContainedViewLayoutTransition) {
         if self.isNodeLoaded {
@@ -377,6 +383,11 @@ public class ContactsController: ViewController {
             }
         }
         
+        //打开群组
+        self.contactsNode.openGroupAndChannel = { [weak self] in
+                
+        }
+        
         self.displayNodeDidLoad()
     }
     
@@ -524,6 +535,10 @@ public class ContactsController: ViewController {
     }
     
     @objc func addPressed() {
+        //显示菜单
+        showMenu(context: context, presentationData: presentationData)
+        return
+        
         let _ = (DeviceAccess.authorizationStatus(subject: .contacts)
         |> take(1)
         |> deliverOnMainQueue).start(next: { [weak self] status in

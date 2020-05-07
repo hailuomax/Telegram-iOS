@@ -15,6 +15,8 @@ import SearchUI
 import AppBundle
 import ContextUI
 
+import Language
+
 private final class ContactsControllerNodeView: UITracingLayerView, PreviewingHostView {
     var previewingDelegate: PreviewingHostViewDelegate? {
         return PreviewingHostViewDelegate(controllerForLocation: { [weak self] sourceView, point in
@@ -69,6 +71,8 @@ final class ContactsControllerNode: ASDisplayNode {
     var requestOpenPeerFromSearch: ((ContactListPeer) -> Void)?
     var openPeopleNearby: (() -> Void)?
     var openInvite: (() -> Void)?
+    //打开群组和频道
+    var openGroupAndChannel: (() -> Void)?
     
     private var presentationData: PresentationData
     private var presentationDataDisposable: Disposable?
@@ -81,12 +85,18 @@ final class ContactsControllerNode: ASDisplayNode {
         
         self.presentationData = context.sharedContext.currentPresentationData.with { $0 }
         
-        var addNearbyImpl: (() -> Void)?
-        var inviteImpl: (() -> Void)?
-        let options = [ContactListAdditionalOption(title: presentationData.strings.Contacts_AddPeopleNearby, icon: .generic(UIImage(bundleImageName: "Contact List/PeopleNearbyIcon")!), action: {
-            addNearbyImpl?()
-        }), ContactListAdditionalOption(title: presentationData.strings.Contacts_InviteFriends, icon: .generic(UIImage(bundleImageName: "Contact List/AddMemberIcon")!), action: {
-            inviteImpl?()
+//        var addNearbyImpl: (() -> Void)?
+//        var inviteImpl: (() -> Void)?
+//        let options = [ContactListAdditionalOption(title: presentationData.strings.Contacts_AddPeopleNearby, icon: .generic(UIImage(bundleImageName: "Contact List/PeopleNearbyIcon")!), action: {
+//            addNearbyImpl?()
+//        }), ContactListAdditionalOption(title: presentationData.strings.Contacts_InviteFriends, icon: .generic(UIImage(bundleImageName: "Contact List/AddMemberIcon")!), action: {
+//            inviteImpl?()
+//        })]
+        
+        //添加群组和频道按钮
+        var groupAndChannelImpl: (() -> Void)?
+        let options = [ContactListAdditionalOption(title: HLLanguage.GroupsAndChannels.localized(), icon: .generic(UIImage(bundleImageName: "Contact List/PeopleNearbyIcon")!), action: {
+            groupAndChannelImpl?()
         })]
         
         let presentation = sortOrder
@@ -129,15 +139,21 @@ final class ContactsControllerNode: ASDisplayNode {
             }
         })
         
-        addNearbyImpl = { [weak self] in
-            if let strongSelf = self {
-                strongSelf.openPeopleNearby?()
-            }
-        }
+//        addNearbyImpl = { [weak self] in
+//            if let strongSelf = self {
+//                strongSelf.openPeopleNearby?()
+//            }
+//        }
+//
+//        inviteImpl = { [weak self] in
+//            if let strongSelf = self {
+//                strongSelf.openInvite?()
+//            }
+//        }
         
-        inviteImpl = { [weak self] in
+        groupAndChannelImpl = { [weak self] in
             if let strongSelf = self {
-                strongSelf.openInvite?()
+                strongSelf.openGroupAndChannel?()
             }
         }
         

@@ -6,7 +6,7 @@ import SwiftSignalKit
 import Display
 import TelegramUIPreferences
 
-enum ChatListNodeLocation: Equatable {
+public enum ChatListNodeLocation: Equatable {
     case initial(count: Int, filter: ChatListFilter?)
     case navigation(index: ChatListIndex, filter: ChatListFilter?)
     case scroll(index: ChatListIndex, sourceIndex: ChatListIndex, scrollPosition: ListViewScrollPosition, animated: Bool, filter: ChatListFilter?)

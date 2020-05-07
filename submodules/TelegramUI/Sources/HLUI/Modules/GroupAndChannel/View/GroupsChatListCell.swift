@@ -11,6 +11,8 @@ import TelegramCore
 import AccountContext
 import Extension
 import AvatarNode
+import SyncCore
+import UI
 
 ///群聊列表
 class GroupsChatListCell: UITableViewCell {
@@ -67,21 +69,21 @@ class GroupsChatListCell: UITableViewCell {
     }
 }
 
-//extension GroupsChatListCell {
-//
-//    public func loadGroupModel(_ m : TelegramGroup){
-//        groupNameLabel.text = m.title
-//
-//        PeerUtil.setAvatar(context: context, peerId: m.id, avatarNode, nil)
-//
-//        self.contentView.layoutIfNeeded()
-//    }
-//
-//    public func loadChanelModel(_ m : TelegramChannel){
-//        groupNameLabel.text = m.title
-//
-//        PeerUtil.setAvatar(context: context, peerId: m.id, avatarNode, nil)
-//
-//        self.contentView.layoutIfNeeded()
-//    }
-//}
+extension GroupsChatListCell {
+
+    public func loadGroupModel(_ m : TelegramGroup){
+        groupNameLabel.text = m.title
+
+        PeerUtil.setAvatar(context: context, peerId: m.id, avatarNode, nil)
+
+        self.contentView.layoutIfNeeded()
+    }
+
+    public func loadChanelModel(_ m : TelegramChannel){
+        groupNameLabel.text = m.title
+
+        PeerUtil.setAvatar(context: context, peerId: m.id, avatarNode, nil)
+
+        self.contentView.layoutIfNeeded()
+    }
+}
