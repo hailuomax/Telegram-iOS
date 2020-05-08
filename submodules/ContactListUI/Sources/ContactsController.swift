@@ -93,6 +93,8 @@ public class ContactsController: ViewController, ShowPopMenuAble {
     
     public var createActionDisposable = MetaDisposable()
     
+    public var openGroupAndChannel: (() -> Void)?
+    
     public override func updateNavigationCustomData(_ data: Any?, progress: CGFloat, transition: ContainedViewLayoutTransition) {
         if self.isNodeLoaded {
             self.contactsNode.contactListNode.updateSelectedChatLocation(data as? ChatLocation, progress: progress, transition: transition)
@@ -288,6 +290,9 @@ public class ContactsController: ViewController, ShowPopMenuAble {
         self.contactsNode.contactListNode.openPeer = { peer in
             openPeer(peer, false)
         }
+        self.contactsNode.openGroupAndChannel = { [weak self] in
+            self?.openGroupAndChannel?()
+        }
         
         self.contactsNode.openPeopleNearby = { [weak self] in
             let _ = (DeviceAccess.authorizationStatus(subject: .location(.tracking))
@@ -385,7 +390,9 @@ public class ContactsController: ViewController, ShowPopMenuAble {
         
         //打开群组
         self.contactsNode.openGroupAndChannel = { [weak self] in
-                
+            guard let self = self else {return}
+            self.openGroupAndChannel?()
+            self.contactsNode.contactListNode.listNode.clearHighlightAnimated(true)
         }
         
         self.displayNodeDidLoad()

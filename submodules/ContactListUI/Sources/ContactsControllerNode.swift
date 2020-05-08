@@ -85,8 +85,8 @@ final class ContactsControllerNode: ASDisplayNode {
         
         self.presentationData = context.sharedContext.currentPresentationData.with { $0 }
         
-//        var addNearbyImpl: (() -> Void)?
-//        var inviteImpl: (() -> Void)?
+        var addNearbyImpl: (() -> Void)?
+        var inviteImpl: (() -> Void)?
 //        let options = [ContactListAdditionalOption(title: presentationData.strings.Contacts_AddPeopleNearby, icon: .generic(UIImage(bundleImageName: "Contact List/PeopleNearbyIcon")!), action: {
 //            addNearbyImpl?()
 //        }), ContactListAdditionalOption(title: presentationData.strings.Contacts_InviteFriends, icon: .generic(UIImage(bundleImageName: "Contact List/AddMemberIcon")!), action: {
@@ -139,17 +139,17 @@ final class ContactsControllerNode: ASDisplayNode {
             }
         })
         
-//        addNearbyImpl = { [weak self] in
-//            if let strongSelf = self {
-//                strongSelf.openPeopleNearby?()
-//            }
-//        }
-//
-//        inviteImpl = { [weak self] in
-//            if let strongSelf = self {
-//                strongSelf.openInvite?()
-//            }
-//        }
+        addNearbyImpl = { [weak self] in
+            if let strongSelf = self {
+                strongSelf.openPeopleNearby?()
+            }
+        }
+
+        inviteImpl = { [weak self] in
+            if let strongSelf = self {
+                strongSelf.openInvite?()
+            }
+        }
         
         groupAndChannelImpl = { [weak self] in
             if let strongSelf = self {

@@ -433,9 +433,9 @@ private func contactListNodeEntries(accountPeer: Peer?, peers: [ContactListPeer]
     var orderedPeers: [ContactListPeer]
     var headers: [ContactListPeerId: ContactListNameIndexHeader] = [:]
     
-    if displaySortOptions, let sortOrder = presentation.sortOrder {
-        entries.append(.sort(theme, strings, sortOrder))
-    }
+//    if displaySortOptions, let sortOrder = presentation.sortOrder {
+//        entries.append(.sort(theme, strings, sortOrder))
+//    }
     
     var addHeader = false
     if #available(iOSApplicationExtension 10.0, iOS 10.0, *) {

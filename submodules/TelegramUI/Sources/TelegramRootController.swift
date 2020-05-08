@@ -93,7 +93,13 @@ public final class TelegramRootController: NavigationController {
         contactsController.switchToChatsController = {  [weak self] in
             self?.openChatsController(activateSearch: false)
         }
-        
+        //打开群组/频道
+        contactsController.openGroupAndChannel = { [weak contactsController, weak self] in
+            guard let vc = contactsController, let self = self else { return }
+            let chatListController = ContactViewController(context: self.context, groupId: .root, controlsHistoryPreload: true,presentationData: (self.context.sharedContext.currentPresentationData.with { $0 }))
+             (vc.navigationController as? NavigationController)?.pushViewController(chatListController, completion: {
+             })
+        }
         
         var restoreSettignsController: (ViewController & SettingsController)?
         if let sharedContext = self.context.sharedContext as? SharedAccountContextImpl {

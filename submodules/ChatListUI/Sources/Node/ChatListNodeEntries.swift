@@ -6,7 +6,7 @@ import SyncCore
 import TelegramPresentationData
 import MergeLists
 
-enum ChatListNodeEntryId: Hashable {
+public enum ChatListNodeEntryId: Hashable {
     case Header
     case Hole(Int64)
     case PeerId(Int64)
@@ -43,8 +43,8 @@ public enum ChatListNodeEntryPromoInfo: Equatable {
     case proxy
     case psa(type: String, message: String?)
 }
-
-enum ChatListNodeEntry: Comparable, Identifiable {
+//ChatListNodeEntry需要公开
+public enum ChatListNodeEntry: Comparable, Identifiable {
     case HeaderEntry
     case PeerEntry(index: ChatListIndex, presentationData: ChatListPresentationData, message: Message?, readState: CombinedPeerReadState?, isRemovedFromTotalUnreadCount: Bool, embeddedInterfaceState: PeerChatListEmbeddedInterfaceState?, peer: RenderedPeer, presence: PeerPresence?, summaryInfo: ChatListMessageTagSummaryInfo, editing: Bool, hasActiveRevealControls: Bool, selected: Bool, inputActivities: [(Peer, PeerInputActivity)]?, promoInfo: ChatListNodeEntryPromoInfo?, hasFailedMessages: Bool, isContact: Bool)
     case HoleEntry(ChatListHole, theme: PresentationTheme)
@@ -69,7 +69,7 @@ enum ChatListNodeEntry: Comparable, Identifiable {
         }
     }
     
-    var stableId: ChatListNodeEntryId {
+    public var stableId: ChatListNodeEntryId {
         switch self {
         case .HeaderEntry:
             return .Header
@@ -86,11 +86,11 @@ enum ChatListNodeEntry: Comparable, Identifiable {
         }
     }
     
-    static func <(lhs: ChatListNodeEntry, rhs: ChatListNodeEntry) -> Bool {
+    public static func <(lhs: ChatListNodeEntry, rhs: ChatListNodeEntry) -> Bool {
         return lhs.sortIndex < rhs.sortIndex
     }
     
-    static func ==(lhs: ChatListNodeEntry, rhs: ChatListNodeEntry) -> Bool {
+    public static func ==(lhs: ChatListNodeEntry, rhs: ChatListNodeEntry) -> Bool {
         switch lhs {
             case .HeaderEntry:
                 if case .HeaderEntry = rhs {

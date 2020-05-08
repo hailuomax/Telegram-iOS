@@ -21,6 +21,7 @@ import TelegramNotices
 import HL
 import Config
 import Language
+import SyncCore
 
 public class ContactViewController: BaseVC {
     
@@ -60,29 +61,29 @@ public class ContactViewController: BaseVC {
         let viewProcessingQueue = self.viewProcessingQueue
         
         
-//        let displayArchiveIntro: Signal<Bool, NoError>
-//        if Namespaces.PeerGroup.archive == groupId {
-//            displayArchiveIntro = context.sharedContext.accountManager.noticeEntry(key: ApplicationSpecificNotice.archiveIntroDismissedKey())
-//            |> map { entry -> Bool in
-//                if let value = entry.value as? ApplicationSpecificVariantNotice {
-//                    return !value.value
-//                } else {
-//                    return true
-//                }
-//            }
-//            |> take(1)
-//            |> afterNext { value in
-//                Queue.mainQueue().async {
-//                    if value {
-//                        let _ = (context.sharedContext.accountManager.transaction { transaction -> Void in
-//                            ApplicationSpecificNotice.setArchiveIntroDismissed(transaction: transaction, value: true)
-//                        }).start()
-//                    }
-//                }
-//            }
-//        } else {
-//            displayArchiveIntro = .single(false)
-//        }
+        let displayArchiveIntro: Signal<Bool, NoError>
+        if Namespaces.PeerGroup.archive == groupId {
+            displayArchiveIntro = context.sharedContext.accountManager.noticeEntry(key: ApplicationSpecificNotice.archiveIntroDismissedKey())
+            |> map { entry -> Bool in
+                if let value = entry.value as? ApplicationSpecificVariantNotice {
+                    return !value.value
+                } else {
+                    return true
+                }
+            }
+            |> take(1)
+            |> afterNext { value in
+                Queue.mainQueue().async {
+                    if value {
+                        let _ = (context.sharedContext.accountManager.transaction { transaction -> Void in
+                            ApplicationSpecificNotice.setArchiveIntroDismissed(transaction: transaction, value: true)
+                        }).start()
+                    }
+                }
+            }
+        } else {
+            displayArchiveIntro = .single(false)
+        }
 
         let currentPeerId: PeerId = context.account.peerId
         
@@ -102,43 +103,43 @@ public class ContactViewController: BaseVC {
     
     public override func initUI() {
 
-//        ContactUtil.getGroup(self.context, state: self.currentState) { (peers) in
-//            guard let peers = peers else { return }
-//
-//            var tgGroup = peers.compactMap{$0 as? TelegramGroup}
-//
-//            peers
-//                .compactMap{$0 as? TelegramChannel}
-//                .filter{
-//                    switch $0.info {
-//                    case .broadcast:
-//                        return false
-//                    case .group:
-//                        return true
-//                    }}
-//                .forEach{
-//                    var role : TelegramGroupRole!
-//                    if $0.flags ==  TelegramChannelFlags.isCreator{
-//                        role = .creator(rank: nil)
-//                    }else if $0.adminRights != nil{
-//                        role = .admin(TelegramChatAdminRights(flags: TelegramChatAdminRightsFlags(rawValue: 0)), rank: nil)
-//                    }else{
-//                        role = .member
-//                    }
-//
-//                    let group = TelegramGroup(id: $0.id, title: $0.title, photo: [], participantCount: 0, role: role, membership: TelegramGroupMembership.Member, flags: TelegramGroupFlags.init(rawValue: 0), defaultBannedRights: nil, migrationReference: nil, creationDate: 0, version: 0)
-//                    tgGroup.append(group)
-//            }
-//
-//
-//            self.groupVC.groupAry.onNext(tgGroup)
-//        }
-//
-//        ContactUtil.getChannel(self.context, state: self.currentState) { (peers) in
-//            guard let peers = peers else {return}
-//
-//            self.channelVC.groupAry.onNext(peers.compactMap{$0 as? TelegramChannel})
-//        }
+        ContactUtil.getGroup(self.context, state: self.currentState) { (peers) in
+            guard let peers = peers else { return }
+
+            var tgGroup = peers.compactMap{$0 as? TelegramGroup}
+
+            peers
+                .compactMap{$0 as? TelegramChannel}
+                .filter{
+                    switch $0.info {
+                    case .broadcast:
+                        return false
+                    case .group:
+                        return true
+                    }}
+                .forEach{
+                    var role : TelegramGroupRole!
+                    if $0.flags ==  TelegramChannelFlags.isCreator{
+                        role = .creator(rank: nil)
+                    }else if $0.adminRights != nil{
+                        role = .admin(TelegramChatAdminRights(flags: TelegramChatAdminRightsFlags(rawValue: 0)), rank: nil)
+                    }else{
+                        role = .member
+                    }
+
+                    let group = TelegramGroup(id: $0.id, title: $0.title, photo: [], participantCount: 0, role: role, membership: TelegramGroupMembership.Member, flags: TelegramGroupFlags.init(rawValue: 0), defaultBannedRights: nil, migrationReference: nil, creationDate: 0, version: 0)
+                    tgGroup.append(group)
+            }
+
+
+            self.groupVC.groupAry.onNext(tgGroup)
+        }
+
+        ContactUtil.getChannel(self.context, state: self.currentState) { (peers) in
+            guard let peers = peers else {return}
+
+            self.channelVC.groupAry.onNext(peers.compactMap{$0 as? TelegramChannel})
+        }
         ConfigUI()
     }
     
