@@ -101,7 +101,7 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
         self.setBind()
         
     }
-    //ssss
+    
     func initUI(){
         
         self.contentView.layout(snapKitMaker: {
@@ -283,7 +283,7 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
                 }
                 let presentPeersNearby = {
                     let controller = NearbyViewController.init(context: context, presentationData: strongSelf.presentationData)
-//                    let controller = NearbyViewModel().getViewController(context: context, type: .group)
+
                     (strongSelf.navigationController as? NavigationController)?.replaceAllButRootController(controller, animated: true, completion: {})
                 }
                 
@@ -354,9 +354,8 @@ extension DiscoverVC : ZCycleViewProtocol{
         if model.linkType == 6,let link = model.link ,link == "http://\(Scheme.i7_app)/jumpExchange" {
             self.validate {[weak self] in
                 guard let self = self else {return}
-                //FIXME: 待接入 ExchangeSquareVC
-//                let squareVC = ExchangeSquareVC(context: self.context)
-//                self.navigationController?.pushViewController(squareVC, animated: true)
+                let squareVC = ExchangeSquareVC(context: self.context)
+                self.navigationController?.pushViewController(squareVC, animated: true)
             }
             return
         }
