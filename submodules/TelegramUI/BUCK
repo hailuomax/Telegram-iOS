@@ -232,6 +232,7 @@ framework(
          "//submodules/HL/Translate:Translate",
          "//submodules/HL/Theme:Theme",
          ":AssetXib",
+         "//submodules/HL/PassValue:PassValue"
 
     ],
     frameworks = [

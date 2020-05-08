@@ -53,6 +53,7 @@ import ViewModel
 import UI
 import Config
 import HL
+import PassValue
 
 private let handleVoipNotifications = false
 
@@ -252,6 +253,31 @@ final class SharedApplicationContext {
             .subscribe(onNext: { _ in
                 //有用户，获取用户相关状态（主要是开车开关）
                 AccountRepo.sensitiveGet()
+            })
+        
+        //MARK: 用户未验证
+        _ = NotificationCenter.default.rx
+            .notification(Notification.Name(kUserNotAuthenticatedNotification))
+            .observeOn(MainScheduler.instance)
+            .takeUntil(self.rx.deallocated)
+            .subscribe(onNext: { noti in
+                // 用户未验证
+                //清空token
+                HLAccountManager.cleanToken().save()
+                HLAccountManager.sharePhone = ""
+                
+                HUD.flash(.label(noti.object as! String), delay: 1)
+                
+                guard let navigationVC = app.mainWindow?.viewController as? TelegramRootController else {return}
+                
+                let vcs = navigationVC.viewControllers
+                let chats: [UIViewController] = vcs.filter{$0 is ChatController}
+                if let chatVC = chats.first {
+                    _ = navigationVC.popToViewController(chatVC, animated: true)
+                }else {
+                    navigationVC.popToRoot(animated: true)
+                }
+                    
             })
         
         precondition(!testIsLaunched)
@@ -1056,7 +1082,7 @@ final class SharedApplicationContext {
                         return nil
                         }
                         |> deliverOnMainQueue).start()
-                    //保存模块间需要的值
+                    //MARK: 保存模块间需要的值
                     PassValuesUtil.default.add(key:.createChanel, value: {
                         return createChannelController(context: context)
                     })
