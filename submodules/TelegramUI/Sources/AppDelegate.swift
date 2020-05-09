@@ -264,7 +264,6 @@ final class SharedApplicationContext {
                 // 用户未验证
                 //清空token
                 HLAccountManager.cleanToken().save()
-                HLAccountManager.sharePhone = ""
                 
                 HUD.flash(.label(noti.object as! String), delay: 1)
                 

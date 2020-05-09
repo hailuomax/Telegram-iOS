@@ -660,13 +660,13 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
     
     if let peer = peerViewMainPeer(view) as? TelegramUser {
         let userInfoState = ItemListAvatarAndNameInfoItemState(editingName: nil, updatingName: nil)
-        entries.append(.userInfo(account, presentationData.theme, presentationData.strings, presentationData.dateTimeFormat, peer, view.cachedData, userInfoState, state.updatingAvatar))
-        if peer.photo.isEmpty {
-            entries.append(.setProfilePhoto(presentationData.theme, presentationData.strings.Settings_SetProfilePhoto))
-        }
-        if peer.addressName == nil {
-            entries.append(.setUsername(presentationData.theme, presentationData.strings.Settings_SetUsername))
-        }
+//        entries.append(.userInfo(account, presentationData.theme, presentationData.strings, presentationData.dateTimeFormat, peer, view.cachedData, userInfoState, state.updatingAvatar))
+//        if peer.photo.isEmpty {
+//            entries.append(.setProfilePhoto(presentationData.theme, presentationData.strings.Settings_SetProfilePhoto))
+//        }
+//        if peer.addressName == nil {
+//            entries.append(.setUsername(presentationData.theme, presentationData.strings.Settings_SetUsername))
+//        }
         
         if displayPhoneNumberConfirmation {
             let phoneNumber = formatPhoneNumber(peer.phone ?? "")
@@ -686,20 +686,20 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
             }
         }
         
-        if !proxySettings.servers.isEmpty {
-            let valueString: String
-            if proxySettings.enabled, let activeServer = proxySettings.activeServer {
-                switch activeServer.connection {
-                    case .mtp:
-                        valueString = presentationData.strings.SocksProxySetup_ProxyTelegram
-                    case .socks5:
-                        valueString = presentationData.strings.SocksProxySetup_ProxySocks5
-                }
-            } else {
-                valueString = presentationData.strings.Settings_ProxyDisabled
-            }
-            entries.append(.proxy(presentationData.theme, PresentationResourcesSettings.proxy, presentationData.strings.Settings_Proxy, valueString))
-        }
+//        if !proxySettings.servers.isEmpty {
+//            let valueString: String
+//            if proxySettings.enabled, let activeServer = proxySettings.activeServer {
+//                switch activeServer.connection {
+//                    case .mtp:
+//                        valueString = presentationData.strings.SocksProxySetup_ProxyTelegram
+//                    case .socks5:
+//                        valueString = presentationData.strings.SocksProxySetup_ProxySocks5
+//                }
+//            } else {
+//                valueString = presentationData.strings.Settings_ProxyDisabled
+//            }
+//            entries.append(.proxy(presentationData.theme, PresentationResourcesSettings.proxy, presentationData.strings.Settings_Proxy, valueString))
+//        }
         
         entries.append(.savedMessages(presentationData.theme, PresentationResourcesSettings.savedMessages, presentationData.strings.Settings_SavedMessages))
         entries.append(.recentCalls(presentationData.theme, PresentationResourcesSettings.recentCalls, presentationData.strings.CallSettings_RecentCalls))

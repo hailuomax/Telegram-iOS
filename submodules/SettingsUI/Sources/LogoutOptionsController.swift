@@ -15,6 +15,7 @@ import AlertUI
 import PresentationDataUtils
 import UrlHandling
 import Repo
+import Account
 
 private struct LogoutOptionsItemArguments {
     let addAccount: () -> Void
@@ -230,6 +231,10 @@ func logoutOptionsController(context: AccountContext, navigationController: Navi
             }),
             TextAlertAction(type: .defaultAction, title: presentationData.strings.Common_OK, action: {
                 let _ = logoutFromAccount(id: context.account.id, accountManager: context.sharedContext.accountManager, alreadyLoggedOutRemotely: false).start()
+                //登出时，把token清掉
+                HLAccountManager.cleanToken().save()
+
+                
                 dismissImpl?()
             })
         ])

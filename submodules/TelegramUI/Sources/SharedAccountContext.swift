@@ -27,6 +27,8 @@ import OverlayStatusController
 import AlertUI
 import PresentationDataUtils
 
+import Account
+
 private enum CallStatusText: Equatable {
     case none
     case inProgress(Double?)
@@ -851,6 +853,8 @@ public final class SharedAccountContextImpl: SharedAccountContext {
             }
         }
         self.switchingData = (settingsController as? (ViewController & SettingsController), chatListController as? ChatListController, chatsBadge)
+        //清除token
+        HLAccountManager.cleanToken().save()
         
         let _ = self.accountManager.transaction({ transaction -> Bool in
             if transaction.getCurrent()?.0 != id {

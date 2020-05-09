@@ -1386,6 +1386,9 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         let _ = (contextValue.get()
         |> take(1)
         |> deliverOnMainQueue).start(next: { context in
+            //清除token
+            HLAccountManager.cleanToken().save()
+            
             accountsAndPeers.set(.never())
             context.sharedContext.switchToAccount(id: id, fromSettingsController: nil, withChatListController: nil)
         })

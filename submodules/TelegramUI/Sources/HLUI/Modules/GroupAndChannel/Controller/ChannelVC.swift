@@ -105,7 +105,7 @@ extension ChannelVC {
                 $0.edges.equalToSuperview()
             })
             .config({
-//                $0.registerCellNib(GroupsChatListCell.self)
+                $0.registerCellNib(GroupsChatListCell.self)
                 $0.rowHeight = 60
                 $0.estimatedRowHeight = 60
                 $0.separatorStyle = .none
@@ -172,7 +172,7 @@ extension ChannelVC : UITableViewDelegate, UITableViewDataSource {
         
         let cell = GroupsChatListCell.cellWithTableView(tableView)
         cell.context = context
-//        cell.loadChanelModel(cellModel)
+        cell.loadChanelModel(cellModel)
         return cell
     }
     
