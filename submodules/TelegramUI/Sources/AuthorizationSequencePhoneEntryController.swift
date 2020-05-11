@@ -13,6 +13,12 @@ import CountrySelectionUI
 import SettingsUI
 import PhoneNumberFormat
 
+import HL
+import Network
+import Repo
+import Config
+import UI
+
 final class AuthorizationSequencePhoneEntryController: ViewController {
     private var controllerNode: AuthorizationSequencePhoneEntryControllerNode {
         return self.displayNode as! AuthorizationSequencePhoneEntryControllerNode
@@ -104,7 +110,10 @@ final class AuthorizationSequencePhoneEntryController: ViewController {
             }
             strongSelf.view.endEditing(true)
             self?.present(debugController(sharedContext: strongSelf.sharedContext, context: nil, modal: true), in: .window(.root), with: ViewControllerPresentationArguments(presentationAnimation: .modalSheet))
-        }, hasOtherAccounts: self.otherAccountPhoneNumbers.0 != nil)
+            },switchProxyTap:{[weak self] in
+                guard let self = self else{return}
+                self.switchProxy()
+        },hasOtherAccounts: self.otherAccountPhoneNumbers.0 != nil)
         self.controllerNode.accountUpdated = { [weak self] account in
             guard let strongSelf = self else {
                 return
@@ -158,7 +167,89 @@ final class AuthorizationSequencePhoneEntryController: ViewController {
         self.controllerNode.containerLayoutUpdated(layout, navigationBarHeight: self.navigationHeight, transition: transition)
     }
     
+    //增加跳转代理
+    @objc func switchProxy(){
+        let vc = proxySettingsController(accountManager: sharedContext.accountManager, context: nil, postbox: account.postbox, network: network, mode: .modal, presentationData: presentationData, updatedPresentationData: sharedContext.presentationData)
+        (self.navigationController as? NavigationController)?.pushViewController(vc)
+    }
+    
+    private let repo = InvitationRepo()
+    private var disposeBag: DisposeBag!
     @objc func nextPressed() {
+        
+        //判断是否勾选已经同意先关协议
+        guard self.controllerNode.hadAgree else {
+            self.controllerNode.notAgreeAnimateError()
+            return
+        }
+        
+        //判断电话是否为空
+        let (phoneCode, _, telephone) = self.controllerNode.codeAndNumber
+                
+        guard !telephone.isEmpty else {
+            hapticFeedback.error()
+            self.controllerNode.animateError()
+            return
+        }
+        
+        disposeBag = DisposeBag()
+        
+        //项目配置，是否输入邀请码
+        if APPConfig.needCheckInvitationCode {
+
+            //判断是否已经输入过邀请码
+            repo.check(phoneCode: "\(phoneCode ?? 86)", telephone: telephone)
+                .value({[weak self] _ in
+                    self?.nextForlogin()
+                })
+                .netWorkState({[weak self] in
+                    guard let self = self else {return}
+                    switch $0{
+                    case .success:
+                        HUD.hide()
+                    case .loading:
+                        HUD.show(.systemActivity, onView: self.view)
+                    case let .error(error):
+                        guard error.code == 100001 else {
+                            HUD.flash(.label(error.msg), delay: 1)
+                            return
+                        }
+
+                        HUD.hide()
+                        InvitationAlertNode.show(from: self,phoneCode: "\(phoneCode ?? 86)", telephone: telephone) {[weak self] in
+                            self?.nextForlogin()
+                        }
+                    }
+                })
+                .load(disposeBag)
+        }else{
+            self.nextForlogin()
+        }
+        
+        /* 白名单暂时屏蔽
+        repo.whitelistCheck(telephone: telephone, phoneCode: "\(phoneCode ?? 86)")
+            .observeObject({[weak self] _ in
+                self?.nextForlogin()
+            })
+            .netWorkState({[weak self] in
+                guard let self = self else {return}
+                switch $0{
+                case .success:
+                    HUD.hide()
+                case .loading:
+                    HUD.show(.systemActivity, onView: self.view)
+                case .error:
+                    break
+                }
+            })
+            .error({
+                HUD.flash(.label($0.message), delay: 1)
+            })
+            .load(disposeBag)
+         */
+    }
+    
+    func nextForlogin() {
         let (_, _, number) = self.controllerNode.codeAndNumber
         if !number.isEmpty {
             let logInNumber = formatPhoneNumber(self.controllerNode.currentNumber)

@@ -13,6 +13,10 @@ import SwiftSignalKit
 import Postbox
 import AccountContext
 
+import Language
+import Extension
+import Config
+
 private func emojiFlagForISOCountryCode(_ countryCode: NSString) -> String {
     if countryCode.length != 2 {
         return ""
@@ -256,7 +260,38 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         }
     }
     
-    init(sharedContext: SharedAccountContext, account: UnauthorizedAccount, strings: PresentationStrings, theme: PresentationTheme, debugAction: @escaping () -> Void, hasOtherAccounts: Bool) {
+    private let switchProxyTap : ()->Void
+    /// 是否已同意先关协议
+    private(set) var hadAgree: Bool = true
+    ///协议内容行
+    private lazy var protocolNode: ProtocolContentNode = {
+        let node = ProtocolContentNode{ [weak self] in
+            guard let self = self else {return}
+            self.hadAgree = $0
+        }
+        node.frame = CGRect(x: 16, y: 0, width: 0, height: 0)
+        return node
+    }()
+    
+    ///跳转代理button
+    private lazy var proxyNode: ASButtonNode = {
+        let node = ASButtonNode()
+        node.setTitle(HLLanguage.SwitchProxy.localized(), with: FontEnum.k_pingFangSC_Regular.toFont(15), with: ColorEnum.kBlue.toColor(), for: .normal)
+        node.addTarget(self, action: #selector(proxyButtonTap), forControlEvents: ASControlNodeEvent.touchUpInside)
+        node.frame = CGRect(x: 34, y: 0, width: 100, height: 20)
+        return node
+    }()
+    
+    ///logo
+    private lazy var iconNode: ASImageNode = {
+        let node = ASImageNode()
+        node.image = UIImage(bundleImageName: "bindHLLogo")
+        node.frame = CGRect(x: 34, y: 0, width: 70, height: 54)
+        node.contentMode = .scaleToFill
+        return node
+    }()
+    
+    init(sharedContext: SharedAccountContext, account: UnauthorizedAccount, strings: PresentationStrings, theme: PresentationTheme, debugAction: @escaping () -> Void,switchProxyTap:@escaping () -> Void, hasOtherAccounts: Bool) {
         self.sharedContext = sharedContext
         self.account = account
         
@@ -271,14 +306,16 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         self.titleNode.attributedText = NSAttributedString(string: strings.Login_PhoneTitle, font: Font.light(30.0), textColor: theme.list.itemPrimaryTextColor)
         
         self.noticeNode = ASTextNode()
-        self.noticeNode.maximumNumberOfLines = 0
-        self.noticeNode.isUserInteractionEnabled = true
-        self.noticeNode.displaysAsynchronously = false
-        self.noticeNode.attributedText = NSAttributedString(string: strings.Login_PhoneAndCountryHelp, font: Font.regular(16.0), textColor: theme.list.itemPrimaryTextColor, paragraphAlignment: .center)
+//        self.noticeNode.maximumNumberOfLines = 0
+//        self.noticeNode.isUserInteractionEnabled = true
+//        self.noticeNode.displaysAsynchronously = false
+//        self.titleNode.attributedText = NSAttributedString(string: strings.Login_PhoneTitle, font: Font.light(30.0), textColor: theme.list.itemPrimaryTextColor)
         
         self.contactSyncNode = ContactSyncNode(theme: theme, strings: strings)
         
         self.phoneAndCountryNode = PhoneAndCountryNode(strings: strings, theme: theme)
+        
+        self.switchProxyTap = switchProxyTap
         
         super.init()
         
@@ -292,6 +329,10 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         self.addSubnode(self.noticeNode)
         self.addSubnode(self.phoneAndCountryNode)
         self.addSubnode(self.contactSyncNode)
+        self.addSubnode(self.protocolNode)
+        self.addSubnode(self.iconNode)
+        self.addSubnode(self.proxyNode)
+        
         self.contactSyncNode.isHidden = true
         
         self.phoneAndCountryNode.selectCountryCode = { [weak self] in
@@ -330,17 +371,18 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         }
         
         if max(layout.size.width, layout.size.height) > 1023.0 {
-            self.titleNode.attributedText = NSAttributedString(string: strings.Login_PhoneTitle, font: Font.light(40.0), textColor: self.theme.list.itemPrimaryTextColor)
+            self.titleNode.attributedText = NSAttributedString(string: HLLanguage.HaiLuoAccountLogin.localized(), font: Font.light(40.0), textColor: self.theme.list.itemPrimaryTextColor)
         } else {
             self.titleNode.attributedText = NSAttributedString(string: strings.Login_PhoneTitle, font: Font.light(30.0), textColor: self.theme.list.itemPrimaryTextColor)
         }
         
         let titleSize = self.titleNode.measure(CGSize(width: layout.size.width, height: CGFloat.greatestFiniteMagnitude))
-        let noticeSize = self.noticeNode.measure(CGSize(width: min(274.0, layout.size.width - 28.0), height: CGFloat.greatestFiniteMagnitude))
+//        let noticeSize = self.noticeNode.measure(CGSize(width: min(274.0, layout.size.width - 28.0), height: CGFloat.greatestFiniteMagnitude))
         
         var items: [AuthorizationLayoutItem] = [
+            AuthorizationLayoutItem(node: self.iconNode, size: CGSize(width: 54, height: 45), spacingBefore: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 10.0, maxValue: 10.0)),
             AuthorizationLayoutItem(node: self.titleNode, size: titleSize, spacingBefore: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0)),
-            AuthorizationLayoutItem(node: self.noticeNode, size: noticeSize, spacingBefore: AuthorizationLayoutItemSpacing(weight: 18.0, maxValue: 18.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0)),
+            AuthorizationLayoutItem(node: self.proxyNode, size: CGSize(width: 100, height: 20), spacingBefore: AuthorizationLayoutItemSpacing(weight: 10.0, maxValue: 10.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0)),
             AuthorizationLayoutItem(node: self.phoneAndCountryNode, size: CGSize(width: layout.size.width, height: 115.0), spacingBefore: AuthorizationLayoutItemSpacing(weight: 44.0, maxValue: 44.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0))
         ]
         let contactSyncSize = self.contactSyncNode.updateLayout(width: layout.size.width)
@@ -352,6 +394,21 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         }
         
         let _ = layoutAuthorizationItems(bounds: CGRect(origin: CGPoint(x: 0.0, y: insets.top), size: CGSize(width: layout.size.width, height: layout.size.height - insets.top - insets.bottom - 10.0)), items: items, transition: transition, failIfDoesNotFit: false)
+        
+//        let protocolSize = self.protocolNode.measure(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
+        let newY = self.bounds.size.height - insets.bottom - 30
+        let oldY = self.protocolNode.frame.origin.y
+        let block : ()->() = {
+            print(newY)
+            self.protocolNode.frame = CGRect(origin: CGPoint(x: 0, y: newY), size: CGSize(width: layout.size.width - 10, height: 50))
+        }
+        if newY < oldY{
+            UIView.animate(withDuration: 0.3) {
+                block()
+            }
+        }else{
+            block()
+        }
     }
     
     func activateInput() {
@@ -362,6 +419,17 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         self.phoneAndCountryNode.phoneInputNode.countryCodeField.layer.addShakeAnimation()
         self.phoneAndCountryNode.phoneInputNode.numberField.layer.addShakeAnimation()
     }
+    
+        /// 未勾选同意相关协议时的抖动动画
+        func notAgreeAnimateError(){
+            self.protocolNode.layer.addShakeAnimation()
+        }
+        
+        @objc private func proxyButtonTap(){
+            
+            self.switchProxyTap()
+        
+        }
     
     private var debugTapCounter: (Double, Int) = (0.0, 0)
     @objc private func debugTap(_ recognizer: UITapGestureRecognizer) {
@@ -459,5 +527,99 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
                 strongSelf.exportTokenDisposable.set(nil)
             }
         }))
+    }
+}
+
+//MARK: - ProtocolContentNode
+private class ProtocolContentNode: ASControlNode{
+    
+    private lazy var imgNode : ASButtonNode = {
+        let node = ASButtonNode()
+        node.imageNode.image = UIImage(bundleImageName: "loginAgree")
+        node.imageNode.contentMode = .scaleAspectFill
+        return node
+    }()
+    
+    /// 协议文本内容
+    private lazy var textNode : ASTextNode = ASTextNode()
+    private lazy var buttonNode : ASButtonNode = ASButtonNode()
+    
+    /// 同意协议与否回调
+    private let onAgreeOrNot : (Bool)->()
+    
+    init(onAgreeOrNot : @escaping (Bool)->()) {
+        self.onAgreeOrNot = onAgreeOrNot
+        super.init()
+        self.isUserInteractionEnabled = true
+        [imgNode,textNode,buttonNode].forEach {
+            self.addSubnode($0)
+        }
+        self.setUpProtocolNode()
+        self.imgNode.addTarget(self, action: #selector(changeAgreeStatus), forControlEvents: ASControlNodeEvent.touchUpInside)
+        buttonNode.addTarget(self, action: #selector(clickAgree), forControlEvents: ASControlNodeEvent.touchUpInside)
+    }
+    
+    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        
+        let maxWidth = constrainedSize.max.width
+        let maxHeight = constrainedSize.max.height
+        
+        if let h = imgNode.imageNode.image?.size.height ,let w = imgNode.imageNode.image?.size.width {
+            let fixSize = CGSize(width: maxWidth, height: 20)
+            let titleFitsSize = textNode.calculateSizeThatFits(fixSize)
+            let x = (maxWidth - titleFitsSize.width - w - 5) / 2
+            let y = (maxHeight - h)
+            
+            imgNode.frame = CGRect(x:x, y:y ,width: w, height: h)
+            textNode.frame = CGRect(x:x + w + 5, y:y ,width: titleFitsSize.width, height: titleFitsSize.height)
+//            buttonNode.frame = textNode.frame
+        }
+        
+        return ASLayoutSpec()
+    }
+    
+    func setUpProtocolNode() {
+        let font = UIFont.systemFont(ofSize: 10)
+        let fontBlueColor = UIColor.hex(.kBlue)
+        let fontBlackColor = UIColor.hex(.k878B9F)
+        
+        /// 协议链接标签的样式 attributes(link, textColor)  link:点击跳转的url
+        let attributes : (String, UIColor)->[NSAttributedString.Key : Any] = { link, textColor in
+            let rtn : [NSAttributedString.Key : Any] = [
+                .font : font,
+                .foregroundColor : textColor,
+                .link : URL(string: link) ?? "",
+                .underlineColor : UIColor.clear
+            ]
+            return rtn
+        }
+        
+        let mtbStr = NSMutableAttributedString()
+        
+        let t0 = NSAttributedString(string: HLLanguage.UserProtocolPart1.localized(), attributes: attributes("", fontBlackColor))
+        let link0 = NSAttributedString(string: HLLanguage.UserProtocolPart2.localized(), attributes: attributes("https://baidu.com", fontBlueColor))
+        let t1 = NSAttributedString(string: HLLanguage.UserProtocolPart3.localized(), attributes: attributes("", fontBlackColor))
+        
+        [t0,link0,t1].forEach{mtbStr.append($0)}
+        
+        self.textNode.do{
+            $0.maximumNumberOfLines = 0
+            $0.attributedText = mtbStr
+            $0.frame = CGRect(origin: CGPoint(x: 53, y: 1000), size: .zero)
+        }
+    }
+    
+    @objc func changeAgreeStatus(){
+        let notAgreeImg = UIImage(bundleImageName: "loginNotAgree")
+        let agreeImg = UIImage(bundleImageName: "loginAgree")
+        
+        let shouldAgree = imgNode.imageNode.image == notAgreeImg
+        
+        imgNode.imageNode.image = shouldAgree ? agreeImg : notAgreeImg
+        onAgreeOrNot(shouldAgree)
+    }
+    
+    @objc func clickAgree(){
+//        AccountRepo.getAgreementService(self.closestViewController)
     }
 }
