@@ -32,7 +32,7 @@ static_library(
         "//submodules/SolidRoundedButtonNode:SolidRoundedButtonNode",
         
         "//submodules/HL/Language:Language",
-
+        "//submodules/HL/UI:UI",
         
     ],
     frameworks = [

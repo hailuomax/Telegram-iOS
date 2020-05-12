@@ -16,6 +16,9 @@ import AccountContext
 import Language
 import Extension
 import Config
+import Repo
+import UI
+import HL
 
 private func emojiFlagForISOCountryCode(_ countryCode: NSString) -> String {
     if countryCode.length != 2 {
@@ -551,10 +554,11 @@ private class ProtocolContentNode: ASControlNode{
         self.onAgreeOrNot = onAgreeOrNot
         super.init()
         self.isUserInteractionEnabled = true
-        [imgNode,textNode,buttonNode].forEach {
+        [buttonNode, imgNode,textNode].forEach {
             self.addSubnode($0)
         }
         self.setUpProtocolNode()
+        self.textNode.isUserInteractionEnabled = false
         self.imgNode.addTarget(self, action: #selector(changeAgreeStatus), forControlEvents: ASControlNodeEvent.touchUpInside)
         buttonNode.addTarget(self, action: #selector(clickAgree), forControlEvents: ASControlNodeEvent.touchUpInside)
     }
@@ -568,11 +572,11 @@ private class ProtocolContentNode: ASControlNode{
             let fixSize = CGSize(width: maxWidth, height: 20)
             let titleFitsSize = textNode.calculateSizeThatFits(fixSize)
             let x = (maxWidth - titleFitsSize.width - w - 5) / 2
-            let y = (maxHeight - h)
+            let y = (maxHeight - h) - 10
             
             imgNode.frame = CGRect(x:x, y:y ,width: w, height: h)
             textNode.frame = CGRect(x:x + w + 5, y:y ,width: titleFitsSize.width, height: titleFitsSize.height)
-//            buttonNode.frame = textNode.frame
+            buttonNode.frame = textNode.frame
         }
         
         return ASLayoutSpec()
@@ -620,6 +624,14 @@ private class ProtocolContentNode: ASControlNode{
     }
     
     @objc func clickAgree(){
-//        AccountRepo.getAgreementService(self.closestViewController)
+        AccountRepo.getAgreementService{[weak closestViewController] url in
+            let vc = WebController(url: url)
+            if closestViewController != nil{
+                closestViewController?.navigationController?.pushViewController(vc, animated: true)
+            }else{
+                HUD.currentVC()?.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+            
     }
 }
