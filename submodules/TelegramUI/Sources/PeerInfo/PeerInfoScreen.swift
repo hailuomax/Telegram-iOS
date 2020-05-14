@@ -39,6 +39,8 @@ import TextFormat
 import StatisticsUI
 
 import Config
+import UI
+import Language
 
 protocol PeerInfoScreenItem: class {
     var id: AnyHashable { get }
@@ -497,6 +499,8 @@ private final class PeerInfoInteraction {
     let performBioLinkAction: (TextLinkItemActionType, TextLinkItem) -> Void
     let requestLayout: () -> Void
     let openEncryptionKey: () -> Void
+    //打开二维码
+    let openQrCode: (PeerId) -> Void
     
     init(
         openUsername: @escaping (String) -> Void,
@@ -526,7 +530,8 @@ private final class PeerInfoInteraction {
         openPeerInfoContextMenu: @escaping (PeerInfoContextSubject, ASDisplayNode) -> Void,
         performBioLinkAction: @escaping (TextLinkItemActionType, TextLinkItem) -> Void,
         requestLayout: @escaping () -> Void,
-        openEncryptionKey: @escaping () -> Void
+        openEncryptionKey: @escaping () -> Void,
+        openQrCode: @escaping (PeerId) -> Void
     ) {
         self.openUsername = openUsername
         self.openPhone = openPhone
@@ -556,6 +561,7 @@ private final class PeerInfoInteraction {
         self.performBioLinkAction = performBioLinkAction
         self.requestLayout = requestLayout
         self.openEncryptionKey = openEncryptionKey
+        self.openQrCode = openQrCode
     }
 }
 
@@ -665,6 +671,7 @@ private func infoItems(data: PeerInfoScreenData?, context: AccountContext, prese
             }))
         }
     } else if let channel = data.peer as? TelegramChannel {
+        let ItemQrCode = 0
         let ItemUsername = 1
         let ItemAbout = 2
         let ItemAdmins = 3
@@ -689,6 +696,10 @@ private func infoItems(data: PeerInfoScreenData?, context: AccountContext, prese
         }
         
         if let username = channel.username {
+            //MARK: username不为空，可以显示二维码
+            items[.peerInfo]!.append(PeerInfoScreenQrCodeItem(id: ItemQrCode , action: {
+                interaction.openQrCode(channel.id)
+            }))
             items[.peerInfo]!.append(PeerInfoScreenLabeledValueItem(id: ItemUsername, label: presentationData.strings.Channel_LinkItem, text: "https://\(Scheme.i7_app)/\(username)", textColor: .accent, action: {
                 interaction.openUsername(username)
             }, longTapAction: { sourceNode in
@@ -1194,6 +1205,11 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
             },
             openEncryptionKey: { [weak self] in
                 self?.openEncryptionKey()
+            },
+            openQrCode:{[weak self] peerId in
+                guard let self = self else {return}
+                let vc = QRCodeViewController(context: self.context, peerId: peerId , type: .group)
+                self.controller?.push(vc)
             }
         )
         
