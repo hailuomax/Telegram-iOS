@@ -48,14 +48,22 @@ private final class PeerInfoScreenQrCodeItemNode : PeerInfoScreenItemNode {
         var bringToFrontForHighlightImpl: (() -> Void)?
         self.selectionNode = PeerInfoScreenSelectableBackgroundNode(bringToFrontForHighlight: { bringToFrontForHighlightImpl?() })
         self.textNode = ImmediateTextNode()
+        self.textNode.displaysAsynchronously = false
+        self.textNode.isUserInteractionEnabled = false
+        
         self.arrowNode = ASImageNode()
         self.codeNode = ASImageNode()
         self.bottomSeparatorNode = ASDisplayNode()
         self.bottomSeparatorNode.isLayerBacked = true
+        
+        self.arrowNode.isUserInteractionEnabled = false
+        self.codeNode.isUserInteractionEnabled = false
+        
         super.init()
         self.addSubnode(self.textNode)
         self.addSubnode(self.arrowNode)
         self.addSubnode(self.codeNode)
+        self.addSubnode(self.selectionNode)
         self.addSubnode(self.bottomSeparatorNode)
         bringToFrontForHighlightImpl = { [weak self] in
             self?.bringToFrontForHighlight?()
@@ -71,13 +79,13 @@ private final class PeerInfoScreenQrCodeItemNode : PeerInfoScreenItemNode {
         
         let sideInset: CGFloat = 16.0
         let verticalInset: CGFloat = 7.0
-        self.textNode.attributedText = NSAttributedString(string: HLLanguage.GroupQRCodeTitle.localized(), font: Font.regular(14.0), textColor: presentationData.theme.list.freeTextColor)
+        self.textNode.attributedText = NSAttributedString(string: HLLanguage.GroupQRCodeTitle.localized(), font: Font.regular(16.0), textColor: presentationData.theme.list.itemPrimaryTextColor)
         
         let textSize = self.textNode.updateLayout(CGSize(width: width - sideInset * 2.0, height: .greatestFiniteMagnitude))
         
         let height : CGFloat = 50
         
-        let textFrame = CGRect(origin: CGPoint(x: sideInset, y: verticalInset), size: textSize)
+        let textFrame = CGRect(origin: CGPoint(x: sideInset, y: (height - textSize.height) / 2), size: textSize)
         
         transition.updateFrame(node: self.textNode, frame: textFrame)
         
@@ -90,7 +98,7 @@ private final class PeerInfoScreenQrCodeItemNode : PeerInfoScreenItemNode {
             arrowNode.image = arrowImage
             let arrowFrame = CGRect(x: width - sideInset - arrowSize.width,  y: (height - arrowSize.height) / 2, width:arrowSize.width, height:arrowSize.height)
             transition.updateFrame(node: arrowNode, frame:  arrowFrame)
-            codeX =  arrowFrame.minX - 15
+            codeX =  arrowFrame.minX - 5
         }
         // 二维码图片
         if let codeSize = codeImage?.size {
@@ -103,6 +111,8 @@ private final class PeerInfoScreenQrCodeItemNode : PeerInfoScreenItemNode {
         transition.updateFrame(node: self.bottomSeparatorNode, frame: CGRect(origin: CGPoint(x: sideInset, y: height - UIScreenPixel), size: CGSize(width: width - sideInset, height: UIScreenPixel)))
         transition.updateAlpha(node: self.bottomSeparatorNode, alpha: bottomItem == nil ? 0.0 : 1.0)
         
+        self.selectionNode.update(size: CGSize(width: width, height: height), theme: presentationData.theme, transition: transition)
+        transition.updateFrame(node: self.selectionNode, frame: CGRect(x:0 , y:0 , width:width, height: height))
         return height
     }
 }

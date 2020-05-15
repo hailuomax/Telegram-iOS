@@ -250,8 +250,13 @@ final class SharedApplicationContext {
             .notification(HLAccountManager.kTelegramUserDidChangeNotificationName)
             .observeOn(MainScheduler.instance)
             .takeUntil(self.rx.deallocated)
-            .subscribe(onNext: { _ in
+            .subscribe(onNext: { noti in
                 //有用户，获取用户相关状态（主要是开车开关）
+                if let user = noti.userInfo?["user"] as? TelegramUser {                    
+                    if HLAccountManager.shareTgUser == nil {
+                        HLAccountManager.shareTgUser = user
+                    }
+                }
                 AccountRepo.sensitiveGet()
             })
         
@@ -1082,8 +1087,11 @@ final class SharedApplicationContext {
                         }
                         |> deliverOnMainQueue).start()
                     //MARK: 保存模块间需要的值
-                    PassValuesUtil.default.add(key:.createChanel, value: {
+                    PassValuesUtil.default.add(key:.CreateChanel, value: {
                         return createChannelController(context: context)
+                    })
+                    PassValuesUtil.default.add(key:.RootViewController, value: {
+                        return app.mainWindow?.viewController as? TelegramRootController
                     })
                     
                     
