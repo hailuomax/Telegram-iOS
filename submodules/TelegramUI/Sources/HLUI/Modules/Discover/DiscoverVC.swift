@@ -141,10 +141,12 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
         let nib = UINib(nibName: name, bundle: Bundle.getAppBundle()/*Bundle(for: DiscoverItemCell.self)*/)
         self.contentView.tableView.register(nib, forCellReuseIdentifier: kDiscoverItemCell)
         self.contentView.tableView.register(DiscoverSectionHeader.self, forHeaderFooterViewReuseIdentifier: kDiscoverSectionHeader)
-         self.contentView.tableView.register(DiscoverSectionFooter.self, forHeaderFooterViewReuseIdentifier: kDiscoverSectionFooter)
+        self.contentView.tableView.register(DiscoverSectionFooter.self, forHeaderFooterViewReuseIdentifier: kDiscoverSectionFooter)
+        [contentView ,contentView.tableView].forEach{
+            $0?.setNeedsLayout()
+            $0?.layoutIfNeeded()
+        }
         
-        self.contentView.tableView.layoutIfNeeded()
-
     }
     
     func setBind(){
