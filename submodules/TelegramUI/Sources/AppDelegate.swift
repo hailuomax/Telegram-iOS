@@ -1087,10 +1087,10 @@ final class SharedApplicationContext {
                         }
                         |> deliverOnMainQueue).start()
                     //MARK: 保存模块间需要的值
-                    PassValuesUtil.default.add(key:.CreateChanel, value: {
+                    PassValuesUtil.default.add(key:.CreateChanel, value: { _ in
                         return createChannelController(context: context)
                     })
-                    PassValuesUtil.default.add(key:.RootViewController, value: {
+                    PassValuesUtil.default.add(key:.RootViewController, value: { _ in
                         return app.mainWindow?.viewController as? TelegramRootController
                     })
                     
