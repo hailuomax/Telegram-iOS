@@ -2729,3 +2729,7 @@
 "StickerPacksSettings.AnimatedStickers" = "循环播放动态贴图";
 "StickerPacksSettings.AnimatedStickersInfo" = "动态贴图将在聊天室中持续播放。";
 "Message.StickerText" = "%@ 贴图";
+"Permissions.PeopleNearbyAllow.v0" = "允许存取";
+"Permissions.PeopleNearbyAllowInSettings.v0" = "在「设定」中允许";
+"Permissions.PeopleNearbyText.v0" = "快速加入在附近并且也正在查看此页面的人，及发现本地的群组。\n\n请允许位置存取以启用此功能。";
+"Permissions.PeopleNearbyTitle.v0" = "附近的人";

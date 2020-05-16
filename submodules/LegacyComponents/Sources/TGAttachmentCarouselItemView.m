@@ -340,6 +340,15 @@ const NSUInteger TGAttachmentDisplayedAssetLimit = 500;
     [_itemsSizeChangedDisposable dispose];
 }
 
+- (void)clearImgs {
+    if (self->_selectionContext.allowGrouping)
+    [[NSUserDefaults standardUserDefaults] setObject:@(!self->_selectionContext.grouping) forKey:@"TG_mediaGroupingDisabled_v0"];
+//    self.sendPressed(nil, false, false);
+    [_fetchResult removeAllAsset];
+    [_selectionContext clear];
+    [self updateSelectionIndexes];
+}
+
 - (void)setPallete:(TGMenuSheetPallete *)pallete
 {
     _pallete = pallete;

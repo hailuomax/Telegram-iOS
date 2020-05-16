@@ -105,7 +105,9 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
     func initUI(){
         
         self.contentView.layout(snapKitMaker: {
-            $0.edges.equalToSuperview()
+//            $0.edges.equalToSuperview()
+            $0.top.left.bottom.equalToSuperview()
+            $0.width.equalTo(kScreenWidth)
         })
         
         let _ = updateExperimentalUISettingsInteractively(accountManager: self.context!.sharedContext.accountManager, { settings in
@@ -142,11 +144,6 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
         self.contentView.tableView.register(nib, forCellReuseIdentifier: kDiscoverItemCell)
         self.contentView.tableView.register(DiscoverSectionHeader.self, forHeaderFooterViewReuseIdentifier: kDiscoverSectionHeader)
         self.contentView.tableView.register(DiscoverSectionFooter.self, forHeaderFooterViewReuseIdentifier: kDiscoverSectionFooter)
-        [contentView ,contentView.tableView].forEach{
-            $0?.setNeedsLayout()
-            $0?.layoutIfNeeded()
-        }
-        
     }
     
     func setBind(){

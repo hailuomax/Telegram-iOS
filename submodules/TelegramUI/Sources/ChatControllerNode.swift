@@ -349,9 +349,12 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
                 }
             }
         }
-        
+        //MARK: 点击发送按钮
         self.textInputPanelNode?.sendMessage = { [weak self] in
             if let strongSelf = self {
+                if strongSelf.selectImgsCount > 0 {
+                    strongSelf.inputMenuNode.menuNode.sendImgs()
+                }
                 if strongSelf.chatPresentationInterfaceState.isScheduledMessages && strongSelf.chatPresentationInterfaceState.editMessageState == nil {
                     strongSelf.controllerInteraction.scheduleCurrentMessage()
                 } else {
