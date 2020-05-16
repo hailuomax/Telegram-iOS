@@ -21,7 +21,7 @@
         _imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
         _imageView.layer.cornerRadius = 8;
-        _imageView.layer.maskedCorners = YES;
+        _imageView.layer.masksToBounds = YES;
         [self addSubview:_imageView];
         
         static dispatch_once_t onceToken;
