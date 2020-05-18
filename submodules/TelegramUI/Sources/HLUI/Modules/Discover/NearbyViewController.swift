@@ -88,7 +88,7 @@ class NearbyViewController: HLBaseVC<NearbyView>  {
         let headerNodeHeight : CGFloat = maxOffset
         let segmentViewHeight : CGFloat = kScreenHeight - NavBarHeight - iPhoneXSafeAreaBottom
         self.contentView.segmentView = IMSegmentView(frame: CGRect(x: 0, y: headerNodeHeight, width: kScreenWidth, height: segmentViewHeight), viewControllers: viewControllers,segmentStyle: style,segmentViewFrame: CGRect(x: 0, y: 0, width: kScreenWidth, height: 44) ,type: .node)
-        self.contentView.segmentView?.disablesInteractiveTransitionGestureRecognizer = true
+//        self.contentView.segmentView?.disablesInteractiveTransitionGestureRecognizer = true
         self.contentView.segmentView?.collectionView.isScrollEnabled = false
         self.contentView.segmentView?.collectionView.hl.canGestureRecognize = true
         self.contentView.scrollView.addSubview(self.contentView.segmentView!)

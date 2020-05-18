@@ -22,7 +22,7 @@ public final class ListViewScroller: UIScrollView, UIGestureRecognizerDelegate {
         if otherGestureRecognizer is ListViewTapGestureRecognizer {
             return true
         }
-        return false
+        return hl_shouldRecognize
     }
     
     override public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
