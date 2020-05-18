@@ -121,7 +121,7 @@ public class ContactsController: ViewController, ShowPopMenuAble {
 //        if useSpecialTabBarIcons() {
 //            icon = UIImage(bundleImageName: "Chat List/Tabs/Holiday/IconContacts")
 //        } else {
-            icon = UIImage(bundleImageName: "Chat List/Tabs/IconFound")
+            icon = UIImage(bundleImageName: "Chat List/Tabs/IconContacts")
 //        }
         
         self.tabBarItem.image = icon
