@@ -52,6 +52,7 @@ import UI
 import Repo
 import protocol SwiftSignalKit.Disposable
 import ViewModel
+import Model
 
 private let avatarFont = avatarPlaceholderFont(size: 13.0)
 
@@ -160,7 +161,7 @@ private enum SettingsSection: Int32 {
 private indirect enum SettingsEntry: ItemListNodeEntry {
     case userInfo(Account, PresentationTheme, PresentationStrings, PresentationDateTimeFormat, Peer?, CachedPeerData?, ItemListAvatarAndNameInfoItemState, ItemListAvatarAndNameInfoItemUpdatingAvatar?)
     
-    case myWallet(PresentationTheme, UIImage?, String)
+    case myWallet(PresentationTheme, UIImage?, String ,String)
     
     case authentication(PresentationTheme,UIImage?, String, String)
     case tradePassword(PresentationTheme,UIImage?, String, String)
@@ -246,12 +247,12 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
                 } else {
                     return false
                 }
-            case let .myWallet(lhsTheme,_,lhsTitle):
-                if case let .myWallet(rhsTheme,_,rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
-                        return true
-                    } else {
-                        return false
-                    }
+            case let .myWallet(lhsTheme,_,lhsTitle,lhsText):
+            if case let .myWallet(rhsTheme,_,rhsTitle,rhsText) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle, lhsText == rhsText {
+                    return true
+                } else {
+                    return false
+                }
             case let .authentication(lhsTheme,_,lhsTitle, lhsText):
                 if case let .authentication(rhsTheme,_,rhsTitle, rhsText) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle, lhsText == rhsText {
                         return true
@@ -310,10 +311,10 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
                     arguments.openQRCode(peer)
                 })
             
-        case let .myWallet(_, image, text):
-            return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: "", sectionId: ItemListSectionId(self.section), style: .blocks , action: {
-                    arguments.openMyWallet()
-                })
+        case let .myWallet(_, image, text , value):
+            return ItemListDisclosureItem(presentationData: presentationData, icon: image, title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks, action: {
+                arguments.openMyWallet()
+            }, clearHighlightAutomatically: false)
 
         case let .authentication(_, image, text, value):
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks , action: {
@@ -357,7 +358,8 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
         let userInfoState = ItemListAvatarAndNameInfoItemState(editingName: nil, updatingName: nil)
         entries.append(.userInfo(account, presentationData.theme, presentationData.strings, presentationData.dateTimeFormat, peer, view.cachedData, userInfoState, state.updatingAvatar))
         
-        entries.append(.myWallet(presentationData.theme, PresentationResourcesSettings.myWallet, HLLanguage.MyAssets.localized()))
+        let phones = AccountRepo.getAccountPhone()
+        entries.append(.myWallet(presentationData.theme, PresentationResourcesSettings.myWallet, HLLanguage.MyAssets.localized(), phones.phone))
         
         var checkHadToken = false
         if let token = HLAccountManager.shareAccount.token {
@@ -435,6 +437,8 @@ private final class SettingsControllerImpl: ItemListController, SettingsControll
     var switchToAccount: ((AccountRecordId) -> Void)?
     var addAccount: (() -> Void)?
     
+    let disposeBag = DisposeBag()
+    
     override var navigationBarRequiresEntireLayoutUpdate: Bool {
         return false
     }
@@ -459,6 +463,18 @@ private final class SettingsControllerImpl: ItemListController, SettingsControll
         |> deliverOnMainQueue).start(next: { [weak self] value in
             self?.accountsAndPeersValue = value
         })
+        //MARK: -更新用户信息
+        AccountRepo.shared.updateUserInfo().value { (accountM) in
+            HLAccountManager.shareAccount = accountM
+            HLAccountManager.save()
+            if HLAccountManager.shareAccount.token == nil || HLAccountManager.shareAccount.token!.isEmpty {
+                HLAccountManager.sharePhone = ""
+            } else {
+                if let phoneCode = accountM.phoneCode,let telephone = accountM.telephone {
+                    HLAccountManager.sharePhone = "\(phoneCode.replacingOccurrences(of: "+", with: ""))\(telephone)"
+                }
+            }
+        }.load(disposeBag)
     }
     
     required init(coder aDecoder: NSCoder) {

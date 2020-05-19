@@ -78,7 +78,7 @@ class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
         }
         
         self.statusNode.openReactions = { [weak self] in
-            guard let strongSelf = self, let item = strongSelf.item else {
+                guard let strongSelf = self, let item = strongSelf.item else {
                 return
             }
             item.controllerInteraction.openMessageReactions(item.message.id)

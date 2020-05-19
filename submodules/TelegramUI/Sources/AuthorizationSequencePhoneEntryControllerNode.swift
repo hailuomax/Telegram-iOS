@@ -403,7 +403,7 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         let oldY = self.protocolNode.frame.origin.y
         let block : ()->() = {
             print(newY)
-            self.protocolNode.frame = CGRect(origin: CGPoint(x: 0, y: newY), size: CGSize(width: layout.size.width - 10, height: 50))
+            self.protocolNode.frame = CGRect(origin: CGPoint(x: 0, y: newY - 15), size: CGSize(width: layout.size.width - 10, height: 40))
         }
         if newY < oldY{
             UIView.animate(withDuration: 0.3) {

@@ -269,16 +269,18 @@ final class SharedApplicationContext {
                 // 用户未验证
                 //清空token
                 HLAccountManager.cleanToken().save()
-                
-                HUD.flash(.label(noti.object as! String), delay: 1)
-                
+                                
                 guard let navigationVC = app.mainWindow?.viewController as? TelegramRootController else {return}
                 
                 let vcs = navigationVC.viewControllers
                 let chats: [UIViewController] = vcs.filter{$0 is ChatController}
                 if let chatVC = chats.first {
+                    HUD.flash(.label(noti.object as! String), delay: 1)
                     _ = navigationVC.popToViewController(chatVC, animated: true)
                 }else {
+                    if vcs.count > 1 {
+                        HUD.flash(.label(noti.object as! String), delay: 1)
+                    }
                     navigationVC.popToRoot(animated: true)
                 }
                     
