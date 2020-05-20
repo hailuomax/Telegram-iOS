@@ -285,7 +285,50 @@ class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                 
                 var textFrame = CGRect(origin: CGPoint(x: -textInsets.left, y: -textInsets.top), size: textLayout.size)
                 var textFrameWithoutInsets = CGRect(origin: CGPoint(x: textFrame.origin.x + textInsets.left, y: textFrame.origin.y + textInsets.top), size: CGSize(width: textFrame.width - textInsets.left - textInsets.right, height: textFrame.height - textInsets.top - textInsets.bottom))
+                //-------
+                var translateTipsSize: CGSize?
+                var translateTipsApply: (() -> TextNode)?
+                if let statusSize = statusSize {
+                    let translateTipsConstrainedSize = CGSize(width: min(maxTextWidth, 140), height: statusSize.height)
+                    let dateFont = UIFont.italicSystemFont(ofSize: 11.0)
+                    var translateTextColor: UIColor
+                    translateTextColor = item.presentationData.theme.theme.chat.message.incoming.secondaryTextColor
+                    let (translateTipsLayout, tipsApply) = translateTipsLayout(TextNodeLayoutArguments(attributedString: NSAttributedString(string: HLLanguage.TranslateTips.localized(), font: dateFont, textColor: translateTextColor), backgroundColor: nil, maximumNumberOfLines: 0, truncationType: .end, constrainedSize: translateTipsConstrainedSize, alignment: .natural, cutout: cutout, insets: textInsets, lineColor: messageTheme.accentControlColor))
+                    translateTipsSize = translateTipsLayout.size
+                    translateTipsApply = tipsApply
+                }
                 
+                var translateSize: CGSize?
+                var translateApply: ((Bool) -> Void)?
+                var translateType: ChatMessageTranslateType = .Unknow
+                var translateFrame: CGRect?
+                var translateText: String = ""
+                switch message.translateStatus {
+                    case 2:
+                        translateText = message.translateText
+                    case 3:
+                        translateText = HLLanguage.TranslateError.localized()
+                    default:
+                        break
+                }
+                
+                translateType = ChatMessageTranslateType(rawValue: message.translateStatus) ?? ChatMessageTranslateType.Unknow
+                var suggestedBoundingWidth: CGFloat
+                if let statusSize = statusSize, let translateTipsSize = translateTipsSize {
+                    if message.translateStatus > 0 {//有翻译的情况
+                        let combination1 = textFrameWithoutInsets.width
+                        let combination2 = translateTipsSize.width + statusSize.width
+                        suggestedBoundingWidth = [combination1,combination2].max() ?? 0
+                    } else {
+                        suggestedBoundingWidth = textFrameWithoutInsets.union(CGRect(x: 0, y: 0, width: statusSize.width, height: statusSize.height)).width
+                    }
+                } else {
+                    suggestedBoundingWidth = textFrameWithoutInsets.width
+                }
+                
+                var translateTipsFrame: CGRect?
+                
+                //-------
                 var statusFrame: CGRect?
                 if let statusSize = statusSize {
                     if forceStatusNewline {
@@ -295,16 +338,37 @@ class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                     }
                 }
                 
+                if message.translateStatus > 0 {
+                    let translateLayout = self.translateNode.asyncLayout()
+                    let (size, apply) = translateLayout(item.presentationData, edited, viewCount, translateText, translateType, textConstrainedSize, CGSize(width: suggestedBoundingWidth, height: textLayout.size.height) , .default)
+                    translateSize = size
+                    translateApply = apply
+                    if let translateSize = translateSize {
+                        translateFrame = CGRect(origin: CGPoint(x: -textInsets.left, y: textFrameWithoutInsets.maxY), size: translateSize)
+                    }
+                }
+                
+                if let translateFrame = translateFrame {
+                    if let statusSize = statusSize {
+                        statusFrame = CGRect(origin: CGPoint(x: textFrameWithoutInsets.maxX - statusSize.width, y: translateFrame.maxY + 18), size: statusSize)
+                    }
+                }
+                
+                if let translateTipsSize = translateTipsSize,let translateFrame = translateFrame {
+                    translateTipsFrame  = CGRect(origin: CGPoint(x: -textInsets.left, y: translateFrame.maxY + 18), size: translateTipsSize)
+                }
+                
                 textFrame = textFrame.offsetBy(dx: layoutConstants.text.bubbleInsets.left, dy: layoutConstants.text.bubbleInsets.top)
                 textFrameWithoutInsets = textFrameWithoutInsets.offsetBy(dx: layoutConstants.text.bubbleInsets.left, dy: layoutConstants.text.bubbleInsets.top)
                 statusFrame = statusFrame?.offsetBy(dx: layoutConstants.text.bubbleInsets.left, dy: layoutConstants.text.bubbleInsets.top)
-
-                var suggestedBoundingWidth: CGFloat
-                if let statusFrame = statusFrame {
-                    suggestedBoundingWidth = textFrameWithoutInsets.union(statusFrame).width
-                } else {
-                    suggestedBoundingWidth = textFrameWithoutInsets.width
-                }
+                translateTipsFrame  = translateTipsFrame?.offsetBy(dx: layoutConstants.text.bubbleInsets.left, dy: layoutConstants.text.bubbleInsets.top)
+                translateFrame = translateFrame?.offsetBy(dx: layoutConstants.text.bubbleInsets.left, dy: layoutConstants.text.bubbleInsets.top)
+                
+//                if let statusFrame = statusFrame {
+//                    suggestedBoundingWidth = textFrameWithoutInsets.union(statusFrame).width
+//                } else {
+//                    suggestedBoundingWidth = textFrameWithoutInsets.width
+//                }
                 suggestedBoundingWidth += layoutConstants.text.bubbleInsets.left + layoutConstants.text.bubbleInsets.right
                 
                 return (suggestedBoundingWidth, { boundingWidth in
@@ -383,6 +447,33 @@ class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                                 }
                             } else if strongSelf.statusNode.supernode != nil {
                                 strongSelf.statusNode.removeFromSupernode()
+                            }
+                            
+                            if let translateApply = translateApply, let translateFrame = translateFrame {
+                                strongSelf.translateNode.frame = translateFrame
+                                print("translateNode.frame--->\(translateFrame)")
+                                var hasAnimation = true
+                                if case .None = animation {
+                                    hasAnimation = false
+                                }
+                                
+                                translateApply(hasAnimation)
+                                if strongSelf.translateNode.supernode == nil {
+                                    strongSelf.addSubnode(strongSelf.translateNode)
+                                }
+                            } else if strongSelf.translateNode.supernode != nil {
+                                strongSelf.translateNode.removeFromSupernode()
+                            }
+                            
+                            if let translateTipsFrame = translateTipsFrame,let translateTipsApply = translateTipsApply {
+                                print("translateTipsNode.frame--->\(translateTipsFrame)")
+                                strongSelf.translateTipsNode.frame = translateTipsFrame
+                                _ = translateTipsApply()
+                                if strongSelf.translateTipsNode.supernode == nil {
+                                    strongSelf.addSubnode(strongSelf.translateTipsNode)
+                                }
+                            } else {
+                                strongSelf.translateTipsNode.removeFromSupernode()
                             }
                             
                             var adjustedTextFrame = textFrame

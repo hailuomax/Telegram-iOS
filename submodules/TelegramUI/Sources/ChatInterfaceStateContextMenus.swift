@@ -548,7 +548,7 @@ func contextMenuForChatPresentationIntefaceState(chatPresentationInterfaceState:
                         let newMessageText = message.text + InTranslation
                         updateMessage(context: context, message: message, text: newMessageText)
                         let _ = (Translate.gtranslate(message.text, presentationData.strings.baseLanguageCode)  |> deliverOnMainQueue).start(next: { translated in
-                            
+                            // 翻译成功更新消息
                             let newMessageText = message.text + TranslateSuccess + translated
                             updateMessage(context: context, message: message, text: newMessageText)
                         }, error: {_ in

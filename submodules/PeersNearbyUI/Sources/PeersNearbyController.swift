@@ -271,7 +271,7 @@ public enum PeersNearbyEntry: ItemListNodeEntry {
             case let .groupsHeader(theme, text, loading):
                 return ItemListSectionHeaderItem(presentationData: presentationData, text: text, activityIndicator: loading ? .left : .none, sectionId: self.section)
             case let .createGroup(theme, title, latitude, longitude, address):
-                return ItemListPeerActionItem(presentationData: presentationData, icon: PresentationResourcesItemList.createGroupIcon(theme), title: title, alwaysPlain: false, sectionId: self.section, editing: false, action: {
+                return ItemListPeerActionItem(presentationData: presentationData, icon: PresentationResourcesItemList.createGroupIcon(theme), title: title, alwaysPlain: true, sectionId: self.section, editing: false, action: {
                     if let latitude = latitude, let longitude = longitude {
                         arguments.openCreateGroup(latitude, longitude, address)
                     }
