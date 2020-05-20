@@ -781,7 +781,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                 if HLAccountManager.shareAccount.token == nil || HLAccountManager.shareAccount.token!.isEmpty {
                     
                     let pushAccountValidationVC : (Bool, Phone)->() = { (showPwdView, phone) in
-                        let vc = AccountValidationVC(context: context,showPwdView: showPwdView, onValidateSuccess: {
+                        let vc = AccountValidationVC(phone:phone, context: context,showPwdView: showPwdView, onValidateSuccess: {
                             //手势设置页面设置好手势密保，或者点击跳过，会有此回调
                             pushControllerImpl?(assetVC)
                         })

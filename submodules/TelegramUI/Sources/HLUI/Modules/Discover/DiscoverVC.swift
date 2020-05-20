@@ -185,7 +185,7 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
             
             let pushAccountValidationVC : (Bool,Phone)->() = { [weak self] (showPwdView,phone) in
                 guard let self = self else {return}
-                let vc = AccountValidationVC(context: self.context!,showPwdView: showPwdView, onValidateSuccess: {
+                let vc = AccountValidationVC(phone:phone, context: self.context!,showPwdView: showPwdView, onValidateSuccess: {
                     //手势设置页面设置好手势密保，或者点击跳过，会有此回调
                     continueAction()
                 })

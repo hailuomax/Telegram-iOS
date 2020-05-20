@@ -3624,3 +3624,4 @@
 "Appearance.BubbleCorners.Title" = "消息圆角";
 "Appearance.BubbleCornersSetting" = "消息圆角";
 "ChatContextMenu.TextSelectionTip" = "在文字上按住，然后移动指标来选择更多文字以进行复制。";
+"MuteFor.Forever" = "永远关闭";

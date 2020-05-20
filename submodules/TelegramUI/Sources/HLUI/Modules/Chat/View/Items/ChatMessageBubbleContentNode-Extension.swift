@@ -15,7 +15,7 @@ import ViewModel
 extension ChatMessageBubbleContentNode {
     func assetVerification(currentVC: ChatController) {
         let pushAccountValidationVC : (Bool,Phone)->() = {  (showPwdView,phone) in
-            let vc = AccountValidationVC(context: currentVC.context ,showPwdView: showPwdView, onValidateSuccess: {[weak currentVC] in
+            let vc = AccountValidationVC(phone:phone, context: currentVC.context ,showPwdView: showPwdView, onValidateSuccess: {[weak currentVC] in
                 currentVC?.navigationController?.popViewController(animated: true)
             })
             currentVC.navigationController?.pushViewController(vc, animated: true)
