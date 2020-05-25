@@ -129,6 +129,7 @@ class ChatDocumentGalleryItemNode: ZoomableContentGalleryItemNode, WKNavigationD
 //
 //            webView.scalesPageToFit = true
 //            self.webView = webView
+            self.webView = UIView()
         }
         self.footerContentNode = ChatItemGalleryFooterContentNode(context: context, presentationData: presentationData)
         

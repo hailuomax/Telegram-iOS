@@ -41,6 +41,8 @@ import PhoneNumberFormat
 import AccountUtils
 import AuthTransferUI
 import Repo
+import Language
+import UI
 
 private let avatarFont = avatarPlaceholderFont(size: 13.0)
 
@@ -735,7 +737,7 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
         }
         
         entries.append(.askAQuestion(presentationData.theme, PresentationResourcesSettings.support, presentationData.strings.Settings_Support))
-        entries.append(.faq(presentationData.theme, PresentationResourcesSettings.faq, presentationData.strings.Settings_FAQ))
+        entries.append(.faq(presentationData.theme, PresentationResourcesSettings.faq, HLLanguage.SettingPrivacyAgreement.localized()))
     }
     
     return entries
@@ -1171,9 +1173,13 @@ public func settingsController(context: AccountContext, accountManager: AccountM
             })]), nil)*/
         })
     }, openFaq: { anchor in
-        let resolvedUrlPromise = Promise<ResolvedUrl>()
-        resolvedUrlPromise.set(resolvedUrl)
-        openFaq(resolvedUrlPromise, anchor)
+//        let resolvedUrlPromise = Promise<ResolvedUrl>()
+//        resolvedUrlPromise.set(resolvedUrl)
+//        openFaq(resolvedUrlPromise, anchor)
+        AccountRepo.getAgreementService{ url in
+            let vc = WebController(url: url)
+            pushControllerImpl?(vc)
+        }
     }, openEditing: {
         let _ = (contextValue.get()
         |> deliverOnMainQueue
