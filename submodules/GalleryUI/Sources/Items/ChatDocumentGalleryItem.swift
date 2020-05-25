@@ -124,11 +124,11 @@ class ChatDocumentGalleryItemNode: ZoomableContentGalleryItemNode, WKNavigationD
             webView.allowsBackForwardNavigationGestures = false
             self.webView = webView
         } else {
-            let _ = registeredURLProtocol
-            let webView = UIWebView()
-            
-            webView.scalesPageToFit = true
-            self.webView = webView
+//            let _ = registeredURLProtocol
+//            let webView = UIWebView()
+//
+//            webView.scalesPageToFit = true
+//            self.webView = webView
         }
         self.footerContentNode = ChatItemGalleryFooterContentNode(context: context, presentationData: presentationData)
         

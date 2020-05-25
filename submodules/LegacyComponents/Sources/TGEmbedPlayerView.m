@@ -20,7 +20,7 @@
 
 #import <libkern/OSAtomic.h>
 
-@interface TGEmbedPlayerView () <UIWebViewDelegate, WKNavigationDelegate>
+@interface TGEmbedPlayerView () < WKNavigationDelegate>
 {
     CGFloat _embedScale;
     
@@ -28,7 +28,7 @@
     UIView *_dimView;
     UILabel *_errorLabel;
     
-    UIWebView *_uiWebView;
+//    UIWebView *_uiWebView;
     WKWebView *_wkWebView;
     
     UIView *_interactionView;
@@ -201,7 +201,7 @@
         wkWebView.navigationDelegate = nil;
     }];
     
-    _uiWebView.delegate = nil;
+//    _uiWebView.delegate = nil;
     
     [_currentAudioSession dispose];
     
@@ -268,7 +268,7 @@
     if (iosMajorVersion() >= 8)
         [self setupWKWebView];
     else
-        [self setupUIWebView];
+//        [self setupUIWebView];
     
     if (!self.disallowAutoplay)
     {
@@ -527,23 +527,23 @@
 
 #pragma mark -
 
-- (void)setupUIWebView
-{
-    _uiWebView = [[UIWebView alloc] initWithFrame:CGRectZero];
-    _uiWebView.mediaPlaybackRequiresUserAction = false;
-    _uiWebView.delegate = self;
-    _uiWebView.scrollView.scrollEnabled = false;
-    
-    NSString *embedHTML = [self _embedHTML];
-    bool useURL = (embedHTML.length == 0);
-    [self commonSetupWithWebView:_uiWebView useURL:useURL completion:^(NSURLRequest *request)
-    {
-        if (useURL)
-            [_uiWebView loadRequest:request];
-        else
-            [_uiWebView loadHTMLString:embedHTML baseURL:[self _baseURL]];
-    }];
-}
+//- (void)setupUIWebView
+//{
+//    _uiWebView = [[UIWebView alloc] initWithFrame:CGRectZero];
+//    _uiWebView.mediaPlaybackRequiresUserAction = false;
+//    _uiWebView.delegate = self;
+//    _uiWebView.scrollView.scrollEnabled = false;
+//
+//    NSString *embedHTML = [self _embedHTML];
+//    bool useURL = (embedHTML.length == 0);
+//    [self commonSetupWithWebView:_uiWebView useURL:useURL completion:^(NSURLRequest *request)
+//    {
+//        if (useURL)
+//            [_uiWebView loadRequest:request];
+//        else
+//            [_uiWebView loadHTMLString:embedHTML baseURL:[self _baseURL]];
+//    }];
+//}
 
 - (BOOL)webView:(UIWebView *)__unused webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)__unused navigationType
 {
@@ -765,12 +765,12 @@
             dispatch_semaphore_wait(_sema, DISPATCH_TIME_FOREVER);
         }];
     }
-    else if (_uiWebView != nil)
-    {
-        NSString *result = [_uiWebView stringByEvaluatingJavaScriptFromString:jsString];
-        if (completion != nil)
-            completion(result);
-    }
+//    else if (_uiWebView != nil)
+//    {
+//        NSString *result = [_uiWebView stringByEvaluatingJavaScriptFromString:jsString];
+//        if (completion != nil)
+//            completion(result);
+//    }
 }
 
 - (NSString *)_embedHTML
@@ -820,15 +820,15 @@
     
 }
 
-- (UIView *)_webView
-{
-    if (_wkWebView != nil)
-        return _wkWebView;
-    else if (_uiWebView != nil)
-        return _uiWebView;
-    
-    return nil;
-}
+//- (UIView *)_webView
+//{
+//    if (_wkWebView != nil)
+//        return _wkWebView;
+//    else if (_uiWebView != nil)
+//        return _uiWebView;
+//
+//    return nil;
+//}
 
 - (bool)_scaleViewToMaxSize
 {
@@ -841,9 +841,9 @@
     [_wkWebView removeFromSuperview];
     _wkWebView = nil;
     
-    _uiWebView.delegate = nil;
-    [_uiWebView removeFromSuperview];
-    _uiWebView = nil;
+//    _uiWebView.delegate = nil;
+//    [_uiWebView removeFromSuperview];
+//    _uiWebView = nil;
 }
 
 + (bool)_supportsWebPage:(TGWebPageMediaAttachment *)__unused webPage
