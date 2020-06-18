@@ -2,7 +2,7 @@
 platform :ios, '10.0'
 inhibit_all_warnings!
 use_frameworks!
-source 'https://github.com/CocoaPods/Specs.git'
+#source 'https://github.com/CocoaPods/Specs.git'
 
 # Only download the files, don't create Xcode projects
 install! 'cocoapods', integrate_targets: false
@@ -21,5 +21,6 @@ target 'Telegram' do
  	pod 'SwiftyJSON', '~> 5.0'
  	pod 'JXPatternLock' #手势解锁
  	pod 'Cache'
-    pod 'Result'
+	pod 'Socket.IO-Client-Swift', '~> 15.2.0'
+    	pod 'Result'
 end

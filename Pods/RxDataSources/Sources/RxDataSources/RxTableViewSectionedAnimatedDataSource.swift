@@ -122,7 +122,7 @@ open class RxTableViewSectionedAnimatedDataSource<Section: AnimatableSectionMode
                     }
                 }
                 catch let e {
-//                    rxDebugFatalError(e)
+                    rxDebugFatalError(e)
                     dataSource.setSections(newSections)
                     tableView.reloadData()
                 }

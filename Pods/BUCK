@@ -153,3 +153,19 @@ apple_third_party_lib(
         "Pods/Then/**/*.swift",
     ]),
 )
+
+apple_third_party_lib(
+    name = "SocketIO",
+    srcs = glob([
+        "Pods/SocketIO/**/*.swift",
+    ],exclude = [
+        ":Starscream",
+    ]),
+)
+
+apple_third_party_lib(
+    name = "Starscream",
+    srcs = glob([
+        "Pods/Starscream/**/*.swift",
+    ]),
+)

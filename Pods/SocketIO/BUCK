@@ -1,0 +1,12 @@
+load("//Config:buck_rule_macros.bzl", "static_library")
+
+
+static_library(
+    name = "SocketIO",
+    srcs = glob([
+        "Source/SocketIO/**/*.swift",
+    ]),
+    deps = [
+        "//Pods/Starscream:Starscream",
+    ]
+)
