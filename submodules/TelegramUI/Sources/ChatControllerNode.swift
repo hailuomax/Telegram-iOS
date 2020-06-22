@@ -210,6 +210,26 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
     var inputMenuNode : ChatMenuInputNode
     private var selectImgsCount: Int = 0
     
+    //MARK: - 交易模块相关
+    ///选择框的高度
+    private var switchViewHeight: CGFloat{
+        return showTrading ? 42 : 0
+    }
+    ///是否展示交易模块入口
+    private var showTrading: Bool = false
+    ///交易模块切换栏
+    private lazy var switchView: ASDisplayNode = {
+        return ASDisplayNode(viewBlock: { () -> UIView in
+            
+            let stack = UIStackView(arrangedSubviews: [UILabel(), UILabel()])
+            stack.axis = .horizontal
+            stack.distribution = .fillEqually
+            return stack
+        }).then{
+            self.addSubnode($0)
+        }
+    }()
+    
     init(context: AccountContext, chatLocation: ChatLocation, subject: ChatControllerSubject?, controllerInteraction: ChatControllerInteraction, chatPresentationInterfaceState: ChatPresentationInterfaceState, automaticMediaDownloadSettings: MediaAutoDownloadSettings, navigationBar: NavigationBar?, controller: ChatControllerImpl? ) {
         self.context = context
         self.chatLocation = chatLocation
@@ -509,8 +529,31 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         self.inputMediaNode?.simulateUpdateLayout(isVisible: isInFocus)
     }
     
-    func containerLayoutUpdated(_ layout: ContainerViewLayout, navigationBarHeight: CGFloat, transition protoTransition: ContainedViewLayoutTransition, listViewTransaction:
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - layout: 位置，size，边距的相关配置
+    ///   - showTrading: 是否展示交易模块入口
+    ///   - navigationBarHeight: 导航栏高度
+    ///   - protoTransition:
+    ///   - listViewTransaction:
+    func containerLayoutUpdated(_ layout: ContainerViewLayout, showTrading: Bool = true, navigationBarHeight: CGFloat, transition protoTransition: ContainedViewLayoutTransition, listViewTransaction:
         (ListViewUpdateSizeAndInsets, CGFloat, Bool, @escaping () -> Void) -> Void) {
+        
+        print(layout.size)
+        print(layout.intrinsicInsets)
+        print(layout.safeInsets)
+        
+        self.showTrading = showTrading
+        
+        //根据是否显示交易模块而改变layout
+        let layout: ContainerViewLayout = {
+            var l = layout
+            l.intrinsicInsets = UIEdgeInsets(top: switchViewHeight, left: 0.0, bottom: 0.0, right: 0.0)
+            return l
+        }()
+        
+        
         let transition: ContainedViewLayoutTransition
         if let _ = self.scheduledAnimateInAsOverlayFromNode {
             transition = .immediate
@@ -812,6 +855,11 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         //MARK: 更新inputMenuNode layout
         if  self.inputMenuNode != self.inputNode {
             let _ = inputMenuNode.updateLayout(width: layout.size.width, leftInset: layout.safeInsets.left, rightInset: layout.safeInsets.right, bottomInset: cleanInsets.bottom, standardInputHeight: layout.standardInputHeight, inputHeight: layout.inputHeight ?? 0.0, maximumHeight: maximumInputNodeHeight, inputPanelHeight: inputPanelSize?.height ?? 0.0, transition: .immediate, interfaceState: self.chatPresentationInterfaceState, deviceMetrics: layout.deviceMetrics, isVisible: false)
+        }
+        
+        //MARK: 更新交易模块选择栏
+        if showTrading{
+            transition.updateFrame(node: self.switchView, frame: CGRect(x: 0, y: insets.top - switchViewHeight, width: layout.size.width, height: switchViewHeight))
         }
         
         transition.updateFrame(node: self.titleAccessoryPanelContainer, frame: CGRect(origin: CGPoint(x: 0.0, y: insets.top), size: CGSize(width: layout.size.width, height: 56.0)))
