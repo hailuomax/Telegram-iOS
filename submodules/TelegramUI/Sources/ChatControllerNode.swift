@@ -14,6 +14,7 @@ import TelegramNotices
 import ReactionSelectionNode
 
 import Account
+import UI
 
 private final class ChatControllerNodeView: UITracingLayerView, WindowInputAccessoryHeightProvider, PreviewingHostView {
     var inputAccessoryHeight: (() -> CGFloat)?
@@ -219,13 +220,17 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
     private var showTrading: Bool = false
     ///交易模块切换栏
     private lazy var switchView: ASDisplayNode = {
-        return ASDisplayNode(viewBlock: { () -> UIView in
-            
-            let stack = UIStackView(arrangedSubviews: [UILabel(), UILabel()])
-            stack.axis = .horizontal
-            stack.distribution = .fillEqually
-            return stack
+        return ASDisplayNode(viewBlock: {ChatControllerNodeSubNode.SwitchView(onSwitch: {[weak self] in
+            self?.coindRoadView.isHidden = $0 == .chat
+        })}).then{self.addSubnode($0)}
+    }()
+    ///懒加载，如果用户没有点击“交易”，socket就不会连通，避免宽带资源浪费
+    private lazy var coindRoadView: ASDisplayNode = {
+        return ASDisplayNode(viewBlock: {
+            //TODO: 这里加交易所的view
+            return UIView().then{$0.backgroundColor = .blue}
         }).then{
+            $0.isHidden = true
             self.addSubnode($0)
         }
     }()
@@ -530,7 +535,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
     }
     
     
-    /// <#Description#>
+    //MARK: - 样式更新
     /// - Parameters:
     ///   - layout: 位置，size，边距的相关配置
     ///   - showTrading: 是否展示交易模块入口
@@ -857,22 +862,23 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
             let _ = inputMenuNode.updateLayout(width: layout.size.width, leftInset: layout.safeInsets.left, rightInset: layout.safeInsets.right, bottomInset: cleanInsets.bottom, standardInputHeight: layout.standardInputHeight, inputHeight: layout.inputHeight ?? 0.0, maximumHeight: maximumInputNodeHeight, inputPanelHeight: inputPanelSize?.height ?? 0.0, transition: .immediate, interfaceState: self.chatPresentationInterfaceState, deviceMetrics: layout.deviceMetrics, isVisible: false)
         }
         
-        //MARK: 更新交易模块选择栏
-        if showTrading{
-            transition.updateFrame(node: self.switchView, frame: CGRect(x: 0, y: insets.top - switchViewHeight, width: layout.size.width, height: switchViewHeight))
-        }
-        
         transition.updateFrame(node: self.titleAccessoryPanelContainer, frame: CGRect(origin: CGPoint(x: 0.0, y: insets.top), size: CGSize(width: layout.size.width, height: 56.0)))
         
         transition.updateFrame(node: self.inputContextPanelContainer, frame: CGRect(origin: CGPoint(x: 0.0, y: 0.0), size: CGSize(width: layout.size.width, height: layout.size.height)))
+        
+        let contentBounds = CGRect(x: 0.0, y: -bottomOverflowOffset, width: layout.size.width - wrappingInsets.left - wrappingInsets.right, height: layout.size.height - wrappingInsets.top - wrappingInsets.bottom)
+        
+        //MARK: 更新交易模块选择栏
+        if showTrading{
+            transition.updateFrame(node: self.switchView, frame: CGRect(x: 0, y: insets.top - switchViewHeight, width: layout.size.width, height: switchViewHeight))
+            transition.updateFrame(node: self.coindRoadView, frame: CGRect(x: 0, y: insets.top, width: contentBounds.size.width, height: contentBounds.size.height - insets.top))
+        }
         
         var titleAccessoryPanelFrame: CGRect?
         if let _ = self.titleAccessoryPanelNode, let panelHeight = titleAccessoryPanelHeight {
             titleAccessoryPanelFrame = CGRect(origin: CGPoint(x: 0.0, y: 0.0), size: CGSize(width: layout.size.width, height: panelHeight))
             insets.top += panelHeight
         }
-        
-        let contentBounds = CGRect(x: 0.0, y: -bottomOverflowOffset, width: layout.size.width - wrappingInsets.left - wrappingInsets.right, height: layout.size.height - wrappingInsets.top - wrappingInsets.bottom)
         
         if let backgroundEffectNode = self.backgroundEffectNode {
             transition.updateFrame(node: backgroundEffectNode, frame: CGRect(origin: CGPoint(), size: layout.size))
@@ -1123,7 +1129,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
             var topInset = listInsets.bottom + UIScreenPixel
             if let titleAccessoryPanelHeight = titleAccessoryPanelHeight {
                 if expandTopDimNode {
-                    topInset -= titleAccessoryPanelHeight
+                    topInset -= titleAccessoryPanelHeight + switchViewHeight
                 } else {
                     topInset -= UIScreenPixel
                 }
