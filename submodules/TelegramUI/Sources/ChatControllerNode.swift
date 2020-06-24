@@ -217,7 +217,11 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         return showTrading ? 42 : 0
     }
     ///是否展示交易模块入口
-    private var showTrading: Bool = false
+    var showTrading: Bool = false{
+        didSet{
+            self.updateLayoutInternal(transition: .immediate)
+        }
+    }
     ///交易模块切换栏
     private lazy var switchView: ASDisplayNode = {
         return ASDisplayNode(viewBlock: {ChatControllerNodeSubNode.SwitchView(onSwitch: {[weak self] in
@@ -543,14 +547,12 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
     ///   - navigationBarHeight: 导航栏高度
     ///   - protoTransition:
     ///   - listViewTransaction:
-    func containerLayoutUpdated(_ layout: ContainerViewLayout, showTrading: Bool = true, navigationBarHeight: CGFloat, transition protoTransition: ContainedViewLayoutTransition, listViewTransaction:
+    func containerLayoutUpdated(_ layout: ContainerViewLayout, navigationBarHeight: CGFloat, transition protoTransition: ContainedViewLayoutTransition, listViewTransaction:
         (ListViewUpdateSizeAndInsets, CGFloat, Bool, @escaping () -> Void) -> Void) {
         
         print(layout.size)
         print(layout.intrinsicInsets)
         print(layout.safeInsets)
-        
-        self.showTrading = showTrading
         
         //根据是否显示交易模块而改变layout
         let layout: ContainerViewLayout = {
@@ -870,7 +872,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         let contentBounds = CGRect(x: 0.0, y: -bottomOverflowOffset, width: layout.size.width - wrappingInsets.left - wrappingInsets.right, height: layout.size.height - wrappingInsets.top - wrappingInsets.bottom)
         
         //MARK: 更新交易模块选择栏
-        if showTrading{
+        if self.showTrading, self.chatPresentationInterfaceState.mode == .standard(previewing: false){
             transition.updateFrame(node: self.switchView, frame: CGRect(x: 0, y: insets.top - switchViewHeight, width: layout.size.width, height: switchViewHeight))
             transition.updateFrame(node: self.coindRoadView, frame: CGRect(x: 0, y: insets.top, width: contentBounds.size.width, height: contentBounds.size.height - insets.top))
         }
@@ -971,6 +973,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         var inputPanelFrame: CGRect?
         var secondaryInputPanelFrame: CGRect?
         
+        bottomOverflowOffset = bottomOverflowOffset > 0 ? (bottomOverflowOffset - self.switchViewHeight) : bottomOverflowOffset
         if self.inputPanelNode != nil {
             inputPanelFrame = CGRect(origin: CGPoint(x: 0.0, y: layout.size.height - insets.bottom - bottomOverflowOffset - inputPanelsHeight - inputPanelSize!.height), size: CGSize(width: layout.size.width, height: inputPanelSize!.height))
             if self.dismissedAsOverlay {
@@ -1130,7 +1133,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
             var topInset = listInsets.bottom + UIScreenPixel
             if let titleAccessoryPanelHeight = titleAccessoryPanelHeight {
                 if expandTopDimNode {
-                    topInset -= titleAccessoryPanelHeight + switchViewHeight
+                    topInset -= titleAccessoryPanelHeight
                 } else {
                     topInset -= UIScreenPixel
                 }

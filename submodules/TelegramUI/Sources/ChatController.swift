@@ -2,6 +2,13 @@ import Foundation
 import UIKit
 import Postbox
 import SwiftSignalKit
+import class SwiftSignalKit.Signal
+import class SwiftSignalKit.Timer
+import class SwiftSignalKit.Bag
+import class SwiftSignalKit.Queue
+import enum SwiftSignalKit.NoError
+import protocol SwiftSignalKit.Disposable
+import class SwiftSignalKit.Promise
 import Display
 import AsyncDisplayKit
 import TelegramCore
@@ -69,6 +76,8 @@ import Config
 import Model
 import HL
 import Language
+import RxSwift
+import Repo
 
 public enum ChatControllerPeekActions {
     case standard
@@ -181,8 +190,19 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     private var rightNavigationButton: ChatNavigationButton?
     private var chatInfoNavigationButton: ChatNavigationButton?
     
-    private var peerView: PeerView?
+    //MARK: - 交易模块相关
+    private var peerView: PeerView?{
+        didSet{
+            guard peerView != nil else {return}
+            self.checkGroupStatus()
+        }
+    }
+    ///群主查看交易所开通详情, 如果后台关闭这个功能，就为nil
+    private var tradingDetail: BiluM.Group.Detail? = nil
+    private let biLuRepo: BiLuRepo = BiLuRepo()
+    private let disposeBag: DisposeBag = DisposeBag()
     
+    //MARK: -
     private var historyStateDisposable: Disposable?
     
     private let galleryHiddenMesageAndMediaDisposable = MetaDisposable()
@@ -4742,6 +4762,8 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.checkGroupStatus()
     }
     
     override public func viewDidAppear(_ animated: Bool) {
@@ -9361,7 +9383,51 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
         let msgType = ChatMsgEnum.exchange(version: ChatMsgConfig.V1.version, type: MessageTypeModel.typeEnum.exchange.rawValue, id: msgExchangeM.id, senderId: senderId, recipientId: msgExchangeM.senderId, payCoin: msgExchangeM.outCoin, getCoin: msgExchangeM.inCoin)
         sendMessages([.message(text: msgType.generateChatMsg(), attributes: [], mediaReference: nil, replyToMessageId: replyMessageId, localGroupingKey: nil)])
     }
+}
+
+extension ChatControllerImpl{
     
+    ///如果是群，需要做群检查
+    private func checkGroupStatus(){
+        guard let p = self.peerView,
+            let peer = p.peers[p.peerId],
+            peer.isGroupOrChannelGroup() else {return}
+        
+        //self.chatSuperNode.containerView.peer = peers
+        requestGroupCreaterDetail(peer)
+        requestGroupStatus(peer)
+    }
+    ///检查群状态
+    private func requestGroupStatus(_ peer: Peer){
+        
+        self.biLuRepo.groupCheckStatus(groupId: "\(peer.id.id)")
+            .value({[weak self] status in
+                guard let self = self , status.available else {return}
+                
+                //            self.chatSuperNode.containerView.coinCode = status.coinCode
+                //            self.chatSuperNode.containerView.fixCoinCode = status.fixCoinCode
+                self.chatDisplayNode.showTrading = true
+            }).netWorkState({
+                guard case let .error(er) = $0 else {return}
+                print(er.msg)
+            }).load(self.disposeBag)
+    }
+    
+    ///群主查看交易所开通详情
+    private func requestGroupCreaterDetail(_ peer: Peer){
+        //只有创建者才需要请求这个开通情况
+        guard peer.isGroupCreater() || peer.isChannelGroupCreater() else {return}
+        
+        self.biLuRepo.groupTradingDetail(groupId: "\(peer.id.id)")
+            .value({[weak self] in
+                guard let self = self,
+                    $0.available else {return}
+                self.tradingDetail = $0
+            }).netWorkState({
+                guard case let .error(er) = $0 else {return}
+                print(er.msg)
+            }).load(self.disposeBag)
+    }
 }
 
 private final class ContextControllerContentSourceImpl: ContextControllerContentSource {
