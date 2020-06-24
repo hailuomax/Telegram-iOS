@@ -221,6 +221,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
     ///交易模块切换栏
     private lazy var switchView: ASDisplayNode = {
         return ASDisplayNode(viewBlock: {ChatControllerNodeSubNode.SwitchView(onSwitch: {[weak self] in
+            self?.dismissInput()
             self?.coindRoadView.isHidden = $0 == .chat
         })}).then{self.addSubnode($0)}
     }()
