@@ -42,6 +42,10 @@ import Markdown
 import LocalizedPeerData
 
 import Config
+import Model
+import UI
+import Account
+import ViewModel
 
 private let maxParticipantsDisplayedLimit: Int32 = 50
 private let maxParticipantsDisplayedCollapseLimit: Int32 = 60
@@ -200,11 +204,14 @@ private enum GroupInfoEntry: ItemListNodeEntry {
     case expand(PresentationTheme, String)
     case leave(PresentationTheme, String)
     
+    ///交易模块开通以及开通后的信息显示
+    case trading(PresentationTheme, PeerId, BiluM.Group.Detail)
+    
     var section: ItemListSectionId {
         switch self {
             case .info, .setGroupPhoto, .groupDescriptionSetup, .about:
                 return GroupInfoSection.info.rawValue
-            case .locationHeader, .location, .changeLocation, .link:
+        case .locationHeader, .location, .changeLocation, .link, .trading:
                 return GroupInfoSection.about.rawValue
             case .groupTypeSetup, .linkedChannelSetup, .preHistory, .stickerPack:
                 return GroupInfoSection.infoManagement.rawValue
@@ -434,6 +441,9 @@ private enum GroupInfoEntry: ItemListNodeEntry {
                 } else {
                     return false
                 }
+        case let .trading(lhsTheme, lhspeerId, lhsdetail):
+            if case let .trading(rhsTheme, rhspeerId, rhsdetail) = rhs, lhsTheme === rhsTheme, lhspeerId ==  rhspeerId, lhsdetail == lhsdetail {return true}
+            else {return false}
         }
     }
     
@@ -465,29 +475,31 @@ private enum GroupInfoEntry: ItemListNodeEntry {
             case .link:
                 return 7
             case .groupTypeSetup:
-                return 8
+                return 8 + 1
             case .linkedChannelSetup:
-                return 9
+                return 9 + 1
             case .preHistory:
-                return 10
+                return 10 + 1
             case .stickerPack:
-                return 11
+                return 11 + 1
             case .notifications:
-                return 12
+                return 12 + 1
             case .sharedMedia:
-                return 13
+                return 13 + 1
             case .permissions:
-                return 14
+                return 14 + 1
             case .administrators:
-                return 15
+                return 15 + 1
             case .addMember:
-                return 16
+                return 16 + 1
             case let .member(_, _, _, _, index, _, _, _, _, _, _, _, _, _):
                 return 20 + index
             case .expand:
                 return 200000 + 1
             case .leave:
                 return 200000 + 2
+        case .trading:
+            return 8
         }
     }
     
@@ -617,8 +629,47 @@ private enum GroupInfoEntry: ItemListNodeEntry {
                 return ItemListActionItem(presentationData: presentationData, title: title, kind: .destructive, alignment: .center, sectionId: self.section, style: .blocks, action: {
                     arguments.leave()
                 })
-            default:
-                preconditionFailure()
+        case let .trading(theme, peerId, detail):
+            return ItemListTradingItem(theme: theme, sectionId: self.section, peerId: peerId, detail: detail, action: { tradingItemType in
+                
+                let context = arguments.context
+                let chatId = peerId.id
+                print("chatId \(chatId)")
+                let applyVC = BourseApplyStatementVC(chatId: "\(chatId)", context: context)
+                
+                if !HLAccountManager.walletIsLogined {
+                    
+                    let pushAccountValidationVC : (Bool,Phone)->() = { (showPwdView, phone) in
+                        let vc = AccountValidationVC(phone: phone, context: context, showPwdView: showPwdView, onValidateSuccess: {
+                            //登录成功
+                            if tradingItemType != .renewal{
+                                arguments.pushController(applyVC)
+                            }
+                        })
+                        arguments.pushController(vc)
+                    }
+                    
+                    let assetVerificationVC = AssetVerificationViewController.show(
+                        context: context, currentVC: nil,
+                        onPushAccountLockVC: ({
+                            let disableVC = AccountLockVC(context: context, title: $0)
+                            arguments.pushController(disableVC)
+                        }),
+                        onPushAccountValidationVC: ({
+                            pushAccountValidationVC($0,$1)
+                        }), onPushBindExceptionVC: ({
+                            let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
+                            let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)
+                            arguments.pushController(exceptionVC)
+                        }))
+                    arguments.pushController(assetVerificationVC)
+                }else{
+                    
+                    if tradingItemType != .renewal{
+                        arguments.pushController(applyVC)
+                    }
+                }
+            })
         }
     }
 }
