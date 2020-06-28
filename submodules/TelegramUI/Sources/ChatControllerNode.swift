@@ -15,6 +15,7 @@ import ReactionSelectionNode
 
 import Account
 import UI
+import Model
 
 private final class ChatControllerNodeView: UITracingLayerView, WindowInputAccessoryHeightProvider, PreviewingHostView {
     var inputAccessoryHeight: (() -> CGFloat)?
@@ -222,6 +223,10 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
             self.updateLayoutInternal(transition: .immediate)
         }
     }
+    
+    var coinRoadViewStatus : BiluM.Group.Status?
+    var chatId : String?
+    
     ///交易模块切换栏
     private lazy var switchView: ASDisplayNode = {
         return ASDisplayNode(viewBlock: {ChatControllerNodeSubNode.SwitchView(onSwitch: {[weak self] in
@@ -233,7 +238,14 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
     private lazy var coindRoadView: ASDisplayNode = {
         return ASDisplayNode(viewBlock: {
             //TODO: 这里加交易所的view
-            return UIView().then{$0.backgroundColor = .blue}
+            return CoinRoadControllorView.loadFromNib()
+            .then({
+                $0.context = self.context
+                $0.chatId = self.chatId ?? ""
+                $0.vm.coinCode = self.coinRoadViewStatus?.coinCode
+                $0.vm.fixCoinCode = self.coinRoadViewStatus?.fixCoinCode
+                $0.vm.startObserve()
+            })
         }).then{
             $0.isHidden = true
             self.addSubnode($0)
