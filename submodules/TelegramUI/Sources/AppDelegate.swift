@@ -268,7 +268,7 @@ final class SharedApplicationContext {
             .subscribe(onNext: { noti in
                 // 用户未验证
                 //清空token
-                HLAccountManager.cleanToken().save()
+                HLAccountManager.cleanWalletToken()
                                 
                 guard let navigationVC = app.mainWindow?.viewController as? TelegramRootController else {return}
                 
@@ -1462,9 +1462,6 @@ final class SharedApplicationContext {
         }*/
         
         self.maybeCheckForUpdates()
-        
-        //获取单例数据
-        _ = HLAccountManager.getAccount()
         
         // 检查版本更新
         defer{

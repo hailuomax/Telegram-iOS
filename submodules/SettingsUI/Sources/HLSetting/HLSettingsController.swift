@@ -466,9 +466,8 @@ private final class SettingsControllerImpl: ItemListController, SettingsControll
         //MARK: -更新用户信息
         AccountRepo.shared.updateUserInfo().value { (accountM) in
             HLAccountManager.shareAccount = accountM
-            HLAccountManager.save()
             if HLAccountManager.shareAccount.token == nil || HLAccountManager.shareAccount.token!.isEmpty {
-                HLAccountManager.sharePhone = ""
+                HLAccountManager.cleanWalletToken()
             } else {
                 if let phoneCode = accountM.phoneCode,let telephone = accountM.telephone {
                     HLAccountManager.sharePhone = "\(phoneCode.replacingOccurrences(of: "+", with: ""))\(telephone)"
@@ -1403,7 +1402,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         |> take(1)
         |> deliverOnMainQueue).start(next: { context in
             //清除token
-            HLAccountManager.cleanToken().save()
+            HLAccountManager.cleanWalletToken()
             
             accountsAndPeers.set(.never())
             context.sharedContext.switchToAccount(id: id, fromSettingsController: nil, withChatListController: nil)
