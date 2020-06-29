@@ -9408,9 +9408,8 @@ extension ChatControllerImpl{
         self.biLuRepo.groupCheckStatus(groupId: "\(peer.id.id)")
             .value({[weak self] status in
                 guard let self = self , status.available else {return}
-                
-                //            self.chatSuperNode.containerView.coinCode = status.coinCode
-                //            self.chatSuperNode.containerView.fixCoinCode = status.fixCoinCode
+                self.chatDisplayNode.chatId = "\(peer.id.id)"
+                self.chatDisplayNode.coinRoadViewStatus = status
                 self.chatDisplayNode.showTrading = true
             }).netWorkState({
                 guard case let .error(er) = $0 else {return}

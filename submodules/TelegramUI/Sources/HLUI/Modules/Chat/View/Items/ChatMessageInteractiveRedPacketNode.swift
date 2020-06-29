@@ -34,7 +34,7 @@ final class ChatMessageInteractiveRedPacketNode: ASDisplayNode {
     private let receiveStateNode: TextNode
     private let dateAndStatusNode: ChatMessageDateAndStatusNode
     
-    private var iconNode: ASImageNode?
+    var iconNode: ASImageNode?
     private var tapRecognizer: UITapGestureRecognizer?
     ///左下角红包
     private let nameNode: TextNode
@@ -225,7 +225,13 @@ final class ChatMessageInteractiveRedPacketNode: ASDisplayNode {
                             } else {
                                 iconNode = ASImageNode()
                                 strongSelf.iconNode = iconNode
-                                strongSelf.iconNode?.image = UIImage(bundleImageName: "Chat/Message/RedPacketIcon")
+
+                                if ReceiveStatus.init(rawValue: file?.receiveStatus ?? 0) == ReceiveStatus.unReceive {
+                                    strongSelf.iconNode?.image = UIImage(bundleImageName: "Chat/Message/RedPacketIcon")
+                                }else {
+                                    strongSelf.iconNode?.image = UIImage(bundleImageName: "Chat/Message/RedPacketReceiveIcon")
+                                }
+
                                 strongSelf.insertSubnode(iconNode, at: 0)
                             }
                             iconNode.frame = iconFrame

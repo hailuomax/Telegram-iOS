@@ -36,7 +36,7 @@ final class ChatMessageInteractiveTransferNode: ASDisplayNode {
     private let descriptionMeasuringNode: TextNode
     private let dateAndStatusNode: ChatMessageDateAndStatusNode
     private let receiveStateNode: TextNode
-    private var iconNode: ASImageNode?
+    public var iconNode: ASImageNode?
     private var tapRecognizer: UITapGestureRecognizer?
     
     var activateLocalContent: () -> Void = { }
@@ -229,7 +229,12 @@ final class ChatMessageInteractiveTransferNode: ASDisplayNode {
                             } else {
                                 iconNode = ASImageNode()
                                 strongSelf.iconNode = iconNode
-                                strongSelf.iconNode?.image = UIImage(bundleImageName: "Chat/Message/ic-transfer")
+
+                                if ReceiveStatus.init(rawValue: file?.receiveStatus ?? 0) == ReceiveStatus.unReceive {
+                                    strongSelf.iconNode?.image = UIImage(bundleImageName: "Chat/Message/ic-transfer")
+                                }else {
+                                    strongSelf.iconNode?.image = UIImage(bundleImageName: "Chat/Message/TransferSuccess")
+                                }
                                  strongSelf.insertSubnode(iconNode, at: 0)
                             }
                             iconNode.frame = iconFrame
