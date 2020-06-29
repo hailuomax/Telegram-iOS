@@ -41,6 +41,10 @@ import StatisticsUI
 import Config
 import UI
 import Language
+import Model
+import HL
+import Account
+import ViewModel
 
 protocol PeerInfoScreenItem: class {
     var id: AnyHashable { get }
@@ -501,6 +505,8 @@ private final class PeerInfoInteraction {
     let openEncryptionKey: () -> Void
     //打开二维码
     let openQrCode: (PeerId) -> Void
+    //打开开通交易模块的申请入口
+    let openTrading: (ItemListTradingItemType) ->()
     
     init(
         openUsername: @escaping (String) -> Void,
@@ -531,7 +537,8 @@ private final class PeerInfoInteraction {
         performBioLinkAction: @escaping (TextLinkItemActionType, TextLinkItem) -> Void,
         requestLayout: @escaping () -> Void,
         openEncryptionKey: @escaping () -> Void,
-        openQrCode: @escaping (PeerId) -> Void
+        openQrCode: @escaping (PeerId) -> Void,
+        openTrading: @escaping (ItemListTradingItemType) -> ()
     ) {
         self.openUsername = openUsername
         self.openPhone = openPhone
@@ -562,12 +569,13 @@ private final class PeerInfoInteraction {
         self.requestLayout = requestLayout
         self.openEncryptionKey = openEncryptionKey
         self.openQrCode = openQrCode
+        self.openTrading = openTrading
     }
 }
 
 private let enabledBioEntities: EnabledEntityTypes = [.url, .mention, .hashtag]
 
-private func infoItems(data: PeerInfoScreenData?, context: AccountContext, presentationData: PresentationData, interaction: PeerInfoInteraction, nearbyPeer: Bool, callMessages: [Message]) -> [(AnyHashable, [PeerInfoScreenItem])] {
+private func infoItems(tradingDetail: BiluM.Group.Detail?, data: PeerInfoScreenData?, context: AccountContext, presentationData: PresentationData, interaction: PeerInfoInteraction, nearbyPeer: Bool, callMessages: [Message]) -> [(AnyHashable, [PeerInfoScreenItem])] {
     guard let data = data else {
         return []
     }
@@ -755,6 +763,12 @@ private func infoItems(data: PeerInfoScreenData?, context: AccountContext, prese
                 }))
             }
         }
+    }
+    
+    if let peer = data.peer, (peer.isGroupCreater() || peer.isChannelGroupCreater()) && tradingDetail != nil && tradingDetail!.available {
+        items[.peerInfo]!.append(ItemListTradingItem(id: 100 , peerId: peer.id, detail:  tradingDetail!, action:{
+            interaction.openTrading($0)
+        }))
     }
     
     if let peer = data.peer, let members = data.members, case let .shortList(_, memberList) = members {
@@ -1051,6 +1065,9 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
     
     private let isMediaOnly: Bool
     
+    ///交易模块的开通详细信息
+    let tradingDetail: BiluM.Group.Detail?
+    
     private var presentationData: PresentationData
     
     let scrollNode: ASScrollNode
@@ -1103,7 +1120,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
     }
     private var didSetReady = false
     
-    init(controller: PeerInfoScreen, context: AccountContext, peerId: PeerId, avatarInitiallyExpanded: Bool, isOpenedFromChat: Bool, nearbyPeer: Bool, callMessages: [Message], ignoreGroupInCommon: PeerId?) {
+    init(controller: PeerInfoScreen, context: AccountContext, peerId: PeerId, avatarInitiallyExpanded: Bool, isOpenedFromChat: Bool, nearbyPeer: Bool, callMessages: [Message], ignoreGroupInCommon: PeerId?, tradingDetail: BiluM.Group.Detail?) {
         self.controller = controller
         self.context = context
         self.peerId = peerId
@@ -1118,6 +1135,8 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
         
         self.headerNode = PeerInfoHeaderNode(context: context, avatarInitiallyExpanded: avatarInitiallyExpanded, isOpenedFromChat: isOpenedFromChat)
         self.paneContainerNode = PeerInfoPaneContainerNode(context: context, peerId: peerId)
+        
+        self.tradingDetail = tradingDetail
         
         super.init()
         
@@ -1210,6 +1229,45 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                 guard let self = self else {return}
                 let vc = QRCodeViewController(context: self.context, peerId: peerId , type: .group)
                 self.controller?.push(vc)
+            },
+            openTrading: {[weak self] tradingItemType in
+                guard let self = self else {return}
+                
+                let chatId = self.peerId.id
+                print("chatId \(chatId)")
+                let applyVC = BourseApplyStatementVC(chatId: "\(chatId)", context: self.context)
+                
+                if !HLAccountManager.walletIsLogined {
+                    
+                    let pushAccountValidationVC : (Bool,Phone)->() = { (showPwdView, phone) in
+                        let vc = AccountValidationVC(phone: phone, context: self.context, showPwdView: showPwdView, onValidateSuccess: {
+                            
+                            //手势设置页面设置好手势密保，或者点击跳过，会有此回调
+                            
+                            if tradingItemType != .renewal{
+                                self.controller?.push(applyVC)
+                            }
+                        })
+                        self.controller?.push(vc)
+                    }
+
+                    self.controller?.push(AssetVerificationViewController.show(context: self.context, currentVC: nil, onPushAccountLockVC: {
+                        let disableVC = AccountLockVC(context: context, title: $0)
+                        self.controller?.push(disableVC)
+                    }, onPushAccountValidationVC: {
+                        pushAccountValidationVC($0,$1)
+                    }, onPushBindExceptionVC: {
+                        let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
+                        let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)
+                        self.controller?.push(exceptionVC)
+                    }))
+                    
+                } else{
+
+                    if tradingItemType != .renewal{
+                        self.controller?.push(applyVC)
+                    }
+                }
             }
         )
         
@@ -3766,7 +3824,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
         
         var validRegularSections: [AnyHashable] = []
         if !self.isMediaOnly {
-            for (sectionId, sectionItems) in infoItems(data: self.data, context: self.context, presentationData: self.presentationData, interaction: self.interaction, nearbyPeer: self.nearbyPeer, callMessages: self.callMessages) {
+            for (sectionId, sectionItems) in infoItems(tradingDetail: self.tradingDetail, data: self.data, context: self.context, presentationData: self.presentationData, interaction: self.interaction, nearbyPeer: self.nearbyPeer, callMessages: self.callMessages) {
                 validRegularSections.append(sectionId)
                 
                 let sectionNode: PeerInfoScreenItemSectionContainerNode
@@ -4217,6 +4275,8 @@ public final class PeerInfoScreen: ViewController {
     private let callMessages: [Message]
     private let ignoreGroupInCommon: PeerId?
     
+    private let tradingDetail: BiluM.Group.Detail?
+    
     private var presentationData: PresentationData
     private var presentationDataDisposable: Disposable?
     
@@ -4231,7 +4291,7 @@ public final class PeerInfoScreen: ViewController {
     
     private var validLayout: (layout: ContainerViewLayout, navigationHeight: CGFloat)?
     
-    public init(context: AccountContext, peerId: PeerId, avatarInitiallyExpanded: Bool, isOpenedFromChat: Bool, nearbyPeer: Bool, callMessages: [Message], ignoreGroupInCommon: PeerId? = nil) {
+    public init(context: AccountContext, peerId: PeerId, avatarInitiallyExpanded: Bool, isOpenedFromChat: Bool, nearbyPeer: Bool, callMessages: [Message], ignoreGroupInCommon: PeerId? = nil, tradingDetail: BiluM.Group.Detail?) {
         self.context = context
         self.peerId = peerId
         self.avatarInitiallyExpanded = avatarInitiallyExpanded
@@ -4239,6 +4299,8 @@ public final class PeerInfoScreen: ViewController {
         self.nearbyPeer = nearbyPeer
         self.callMessages = callMessages
         self.ignoreGroupInCommon = ignoreGroupInCommon
+        
+        self.tradingDetail = tradingDetail
         
         self.presentationData = context.sharedContext.currentPresentationData.with { $0 }
         
@@ -4309,7 +4371,7 @@ public final class PeerInfoScreen: ViewController {
     }
     
     override public func loadDisplayNode() {
-        self.displayNode = PeerInfoScreenNode(controller: self, context: self.context, peerId: self.peerId, avatarInitiallyExpanded: self.avatarInitiallyExpanded, isOpenedFromChat: self.isOpenedFromChat, nearbyPeer: self.nearbyPeer, callMessages: self.callMessages, ignoreGroupInCommon: self.ignoreGroupInCommon)
+        self.displayNode = PeerInfoScreenNode(controller: self, context: self.context, peerId: self.peerId, avatarInitiallyExpanded: self.avatarInitiallyExpanded, isOpenedFromChat: self.isOpenedFromChat, nearbyPeer: self.nearbyPeer, callMessages: self.callMessages, ignoreGroupInCommon: self.ignoreGroupInCommon, tradingDetail: self.tradingDetail)
         
         self._ready.set(self.controllerNode.ready.get())
         

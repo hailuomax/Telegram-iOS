@@ -229,7 +229,7 @@ final class ChatMessageInteractiveTransferNode: ASDisplayNode {
                             } else {
                                 iconNode = ASImageNode()
                                 strongSelf.iconNode = iconNode
-                                strongSelf.iconNode?.image = UIImage(bundleImageName: "Chat/ic-transfer")
+                                strongSelf.iconNode?.image = UIImage(bundleImageName: "Chat/Message/ic-transfer")
                                  strongSelf.insertSubnode(iconNode, at: 0)
                             }
                             iconNode.frame = iconFrame

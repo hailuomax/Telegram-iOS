@@ -17,6 +17,7 @@ import HL
 import Extension
 import Account
 
+
 public enum ItemListTradingItemType: Then, Equatable{
     ///申请
     case apply
@@ -202,7 +203,7 @@ extension ItemListTradingItemNodeView{
             }
             
             _ = { () -> PopTradApplyView in
-                return Bundle(for: PopTradApplyView.self).loadNibNamed("PopTradApplyView", owner: nil, options: nil)![1] as! PopTradApplyView
+                return Bundle.getAppBundle().loadNibNamed("PopTradApplyView", owner: nil, options: nil)![1] as! PopTradApplyView
                 }()
                 .then({
                     $0.paymentLb.text = self.detail.payAmount! + " " + self.detail.payCoinName!

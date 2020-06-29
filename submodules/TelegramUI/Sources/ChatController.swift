@@ -5594,6 +5594,11 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                             if let validLayout = strongSelf.validLayout, validLayout.deviceMetrics.type == .tablet {
                                 expandAvatar = false
                             }
+                             
+                            //把tradingDetail传到群信息页面
+                            if let imp = strongSelf.context.sharedContext as? SharedAccountContextImpl{
+                                imp.tradingDetail = self?.tradingDetail
+                            }
                             if let infoController = strongSelf.context.sharedContext.makePeerInfoController(context: strongSelf.context, peer: peer, mode: .generic, avatarInitiallyExpanded: expandAvatar, fromChat: true) {
                                 strongSelf.effectiveNavigationController?.pushViewController(infoController)
                             }

@@ -225,7 +225,7 @@ final class ChatMessageInteractiveRedPacketNode: ASDisplayNode {
                             } else {
                                 iconNode = ASImageNode()
                                 strongSelf.iconNode = iconNode
-                                strongSelf.iconNode?.image = UIImage(bundleImageName: "Chat/RedPacketIcon")
+                                strongSelf.iconNode?.image = UIImage(bundleImageName: "Chat/Message/RedPacketIcon")
                                 strongSelf.insertSubnode(iconNode, at: 0)
                             }
                             iconNode.frame = iconFrame
