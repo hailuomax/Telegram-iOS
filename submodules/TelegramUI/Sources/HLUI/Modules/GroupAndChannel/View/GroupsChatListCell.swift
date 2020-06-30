@@ -75,7 +75,7 @@ extension GroupsChatListCell {
         groupNameLabel.text = m.title
 
         PeerUtil.setAvatar(context: context, peerId: m.id, avatarNode, nil)
-
+        avatarNode.isOpaque = false
         self.contentView.layoutIfNeeded()
     }
 
@@ -83,7 +83,7 @@ extension GroupsChatListCell {
         groupNameLabel.text = m.title
 
         PeerUtil.setAvatar(context: context, peerId: m.id, avatarNode, nil)
-
+        avatarNode.isOpaque = false
         self.contentView.layoutIfNeeded()
     }
 }
