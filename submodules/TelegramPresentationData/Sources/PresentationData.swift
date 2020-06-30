@@ -289,6 +289,11 @@ public func currentPresentationDataAndSettings(accountManager: AccountManager, s
         } else {
             stringsValue = defaultPresentationStrings
         }
+        
+        //保存当前语言状态到本地
+        UserDefaults.standard.set(stringsValue.primaryComponent.languageCode, forKey: "LanguageCode.share")
+        UserDefaults.standard.synchronize()
+        
         let nameDisplayOrder = contactSettings.nameDisplayOrder
         let nameSortOrder = currentPersonNameSortOrder()
         
@@ -648,6 +653,12 @@ public func updatedPresentationData(accountManager: AccountManager, applicationI
                         } else {
                             stringsValue = defaultPresentationStrings
                         }
+                        
+                        //保存当前语言状态到本地
+                        UserDefaults.standard.set(stringsValue.primaryComponent.languageCode, forKey: "LanguageCode.share")
+                        UserDefaults.standard.synchronize()
+                        
+                        
                         let nameDisplayOrder = contactSettings.nameDisplayOrder
                         let nameSortOrder = currentPersonNameSortOrder()
                         
