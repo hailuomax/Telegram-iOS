@@ -54,6 +54,7 @@ import UI
 import Config
 import HL
 import PassValue
+import IQKeyboardManagerSwift
 
 private let handleVoipNotifications = false
 
@@ -244,6 +245,10 @@ final class SharedApplicationContext {
     
     //MARK:  启动app的代理
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        
+        
+        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.enableAutoToolbar = false
         
         //MARK:  注册telegramUser的用户更新通知
         _ = NotificationCenter.default.rx

@@ -227,13 +227,13 @@ framework(
         "//Pods/RxSwift:RxSwift",
         "//Pods/RxCocoa:RxCocoa",
         "//Pods/SnapKit:SnapKit",
-         "//submodules/HL/UI:UI",
-         "//submodules/HL/ViewModel:ViewModel",
-         "//submodules/HL/Translate:Translate",
-         "//submodules/HL/Theme:Theme",
-         ":AssetXib",
-         "//submodules/HL/PassValue:PassValue"
-
+        "//Pods/IQKeyboardManagerSwift:IQKeyboardManagerSwift",
+        "//submodules/HL/UI:UI",
+        "//submodules/HL/ViewModel:ViewModel",
+        "//submodules/HL/Translate:Translate",
+        "//submodules/HL/Theme:Theme",
+        ":AssetXib",
+        "//submodules/HL/PassValue:PassValue",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",
