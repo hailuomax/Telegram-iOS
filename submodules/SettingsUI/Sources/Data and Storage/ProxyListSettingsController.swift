@@ -104,21 +104,22 @@ private enum ProxySettingsControllerEntry: ItemListNodeEntry {
     var stableId: ProxySettingsControllerEntryId {
         switch self {
         case .defaultEnabled:
-            return .index(0)
+            return .index(6)
         case .enabled:
-            return .index(1)
+            return .index(0)
         case .serversHeader:
-            return .index(2)
+            return .index(1)
         case .addServer:
-            return .index(3)
+            return .index(2)
         case let .server(_, _, _, settings, _, _, _, _, _):
             return .server(settings.host, settings.port, settings.connection)
         case .shareProxyList:
-            return .index(4)
+            return .index(3)
         case .useForCalls:
-            return .index(5)
+            return .index(4)
         case .useForCallsInfo:
-            return .index(6)
+            return .index(5)
+            
         }
     }
     
