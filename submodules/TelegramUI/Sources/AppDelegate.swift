@@ -247,9 +247,11 @@ final class SharedApplicationContext {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         
         
-        IQKeyboardManager.shared.enable = true
-        IQKeyboardManager.shared.enableAutoToolbar = false
-        
+        IQKeyboardManager.shared.then{
+            $0.enable = true
+            $0.shouldResignOnTouchOutside = true
+            $0.enableAutoToolbar = false
+        }
         //MARK:  注册telegramUser的用户更新通知
         _ = NotificationCenter.default.rx
             .notification(HLAccountManager.kTelegramUserDidChangeNotificationName)
