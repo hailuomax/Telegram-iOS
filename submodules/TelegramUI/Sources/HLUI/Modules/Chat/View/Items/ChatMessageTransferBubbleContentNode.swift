@@ -130,11 +130,11 @@ final class ChatMessageTransferBubbleContentNode: ChatMessageBubbleContentNode {
                             strongSelf.bgTopNode.frame = bgImageRect
                             if ReceiveStatus.init(rawValue: strongSelf.transfer?.receiveStatus ?? 0) == ReceiveStatus.unReceive {
                                 strongSelf.bgTopNode.image = UIImage.setGradientImageWithBounds(rect: bgImageRect, colors: [ColorEnum.kFFB400.toColor(),ColorEnum.kFF933E.toColor()], type: 1)
-                                strongSelf.interactiveTransferNode.iconNode?.image = UIImage(bundleImageName: "Chat/ic-transfer")
+                                strongSelf.interactiveTransferNode.iconNode?.image = UIImage(bundleImageName: "Chat/Message/ic-transfer")
                             } else {
                                 strongSelf.bgTopNode.image =
                                    UIImage.colorImg(ColorEnum.kFFE2C2.toColor())
-                                strongSelf.interactiveTransferNode.iconNode?.image = UIImage(bundleImageName: "Chat/TransferSuccess")
+                                strongSelf.interactiveTransferNode.iconNode?.image = UIImage(bundleImageName: "Chat/Message/TransferSuccess")
                             }
                             
                             strongSelf.bgBottomNode.backgroundColor = .white

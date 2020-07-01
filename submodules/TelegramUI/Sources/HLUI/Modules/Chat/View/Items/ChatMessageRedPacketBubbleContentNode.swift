@@ -203,10 +203,10 @@ final class ChatMessageRedPacketBubbleContentNode: ChatMessageBubbleContentNode 
                             strongSelf.bgTopNode.frame = bgImageRect
                             if ReceiveStatus(rawValue: strongSelf.redPacket?.receiveStatus ?? 0) == ReceiveStatus.unReceive {
                                 strongSelf.bgTopNode.image = UIImage.setGradientImageWithBounds(rect: bgImageRect, colors: [ColorEnum.kFF9A4E.toColor(),ColorEnum.kFF4545.toColor()], type: 1)
-                                strongSelf.interactiveRedPacketNode.iconNode?.image = UIImage(bundleImageName: "Chat/RedPacketIcon")
+                                strongSelf.interactiveRedPacketNode.iconNode?.image = UIImage(bundleImageName: "Chat/Message/RedPacketIcon")
                             } else {
                                 strongSelf.bgTopNode.image = UIImage.colorImg(ColorEnum.kFFB292.toColor())
-                                strongSelf.interactiveRedPacketNode.iconNode?.image = UIImage(bundleImageName: "Chat/RedPacketReceiveIcon")
+                                strongSelf.interactiveRedPacketNode.iconNode?.image = UIImage(bundleImageName: "Chat/Message/RedPacketReceiveIcon")
                             }
                             
                             strongSelf.bgBottomNode.backgroundColor = ColorEnum.kFFEBDB.toColor()
