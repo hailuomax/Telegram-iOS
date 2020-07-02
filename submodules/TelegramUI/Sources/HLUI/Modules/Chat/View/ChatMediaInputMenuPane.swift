@@ -56,7 +56,7 @@ final class ChatMediaInputMenuPane: ChatMediaInputPane {
         let view = Bundle.getAppBundle().loadNibNamed("ChatMediaInputMenu", owner: nil, options: nil)![0] as! ChatMediaInputMenuView
         self.contentView = view
         super.init()
-        self.setViewBlock { return self.contentView }
+        self.setViewBlock { return view }
     }
     
     func sendImgs() {
@@ -287,6 +287,23 @@ final class ChatMediaInputMenuItem: UIControl{
         }
     }
     
+    private var menuType: ChatMediaInputMenu?
+    private var onSelect: ((ChatMediaInputMenu) -> ())?
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        //点击事件
+        self.rx.controlEvent(.touchUpInside)
+            .subscribe ({[weak self] _ in
+                guard let self = self,
+                    let menuType = self.menuType,
+                    let onSelect = self.onSelect else {return}
+                onSelect(menuType)
+            })
+            .disposed(by: disposeBag)
+    }
+    
     ///更新UI
     func updateViews(with menuType: ChatMediaInputMenu?, onSelect: @escaping (ChatMediaInputMenu)->()){
         
@@ -332,13 +349,7 @@ final class ChatMediaInputMenuItem: UIControl{
         
         titleLabel.text = title
         
-        //点击事件
-        self.rx.controlEvent(.touchUpInside)
-            .subscribe ({[weak self] _ in
-                guard let self = self,
-                    let menuType = menuType else {return}
-                onSelect(menuType)
-            })
-            .disposed(by: disposeBag)
+        self.menuType = menuType
+        self.onSelect = onSelect
     }
 }

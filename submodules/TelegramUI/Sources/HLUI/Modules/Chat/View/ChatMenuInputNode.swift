@@ -37,11 +37,13 @@ final class ChatMenuInputNode: ChatInputNode {
     
     override func updateLayout(width: CGFloat, leftInset: CGFloat, rightInset: CGFloat, bottomInset: CGFloat, standardInputHeight: CGFloat, inputHeight: CGFloat, maximumHeight: CGFloat, inputPanelHeight: CGFloat, transition: ContainedViewLayoutTransition, interfaceState: ChatPresentationInterfaceState, deviceMetrics: DeviceMetrics, isVisible: Bool) -> (CGFloat, CGFloat) {
         
+        let height: CGFloat = 380
+        
         self.backgroundColor = interfaceState.theme.chat.inputPanel.panelBackgroundColor
         self.menuNode.backgroundColor = self.backgroundColor
-        transition.updateFrame(node: self.menuNode, frame: CGRect(origin: CGPoint(), size: CGSize(width: width, height: standardInputHeight)))
+        transition.updateFrame(node: self.menuNode, frame: CGRect(origin: CGPoint(), size: CGSize(width: width, height: height)))
         
-        return (380 + bottomInset, 0)
+        return (height + bottomInset, 0)
     }
     
     func updateData(peer: Peer,editMediaOptions: MessageMediaEditingOptions?, saveEditedPhotos: Bool, presentationData: PresentationData, parentController: LegacyController, initialCaption: String, menuInteraction: HLMenuInteraction) {
