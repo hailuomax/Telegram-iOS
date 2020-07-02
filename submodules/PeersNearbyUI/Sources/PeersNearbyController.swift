@@ -250,7 +250,7 @@ public enum PeersNearbyEntry: ItemListNodeEntry {
             case let .empty(theme, text):
                 return ItemListPlaceholderItem(theme: theme, text: text, sectionId: self.section, style: .blocks)
             case let .visibility(theme, title, stop):
-                return ItemListPeerActionItem(presentationData: presentationData, icon: stop ? PresentationResourcesItemList.makeInvisibleIcon(theme) : PresentationResourcesItemList.makeVisibleIcon(theme), title: title, alwaysPlain: false, sectionId: self.section, color: stop ? .destructive : .accent, editing: false, action: {
+                return ItemListPeerActionItem(presentationData: presentationData, icon: stop ? PresentationResourcesItemList.makeInvisibleIcon(theme) : PresentationResourcesItemList.makeVisibleIcon(theme), title: title, alwaysPlain: true, sectionId: self.section, color: stop ? .destructive : .accent, editing: false, action: {
                     arguments.toggleVisibility(!stop)
                 })
             case let .user(_, theme, strings, dateTimeFormat, nameDisplayOrder, peer):
@@ -643,7 +643,7 @@ public func peersNearbyController(context: AccountContext, nearbyType : NearbyTy
         let peersNearbyEntrys: [PeersNearbyEntry] = {
             switch nearbyType{
             case .default: return peersNearbyControllerEntries(data: data, state: state, presentationData: presentationData, displayLoading: displayLoading, expanded: expanded)
-            case .user: return userEntries(data: data, presentationData: presentationData, displayLoading: displayLoading)
+            case .user: return userEntries(data: data,state: state ,presentationData: presentationData, displayLoading: displayLoading)
             case .group: return groupEntries(data: data, presentationData: presentationData, displayLoading: displayLoading)
             }
         }()
@@ -699,11 +699,13 @@ public func peersNearbyController(context: AccountContext, nearbyType : NearbyTy
 }
 
 
-private func userEntries(data: PeersNearbyData?, presentationData: PresentationData, displayLoading: Bool) -> [PeersNearbyEntry] {
+private func userEntries(data: PeersNearbyData?, state: PeersNearbyState, presentationData: PresentationData, displayLoading: Bool) -> [PeersNearbyEntry] {
     var entries: [PeersNearbyEntry] = []
-    
+
     if let data = data, !data.users.isEmpty {
         var i: Int32 = 0
+        let visible = state.visibilityExpires != nil
+        entries.append(.visibility(presentationData.theme, visible ? presentationData.strings.PeopleNearby_MakeInvisible : presentationData.strings.PeopleNearby_MakeVisible, visible))
         for user in data.users {
             entries.append(.user(i, presentationData.theme, presentationData.strings, presentationData.dateTimeFormat, presentationData.nameDisplayOrder, user))
             i += 1

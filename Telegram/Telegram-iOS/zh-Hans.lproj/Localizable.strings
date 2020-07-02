@@ -3625,3 +3625,4 @@
 "Appearance.BubbleCornersSetting" = "消息圆角";
 "ChatContextMenu.TextSelectionTip" = "在文字上按住，然后移动指标来选择更多文字以进行复制。";
 "MuteFor.Forever" = "永远关闭";
+"PeopleNearby.MakeVisibleDescription" = "附近的用户将能够查看您的个人资料并向您传送讯息。这可能会帮助您找到新朋友，但也可能引起过多关注。您可以随时停止分享您的个人资料。\n\n您的电话号码将保持隐藏状态。";
