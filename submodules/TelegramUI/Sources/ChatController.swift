@@ -5891,7 +5891,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                     self.photoLegacyController = legacyController
                 }
                 
-                let menuInteraction = self.createMenuInteraction(editMediaOptions:editMediaOptions,peer:peer)
+                let menuInteraction = self.createMenuInteraction(editMediaOptions:editMediaOptions,peer:peer , storeEditedPhotos: settings.storeEditedPhotos)
                 self.chatDisplayNode.inputMenuNode.updateData(peer: peer, editMediaOptions: editMediaOptions, saveEditedPhotos: settings.storeEditedPhotos, presentationData: self.presentationData, parentController: self.photoLegacyController!, initialCaption: inputText.string, menuInteraction: menuInteraction)
                 
                 let isMenu = self.chatDisplayNode.chatPresentationInterfaceState.inputMode == .hlMenu
@@ -9162,7 +9162,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     }
     
     //MARK:---海螺菜单回调----
-    func createMenuInteraction(editMediaOptions: MessageMediaEditingOptions? ,peer: Peer) -> HLMenuInteraction{
+    func createMenuInteraction(editMediaOptions: MessageMediaEditingOptions? ,peer: Peer , storeEditedPhotos : Bool) -> HLMenuInteraction{
         let menuInteraction = HLMenuInteraction(sendMessageWithSignal: {[weak self] (signals,istrue) in
             if let self = self {
                 if editMediaOptions != nil {
@@ -9192,7 +9192,8 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             self?.photoLegacyController?.dismiss()
         }, openCamera: {[weak self] in
             guard let self = self else {return}
-            presentedLegacyShortcutCamera(context: self.context, saveCapturedMedia: false, saveEditedPhotos: false, mediaGrouping: true, parentController: self)
+            self.openCamera(editMediaOptions: editMediaOptions , peer: peer  ,storeEditedPhotos : storeEditedPhotos)
+
         }, openPhoto: {
             self.presentMediaPicker(fileMode: false, editingMedia: editMediaOptions != nil, completion: { signals, silentPosting, _ in
                     
@@ -9221,6 +9222,41 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
         })
         
         return menuInteraction
+    }
+    
+    //MARK: --拍照
+    func openCamera(editMediaOptions: MessageMediaEditingOptions? , peer: Peer  ,storeEditedPhotos : Bool) {
+        let inputText = self.presentationInterfaceState.interfaceState.effectiveInputState.inputText
+        presentedLegacyCamera(context: self.context, peer: peer, cameraView: nil, menuController: nil, parentController: self, editingMedia: editMediaOptions != nil, saveCapturedPhotos: storeEditedPhotos, mediaGrouping: true, initialCaption: inputText.string, hasSchedule: !self.presentationInterfaceState.isScheduledMessages && peer.id.namespace != Namespaces.Peer.SecretChat, sendMessagesWithSignals: { [weak self] signals, silentPosting, scheduleTime in
+            if let strongSelf = self {
+                if editMediaOptions != nil {
+                    strongSelf.editMessageMediaWithLegacySignals(signals!)
+                } else {
+                    strongSelf.enqueueMediaMessages(signals: signals, silentPosting: silentPosting, scheduleTime: scheduleTime > 0 ? scheduleTime : nil)
+                }
+
+            }
+            }, recognizedQRCode: { [weak self] code in
+                if let strongSelf = self {
+                    if let (host, port, username, password, secret) = parseProxyUrl(code) {
+                        strongSelf.openResolved(ResolvedUrl.proxy(host: host, port: port, username: username, password: password, secret: secret))
+                    }/* else if let url = URL(string: code), let parsedWalletUrl = parseWalletUrl(url) {
+                     //strongSelf.openResolved(ResolvedUrl.wallet(address: parsedWalletUrl.address, amount: parsedWalletUrl.amount, comment: parsedWalletUrl.comment))
+                     }*/
+                }
+            }, presentSchedulePicker: { [weak self] done in
+                if let strongSelf = self {
+                    strongSelf.presentScheduleTimePicker(completion: { [weak self] time in
+                        if let strongSelf = self {
+                            done(time)
+                            if !strongSelf.presentationInterfaceState.isScheduledMessages && time != scheduleWhenOnlineTimestamp {
+                                strongSelf.openScheduledMessages()
+                            }
+                        }
+                    })
+                }
+        })
+        
     }
 
     //MARK: --发送红包
