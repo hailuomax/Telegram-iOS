@@ -74,7 +74,7 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
         self.tabBarItem.title = HLLanguage.Tabbar.Discover.str
         
         self.viewModel = DiscoverVM(onUpdateBadge: {[weak self] in
-            self?.tabBarItem.badgeValue = $0
+            self?.tabBarItem.badgeValue = ($0 == nil || $0!.isEmpty) ? $0 : "0"
         })
     }
     
