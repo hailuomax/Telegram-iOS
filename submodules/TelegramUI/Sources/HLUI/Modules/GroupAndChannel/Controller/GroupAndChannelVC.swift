@@ -132,7 +132,7 @@ public class ContactViewController: BaseVC {
             }
 
 
-            self.groupVC.groupAry.onNext(tgGroup)
+            self.groupVC.groupAry.accept(tgGroup)
         }
 
         ContactUtil.getChannel(self.context, state: self.currentState) { (peers) in

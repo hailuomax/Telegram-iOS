@@ -14,6 +14,8 @@ import SyncCore
 import Language
 import RxSwift
 import RxRelay
+import Repo
+import HL
 
 class GroupVC: UIViewController {
     
@@ -21,7 +23,7 @@ class GroupVC: UIViewController {
     
     /// 群的类型
     fileprivate enum SectionType: Int {
-        case myCreate, myManager, myJoin
+        case myCreate, myManager, myJoin, openTrading
         
         func headerTitle() -> String{
             switch self{
@@ -31,26 +33,31 @@ class GroupVC: UIViewController {
                 return HLLanguage.GroupsImanage.localized()
             case .myJoin :
                 return HLLanguage.GroupsIjoin.localized()
+            case .openTrading:
+                return HLLanguage.GroupsOpenTrading.localized()
             }
         }
     }
     
     private let tableView = UITableView(frame: .zero, style: .plain)
     
+    private let biluRepo: BiLuRepo = BiLuRepo()
     private let disposeBag = DisposeBag()
     ///获取所有群组的序列
-    let groupAry: ReplaySubject<[TelegramGroup]> = ReplaySubject<[TelegramGroup]>.create(bufferSize: 1)
+    let groupAry: BehaviorRelay<[TelegramGroup]> = BehaviorRelay<[TelegramGroup]>(value: [])
      
     private var myCreateGroups : [TelegramGroup] = []
     ///我管理的群聊数组
     private var myManageGroups : [TelegramGroup] = []
     ///我加入的群聊数组
     private var myJoinedGroups : [TelegramGroup] = []
+    ///我開通交易的群聊数组
+    private var myTradingGroups : [TelegramGroup] = []
     
     ///展开的标记
     private var openFlag : SectionType? = nil
     ///头部数组
-    private let headers : [GroupsHeaderView] = [GroupsHeaderView.create(),GroupsHeaderView.create(),GroupsHeaderView.create()]
+    private let headers : [GroupsHeaderView] = [GroupsHeaderView.create(),GroupsHeaderView.create(),GroupsHeaderView.create(),GroupsHeaderView.create()]
 
     init(context: AccountContext){
         self.context = context
@@ -65,6 +72,7 @@ class GroupVC: UIViewController {
         super.viewDidLoad()
         setViews()
         setBind()
+        requestTradingGroup()
     }
     
 }
@@ -141,8 +149,9 @@ extension GroupVC {
             return myManageGroups.count
         case .myJoin:
             return myJoinedGroups.count
-        case .none:
-            return 0
+        case .openTrading:
+            return myTradingGroups.count
+        case .none: return 0
         }
     }
     ///section对应的群数组
@@ -155,9 +164,33 @@ extension GroupVC {
             return myManageGroups
         case .myJoin:
             return myJoinedGroups
+        case .openTrading:
+            return myTradingGroups
         case .none:
             return []
         }
+    }
+    ///请求自己开通的群
+    private func requestTradingGroup(){
+        
+        guard HLAccountManager.walletIsLogined else {return}
+        biluRepo.list()
+            .value({[weak self] in
+                guard let self = self else {return}
+                self.myTradingGroups = $0.compactMap({ one in
+                    return self.groupAry.value.filter({"\($0.id.id)" == one.telegramId}).first
+                })
+                self.tableView.reloadData()
+            }).netWorkState({
+                switch $0{
+                case .success:
+                    HUD.hide()
+                case .loading:
+                    HUD.show(.systemActivity)
+                case .error(let er):
+                    HUD.flash(.label(er.msg))
+                }
+            }).load(disposeBag)
     }
 }
 
@@ -188,7 +221,7 @@ extension GroupVC : UITableViewDelegate, UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return myTradingGroups.count == 0 ? 3 : 4
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
