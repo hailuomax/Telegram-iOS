@@ -587,12 +587,27 @@ class TabBarNode: ASDisplayNode {
                 }
                 
                 if !container.badgeContainerNode.isHidden {
+                    
                     var hasSingleLetterValue: Bool = false
-                    if let string = container.badgeTextNode.attributedText?.string {
+                    
+                    let string = container.badgeTextNode.attributedText?.string
+                    if let string = string {
                         hasSingleLetterValue = string.count == 1
                     }
-                    let badgeSize = container.badgeTextNode.updateLayout(CGSize(width: 200.0, height: 100.0))
-                    let backgroundSize = CGSize(width: hasSingleLetterValue ? 18.0 : max(18.0, badgeSize.width + 10.0 + 1.0), height: 18.0)
+                    
+                    //MARK: 修改，当badge == 0时，只显示一个红点
+                    let (badgeSize, backgroundSize) = { () -> (CGSize, CGSize) in
+                        if string == "0" {
+                            let tmpSize = CGSize(width: 9.0, height: 9.0)
+                            return (tmpSize, tmpSize)
+                        }else {
+                            let badgeSize = container.badgeTextNode.updateLayout(CGSize(width: 200.0, height: 100.0))
+                            let backgroundSize = CGSize(width: hasSingleLetterValue ? 18.0 : max(18.0, badgeSize.width + 10.0 + 1.0), height: 18.0)
+                            return (badgeSize, backgroundSize)
+                        }
+                    }()
+                    
+                    
                     let backgroundFrame: CGRect
                     if horizontal {
                         backgroundFrame = CGRect(origin: CGPoint(x: 15.0, y: 0.0), size: backgroundSize)
