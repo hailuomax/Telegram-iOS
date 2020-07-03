@@ -78,6 +78,7 @@ import HL
 import Language
 import RxSwift
 import Repo
+import IQKeyboardManagerSwift
 
 public enum ChatControllerPeekActions {
     case standard
@@ -191,9 +192,11 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     private var chatInfoNavigationButton: ChatNavigationButton?
     
     //MARK: - 交易模块相关
+    
     private var peerView: PeerView?{
         didSet{
-            guard peerView != nil else {return}
+            //peerView第一次有值的时候，才check
+            guard oldValue == nil && peerView != nil else {return}
             self.checkGroupStatus()
         }
     }
@@ -4769,6 +4772,8 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        IQKeyboardManager.shared.enable = false
+        
         self.chatDisplayNode.historyNode.preloadPages = true
         self.chatDisplayNode.historyNode.experimentalSnapScrollToItem = false
         self.chatDisplayNode.historyNode.canReadHistory.set(combineLatest(context.sharedContext.applicationBindings.applicationInForeground, self.canReadHistory.get()) |> map { a, b in
@@ -4988,6 +4993,8 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        
+        IQKeyboardManager.shared.enable = true
         
         self.updateChatPresentationInterfaceState(animated: false, interactive: false, {
             $0.updatedTitlePanelContext {

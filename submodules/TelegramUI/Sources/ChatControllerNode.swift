@@ -569,7 +569,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         //根据是否显示交易模块而改变layout
         let layout: ContainerViewLayout = {
             var l = layout
-            l.intrinsicInsets = UIEdgeInsets(top: switchViewHeight, left: 0.0, bottom: 0.0, right: 0.0)
+            l.intrinsicInsets.top = switchViewHeight
             return l
         }()
         
