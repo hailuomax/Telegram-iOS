@@ -84,6 +84,7 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
         self.contentView.titleLabel.text = HLLanguage.Tabbar.Discover.localized()
         self.title = HLLanguage.Tabbar.Discover.localized()
         self.tabBarItem.title = HLLanguage.Tabbar.Discover.localized()
+        self.updateTheme()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -171,12 +172,10 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
     }
     
     @objc func updateTheme() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            let themeManager = ThemeManager(self.context!)
-            self.contentView.tableView.backgroundColor = themeManager.getPlainBgColor()
-            self.contentView.backgroundColor = themeManager.getPlainBgColor()
-            self.contentView.tableView.reloadData()
-        }
+        let themeManager = ThemeManager(self.context!)
+        self.contentView.tableView.backgroundColor = themeManager.getPlainBgColor()
+        self.contentView.backgroundColor = themeManager.getPlainBgColor()
+        self.contentView.tableView.reloadData()
     }
     ///验证y
     @objc func validate(_ continueAction :@escaping ()->()){
