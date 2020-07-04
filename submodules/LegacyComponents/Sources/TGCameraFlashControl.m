@@ -607,7 +607,7 @@ const CGFloat TGCameraFlashControlHeight = 44.0f;
     CGFloat width = CGCeil(size.width);
     if (iosMajorVersion() < 7)
         width += 2;
-    return CGSizeMake(width, 20);
+    return CGSizeMake(width + 2, 20);
 }
 
 @end
