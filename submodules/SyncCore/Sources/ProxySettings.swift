@@ -77,7 +77,11 @@ public struct ProxySettings: PreferencesEntry, Equatable {
     
     ///内置翻墙使用开关（默认为开）
     public var defaultEnabled: Bool
-    public var enabled: Bool
+    public var enabled: Bool{//确保用户主动开启非内置时，把内置代理开关关掉
+        didSet{
+            defaultEnabled = false
+        }
+    }
     public var servers: [ProxyServerSettings]
     public var activeServer: ProxyServerSettings?
     public var useForCalls: Bool

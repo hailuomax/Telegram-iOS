@@ -438,8 +438,8 @@ public func proxySettingsController(accountManager: AccountManager, context: Acc
         _ = updateProxySettingsInteractively(accountManager: accountManager, { current in
             var current = current
             //默认代理和自带代理需要同时开启或关闭
-            current.defaultEnabled = value
             current.enabled = value
+            current.defaultEnabled = value
             defer{
                 if value{
                     ProxyManager.checkLocalProxyList(true)
