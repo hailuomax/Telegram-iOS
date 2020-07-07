@@ -193,13 +193,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     
     //MARK: - 交易模块相关
     
-    private var peerView: PeerView?{
-        didSet{
-            //peerView第一次有值的时候，才check
-            guard oldValue == nil && peerView != nil else {return}
-            self.checkGroupStatus()
-        }
-    }
+    private var peerView: PeerView?
     ///群主查看交易所开通详情, 如果后台关闭这个功能，就为nil
     private var tradingDetail: BiluM.Group.Detail? = nil
     private let biLuRepo: BiLuRepo = BiLuRepo()
@@ -4766,13 +4760,13 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.checkGroupStatus()
     }
     
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         IQKeyboardManager.shared.enable = false
+        self.checkGroupStatus()
         
         self.chatDisplayNode.historyNode.preloadPages = true
         self.chatDisplayNode.historyNode.experimentalSnapScrollToItem = false

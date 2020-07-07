@@ -164,7 +164,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
     public var tradingDetail: BiluM.Group.Detail? = nil
     
     public init(mainWindow: Window1?, basePath: String, encryptionParameters: ValueBoxEncryptionParameters, accountManager: AccountManager, appLockContext: AppLockContext, applicationBindings: TelegramApplicationBindings, initialPresentationDataAndSettings: InitialPresentationDataAndSettings, networkArguments: NetworkInitializationArguments, rootPath: String, legacyBasePath: String?, legacyCache: LegacyCache?, apsNotificationToken: Signal<Data?, NoError>, voipNotificationToken: Signal<Data?, NoError>, setNotificationCall: @escaping (PresentationCall?) -> Void, navigateToChat: @escaping (AccountRecordId, PeerId, MessageId?) -> Void, displayUpgradeProgress: @escaping (Float?) -> Void = { _ in }) {
-        assert(Queue.mainQueue().isCurrent())
+        //assert(Queue.mainQueue().isCurrent())
         
         precondition(!testHasInstance)
         testHasInstance = true
@@ -838,7 +838,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
             return
         }
         
-        assert(Queue.mainQueue().isCurrent())
+        //assert(Queue.mainQueue().isCurrent())
         var chatsBadge: String?
         if let rootController = self.mainWindow?.viewController as? TelegramRootController {
             if let tabsController = rootController.viewControllers.first as? TabBarController {
@@ -978,7 +978,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
     }
     
     public func setAccountUserInterfaceInUse(_ id: AccountRecordId) -> Disposable {
-        assert(Queue.mainQueue().isCurrent())
+        //assert(Queue.mainQueue().isCurrent())
         let context: AccountUserInterfaceInUseContext
         if let current = self.accountUserInterfaceInUseContexts[id] {
             context = current
