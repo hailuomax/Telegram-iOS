@@ -259,10 +259,8 @@ final class SharedApplicationContext {
             .takeUntil(self.rx.deallocated)
             .subscribe(onNext: { noti in
                 //有用户，获取用户相关状态（主要是开车开关）
-                if let user = noti.userInfo?["user"] as? TelegramUser {                    
-                    if HLAccountManager.shareTgUser == nil {
-                        HLAccountManager.shareTgUser = user
-                    }
+                if let user = noti.userInfo?["user"] as? TelegramUser {
+                    HLAccountManager.setShareTgUser(user, shouldCleanWalletToken: false)
                 }
                 AccountRepo.sensitiveGet()
             })

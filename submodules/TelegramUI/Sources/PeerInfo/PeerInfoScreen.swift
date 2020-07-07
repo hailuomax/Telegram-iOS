@@ -1233,9 +1233,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
             openTrading: {[weak self] tradingItemType in
                 guard let self = self else {return}
                 
-                let chatId = self.peerId.id
-                print("chatId \(chatId)")
-                let applyVC = BourseApplyStatementVC(chatId: "\(chatId)", context: self.context)
+                let applyVC = BourseApplyStatementVC(peerId: self.peerId, context: self.context)
                 
                 if !HLAccountManager.walletIsLogined {
                     
