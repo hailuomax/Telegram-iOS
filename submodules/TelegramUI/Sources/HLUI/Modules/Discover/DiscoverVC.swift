@@ -304,6 +304,9 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
                         (strongSelf.navigationController as? NavigationController)?.pushViewController(controller, completion: { })
                 }
             })
+        case 4:
+            let vc = CoinRoadWebVC(context: context, path : model.link!)
+            self.navigationController?.pushViewController(vc, animated: true)
         default:
             break
         }
