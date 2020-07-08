@@ -235,7 +235,7 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
             cell.redDot.isHidden = !(model.refCode == "welfareBot" && self.viewModel.welfareBotStatus)
         }
         // 附近的人
-        if listData.itemType == 3 {
+        if listData.itemType == 3 || listData.itemType == 4 {
             cell.iconImageView.image = UIImage(bundleImageName: listData.titleIcon ?? "ic-discover-default")
         }
         ///查看全部

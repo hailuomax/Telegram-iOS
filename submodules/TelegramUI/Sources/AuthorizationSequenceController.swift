@@ -15,6 +15,7 @@ import AccountContext
 import CountrySelectionUI
 import SettingsUI
 import PhoneNumberFormat
+import UI
 
 private enum InnerState: Equatable {
     case state(UnauthorizedAccountStateContents)
@@ -173,7 +174,7 @@ public final class AuthorizationSequenceController: NavigationController, MFMail
                     }, error: { error in
                         if let strongSelf = self, let controller = controller {
                             controller.inProgress = false
-                            
+                            var showAlert = true
                             let text: String
                             var actions: [TextAlertAction] = [
                                 TextAlertAction(type: .defaultAction, title: strongSelf.presentationData.strings.Common_OK, action: {})
@@ -200,19 +201,22 @@ public final class AuthorizationSequenceController: NavigationController, MFMail
                                     text = strongSelf.presentationData.strings.Login_PhoneFloodError
                                 case .phoneBanned:
                                     text = strongSelf.presentationData.strings.Login_PhoneBannedError
-                                    actions.append(TextAlertAction(type: .defaultAction, title: strongSelf.presentationData.strings.Login_PhoneNumberHelp, action: { [weak controller] in
-                                        guard let strongSelf = self, let controller = controller else {
-                                            return
-                                        }
-                                        let formattedNumber = formatPhoneNumber(number)
-                                        let appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "unknown"
-                                        let systemVersion = UIDevice.current.systemVersion
-                                        let locale = Locale.current.identifier
-                                        let carrier = CTCarrier()
-                                        let mnc = carrier.mobileNetworkCode ?? "none"
-                                        
-                                        strongSelf.presentEmailComposeController(address: "login@stel.com", subject: strongSelf.presentationData.strings.Login_PhoneBannedEmailSubject(formattedNumber).0, body: strongSelf.presentationData.strings.Login_PhoneBannedEmailBody(formattedNumber, appVersion, systemVersion, locale, mnc).0, from: controller)
-                                    }))
+//                                    actions.append(TextAlertAction(type: .defaultAction, title: strongSelf.presentationData.strings.Login_PhoneNumberHelp, action: { [weak controller] in
+//                                        guard let strongSelf = self, let controller = controller else {
+//                                            return
+//                                        }
+//                                        let formattedNumber = formatPhoneNumber(number)
+//                                        let appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "unknown"
+//                                        let systemVersion = UIDevice.current.systemVersion
+//                                        let locale = Locale.current.identifier
+//                                        let carrier = CTCarrier()
+//                                        let mnc = carrier.mobileNetworkCode ?? "none"
+//
+//                                        strongSelf.presentEmailComposeController(address: "login@stel.com", subject: strongSelf.presentationData.strings.Login_PhoneBannedEmailSubject(formattedNumber).0, body: strongSelf.presentationData.strings.Login_PhoneBannedEmailBody(formattedNumber, appVersion, systemVersion, locale, mnc).0, from: controller)
+//                                    }))
+                                    //MARK: 账号封禁，转移账户资产入口
+                                    showAlert = false
+                                    PopViewUtil.tgPhoneBanned(containerView: controller.view, phoneNumber: formatPhoneNumber(number))
                                 case let .generic(info):
                                     text = strongSelf.presentationData.strings.Login_UnknownError
                                     actions.append(TextAlertAction(type: .defaultAction, title: strongSelf.presentationData.strings.Login_PhoneNumberHelp, action: { [weak controller] in
@@ -243,7 +247,10 @@ public final class AuthorizationSequenceController: NavigationController, MFMail
                                         controller.present(proxySettingsController(accountManager: strongSelf.sharedContext.accountManager, postbox: strongSelf.account.postbox, network: strongSelf.account.network, mode: .modal, presentationData: strongSelf.sharedContext.currentPresentationData.with { $0 }, updatedPresentationData: strongSelf.sharedContext.presentationData), in: .window(.root), with: ViewControllerPresentationArguments(presentationAnimation: .modalSheet))
                                     }))
                             }
-                            controller.present(standardTextAlertController(theme: AlertControllerTheme(presentationData: strongSelf.presentationData), title: nil, text: text, actions: actions), in: .window(.root))
+                            if showAlert {
+                               controller.present(standardTextAlertController(theme: AlertControllerTheme(presentationData: strongSelf.presentationData), title: nil, text: text, actions: actions), in: .window(.root))
+                            }
+                            
                         }
                     }))
                 }
