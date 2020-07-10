@@ -1140,9 +1140,9 @@ public func settingsController(context: AccountContext, accountManager: AccountM
         |> deliverOnMainQueue
         |> take(1)).start(next: { context in
             
-            AccountRepo.getCustomerService()
+            AccountRepo.getUrlGlobalConfig()
                 .value({
-                    guard let urlString = $0.groupId else {return}
+                    let urlString = $0.groupId
                     
                     let _ = (resolveUrlImpl(account: context.account, url: urlString)
                         |> deliverOnMainQueue).start(next: { resolvedUrl in

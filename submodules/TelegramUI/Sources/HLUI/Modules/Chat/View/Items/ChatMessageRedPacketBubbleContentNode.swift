@@ -22,6 +22,7 @@ import Repo
 import HL
 import UI
 import ViewModel
+import Extension
 
 final class ChatMessageRedPacketBubbleContentNode: ChatMessageBubbleContentNode {
     private var redPacket: TelegramMediaRedPackets?

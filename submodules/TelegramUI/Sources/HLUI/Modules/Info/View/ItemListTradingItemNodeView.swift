@@ -17,7 +17,7 @@ import UI
 import HL
 import Extension
 import Account
-
+import RxSwift
 
 public enum ItemListTradingItemType: Then, Equatable{
     ///申请

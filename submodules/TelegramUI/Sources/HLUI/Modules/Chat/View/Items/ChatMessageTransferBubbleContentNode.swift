@@ -22,6 +22,7 @@ import Repo
 import HL
 import UI
 import ViewModel
+import Extension
 
 final class ChatMessageTransferBubbleContentNode: ChatMessageBubbleContentNode {
     private var transfer: TelegramMediaTransfer?

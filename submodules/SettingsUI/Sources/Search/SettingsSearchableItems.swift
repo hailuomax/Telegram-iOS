@@ -894,9 +894,9 @@ func settingsSearchableItems(context: AccountContext, notificationExceptionsList
         #endif
         
         let support = SettingsSearchableItem(id: .support(0), title: strings.Settings_Support, alternate: synonyms(strings.SettingsSearch_Synonyms_Support), icon: .support, breadcrumbs: [], present: { context, _, present in
-            AccountRepo.getCustomerService()
+            AccountRepo.getUrlGlobalConfig()
             .value({
-                guard let urlString = $0.groupId else {return}
+                let urlString = $0.groupId
                 
                 let _ = (resolveUrlImpl(account: context.account, url: urlString)
                     |> deliverOnMainQueue).start(next: { resolvedUrl in

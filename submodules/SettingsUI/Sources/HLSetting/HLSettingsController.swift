@@ -53,6 +53,7 @@ import Repo
 import protocol SwiftSignalKit.Disposable
 import ViewModel
 import Model
+import RxSwift
 
 private let avatarFont = avatarPlaceholderFont(size: 13.0)
 
