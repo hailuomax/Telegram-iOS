@@ -242,8 +242,8 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
             .then({
                 $0.context = self.context
                 $0.chatId = self.chatId ?? ""
-                $0.vm.coinCode = self.coinRoadViewStatus?.coinCode
-                $0.vm.fixCoinCode = self.coinRoadViewStatus?.fixCoinCode
+//                $0.vm.coinCode = self.coinRoadViewStatus?.coinCode
+//                $0.vm.fixCoinCode = self.coinRoadViewStatus?.fixCoinCode
                 $0.vm.startObserve()
             })
         }).then{
