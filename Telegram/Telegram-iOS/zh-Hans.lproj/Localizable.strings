@@ -794,6 +794,10 @@
 "ChatList.Read" = "标为已读";
 "ChatList.ReadAll" = "全部标为已读";
 "ChatList.SelectedChats_any" = "已选择 %@ 个对话";
+"ChatList.TabIconFoldersTooltipEmptyFolders" = "按住即可整理资料夹中的聊天室。";
+"ChatList.TabIconFoldersTooltipNonEmptyFolders" = "按住「聊天」可编辑资料夹或在各个视图之间切换。";
+"ChatList.Tabs.All" = "所有";
+"ChatList.Tabs.AllChats" = "所有聊天";
 "ChatList.UnarchiveAction" = "取消归档";
 "ChatList.UndoArchiveHiddenText" = "向下滑动查看归档。";
 "ChatList.UndoArchiveHiddenTitle" = "归档已隐藏";
@@ -2884,12 +2888,14 @@
 "Settings.CallSettings" = "语音通话";
 "Settings.ChangePhoneNumber" = "更改手机号码";
 "Settings.ChatBackground" = "聊天背景";
+"Settings.ChatFolders" = "资料夹";
 "Settings.ChatSettings" = "数据和存储";
 "Settings.CheckPhoneNumberText" = "保持您的手机号码最新，以确保您始终可以登录 海螺 [了解更多]()";
 "Settings.CheckPhoneNumberTitle" = "%@ 仍然是您的手机号码吗？";
 "Settings.Context.Logout" = "退出账号";
 "Settings.CopyPhoneNumber" = "复制手机号码";
 "Settings.CopyUsername" = "复制用户名";
+"Settings.Devices" = "设备";
 "Settings.FAQ" = "隐私政策";
 "Settings.FAQ_Button" = "常见问题";
 "Settings.FAQ_Intro" = "请注意:海螺 的支持服务由志愿者提供。我们会尽快回复，但仍可能需要等待一段时间。";
