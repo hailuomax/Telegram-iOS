@@ -464,7 +464,9 @@ public func proxySettingsController(accountManager: AccountManager, context: Acc
                 if let _ = current.servers.firstIndex(of: server) ?? ProxyManager.shared.list.firstIndex(of: server) {
                     ProxyManager.refreshAPIEnvironmnet(current.activeServer)
                     current.activeServer = server
-                    current.enabled = true
+                    if !current.defaultEnabled{
+                        current.enabled = true
+                    }
                 }
             }
             return current
