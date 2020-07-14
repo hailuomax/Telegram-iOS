@@ -123,10 +123,10 @@ public func dictFromLocalization(_ value: Localization) -> [String: String] {
         }
     }
     
-    //TODO: 用于获取多语言的数据，然后整合到本地，一般情况不用开启
-    //    for key in dict.keys.sorted(){
-    //        print("\"\(key)\" = \"\(String(describing: dict[key]))\";")
-    //    }
+    //TODO: 用于获取电报多语言的数据，然后整合到本地，一般情况不用开启
+//        for key in dict.keys.sorted(){
+//            print("\"\(key)\" = \"\(String(describing: dict[key]))\";")
+//        }
     
     return dict
 }
