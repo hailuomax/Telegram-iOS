@@ -348,7 +348,7 @@ private func sampleHoleRanges(orderedEntriesBySpace: [PeerIdAndNamespace: Ordere
             if currentMessageId <= startingMessageId {
                 range = Int(currentMessageId) ... Int(startingMessageId)
             } else {
-                assertionFailure()
+                ////assertionFailure()
                 range = Int(startingMessageId) ... Int(currentMessageId)
             }
             if indices.intersects(integersIn: range) {
@@ -416,7 +416,7 @@ private func sampleHoleRanges(orderedEntriesBySpace: [PeerIdAndNamespace: Ordere
             if startingMessageId <= currentMessageId {
                 range = Int(startingMessageId) ... Int(currentMessageId)
             } else {
-                assertionFailure()
+                //assertionFailure()
                 range = Int(currentMessageId) ... Int(startingMessageId)
             }
             if indices.intersects(integersIn: range) {
@@ -661,7 +661,7 @@ struct OrderedHistoryViewEntries {
         if self.lowerOrAtAnchor.count > 1 {
             for i in 1 ..< self.lowerOrAtAnchor.count {
                 if self.lowerOrAtAnchor[i].index < self.lowerOrAtAnchor[i - 1].index {
-                    //assertionFailure()
+                    ////assertionFailure()
                     break
                 }
             }
@@ -669,7 +669,7 @@ struct OrderedHistoryViewEntries {
         if self.higherThanAnchor.count > 1 {
             for i in 1 ..< self.higherThanAnchor.count {
                 if self.higherThanAnchor[i].index < self.higherThanAnchor[i - 1].index {
-                    assertionFailure()
+                    //assertionFailure()
                     break
                 }
             }
@@ -693,7 +693,7 @@ struct OrderedHistoryViewEntries {
             }
         }
         if fix {
-            //assertionFailure()
+            ////assertionFailure()
             self.lowerOrAtAnchor.sort(by: { $0.index.id.id < $1.index.id.id })
             self.higherThanAnchor.sort(by: { $0.index.id.id < $1.index.id.id })
         }
@@ -1068,7 +1068,7 @@ final class HistoryViewLoadedState {
             
             if insertionIndex < self.orderedEntriesBySpace[space]!.lowerOrAtAnchor.count {
                 if self.orderedEntriesBySpace[space]!.lowerOrAtAnchor[insertionIndex].index == entry.index {
-                    assertionFailure("Inserting an existing index is not allowed")
+                    //assertionFailure("Inserting an existing index is not allowed")
                     self.orderedEntriesBySpace[space]!.setLowerOrAtAnchorAtArrayIndex(insertionIndex, to: entry)
                     return true
                 }
@@ -1087,7 +1087,7 @@ final class HistoryViewLoadedState {
             
             if insertionIndex < self.orderedEntriesBySpace[space]!.higherThanAnchor.count {
                 if self.orderedEntriesBySpace[space]!.higherThanAnchor[insertionIndex].index == entry.index {
-                    assertionFailure("Inserting an existing index is not allowed")
+                    //assertionFailure("Inserting an existing index is not allowed")
                     self.orderedEntriesBySpace[space]!.setHigherThanAnchorAtArrayIndex(insertionIndex, to: entry)
                     return true
                 }
