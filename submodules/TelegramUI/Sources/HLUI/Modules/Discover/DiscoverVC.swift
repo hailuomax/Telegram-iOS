@@ -235,7 +235,7 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
             cell.redDot.isHidden = !(model.refCode == "welfareBot" && self.viewModel.welfareBotStatus)
         }
         // 附近的人
-        if listData.itemType == 3 || listData.itemType == 4 {
+        if listData.itemType == 3  {
             cell.iconImageView.image = UIImage(bundleImageName: listData.titleIcon ?? "ic-discover-default")
         }
         ///查看全部
@@ -305,8 +305,16 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
                 }
             })
         case 4:
-            let vc = CoinRoadWebVC(context: context, path : model.link!)
-            self.navigationController?.pushViewController(vc, animated: true)
+            self.validate {[weak self] in
+                guard let self = self , let link = model.link, let url = URL(string: link + "?token=\(HLAccountManager.shareAccount.token)") else {
+                    HUD.flashOnTopVC(.label("地址无效！"))
+                    return
+                }
+                app.openUrl(url: url)
+//                let vc = CoinRoadWebVC(context: context, path : link)
+//                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            
         default:
             break
         }
