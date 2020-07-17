@@ -40,7 +40,7 @@ export BUILDBOX_DIR=buildbox
 export CODESIGNING_PROFILES_VARIANT=appstore
 export PACKAGE_METHOD=appstore
 
-export BUILD_NUMBER=74
+export BUILD_NUMBER=95
 
 include Utils.makefile
 
