@@ -420,7 +420,6 @@ deps: check_env
 
 clean: kill_xcode
 	sh clean.sh
-	rm -rf buck-out
 
 project: check_env kill_xcode
 	$(BUCK) project //Telegram:workspace --config custom.mode=project ${BUCK_OPTIONS} ${BUCK_DEBUG_OPTIONS}

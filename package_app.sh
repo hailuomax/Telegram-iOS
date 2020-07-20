@@ -6,17 +6,6 @@ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
 	echo "Usage: sh package_app.sh path/to/buck platform-flavors type"
 	exit 1
 fi
-CODESIGNING_DATA_PATH="build-system/fake-codesigning"
-CODESIGNING_CERTS_VARIANT="distribution"
-CODESIGNING_PROFILES_VARIANT="appstore"
-PACKAGE_PROVISIONING_PROFILE_EXTENSION_Share="lxtx.conch.app2.Share_pro"
-PACKAGE_PROVISIONING_PROFILE_EXTENSION_Widget="lxtx.conch.app2.Widget_pro"
-PACKAGE_PROVISIONING_PROFILE_EXTENSION_NotificationService="lxtx.conch.app2.NotificationService_pro"
-PACKAGE_PROVISIONING_PROFILE_EXTENSION_NotificationContent="lxtx.conch.app2.NotificationContent_pro"
-PACKAGE_PROVISIONING_PROFILE_EXTENSION_Intents="lxtx.conch.app2.SiriIntents_pro"
-PACKAGE_PROVISIONING_PROFILE_WATCH_APP="lxtx.conch.app2.watchkitapp_pro"
-PACKAGE_PROVISIONING_PROFILE_WATCH_EXTENSION="lxtx.conch.app2.watchkitapp.watchkitextension_pro"
-APP="lxtx.conch.app2_pro"
 
 PLATFORM_FLAVORS="$1"
 BUCK="$2"
@@ -89,7 +78,7 @@ mkdir -p "$TEMP_ENTITLEMENTS_PATH"
 if [ "$APP_TYPE" == "wallet" ]; then
 	cp "buck-out/gen/Wallet/AppPackage#$PLATFORM_FLAVORS.ipa" "$IPA_PATH.original"
 else
-	cp "buck-out/gen/Telegram/AppPackage/$PLATFORM_FLAVORS.ipa" "$IPA_PATH.original"
+	cp "buck-out/gen/Telegram/AppPackage#$PLATFORM_FLAVORS.ipa" "$IPA_PATH.original"
 fi
 rm -rf "$IPA_PATH.original.unpacked"
 rm -f "$BUILD_PATH/${APP_NAME}_signed.ipa"
