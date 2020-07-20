@@ -21,6 +21,30 @@ APP="lxtx.conch.app2_pro"
 PLATFORM_FLAVORS="$1"
 BUCK="$2"
 APP_TYPE="$3"
+PACKAGE_BUNDLE_ID="lxtx.conch.app2"
+PACKAGE_METHOD="appstore"
+PACKAGE_CODE_SIGN_IDENTITY="iPhone Distribution: CAILU PTE LTD (4UB2QM68WG)"
+DEVELOPMENT_TEAM="4UB2QM68WG"
+CODESIGNING_DATA_PATH="build-system/fake-codesigning"
+PACKAGE_PROVISIONING_PROFILE_APP="lxtx.conch.app2_pro"
+CODESIGNING_CERTS_VARIANT="distribution"
+CODESIGNING_PROFILES_VARIANT="appstore"
+PACKAGE_PROVISIONING_PROFILE_EXTENSION_Share="lxtx.conch.app2.Share_pro"
+PACKAGE_PROVISIONING_PROFILE_EXTENSION_Widget="lxtx.conch.app2.Widget_pro"
+PACKAGE_PROVISIONING_PROFILE_EXTENSION_NotificationService="lxtx.conch.app2.NotificationService_pro"
+PACKAGE_PROVISIONING_PROFILE_EXTENSION_NotificationContent="lxtx.conch.app2.NotificationContent_pro"
+PACKAGE_PROVISIONING_PROFILE_EXTENSION_Intents="lxtx.conch.app2.SiriIntents_pro"
+PACKAGE_PROVISIONING_PROFILE_WATCH_APP="lxtx.conch.app2.watchkitapp_pro"
+PACKAGE_PROVISIONING_PROFILE_WATCH_EXTENSION="lxtx.conch.app2.watchkitapp.watchkitextension_pro"
+
+ENTITLEMENTS_APP="Telegram/Telegram-iOS/Telegram-iOS-AppStoreLLC.entitlements"
+ENTITLEMENTS_EXTENSION_Share="Telegram/Share/Share-AppStoreLLC.entitlements"
+ENTITLEMENTS_EXTENSION_Widget="Telegram/Widget/Widget-AppStoreLLC.entitlements"
+ENTITLEMENTS_EXTENSION_NotificationService="Telegram/NotificationService/NotificationService-AppStoreLLC.entitlements"
+ENTITLEMENTS_EXTENSION_NotificationContent="Telegram/NotificationContent/NotificationContent-AppStoreLLC.entitlements"
+ENTITLEMENTS_EXTENSION_Intents="Telegram/SiriIntents/SiriIntents-AppStoreLLC.entitlements"
+
+
 shift
 shift
 shift
@@ -65,7 +89,7 @@ mkdir -p "$TEMP_ENTITLEMENTS_PATH"
 if [ "$APP_TYPE" == "wallet" ]; then
 	cp "buck-out/gen/Wallet/AppPackage#$PLATFORM_FLAVORS.ipa" "$IPA_PATH.original"
 else
-	cp "buck-out/gen/Telegram/AppPackage#$PLATFORM_FLAVORS.ipa" "$IPA_PATH.original"
+	cp "buck-out/gen/Telegram/AppPackage/$PLATFORM_FLAVORS.ipa" "$IPA_PATH.original"
 fi
 rm -rf "$IPA_PATH.original.unpacked"
 rm -f "$BUILD_PATH/${APP_NAME}_signed.ipa"
@@ -167,7 +191,7 @@ echo "Generating entitlements..."
 for ITEM in $APP_ITEMS_WITH_PROVISIONING_PROFILE; do
 	PROFILE_VAR=PACKAGE_PROVISIONING_PROFILE_$ITEM
 	if [ -z "${!PROFILE_VAR}" ]; then
-		echo "$PROFILE_VAR is not set"
+		echo "PROFILE_VAR $PROFILE_VAR is not set"
 		exit 1
 	fi
 	for PROFILE in "$PROFILES_PATH/"*; do
@@ -217,7 +241,7 @@ for ITEM in $APP_ITEMS_WITH_PROVISIONING_PROFILE; do
 	        	plutil -insert "$PLUTIL_KEY" -xml "<true/>" "$PROFILE_ENTITLEMENTS_PATH"
 	        fi
 
-	        ENTITLEMENTS_VAR=PACKAGE_ENTITLEMENTS_$ITEM
+	        ENTITLEMENTS_VAR=ENTITLEMENTS_$ITEM
 			if [ ! -z "${!ENTITLEMENTS_VAR}" ]; then
 				if [ ! -f "${!ENTITLEMENTS_VAR}" ]; then
 					echo "${!ENTITLEMENTS_VAR} does not exist"
@@ -251,9 +275,9 @@ for ITEM in $APP_ITEMS_WITH_PROVISIONING_PROFILE; do
 done
 
 for ITEM in $APP_ITEMS_WITH_ENTITLEMENTS; do
-	ENTITLEMENTS_VAR=PACKAGE_ENTITLEMENTS_$ITEM
+	ENTITLEMENTS_VAR=ENTITLEMENTS_$ITEM
 	if [ -z "${!ENTITLEMENTS_VAR}" ]; then
-		echo "$ENTITLEMENTS_VAR is not set"
+		echo "ENTITLEMENTS_VAR $ENTITLEMENTS_VAR is not set"
 		exit 1
 	fi
 	if [ ! -f "${!ENTITLEMENTS_VAR}" ]; then
