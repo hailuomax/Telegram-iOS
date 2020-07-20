@@ -40,7 +40,7 @@ export BUILDBOX_DIR=buildbox
 export CODESIGNING_PROFILES_VARIANT=appstore
 export PACKAGE_METHOD=appstore
 
-export BUILD_NUMBER=74
+export BUILD_NUMBER=98
 
 include Utils.makefile
 
@@ -341,7 +341,7 @@ package:
 	PACKAGE_PROVISIONING_PROFILE_WATCH_APP="${DISTRIBUTION_PROVISIONING_PROFILE_WATCH_APP}" \
 	PACKAGE_PROVISIONING_PROFILE_WATCH_EXTENSION="${DISTRIBUTION_PROVISIONING_PROFILE_WATCH_EXTENSION}" \
 	PACKAGE_BUNDLE_ID="${BUNDLE_ID}" \
-	sh package_app.sh iphoneos-arm64,iphoneos-armv7 $(BUCK) "telegram" $(BUCK_OPTIONS) ${BUCK_RELEASE_OPTIONS}
+	sh package_app.sh iphoneos-arm64 $(BUCK) "telegram" $(BUCK_OPTIONS) ${BUCK_RELEASE_OPTIONS}
 
 app: build package
 
@@ -419,6 +419,7 @@ deps: check_env
 
 clean: kill_xcode
 	sh clean.sh
+	rm -rf buck-out
 
 project: check_env kill_xcode
 	$(BUCK) project //Telegram:workspace --config custom.mode=project ${BUCK_OPTIONS} ${BUCK_DEBUG_OPTIONS}

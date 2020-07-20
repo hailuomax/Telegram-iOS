@@ -1,13 +1,13 @@
 #!/bin/bash
-export BUILD_NUMBER="60"
+export BUILD_NUMBER="95"
 export TELEGRAM_ENV_SET="1"
 
-export DEVELOPMENT_CODE_SIGN_IDENTITY="iPhone Distribution: Digital Fortress LLC (4UB2QM68WG)"
-export DISTRIBUTION_CODE_SIGN_IDENTITY="iPhone Distribution: Digital Fortress LLC (4UB2QM68WG)"
+export DEVELOPMENT_CODE_SIGN_IDENTITY="iPhone Distribution: Guojian Huang (MZP78X9H74)"
+export DISTRIBUTION_CODE_SIGN_IDENTITY="iPhone Distribution: CAILU PTE LTD (4UB2QM68WG)"
 export DEVELOPMENT_TEAM="4UB2QM68WG"
 
-export API_ID="1073752"
-export API_HASH="2697f8e8071b20e15c088cca9d019b6f"
+export API_ID="1727834"
+export API_HASH="c8b31c26e3342e91aa0a276107cf9c0b"
 
 export BUNDLE_ID="lxtx.conch.app2"
 export APP_CENTER_ID=""
