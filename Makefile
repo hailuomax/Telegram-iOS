@@ -40,7 +40,7 @@ export BUILDBOX_DIR=buildbox
 export CODESIGNING_PROFILES_VARIANT=appstore
 export PACKAGE_METHOD=appstore
 
-export BUILD_NUMBER=99
+export BUILD_NUMBER=101
 
 
 include Utils.makefile
@@ -344,7 +344,7 @@ package:
 	PACKAGE_BUNDLE_ID="${BUNDLE_ID}" \
 	sh package_app.sh iphoneos-arm64 $(BUCK) "telegram" $(BUCK_OPTIONS) ${BUCK_RELEASE_OPTIONS}
 
-app: build package
+app: build_verbose package
 
 app_arm64: build_arm64 package_arm64
 
