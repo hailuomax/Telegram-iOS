@@ -412,7 +412,7 @@ build_verbose: check_env
 	//Telegram:NotificationContentExtension#dwarf-and-dsym,iphoneos-arm64 \
 	//Telegram:NotificationServiceExtension#dwarf-and-dsym,iphoneos-arm64 \
 	//Telegram:IntentsExtension#dwarf-and-dsym,iphoneos-arm64 \
-	--verbose 7 ${BUCK_OPTIONS} ${BUCK_THREADS_OPTIONS} ${BUCK_DEBUG_OPTIONS} ${BUCK_CACHE_OPTIONS}
+	--verbose 7 ${BUCK_OPTIONS} ${BUCK_THREADS_OPTIONS} ${BUCK_RELEASE_OPTIONS} ${BUCK_CACHE_OPTIONS}
 
 deps: check_env
 	$(BUCK) query "deps(//Telegram:AppPackage)" --dot  \
