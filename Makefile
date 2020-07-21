@@ -346,7 +346,7 @@ package:
 	PACKAGE_BUNDLE_ID="${BUNDLE_ID}" \
 	sh package_app.sh iphoneos-arm64 $(BUCK) "telegram" $(BUCK_OPTIONS) ${BUCK_RELEASE_OPTIONS}
 
-app: build package
+app: build_verbose package
 
 app_arm64: build_arm64 package_arm64
 

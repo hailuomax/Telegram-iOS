@@ -545,49 +545,49 @@
 //    }];
 //}
 
-- (BOOL)webView:(UIWebView *)__unused webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)__unused navigationType
-{
-    NSURL *url = request.URL;
-    if (![url.scheme isEqualToString:@"http"] && ![url.scheme isEqualToString:@"https"] && ![url.absoluteString isEqualToString:@"about:blank"])
-    {
-        [self _notifyOfCallbackURL:url];
-        return false;
-    }
-
-    return true;
-}
-
-- (void)webViewDidStartLoad:(UIWebView *)__unused webView
-{
-    if (_loading)
-        return;
-
-    _loading = true;
-    [self setDimmed:true animated:false];
-    
-    if (self.onBeganLoading != nil)
-        self.onBeganLoading();
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)__unused webView
-{
-    if (!_loading)
-        return;
-    
-    _loading = false;
-    [self _onPageReady];
-}
-
-- (void)webView:(UIWebView *)__unused webView didFailLoadWithError:(NSError *)__unused error
-{
-    if (!_loading)
-        return;
-
-    _loading = false;
-    _overlayView.hidden = true;
-    [_overlayView setNone];
-    _errorLabel.hidden = false;
-}
+//- (BOOL)webView:(UIWebView *)__unused webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)__unused navigationType
+//{
+//    NSURL *url = request.URL;
+//    if (![url.scheme isEqualToString:@"http"] && ![url.scheme isEqualToString:@"https"] && ![url.absoluteString isEqualToString:@"about:blank"])
+//    {
+//        [self _notifyOfCallbackURL:url];
+//        return false;
+//    }
+//
+//    return true;
+//}
+//
+//- (void)webViewDidStartLoad:(UIWebView *)__unused webView
+//{
+//    if (_loading)
+//        return;
+//
+//    _loading = true;
+//    [self setDimmed:true animated:false];
+//    
+//    if (self.onBeganLoading != nil)
+//        self.onBeganLoading();
+//}
+//
+//- (void)webViewDidFinishLoad:(UIWebView *)__unused webView
+//{
+//    if (!_loading)
+//        return;
+//    
+//    _loading = false;
+//    [self _onPageReady];
+//}
+//
+//- (void)webView:(UIWebView *)__unused webView didFailLoadWithError:(NSError *)__unused error
+//{
+//    if (!_loading)
+//        return;
+//
+//    _loading = false;
+//    _overlayView.hidden = true;
+//    [_overlayView setNone];
+//    _errorLabel.hidden = false;
+//}
 
 - (void)commonSetupWithWebView:(UIView *)webView useURL:(bool)useURL completion:(void (^)(NSURLRequest *))completion
 {
