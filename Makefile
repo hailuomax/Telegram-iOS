@@ -40,12 +40,14 @@ export BUILDBOX_DIR=buildbox
 export CODESIGNING_PROFILES_VARIANT=appstore
 export PACKAGE_METHOD=appstore
 
-export BUILD_NUMBER=99
-
+# build 版本
+export BUILD_NUMBER=102
+# app 版本
+APP_VERSION="1.3.3"
 
 include Utils.makefile
 
-APP_VERSION="1.3.3"
+
 CORE_COUNT=$(shell sysctl -n hw.logicalcpu)
 CORE_COUNT_MINUS_ONE=$(shell expr ${CORE_COUNT} \- 1)
 
