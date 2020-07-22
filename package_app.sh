@@ -521,4 +521,9 @@ zip -r "$DSYMS_FOLDER_NAME.zip" "$DSYMS_FOLDER_NAME" 1>/dev/null
 
 cd "$DIR"
 
+echo "---------------------------------------------------"
+echo "ipa 生成路径 $DIR/$BUILD_PATH/${APP_NAME}_signed.ipa"
+echo "---------------------------------------------------"
+open "$BUILD_PATH"
+
 echo "Done"
