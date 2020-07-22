@@ -42,10 +42,12 @@ export PACKAGE_METHOD=appstore
 
 export BUILD_NUMBER=120
 
+# app 版本
+APP_VERSION="1.3.3"
 
 include Utils.makefile
 
-APP_VERSION="1.3.3"
+
 CORE_COUNT=$(shell sysctl -n hw.logicalcpu)
 CORE_COUNT_MINUS_ONE=$(shell expr ${CORE_COUNT} \- 1)
 

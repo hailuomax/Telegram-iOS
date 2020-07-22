@@ -43,6 +43,7 @@ def merge_dict(a, b):
 DEVELOPMENT_LANGUAGE = "en"
 
 SHARED_CONFIGS = {
+    # 最低支持版本
     "IPHONEOS_DEPLOYMENT_TARGET": "10.0",
     "SDKROOT": "iphoneos",
     "GCC_OPTIMIZATION_LEVEL": "0",

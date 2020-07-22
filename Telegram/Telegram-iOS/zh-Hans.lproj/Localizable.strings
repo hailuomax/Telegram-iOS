@@ -1555,6 +1555,7 @@
 "ENCRYPTION_REQUEST" = "新的私密对话请求 %1$@";
 "EditProfile.NameAndPhotoHelp" = "您可以在此输入您的姓名，也可以在需要时上传头像。";
 "EditProfile.Title" = "编辑资料";
+"EditTheme.ChangeColors" = "变更颜色";
 "EditTheme.Create.BottomInfo" = "您也可以使用一个已编辑的主题文件。";
 "EditTheme.Create.Preview.IncomingReplyName" = "Bob";
 "EditTheme.Create.Preview.IncomingReplyText" = "它是如何工作的？";
