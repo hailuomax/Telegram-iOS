@@ -1,4 +1,7 @@
 load("//Config:buck_rule_macros.bzl", "static_library")
+load("//Config:utils.bzl",
+    "library_configs",
+)
 
 genrule(
     name = "opus_lib_file",
@@ -14,6 +17,7 @@ genrule(
 
 apple_library(
     name = "opus_lib",
+    configs = library_configs(),
     visibility = [
         "//submodules/Opus:..."
     ],

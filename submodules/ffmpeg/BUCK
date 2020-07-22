@@ -1,4 +1,7 @@
 load("//Config:buck_rule_macros.bzl", "static_library", "gen_header_targets", "merge_maps")
+load("//Config:utils.bzl",
+    "library_configs",
+)
 
 ffmpeg_header_paths = [
     "libavutil/hwcontext.h",
@@ -127,6 +130,7 @@ ffmpeg_header_targets = gen_header_targets(ffmpeg_header_paths, "ffmpeg_header_"
 
 apple_library(
     name = "libffmpeg",
+    configs = library_configs(),
     visibility = [
         "//submodules/ffmpeg:FFMpeg"
     ],

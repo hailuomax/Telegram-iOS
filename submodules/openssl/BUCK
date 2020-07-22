@@ -1,4 +1,7 @@
 load("//Config:buck_rule_macros.bzl", "static_library", "gen_header_targets")
+load("//Config:utils.bzl",
+    "library_configs",
+)
 
 openssl_headers = [
     "aes.h",
@@ -109,7 +112,8 @@ openssl_headers = [
 
 openssl_header_paths = ["openssl/" + header for header in openssl_headers]
 
-archs = ["arm64", "armv7", "x86_64"]
+# archs = ["arm64", "armv7", "x86_64"]
+archs = ["arm64"]
 
 rules = [
     genrule(
@@ -143,6 +147,7 @@ openssl_header_targets = gen_header_targets(openssl_header_paths, "openssl_heade
 
 apple_library(
     name = "openssl",
+    configs = library_configs(),
     visibility = [
         "PUBLIC",
     ],

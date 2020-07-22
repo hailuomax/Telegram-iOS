@@ -1,4 +1,7 @@
 load("//Config:buck_rule_macros.bzl", "static_library", "gen_header_targets")
+load("//Config:utils.bzl",
+    "library_configs",
+)
 
 ton_header_paths = [
     "auto/tl/tonlib_api.h",
@@ -61,6 +64,7 @@ ton_header_targets = gen_header_targets(ton_header_paths, "ton_header_", "", "to
 
 apple_library(
     name = "ton",
+    configs = library_configs(),
     visibility = [
         "PUBLIC",
     ],
