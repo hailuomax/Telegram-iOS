@@ -39,8 +39,8 @@ export DISTRIBUTION_PROVISIONING_PROFILE_WATCH_EXTENSION=lxtx.conch.app2.watchki
 export BUILDBOX_DIR=buildbox
 export CODESIGNING_PROFILES_VARIANT=appstore
 export PACKAGE_METHOD=appstore
-
-export BUILD_NUMBER=120
+# build 版本
+export BUILD_NUMBER=122
 
 # app 版本
 APP_VERSION="1.3.3"
@@ -424,8 +424,8 @@ clean: kill_xcode
 	sh clean.sh
 
 project: check_env kill_xcode
-	$(BUCK) project //Telegram:workspace --config custom.mode=project ${BUCK_OPTIONS} ${BUCK_RELEASE_OPTIONS}
-	# open Telegram/Telegram_Buck.xcworkspace
+	$(BUCK) project //Telegram:workspace --config custom.mode=project ${BUCK_OPTIONS} ${BUCK_DEBUG_OPTIONS}
+	open Telegram/Telegram_Buck.xcworkspace
 
 bazel_app_debug_arm64:
 	APP_VERSION="${APP_VERSION}" \
