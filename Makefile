@@ -40,7 +40,7 @@ export BUILDBOX_DIR=buildbox
 export CODESIGNING_PROFILES_VARIANT=appstore
 export PACKAGE_METHOD=appstore
 
-export BUILD_NUMBER=101
+export BUILD_NUMBER=120
 
 
 include Utils.makefile
@@ -422,8 +422,8 @@ clean: kill_xcode
 	sh clean.sh
 
 project: check_env kill_xcode
-	$(BUCK) project //Telegram:workspace --config custom.mode=project ${BUCK_OPTIONS} ${BUCK_DEBUG_OPTIONS}
-	open Telegram/Telegram_Buck.xcworkspace
+	$(BUCK) project //Telegram:workspace --config custom.mode=project ${BUCK_OPTIONS} ${BUCK_RELEASE_OPTIONS}
+	# open Telegram/Telegram_Buck.xcworkspace
 
 bazel_app_debug_arm64:
 	APP_VERSION="${APP_VERSION}" \

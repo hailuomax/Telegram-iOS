@@ -155,7 +155,7 @@ if [ "$APP_TYPE" == "wallet" ]; then
 	APP_ITEMS_WITH_PROVISIONING_PROFILE="APP"
 	APP_ITEMS_WITH_ENTITLEMENTS="APP"
 else
-	APP_ITEMS_WITH_PROVISIONING_PROFILE="APP EXTENSION_Share EXTENSION_Widget EXTENSION_NotificationService EXTENSION_NotificationContent EXTENSION_Intents WATCH_APP WATCH_EXTENSION"
+	APP_ITEMS_WITH_PROVISIONING_PROFILE="APP EXTENSION_Share EXTENSION_Widget EXTENSION_NotificationService EXTENSION_NotificationContent EXTENSION_Intents"
 	APP_ITEMS_WITH_ENTITLEMENTS="APP EXTENSION_Share EXTENSION_Widget EXTENSION_NotificationService EXTENSION_NotificationContent EXTENSION_Intents"
 fi
 
@@ -389,9 +389,9 @@ xcrun swift-stdlib-tool \
 
 for dylib in "$TEMP_DYLIB_DIR"/*.dylib; do
 	FILE_NAME=$(basename "$dylib")
-	lipo -extract armv7 "$dylib" -output "$dylib.armv7"
+	# lipo -extract armv7 "$dylib" -output "$dylib.armv7"
 	lipo -extract arm64 "$dylib" -output "$dylib.arm64"
-	lipo "$dylib.armv7" "$dylib.arm64" -create -output "$dylib.unstripped"
+	lipo "$dylib.arm64" -create -output "$dylib.unstripped"
 	if [ "$PACKAGE_METHOD" == "enterprise" ]; then
 		xcrun strip -ST -o "$TEMP_DYLIB_DIR/out/$FILE_NAME" - "$dylib.unstripped" 2>/dev/null
 		xcrun bitcode_strip -r "$TEMP_DYLIB_DIR/out/$FILE_NAME" -o "$TEMP_DYLIB_DIR/out/$FILE_NAME" 1>/dev/null
@@ -403,7 +403,7 @@ done
 cp "$TEMP_DYLIB_DIR/out/"*.dylib "$IPA_PATH.original.unpacked/SwiftSupport/iphoneos/"
 cp "$IPA_PATH.original.unpacked/SwiftSupport/iphoneos/"*.dylib "$FRAMEWORKS_DIR/"
 
-REMOVE_ARCHS="armv7s arm64e"
+REMOVE_ARCHS="armv7 armv7s arm64e"
 
 for framework in "$FRAMEWORKS_DIR"/*; do
     if [[ "$framework" == *.framework || "$framework" == *.dylib ]]; then
@@ -457,54 +457,54 @@ for PLUGIN in $PLUGINS; do
 	/usr/bin/codesign ${VERBOSE} -f -s "$COMMON_IDENTITY_HASH" --entitlements "${!ENTITLEMENTS_PATH_VAR}" "$PLUGIN_PATH"
 done
 
-if [ "$APP_TYPE" != "wallet" ]; then
-	WATCH_APP_PATH="$APP_PATH/Watch/WatchApp.app"
-	WATCH_EXTENSION_PATH="$WATCH_APP_PATH/PlugIns/WatchAppExtension.appex"
+# if [ "$APP_TYPE" != "wallet" ]; then
+# 	WATCH_APP_PATH="$APP_PATH/Watch/WatchApp.app"
+# 	WATCH_EXTENSION_PATH="$WATCH_APP_PATH/PlugIns/WatchAppExtension.appex"
 
-	WATCH_EXTENSION_PROFILE_PATH_VAR="PROFILE_PATH_WATCH_EXTENSION"
-	if [ -z "${!WATCH_EXTENSION_PROFILE_PATH_VAR}" ]; then
-		echo "$WATCH_EXTENSION_PROFILE_PATH_VAR is not defined"
-		exit 1
-	fi
-	if [ ! -f "${!WATCH_EXTENSION_PROFILE_PATH_VAR}" ]; then
-		echo "${!WATCH_EXTENSION_PROFILE_PATH_VAR} does not exist"
-		exit 1
-	fi
-	WATCH_EXTENSION_ENTITLEMENTS_PATH_VAR="ENTITLEMENTS_PATH_WATCH_EXTENSION"
-	if [ -z "${!WATCH_EXTENSION_ENTITLEMENTS_PATH_VAR}" ]; then
-		echo "$WATCH_EXTENSION_ENTITLEMENTS_PATH_VAR is not defined"
-		exit 1
-	fi
-	if [ ! -f "${!WATCH_EXTENSION_ENTITLEMENTS_PATH_VAR}" ]; then
-		echo "${!WATCH_EXTENSION_ENTITLEMENTS_PATH_VAR} does not exist"
-		exit 1
-	fi
+# 	WATCH_EXTENSION_PROFILE_PATH_VAR="PROFILE_PATH_WATCH_EXTENSION"
+# 	if [ -z "${!WATCH_EXTENSION_PROFILE_PATH_VAR}" ]; then
+# 		echo "$WATCH_EXTENSION_PROFILE_PATH_VAR is not defined"
+# 		exit 1
+# 	fi
+# 	if [ ! -f "${!WATCH_EXTENSION_PROFILE_PATH_VAR}" ]; then
+# 		echo "${!WATCH_EXTENSION_PROFILE_PATH_VAR} does not exist"
+# 		exit 1
+# 	fi
+# 	WATCH_EXTENSION_ENTITLEMENTS_PATH_VAR="ENTITLEMENTS_PATH_WATCH_EXTENSION"
+# 	if [ -z "${!WATCH_EXTENSION_ENTITLEMENTS_PATH_VAR}" ]; then
+# 		echo "$WATCH_EXTENSION_ENTITLEMENTS_PATH_VAR is not defined"
+# 		exit 1
+# 	fi
+# 	if [ ! -f "${!WATCH_EXTENSION_ENTITLEMENTS_PATH_VAR}" ]; then
+# 		echo "${!WATCH_EXTENSION_ENTITLEMENTS_PATH_VAR} does not exist"
+# 		exit 1
+# 	fi
 
-	cp "${!WATCH_EXTENSION_PROFILE_PATH_VAR}" "$WATCH_EXTENSION_PATH/embedded.mobileprovision"
-	/usr/bin/codesign ${VERBOSE} -f -s "$COMMON_IDENTITY_HASH" --entitlements "${!WATCH_EXTENSION_ENTITLEMENTS_PATH_VAR}" "$WATCH_EXTENSION_PATH" 2>/dev/null
+# 	cp "${!WATCH_EXTENSION_PROFILE_PATH_VAR}" "$WATCH_EXTENSION_PATH/embedded.mobileprovision"
+# 	/usr/bin/codesign ${VERBOSE} -f -s "$COMMON_IDENTITY_HASH" --entitlements "${!WATCH_EXTENSION_ENTITLEMENTS_PATH_VAR}" "$WATCH_EXTENSION_PATH" 2>/dev/null
 
-	WATCH_APP_PROFILE_PATH_VAR="PROFILE_PATH_WATCH_APP"
-	if [ -z "${!WATCH_APP_PROFILE_PATH_VAR}" ]; then
-		echo "$WATCH_APP_PROFILE_PATH_VAR is not defined"
-		exit 1
-	fi
-	if [ ! -f "${!WATCH_APP_PROFILE_PATH_VAR}" ]; then
-		echo "${!WATCH_APP_PROFILE_PATH_VAR} does not exist"
-		exit 1
-	fi
-	WATCH_APP_ENTITLEMENTS_PATH_VAR="ENTITLEMENTS_PATH_WATCH_APP"
-	if [ -z "${!WATCH_APP_ENTITLEMENTS_PATH_VAR}" ]; then
-		echo "$WATCH_APP_ENTITLEMENTS_PATH_VAR is not defined"
-		exit 1
-	fi
-	if [ ! -f "${!WATCH_APP_ENTITLEMENTS_PATH_VAR}" ]; then
-		echo "${!WATCH_APP_ENTITLEMENTS_PATH_VAR} does not exist"
-		exit 1
-	fi
+# 	WATCH_APP_PROFILE_PATH_VAR="PROFILE_PATH_WATCH_APP"
+# 	if [ -z "${!WATCH_APP_PROFILE_PATH_VAR}" ]; then
+# 		echo "$WATCH_APP_PROFILE_PATH_VAR is not defined"
+# 		exit 1
+# 	fi
+# 	if [ ! -f "${!WATCH_APP_PROFILE_PATH_VAR}" ]; then
+# 		echo "${!WATCH_APP_PROFILE_PATH_VAR} does not exist"
+# 		exit 1
+# 	fi
+# 	WATCH_APP_ENTITLEMENTS_PATH_VAR="ENTITLEMENTS_PATH_WATCH_APP"
+# 	if [ -z "${!WATCH_APP_ENTITLEMENTS_PATH_VAR}" ]; then
+# 		echo "$WATCH_APP_ENTITLEMENTS_PATH_VAR is not defined"
+# 		exit 1
+# 	fi
+# 	if [ ! -f "${!WATCH_APP_ENTITLEMENTS_PATH_VAR}" ]; then
+# 		echo "${!WATCH_APP_ENTITLEMENTS_PATH_VAR} does not exist"
+# 		exit 1
+# 	fi
 
-	cp "${!WATCH_APP_PROFILE_PATH_VAR}" "$WATCH_APP_PATH/embedded.mobileprovision"
-	/usr/bin/codesign ${VERBOSE} -f -s "$COMMON_IDENTITY_HASH" --entitlements "${!WATCH_APP_ENTITLEMENTS_PATH_VAR}" "$WATCH_APP_PATH" 2>/dev/null
-fi
+# 	cp "${!WATCH_APP_PROFILE_PATH_VAR}" "$WATCH_APP_PATH/embedded.mobileprovision"
+# 	/usr/bin/codesign ${VERBOSE} -f -s "$COMMON_IDENTITY_HASH" --entitlements "${!WATCH_APP_ENTITLEMENTS_PATH_VAR}" "$WATCH_APP_PATH" 2>/dev/null
+# fi
 
 APP_PROFILE_PATH_VAR="PROFILE_PATH_APP"
 if [ -z "${!APP_PROFILE_PATH_VAR}" ]; then
