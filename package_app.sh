@@ -524,6 +524,6 @@ cd "$DIR"
 echo "---------------------------------------------------"
 echo "ipa 生成路径 $DIR/$BUILD_PATH/${APP_NAME}_signed.ipa"
 echo "---------------------------------------------------"
-open "$BUILD_PATH"
+open -R "$BUILD_PATH/${APP_NAME}_signed.ipa"
 
 echo "Done"
