@@ -267,7 +267,7 @@ final class SharedApplicationContext {
         
         //MARK: 用户未验证
         _ = NotificationCenter.default.rx
-            .notification(Notification.Name(kUserNotAuthenticatedNotification))
+            .notification(HLNotification.userNotAuthenticated.name)
             .observeOn(MainScheduler.instance)
             .takeUntil(self.rx.deallocated)
             .subscribe(onNext: { noti in
@@ -290,6 +290,9 @@ final class SharedApplicationContext {
                 }
                     
             })
+        
+        //MARK: 注册通知，用于调用app.openUrl(url:)
+        self.registNotification4AppOpenUrl()
         
         precondition(!testIsLaunched)
         testIsLaunched = true
@@ -1794,6 +1797,7 @@ final class SharedApplicationContext {
     }
     
     func openUrl(url: URL) {
+        HUD.flashOnTopVC(.systemActivity, delay: 30)
         let _ = (self.sharedContextPromise.get()
         |> take(1)
         |> mapToSignal { sharedApplicationContext -> Signal<(SharedAccountContextImpl, AuthorizedApplicationContext?, UnauthorizedApplicationContext?), NoError> in
@@ -1807,6 +1811,7 @@ final class SharedApplicationContext {
         |> deliverOnMainQueue).start(next: { _, context, authContext in
             if let context = context {
                 context.openUrl(url)
+                HUD.hide()
             } else if let authContext = authContext {
                 if let proxyData = parseProxyUrl(url) {
                     authContext.rootController.view.endEditing(true)
@@ -2507,5 +2512,21 @@ private func downloadHTTPData(url: URL) -> Signal<Data, DownloadFileError> {
                 downloadTask.cancel()
             }
         }
+    }
+}
+
+extension AppDelegate{
+    
+    private func registNotification4AppOpenUrl(){
+        
+        _ = NotificationCenter.default.rx
+            .notification(HLNotification.appOpenUrl.name)
+            .observeOn(MainScheduler.instance)
+            .takeUntil(self.rx.deallocated)
+            .subscribe(onNext: {[weak self] noti in
+                guard let url: URL = noti.object as? URL else {return}
+                
+                self?.openUrl(url: url)
+            })
     }
 }
