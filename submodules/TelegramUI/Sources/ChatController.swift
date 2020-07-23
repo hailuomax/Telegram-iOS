@@ -5902,6 +5902,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                     }
                     self.chatDisplayNode.interfaceInteraction?.openStickers(true)
                 }else {
+                    self.chatDisplayNode.inputMenuNode.menuNode.clearImgs()
                     self.interfaceInteraction?.updateInputModeAndDismissedButtonKeyboardMessageId({ state in
                         return (.text, state.keyboardButtonsMessage?.id)
                     })

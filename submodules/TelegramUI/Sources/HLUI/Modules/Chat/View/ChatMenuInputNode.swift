@@ -25,7 +25,7 @@ final class ChatMenuInputNode: ChatInputNode {
     let menuNode: ChatMediaInputMenuPane
     
     private var menus: [ChatMediaInputMenu] = []
-    
+        
     init(context: AccountContext ) {
         self.context = context
         self.menuNode = ChatMediaInputMenuPane(menus: [], onSelect: {_ in })
