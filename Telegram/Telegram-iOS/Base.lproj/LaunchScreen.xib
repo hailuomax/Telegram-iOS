@@ -14,20 +14,20 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="73.5" translatesAutoresizingMaskIntoConstraints="NO" id="19y-8r-FDe">
-                    <rect key="frame" x="0.0" y="212" width="414" height="472.5"/>
+                    <rect key="frame" x="0.0" y="212.5" width="414" height="471.5"/>
                     <subviews>
-                        <imageView autoresizesSubviews="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalCompressionResistancePriority="250" image="LS3" translatesAutoresizingMaskIntoConstraints="NO" id="7UV-mo-YSm">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen/1.3.4_2" translatesAutoresizingMaskIntoConstraints="NO" id="BRi-OK-09N">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                         </imageView>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="2Xa-ik-wRH">
-                            <rect key="frame" x="0.0" y="373.5" width="414" height="99"/>
+                            <rect key="frame" x="0.0" y="373.5" width="414" height="98"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LS2" translatesAutoresizingMaskIntoConstraints="NO" id="OWD-2H-Lqo">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen/1.3.4_1" translatesAutoresizingMaskIntoConstraints="NO" id="pXe-4A-acw">
                                     <rect key="frame" x="169.5" y="0.0" width="75" height="75"/>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="海 螺" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZdU-46-icQ">
-                                    <rect key="frame" x="184.5" y="75" width="45.5" height="24"/>
-                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                    <rect key="frame" x="185.5" y="75" width="43.5" height="23"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="19"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -46,7 +46,7 @@
         </view>
     </objects>
     <resources>
-        <image name="LS2" width="75" height="75"/>
-        <image name="LS3" width="375" height="300"/>
+        <image name="LaunchScreen/1.3.4_1" width="75" height="75"/>
+        <image name="LaunchScreen/1.3.4_2" width="375" height="300"/>
     </resources>
 </document>
