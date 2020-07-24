@@ -596,8 +596,12 @@ const NSUInteger TGAttachmentDisplayedAssetLimit = 500;
         return;
     }
     
-    if (totalCount == 0)
+    if (totalCount == 0){
+        if (self.selectImgBlock) {
+            self.selectImgBlock(0);
+        }
         return;
+    }
     
     if (photosCount > 0 && videosCount == 0 && gifsCount == 0)
     {

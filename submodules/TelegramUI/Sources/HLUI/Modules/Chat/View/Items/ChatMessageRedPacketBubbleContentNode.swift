@@ -96,8 +96,8 @@ final class ChatMessageRedPacketBubbleContentNode: ChatMessageBubbleContentNode 
             self.viewModel.isSelf = peerId == user
             self.viewModel.received = model.received
             self.viewModel.isGroupOrChannel = model.type != 0
-            //已领取过 / 自己的个人红包 / 自己的已过期抢完的群红包
-            if model.received || (peerId == user && !isGroupOrChannel) || (peerId == user && isGroupOrChannel && (model.status == 1 || model.status == 2)){
+            //已领取过 / 自己的个人红包 / 自己的(领取过且已抢光)/已过期的群红包
+            if model.received || (peerId == user && !isGroupOrChannel) || (peerId == user && isGroupOrChannel && ((model.status == 1 && model.received) || model.status == 2)){
                 //跳到领取详情页
                 self.gotoRedpacketReceiveVC()
             //未领取抢光/过期 群红包

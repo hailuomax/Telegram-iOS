@@ -47,6 +47,9 @@ enum ChatMediaInputMenu: String, Equatable{
 /// 聊天页面菜单弹窗（包括发送图片视频，炒鸡红包，普通红包，群红包，闪兑，转账等。。。。）
 final class ChatMediaInputMenuPane: ChatMediaInputPane {
     
+    var selectImgsCount : Int {
+        return self.contentView.selectImgsCount
+    }
     ///选项
     private var menus: [ChatMediaInputMenu] = []
     let contentView: ChatMediaInputMenuView
@@ -67,13 +70,20 @@ final class ChatMediaInputMenuPane: ChatMediaInputPane {
                 sendMessagesWithSignals(signals, false)
             }
         }
+        clearImgs()
+    }
+    
+    func clearImgs() {
         self.contentView.carouselItem?.clearImgs()
+        self.contentView.selectImgsCount = 0
     }
 }
 
 final class ChatMediaInputMenuView: UIView{
     
     private let disposeBag = DisposeBag()
+    
+    fileprivate var selectImgsCount : Int = 0
     
     /// 规定每页两行
     static let lineCount: Int = 2
@@ -119,8 +129,17 @@ final class ChatMediaInputMenuView: UIView{
         carouselItem?.pickerDidDissmis = closeMediaPicker
         carouselItem?.didSelectRow = openMediaPicker
         carouselItem?.selectImgBlock = { [weak self] selectCount in
+            self?.selectImgsCount = selectCount
             if let selectImgBlock = self?.selectImgs {
                 selectImgBlock(selectCount)
+            }
+        }
+        
+        carouselItem?.sendPressed = { [weak carouselItem] currentItem, asFiles, silentPosting , time in
+            if let carouselItem = carouselItem {
+                let intent: TGMediaAssetsControllerIntent = asFiles ? TGMediaAssetsControllerSendFileIntent : TGMediaAssetsControllerSendMediaIntent
+                let signals = TGMediaAssetsController.resultSignals(for: carouselItem.selectionContext, editingContext: carouselItem.editingContext, intent: intent, currentItem: currentItem, storeAssets: true, useMediaCache: false, descriptionGenerator: legacyAssetPickerItemGenerator(), saveEditedPhotos: saveEditedPhotos)
+                sendMessagesWithSignals(signals, silentPosting)
             }
         }
 

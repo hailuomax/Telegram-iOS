@@ -210,7 +210,6 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
     
     //MARK: 海螺定制InputNode
     var inputMenuNode : ChatMenuInputNode
-    private var selectImgsCount: Int = 0
     
     //MARK: - 交易模块相关
     ///选择框的高度
@@ -242,8 +241,6 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
             .then({
                 $0.context = self.context
                 $0.chatId = self.chatId ?? ""
-//                $0.vm.coinCode = self.coinRoadViewStatus?.coinCode
-//                $0.vm.fixCoinCode = self.coinRoadViewStatus?.fixCoinCode
                 $0.vm.startObserve()
             })
         }).then{
@@ -394,7 +391,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         //MARK: 点击发送按钮
         self.textInputPanelNode?.sendMessage = { [weak self] in
             if let strongSelf = self {
-                if strongSelf.selectImgsCount > 0 {
+                if strongSelf.inputMenuNode.menuNode.selectImgsCount > 0 {
                     strongSelf.inputMenuNode.menuNode.sendImgs()
                 }
                 if strongSelf.chatPresentationInterfaceState.isScheduledMessages && strongSelf.chatPresentationInterfaceState.editMessageState == nil {
@@ -505,7 +502,6 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         //MARK: 菜单点击了照片
         self.inputMenuNode.menuNode.contentView.selectImgs = { [weak self] selectCount in
             guard let strongSelf = self else { return }
-            strongSelf.selectImgsCount = selectCount
             if selectCount > 0 {
                 strongSelf.textInputPanelNode?.actionButtons.sendButton.alpha = 1.0
                 strongSelf.textInputPanelNode?.actionButtons.sendButtonRadialStatusNode?.alpha = 1.0
@@ -513,7 +509,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
             } else {
                 strongSelf.textInputPanelNode?.actionButtons.sendButton.alpha = 0.0
                 strongSelf.textInputPanelNode?.actionButtons.sendButtonRadialStatusNode?.alpha = 0.0
-                strongSelf.textInputPanelNode?.actionButtons.expandMediaInputButton.alpha = 1.0
+                strongSelf.textInputPanelNode?.actionButtons.expandMediaInputButton.alpha = 0.0
             }
             strongSelf.textInputPanelNode?.actionButtons.updateAccessibility()
         }
@@ -766,6 +762,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
         } else if let inputNode = self.inputNode {
             dismissedInputNode = inputNode
             self.inputNode = nil
+            self.inputMenuNode.menuNode.clearImgs()
         }
         
         var effectiveInputNodeHeight: CGFloat?
