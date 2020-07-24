@@ -40,7 +40,7 @@ export BUILDBOX_DIR=buildbox
 export CODESIGNING_PROFILES_VARIANT=appstore
 export PACKAGE_METHOD=appstore
 # build 版本
-export BUILD_NUMBER=122
+export BUILD_NUMBER=$(shell date +%Y%m%d%H%M)
 
 # app 版本
 APP_VERSION="1.3.3"
