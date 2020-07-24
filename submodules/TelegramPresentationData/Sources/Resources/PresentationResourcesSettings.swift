@@ -76,5 +76,7 @@ public extension PresentationResourcesSettings {
     public static let aboutMe = UIImage(bundleImageName: "AboutMe")?.precomposed()
     public static let qrCode = UIImage(bundleImageName: "QRCode")?.precomposed()
     public static let groupQRCode = UIImage(bundleImageName: "GroupQRCode")?.precomposed()
-
+    public static let caiLuCloudCollege = UIImage(bundleImageName: "caiLuCloudCollege")?.precomposed()
+    public static let notificationCenter = UIImage(bundleImageName: "notificationCenter")?.precomposed()
+    public static let systemNotice = UIImage(bundleImageName: "systemNotice")?.precomposed()
 }

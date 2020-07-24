@@ -54,6 +54,7 @@ import protocol SwiftSignalKit.Disposable
 import ViewModel
 import Model
 import RxSwift
+import HLBase
 
 private let avatarFont = avatarPlaceholderFont(size: 13.0)
 
@@ -114,6 +115,7 @@ private final class SettingsItemArguments {
     let openSetting: () -> Void
     let openAboutMe: () -> Void
     let openQRCode: (Peer?) -> Void
+    let openCaiLuCloudCollege: () -> ()
     
     init(
         sharedContext: SharedAccountContext,
@@ -130,7 +132,8 @@ private final class SettingsItemArguments {
         openInvite:@escaping ()-> Void,
         openSetting:@escaping () -> Void,
         openAboutMe:@escaping () -> Void,
-        openQRCode:@escaping (Peer?) -> Void
+        openQRCode:@escaping (Peer?) -> Void,
+        openCaiLuCloudCollege:@escaping () -> ()
     ) {
         self.sharedContext = sharedContext
         self.avatarAndNameInfoContext = avatarAndNameInfoContext
@@ -148,7 +151,7 @@ private final class SettingsItemArguments {
         self.openSetting = openSetting
         self.openAboutMe = openAboutMe
         self.openQRCode = openQRCode
-
+        self.openCaiLuCloudCollege = openCaiLuCloudCollege
     }
 }
 
@@ -169,6 +172,9 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
     case inviteFriends(PresentationTheme,UIImage?, String)
     case proxy(PresentationTheme, UIImage?, String)
     
+    ///财路云学院
+    case caiLuCloudCollege(PresentationTheme, UIImage?, String)
+    
     case settings(PresentationTheme, UIImage?, String)
     case aboutMe(PresentationTheme, UIImage?, String, String)
     
@@ -176,7 +182,7 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         switch self {
             case .userInfo:
                 return SettingsSection.info.rawValue
-        case .myWallet, .authentication, .tradePassword, .proxy, .inviteFriends:
+        case .myWallet, .authentication, .tradePassword, .proxy, .inviteFriends, .caiLuCloudCollege:
                 return SettingsSection.wallet.rawValue
             case .settings, .aboutMe:
                 return SettingsSection.settings.rawValue
@@ -185,22 +191,15 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
     
     var stableId: Int32 {
         switch self {
-        case .userInfo:
-            return 0
-        case .myWallet:
-            return 1
-        case .authentication:
-            return 2
-        case .tradePassword:
-            return 3
-        case .inviteFriends:
-            return 4
-        case .proxy:
-            return 5
-        case .settings:
-            return 6
-        case .aboutMe:
-            return 7
+        case .userInfo: return 0
+        case .myWallet: return 1
+        case .authentication: return 2
+        case .tradePassword: return 3
+        case .caiLuCloudCollege: return 4
+        case .inviteFriends: return 5
+        case .proxy: return 6
+        case .settings: return 7
+        case .aboutMe: return 8
         }
     }
     
@@ -290,6 +289,12 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
                 } else {
                     return false
                 }
+            case let .caiLuCloudCollege(lhsTheme, _, lhsTitle):
+                if case let .caiLuCloudCollege(rhsTheme,_,rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
+                    return true
+                } else {
+                    return false
+                }
         }
     }
     
@@ -340,6 +345,10 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         case let .aboutMe(_, image, text, value):
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks , action: {
                 arguments.openAboutMe()
+            })
+        case let .caiLuCloudCollege(_, image, text):
+            return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: "", sectionId: ItemListSectionId(self.section), style: .blocks , action: {
+                arguments.openCaiLuCloudCollege()
             })
         }
     }
@@ -423,9 +432,11 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
         
         entries.append(.aboutMe(presentationData.theme, PresentationResourcesSettings.aboutMe, HLLanguage.AboutConch.localized(), APPConfig.appVersion))
         
+        entries.append(.caiLuCloudCollege(presentationData.theme, PresentationResourcesSettings.caiLuCloudCollege, "财路云学院"))
     }
     
-    return entries
+    //按stableId重新排序
+    return entries.sorted {$0.stableId < $1.stableId}
 }
 
 
@@ -860,6 +871,15 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                 
             }
         })
+    }, openCaiLuCloudCollege: {
+        let _ = (contextValue.get()
+            |> deliverOnMainQueue
+            |> take(1)).start(next: { context in
+                let webVC: HLBaseVC<BaseWkWebView> = HLBaseVC<BaseWkWebView>(context: context).then{
+                    $0.contentView.load(urlStr: "https://m.cailu.net/academy", jsNames: [], onListen: {_,_  in})
+                }
+                pushControllerImpl?(webVC)
+            })
     })
     
     changeProfilePhotoImpl = {
