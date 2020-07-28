@@ -234,8 +234,8 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
             ///福利机器人红点显示
             cell.redDot.isHidden = !(model.refCode == "welfareBot" && self.viewModel.welfareBotStatus)
         }
-        // 附近的人
-        if listData.itemType == 3  {
+        // 附近的人 
+        if [3, 5].contains(listData.itemType) {
             cell.iconImageView.image = UIImage(bundleImageName: listData.titleIcon ?? "ic-discover-default")
         }
         ///查看全部
@@ -315,6 +315,19 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
 //                self.navigationController?.pushViewController(vc, animated: true)
             }
             
+        case 5:
+            if HLAccountManager.biLuToken.isEmpty {
+                let logoinVC = TransactionLoginVC(context:self.context)
+                logoinVC.successBlock = { [weak self] in
+                    guard let self = self else { return }
+                    self.navigationController?.popViewController(animated: true)
+                }
+                HLAccountManager.validateAccountAndcheckPwdSetting((self, logoinVC), context: self.context!)
+            } else {
+                let entrustAllVC = EntrustAllVC(symbol: "",context:self.context)
+                HLAccountManager.validateAccountAndcheckPwdSetting((self, entrustAllVC), context: self.context!)
+            }
+            break
         default:
             break
         }
