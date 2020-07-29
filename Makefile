@@ -43,7 +43,7 @@ export PACKAGE_METHOD=appstore
 export BUILD_NUMBER=$(shell date +%Y%m%d%H%M)
 
 # app 版本
-APP_VERSION="1.3.3"
+APP_VERSION="1.3.4"
 
 include Utils.makefile
 
