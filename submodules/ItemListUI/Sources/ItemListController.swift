@@ -229,6 +229,7 @@ open class ItemListController: ViewController, KeyShortcutResponder, Presentable
     
     public var willDisappear: ((Bool) -> Void)?
     public var didDisappear: ((Bool) -> Void)?
+    public var willAppear: ((Bool) -> Void)?
     
     public init<ItemGenerationArguments>(presentationData: ItemListPresentationData, updatedPresentationData: Signal<ItemListPresentationData, NoError>, state: Signal<(ItemListControllerState, (ItemListNodeState, ItemGenerationArguments)), NoError>, tabBarItem: Signal<ItemListControllerTabBarItem, NoError>?) {
         self.state = state
@@ -512,6 +513,11 @@ open class ItemListController: ViewController, KeyShortcutResponder, Presentable
         let firstTime = !self.didAppearOnce
         self.didAppearOnce = true
         self.didAppear?(firstTime)
+    }
+    
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.willAppear?(animated)
     }
     
     override open func viewWillDisappear(_ animated: Bool) {

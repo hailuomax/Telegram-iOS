@@ -55,6 +55,7 @@ import ViewModel
 import Model
 import RxSwift
 import HLBase
+import Network
 
 private let avatarFont = avatarPlaceholderFont(size: 13.0)
 
@@ -116,6 +117,8 @@ private final class SettingsItemArguments {
     let openAboutMe: () -> Void
     let openQRCode: (Peer?) -> Void
     let openCaiLuCloudCollege: () -> ()
+    let openNoticeCenter: () -> ()
+    let openSystemMessages: () -> ()
     
     init(
         sharedContext: SharedAccountContext,
@@ -133,7 +136,10 @@ private final class SettingsItemArguments {
         openSetting:@escaping () -> Void,
         openAboutMe:@escaping () -> Void,
         openQRCode:@escaping (Peer?) -> Void,
-        openCaiLuCloudCollege:@escaping () -> ()
+        openCaiLuCloudCollege:@escaping () -> (),
+        openNoticeCenter:@escaping () -> (),
+        openSystemMessages:@escaping () -> ()
+        
     ) {
         self.sharedContext = sharedContext
         self.avatarAndNameInfoContext = avatarAndNameInfoContext
@@ -152,6 +158,8 @@ private final class SettingsItemArguments {
         self.openAboutMe = openAboutMe
         self.openQRCode = openQRCode
         self.openCaiLuCloudCollege = openCaiLuCloudCollege
+        self.openNoticeCenter = openNoticeCenter
+        self.openSystemMessages = openSystemMessages
     }
 }
 
@@ -174,6 +182,10 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
     
     ///财路云学院
     case caiLuCloudCollege(PresentationTheme, UIImage?, String)
+    /// 通知中心
+    case noticeCenter(PresentationTheme, UIImage?, String, Bool)
+    /// 系统消息
+    case systemMessage(PresentationTheme, UIImage?, String)
     
     case settings(PresentationTheme, UIImage?, String)
     case aboutMe(PresentationTheme, UIImage?, String, String)
@@ -182,7 +194,7 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         switch self {
             case .userInfo:
                 return SettingsSection.info.rawValue
-        case .myWallet, .authentication, .tradePassword, .proxy, .inviteFriends, .caiLuCloudCollege:
+        case .myWallet, .authentication, .tradePassword, .proxy, .inviteFriends, .caiLuCloudCollege, .noticeCenter, .systemMessage:
                 return SettingsSection.wallet.rawValue
             case .settings, .aboutMe:
                 return SettingsSection.settings.rawValue
@@ -196,10 +208,12 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         case .authentication: return 2
         case .tradePassword: return 3
         case .caiLuCloudCollege: return 4
+        case .noticeCenter: return 6
+        case .systemMessage: return 7
         case .inviteFriends: return 5
-        case .proxy: return 6
-        case .settings: return 7
-        case .aboutMe: return 8
+        case .proxy: return 8
+        case .settings: return 9
+        case .aboutMe: return 10
         }
     }
     
@@ -295,6 +309,19 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
                 } else {
                     return false
                 }
+            case let .noticeCenter(lhsTheme, _, lhsTitle, lhsUnread):
+                if case let .noticeCenter(rhsTheme, _, rhsTitle, rhsUnread) = rhs,  lhsTheme === rhsTheme, lhsTitle == rhsTitle , lhsUnread == rhsUnread {
+                    return true
+                }else {
+                    return false
+                }
+            
+            case let .systemMessage(lhsTheme, _, lhsTitle):
+                if case let .systemMessage(rhsTheme, _, rhsTitle) = rhs,  lhsTheme === rhsTheme, lhsTitle == rhsTitle {
+                    return true
+                }else {
+                    return false
+                }
         }
     }
     
@@ -350,6 +377,14 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: "", sectionId: ItemListSectionId(self.section), style: .blocks , action: {
                 arguments.openCaiLuCloudCollege()
             })
+        case let .noticeCenter(_, image, text, unread):
+            return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: "", sectionId: ItemListSectionId(self.section),style: .blocks , showRedDot: unread, action: {
+                arguments.openNoticeCenter()
+            })
+        case let .systemMessage(_, image, text):
+            return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: "" , sectionId: ItemListSectionId(self.section), style: .blocks , action: {
+                arguments.openSystemMessages()
+            })
         }
     }
 }
@@ -358,6 +393,7 @@ private struct SettingsState: Equatable {
     var updatingAvatar: ItemListAvatarAndNameInfoItemUpdatingAvatar?
     var accountIdWithRevealedOptions: AccountRecordId?
     var isSearching: Bool
+    var unread: Bool
 }
 
 //MARK: 配置Entries
@@ -420,7 +456,13 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
             entries.append(.tradePassword(presentationData.theme, PresentationResourcesSettings.tradePassword, HLLanguage.TransactionPassword.localized(), pwdStatus))
             //邀請好友
             entries.append(.inviteFriends(presentationData.theme, PresentationResourcesSettings.inviteFriends, HLLanguage.InviteNewUser.localized()))
+            
+            entries.append(.caiLuCloudCollege(presentationData.theme, PresentationResourcesSettings.caiLuCloudCollege, "财路云学院"))
+            entries.append(.noticeCenter(presentationData.theme, PresentationResourcesSettings.notificationCenter, "通知中心" , state.unread))
+            
         }
+        
+        entries.append(.systemMessage(presentationData.theme, PresentationResourcesSettings.systemNotice, "系统公告"))
         
         entries.append(.proxy(presentationData.theme, PresentationResourcesSettings.proxy, HLLanguage.Agent.localized()))
         
@@ -432,7 +474,7 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
         
         entries.append(.aboutMe(presentationData.theme, PresentationResourcesSettings.aboutMe, HLLanguage.AboutConch.localized(), APPConfig.appVersion))
         
-        entries.append(.caiLuCloudCollege(presentationData.theme, PresentationResourcesSettings.caiLuCloudCollege, "财路云学院"))
+        
     }
     
     //按stableId重新排序
@@ -607,10 +649,11 @@ private final class SettingsTabBarContextExtractedContentSource: ContextExtracte
     }
 }
 
+let repo = Repo.Notice()
 //MARK: ====HLSettingsController=====
 public func hlSettingsController(context: AccountContext, accountManager: AccountManager, enableDebugActions: Bool) -> SettingsController & ViewController {
     
-    let initialState = SettingsState(updatingAvatar: nil, accountIdWithRevealedOptions: nil, isSearching: false)
+    let initialState = SettingsState(updatingAvatar: nil, accountIdWithRevealedOptions: nil, isSearching: false, unread: false)
     let statePromise = ValuePromise(initialState, ignoreRepeated: true)
     let stateValue = Atomic(value: initialState)
     let updateState: ((SettingsState) -> SettingsState) -> Void = { f in
@@ -880,6 +923,21 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                 }
                 pushControllerImpl?(webVC)
             })
+    }, openNoticeCenter: {
+        let _ = (contextValue.get()
+        |> deliverOnMainQueue
+        |> take(1)).start(next: { context in
+            let vc = NoticeCenterVC(context: context)
+            pushControllerImpl?(vc)
+        })
+        
+    }, openSystemMessages: {
+        let _ = (contextValue.get()
+        |> deliverOnMainQueue
+        |> take(1)).start(next: { context in
+            let vc = SystemMessagesVC(context: context)
+            pushControllerImpl?(vc)
+        })
     })
     
     changeProfilePhotoImpl = {
@@ -1521,6 +1579,18 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
             state.isSearching = false
             return state
         }
+    }
+    //MARK: -WillAppear
+    controller.willAppear = {[weak controller]  _ in
+        guard let ctr = controller else { return }
+        repo.unreadNotice().value { data in
+            debugPrint(data)
+            updateState { state in
+                var state = state
+                state.unread = data.unread
+                return state
+            }
+        }.load(ctr.disposeBag)
     }
 
     setDisplayNavigationBarImpl = { [weak controller] display in

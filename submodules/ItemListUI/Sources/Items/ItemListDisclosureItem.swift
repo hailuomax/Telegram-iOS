@@ -37,8 +37,9 @@ public class ItemListDisclosureItem: ListViewItem, ItemListItem {
     let action: (() -> Void)?
     let clearHighlightAutomatically: Bool
     public let tag: ItemListItemTag?
+    let showRedDot: Bool
     
-    public init(presentationData: ItemListPresentationData, icon: UIImage? = nil, title: String, enabled: Bool = true, titleColor: ItemListDisclosureItemTitleColor = .primary, label: String, labelStyle: ItemListDisclosureLabelStyle = .text, sectionId: ItemListSectionId, style: ItemListStyle, disclosureStyle: ItemListDisclosureStyle = .arrow, action: (() -> Void)?, clearHighlightAutomatically: Bool = true, tag: ItemListItemTag? = nil) {
+    public init(presentationData: ItemListPresentationData, icon: UIImage? = nil, title: String, enabled: Bool = true, titleColor: ItemListDisclosureItemTitleColor = .primary, label: String, labelStyle: ItemListDisclosureLabelStyle = .text, sectionId: ItemListSectionId, style: ItemListStyle, disclosureStyle: ItemListDisclosureStyle = .arrow, showRedDot : Bool = false , action: (() -> Void)?, clearHighlightAutomatically: Bool = true, tag: ItemListItemTag? = nil) {
         self.presentationData = presentationData
         self.icon = icon
         self.title = title
@@ -52,6 +53,7 @@ public class ItemListDisclosureItem: ListViewItem, ItemListItem {
         self.action = action
         self.clearHighlightAutomatically = clearHighlightAutomatically
         self.tag = tag
+        self.showRedDot = showRedDot
     }
     
     public func nodeConfiguredForParams(async: @escaping (@escaping () -> Void) -> Void, params: ListViewItemLayoutParams, synchronousLoads: Bool, previousItem: ListViewItem?, nextItem: ListViewItem?, completion: @escaping (ListViewItemNode, @escaping () -> (Signal<Void, NoError>?, (ListViewItemApply) -> Void)) -> Void) {
@@ -115,6 +117,9 @@ public class ItemListDisclosureItemNode: ListViewItemNode, ItemListItemNode {
     let labelBadgeNode: ASImageNode
     let labelImageNode: ASImageNode
     
+    //红点Node
+    let redDotNode : ASImageNode
+    
     private let activateArea: AccessibilityAreaNode
     
     private var item: ItemListDisclosureItem?
@@ -170,6 +175,11 @@ public class ItemListDisclosureItemNode: ListViewItemNode, ItemListItemNode {
         
         self.activateArea = AccessibilityAreaNode()
         
+        self.redDotNode = ASImageNode()
+        self.redDotNode.displayWithoutProcessing = true
+        self.redDotNode.displaysAsynchronously = false
+        self.redDotNode.isLayerBacked = true
+        
         super.init(layerBacked: false, dynamicBounce: false)
         
         self.addSubnode(self.titleNode)
@@ -177,6 +187,7 @@ public class ItemListDisclosureItemNode: ListViewItemNode, ItemListItemNode {
         self.addSubnode(self.arrowNode)
         
         self.addSubnode(self.activateArea)
+        self.addSubnode(self.redDotNode)
     }
     
     public func asyncLayout() -> (_ item: ItemListDisclosureItem, _ params: ListViewItemLayoutParams, _ insets: ItemListNeighbors) -> (ListViewItemNodeLayout, () -> Void) {
@@ -421,6 +432,13 @@ public class ItemListDisclosureItemNode: ListViewItemNode, ItemListItemNode {
                     
                     let titleFrame = CGRect(origin: CGPoint(x: leftInset, y: 11.0), size: titleLayout.size)
                     strongSelf.titleNode.frame = titleFrame
+                    
+                    //设置红点
+                    let redDotFrame = CGRect(x: titleFrame.maxX + 10, y: titleFrame.center.y - 4, width: 8, height: 8)
+                    strongSelf.redDotNode.cornerRadius = 4
+                    strongSelf.redDotNode.backgroundColor = UIColor.init(hexString: "FF3636")
+                    strongSelf.redDotNode.frame = redDotFrame
+                    strongSelf.redDotNode.isHidden = !item.showRedDot
                     
                     if let updateBadgeImage = updatedLabelBadgeImage {
                         if strongSelf.labelBadgeNode.supernode == nil {
