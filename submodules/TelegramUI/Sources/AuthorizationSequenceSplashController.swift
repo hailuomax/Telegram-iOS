@@ -82,7 +82,7 @@ final class AuthorizationSequenceSplashController: ViewController {
         self.supportedOrientations = ViewControllerSupportedOrientations(regularSize: .all, compactSize: .portrait)
         
         self.statusBar.statusBarStyle = theme.intro.statusBarStyle.style
-        
+        //点击了确定按钮
         self.controller.startMessaging = { [weak self] in
             //self?.activateLocalization("en")
             self?.activateLocalization("zh-hans-raw")

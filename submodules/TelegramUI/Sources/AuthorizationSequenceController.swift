@@ -736,57 +736,57 @@ public final class AuthorizationSequenceController: NavigationController, MFMail
                     if let _ = self.viewControllers.last as? AuthorizationSequenceSplashController {
                     } else {
                         var controllers: [ViewController] = []
-                        if self.otherAccountPhoneNumbers.1.isEmpty {
-                            controllers.append(self.splashController())
-                        } else {
+//                        if self.otherAccountPhoneNumbers.1.isEmpty {
+//                            controllers.append(self.splashController())
+//                        } else {
                             controllers.append(self.phoneEntryController(countryCode: defaultCountryCode(), number: ""))
-                        }
+//                        }
                         self.setViewControllers(controllers, animated: !self.viewControllers.isEmpty)
                     }
                 case let .phoneEntry(countryCode, number):
                     var controllers: [ViewController] = []
-                    if !self.otherAccountPhoneNumbers.1.isEmpty {
-                        controllers.append(self.splashController())
-                    }
+//                    if !self.otherAccountPhoneNumbers.1.isEmpty {
+//                        controllers.append(self.splashController())
+//                    }
                     controllers.append(self.phoneEntryController(countryCode: countryCode, number: number))
                     self.setViewControllers(controllers, animated: !self.viewControllers.isEmpty)
                 case let .confirmationCodeEntry(number, type, _, timeout, nextType, _):
                     var controllers: [ViewController] = []
-                    if !self.otherAccountPhoneNumbers.1.isEmpty {
-                        controllers.append(self.splashController())
-                    }
+//                    if !self.otherAccountPhoneNumbers.1.isEmpty {
+//                        controllers.append(self.splashController())
+//                    }
                     controllers.append(self.phoneEntryController(countryCode: defaultCountryCode(), number: ""))
                     controllers.append(self.codeEntryController(number: number, type: type, nextType: nextType, timeout: timeout, termsOfService: nil))
                     self.setViewControllers(controllers, animated: !self.viewControllers.isEmpty)
                 case let .passwordEntry(hint, _, _, suggestReset, syncContacts):
                     var controllers: [ViewController] = []
-                    if !self.otherAccountPhoneNumbers.1.isEmpty {
-                        controllers.append(self.splashController())
-                    }
+//                    if !self.otherAccountPhoneNumbers.1.isEmpty {
+//                        controllers.append(self.splashController())
+//                    }
                     controllers.append(self.passwordEntryController(hint: hint, suggestReset: suggestReset, syncContacts: syncContacts))
                     self.setViewControllers(controllers, animated: !self.viewControllers.isEmpty)
                 case let .passwordRecovery(_, _, _, emailPattern, syncContacts):
                     var controllers: [ViewController] = []
-                    if !self.otherAccountPhoneNumbers.1.isEmpty {
-                        controllers.append(self.splashController())
-                    }
+//                    if !self.otherAccountPhoneNumbers.1.isEmpty {
+//                        controllers.append(self.splashController())
+//                    }
                     controllers.append(self.passwordRecoveryController(emailPattern: emailPattern, syncContacts: syncContacts))
                     self.setViewControllers(controllers, animated: !self.viewControllers.isEmpty)
                 case let .awaitingAccountReset(protectedUntil, number, _):
                     var controllers: [ViewController] = []
-                    if !self.otherAccountPhoneNumbers.1.isEmpty {
-                        controllers.append(self.splashController())
-                    }
+//                    if !self.otherAccountPhoneNumbers.1.isEmpty {
+//                        controllers.append(self.splashController())
+//                    }
                     controllers.append(self.awaitingAccountResetController(protectedUntil: protectedUntil, number: number))
                     self.setViewControllers(controllers, animated: !self.viewControllers.isEmpty)
                 case let .signUp(_, _, firstName, lastName, termsOfService, _):
                     var controllers: [ViewController] = []
                     var displayCancel = false
-                    if !self.otherAccountPhoneNumbers.1.isEmpty {
-                        controllers.append(self.splashController())
-                    } else {
+//                    if !self.otherAccountPhoneNumbers.1.isEmpty {
+//                        controllers.append(self.splashController())
+//                    } else {
                         displayCancel = true
-                    }
+//                    }
                     controllers.append(self.signUpController(firstName: firstName, lastName: lastName, termsOfService: termsOfService, displayCancel: displayCancel))
                     self.setViewControllers(controllers, animated: !self.viewControllers.isEmpty)
             }
