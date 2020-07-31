@@ -1479,6 +1479,9 @@ final class SharedApplicationContext {
             }
         }
         
+        //
+        showGuidePage()
+        
         return true
     }
 
@@ -2528,5 +2531,21 @@ extension AppDelegate{
                 
                 self?.openUrl(url: url)
             })
+    }
+}
+
+let kIsFirstEnterAppKey = "kIsFirstEnterAppKey"
+extension AppDelegate {
+    
+    private func showGuidePage(){
+        if  UserDefaults.standard.bool(forKey: kIsFirstEnterAppKey) == false {
+            let guidePageVC = GuidePageVC()
+            guidePageVC.modalPresentationStyle = .fullScreen
+            guidePageVC.modalTransitionStyle = .crossDissolve
+            self.window?.rootViewController?.present(guidePageVC, animated: false, completion: nil)
+            UserDefaults.standard.set(true, forKey:kIsFirstEnterAppKey)
+        }
+        
+        
     }
 }
