@@ -160,6 +160,9 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
             guard let self = self else {return}
             self.contentView.tableView.reloadData()
             self.contentView.banner.setUrlsGroup(self.viewModel.bannerDatas.map{$0.linkIcon})
+            DispatchQueue.main.async {
+                self.showGuide()
+            }
         }).disposed(by: disposeBag)
         
         self.viewModel.isLoading.subscribe(onNext: {[weak self] (isLoading) in
@@ -169,6 +172,24 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
             }
         }).disposed(by: disposeBag)
 
+    }
+    
+    func showGuide() {
+        if UserDefaults.standard.bool(forKey: "kShowWelfareGuideKey") == true {
+            return
+        }
+        let visbleCells = contentView.tableView.visibleCells
+        for cell in visbleCells {
+            guard let cell = cell as? DiscoverItemCell , cell.needGuide == true ,let indexPath = contentView.tableView.indexPath(for: cell) else {
+                continue
+            }
+            let cellRect = contentView.tableView.rectForRow(at: indexPath)
+            let rect = CGRect(x:0 , y:cellRect.minY + contentView.tableView.frame.minY + 24, width: cellRect.width, height: cellRect.height)
+            debugPrint(rect)
+            GuideView.show(mold: GuideView.Mold.welfare, target: rect)
+            UserDefaults.standard.set(true, forKey: "kShowWelfareGuideKey")
+            return
+        }
     }
     
     @objc func updateTheme() {
@@ -233,6 +254,7 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
             cell.titleLabel.text = model.name ?? model.linkName
             ///福利机器人红点显示
             cell.redDot.isHidden = !(model.refCode == "welfareBot" && self.viewModel.welfareBotStatus)
+            cell.needGuide = model.refCode == "welfareBot"
         }
         // 附近的人 
         if [3, 5].contains(listData.itemType) {

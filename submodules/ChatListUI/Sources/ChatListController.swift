@@ -25,6 +25,10 @@ import TelegramIntents
 import TooltipUI
 
 import UI
+import Repo
+import Model
+import RxSwift
+import Network
 
 private func fixListNodeScrolling(_ listNode: ListView, searchNode: NavigationBarSearchContentNode) -> Bool {
     if listNode.scroller.isDragging {
@@ -120,9 +124,9 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController,
     private var proxyUnavailableTooltipController: TooltipController?
     private var didShowProxyUnavailableTooltipController = false
     
-    private var titleDisposable: Disposable?
-    private var badgeDisposable: Disposable?
-    private var badgeIconDisposable: Disposable?
+    private var titleDisposable: SwiftSignalKit.Disposable?
+    private var badgeDisposable: SwiftSignalKit.Disposable?
+    private var badgeIconDisposable: SwiftSignalKit.Disposable?
     
     private var didAppear = false
     private var dismissSearchOnDisappear = false
@@ -135,7 +139,7 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController,
     
     private var presentationData: PresentationData
     private let presentationDataValue = Promise<PresentationData>()
-    private var presentationDataDisposable: Disposable?
+    private var presentationDataDisposable: SwiftSignalKit.Disposable?
     
     private let stateDisposable = MetaDisposable()
     private let filterDisposable = MetaDisposable()
@@ -150,6 +154,9 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController,
     private var tabContainerData: ([ChatListFilterTabEntry], Bool)?
     
     public var createActionDisposable = MetaDisposable()
+    
+    private let repo = DiscoverRepo()
+    private let disposeBag = RxSwift.DisposeBag()
     
     public override func updateNavigationCustomData(_ data: Any?, progress: CGFloat, transition: ContainedViewLayoutTransition) {
         if self.isNodeLoaded {
@@ -1056,6 +1063,32 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController,
         self.ready.set(self.chatListDisplayNode.containerNode.ready)
         
         self.displayNodeDidLoad()
+    }
+    var test = false
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        //获取全部群
+        ContactUtil.getGroup(context, presentationData: presentationData ,complete : {[weak self] list in
+            guard let self = self else {return}
+            let checkGroups = Set(["cailuschool", "bcbcommunity"]) // 判断要不要弹出推荐的群
+            let usernames = list.compactMap{$0.username}
+            //UserDefaults.standard.bool(forKey: "kShowRecommendGroupKey")
+            if checkGroups.isSubset(of:Set(usernames)) || self.test  == true {
+                return
+            }
+            
+            self.repo.discoveryGroupList(subTypeId: "", current:"1")
+            .value {[weak self] list in
+                guard let self = self else {return}
+                RecommendGroupVC.showRecommendGroup(target: self, context: self.context, listData: list)
+                self.test = true
+//                UserDefaults.standard.set(true, forKey: "kShowRecommendGroupKey")
+            }.load(self.disposeBag)
+            
+        })
+        
+        
+        
     }
     
     override public func viewDidAppear(_ animated: Bool) {

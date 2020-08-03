@@ -48,6 +48,10 @@ static_library(
         "//submodules/TooltipUI:TooltipUI",
         
         "//submodules/HL/UI:UI",
+        "//submodules/HL/Repo:Repo",
+        "//submodules/HL/Model:Model",
+        "//Pods/RxSwift:RxSwift",
+        "//submodules/HL/Network:Network"
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",

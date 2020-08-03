@@ -345,7 +345,7 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
                 })
             
         case let .myWallet(_, image, text , value):
-            return ItemListDisclosureItem(presentationData: presentationData, icon: image, title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks, action: {
+            return ItemListDisclosureItem(presentationData: presentationData, icon: image, title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks,action: {
                 arguments.openMyWallet()
             }, clearHighlightAutomatically: false)
 
@@ -1581,7 +1581,15 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         }
     }
     //MARK: -WillAppear
+    let kShowWalletGuideKey = "kShowWalletGuideKey"
     controller.willAppear = {[weak controller]  _ in
+        
+        if UserDefaults.standard.bool(forKey: kShowWalletGuideKey) == false {
+        let itemFrame = CGRect(x: 0, y: 151 + NavBarHeight , width: kScreenWidth, height: 44 )
+            GuideView.show(mold: GuideView.Mold.wallet, target: itemFrame)
+            UserDefaults.standard.set(true, forKey:kShowWalletGuideKey)
+        }
+        
         guard let ctr = controller else { return }
         repo.unreadNotice().value { data in
             debugPrint(data)
