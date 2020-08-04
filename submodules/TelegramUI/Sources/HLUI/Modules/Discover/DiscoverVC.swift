@@ -184,7 +184,7 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
                 continue
             }
             let cellRect = contentView.tableView.rectForRow(at: indexPath)
-            let rect = CGRect(x:0 , y:cellRect.minY + contentView.tableView.frame.minY + 24, width: cellRect.width, height: cellRect.height)
+            let rect = CGRect(x:0 , y:cellRect.minY + contentView.tableView.frame.minY , width: cellRect.width, height: cellRect.height)
             debugPrint(rect)
             GuideView.show(mold: GuideView.Mold.welfare, target: rect)
             UserDefaults.standard.set(true, forKey: "kShowWelfareGuideKey")

@@ -1585,7 +1585,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
     controller.willAppear = {[weak controller]  _ in
         
         if UserDefaults.standard.bool(forKey: kShowWalletGuideKey) == false {
-        let itemFrame = CGRect(x: 0, y: 151 + NavBarHeight , width: kScreenWidth, height: 44 )
+        let itemFrame = CGRect(x: 0, y: 130 + NavBarHeight , width: kScreenWidth, height: 44 )
             GuideView.show(mold: GuideView.Mold.wallet, target: itemFrame)
             UserDefaults.standard.set(true, forKey:kShowWalletGuideKey)
         }

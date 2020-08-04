@@ -1064,7 +1064,7 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController,
         
         self.displayNodeDidLoad()
     }
-    var test = false
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         //获取全部群
@@ -1072,8 +1072,8 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController,
             guard let self = self else {return}
             let checkGroups = Set(["cailuschool", "bcbcommunity"]) // 判断要不要弹出推荐的群
             let usernames = list.compactMap{$0.username}
-            //UserDefaults.standard.bool(forKey: "kShowRecommendGroupKey")
-            if checkGroups.isSubset(of:Set(usernames)) || self.test  == true {
+            
+            if checkGroups.isSubset(of:Set(usernames)) || UserDefaults.standard.bool(forKey: "kShowRecommendGroupKey")  == true {
                 return
             }
             
@@ -1081,8 +1081,7 @@ public class ChatListControllerImpl: TelegramBaseController, ChatListController,
             .value {[weak self] list in
                 guard let self = self else {return}
                 RecommendGroupVC.showRecommendGroup(target: self, context: self.context, listData: list)
-                self.test = true
-//                UserDefaults.standard.set(true, forKey: "kShowRecommendGroupKey")
+                UserDefaults.standard.set(true, forKey: "kShowRecommendGroupKey")
             }.load(self.disposeBag)
             
         })
