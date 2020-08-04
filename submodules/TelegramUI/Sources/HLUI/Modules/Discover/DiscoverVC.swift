@@ -60,6 +60,8 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
     private var viewModel: DiscoverVM!
     
     private lazy var locationManager = CLLocationManager()
+    
+    private var needShowGuide = false
     /*
      * 修改记录
      * 2020/3/24 修改tabBar发现图片
@@ -85,8 +87,11 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
         self.title = HLLanguage.Tabbar.Discover.localized()
         self.tabBarItem.title = HLLanguage.Tabbar.Discover.localized()
         self.updateTheme()
+        if needShowGuide == true {
+            showGuide()
+        }
     }
-    
+        
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -148,7 +153,6 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
     }
     
     func setBind(){
-        
         self.contentView.tableView.jy.onRefresh {[weak self] in
             guard let self = self else { return }
             self.viewModel.getDiscoverList()
@@ -175,6 +179,12 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
     }
     
     func showGuide() {
+        // 防止未请求完，用户切换了tabbar
+        print((self.parent as? TabBarController)?.selectedIndex)
+        if (self.parent as? TabBarController)?.selectedIndex != 2 {
+            needShowGuide = true
+            return
+        }
         if UserDefaults.standard.bool(forKey: "kShowWelfareGuideKey") == true {
             return
         }
@@ -185,9 +195,9 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
             }
             let cellRect = contentView.tableView.rectForRow(at: indexPath)
             let rect = CGRect(x:0 , y:cellRect.minY + contentView.tableView.frame.minY , width: cellRect.width, height: cellRect.height)
-            debugPrint(rect)
             GuideView.show(mold: GuideView.Mold.welfare, target: rect)
             UserDefaults.standard.set(true, forKey: "kShowWelfareGuideKey")
+            needShowGuide = false
             return
         }
     }
