@@ -22,6 +22,7 @@ import HL
 import Config
 import Language
 import SyncCore
+import ChatListUI
 
 public class ContactViewController: BaseVC {
     

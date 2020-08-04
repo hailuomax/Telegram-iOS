@@ -14,6 +14,9 @@ class DiscoverItemCell: UITableViewCell {
     @IBOutlet weak var redDot: UIView!
     @IBOutlet weak var iconImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
+    
+    var needGuide = false
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }    

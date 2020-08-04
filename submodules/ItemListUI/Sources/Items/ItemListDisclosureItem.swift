@@ -37,9 +37,11 @@ public class ItemListDisclosureItem: ListViewItem, ItemListItem {
     let action: (() -> Void)?
     let clearHighlightAutomatically: Bool
     public let tag: ItemListItemTag?
+    //hl自定义属性
+    //是否显示红点
     let showRedDot: Bool
     
-    public init(presentationData: ItemListPresentationData, icon: UIImage? = nil, title: String, enabled: Bool = true, titleColor: ItemListDisclosureItemTitleColor = .primary, label: String, labelStyle: ItemListDisclosureLabelStyle = .text, sectionId: ItemListSectionId, style: ItemListStyle, disclosureStyle: ItemListDisclosureStyle = .arrow, showRedDot : Bool = false , action: (() -> Void)?, clearHighlightAutomatically: Bool = true, tag: ItemListItemTag? = nil) {
+    public init(presentationData: ItemListPresentationData, icon: UIImage? = nil, title: String, enabled: Bool = true, titleColor: ItemListDisclosureItemTitleColor = .primary, label: String, labelStyle: ItemListDisclosureLabelStyle = .text, sectionId: ItemListSectionId, style: ItemListStyle, disclosureStyle: ItemListDisclosureStyle = .arrow, showRedDot : Bool = false ,action: (() -> Void)?, clearHighlightAutomatically: Bool = true, tag: ItemListItemTag? = nil) {
         self.presentationData = presentationData
         self.icon = icon
         self.title = title
@@ -493,6 +495,7 @@ public class ItemListDisclosureItemNode: ListViewItemNode, ItemListItemNode {
                     }
                     
                     strongSelf.highlightedBackgroundNode.frame = CGRect(origin: CGPoint(x: 0.0, y: -UIScreenPixel), size: CGSize(width: params.width, height: height + UIScreenPixel))
+    
                 }
             })
         }

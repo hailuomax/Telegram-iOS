@@ -11,8 +11,9 @@ import Postbox
 import TelegramCore
 import SwiftSignalKit
 import AccountContext
-import ChatListUI
 import SyncCore
+import TelegramPresentationData
+import TelegramUIPreferences
 
 public class ContactUtil {
     
@@ -20,7 +21,7 @@ public class ContactUtil {
     /// - Parameter context: 上下文
     /// - Parameter state: 鬼才知道
     /// - Parameter complete: 回调
-    static func getAllChatList(context:AccountContext,state: ChatListNodeState,complete: @escaping (([ChatListNodeEntry]?) -> Void)) {
+    public static func getAllChatList(context:AccountContext,state: ChatListNodeState,complete: @escaping (([ChatListNodeEntry]?) -> Void)) {
         _ = (context.account.viewTracker.aroundChatListView(groupId: PeerGroupId.root, index: ChatListIndex.absoluteUpperBound, count: 80)
         |> map { view, updateType -> [ChatListNodeEntry] in
             var result: [ChatListNodeEntry] = []
@@ -46,7 +47,7 @@ public class ContactUtil {
     /// - Parameter context: 上下文
     /// - Parameter state: 暂不知道
     /// - Parameter complete: 回调
-    static func getGroup(_ context: AccountContext, state: ChatListNodeState,complete: @escaping (([Peer]?) -> Void)) {
+    public static func getGroup(_ context: AccountContext, state: ChatListNodeState,complete: @escaping (([Peer]?) -> Void)) {
         getAllChatList(context: context, state: state) { (entries) in
             var peerArr: [Peer] = [Peer]()
             
@@ -82,9 +83,33 @@ public class ContactUtil {
     
     /// 获取聊天列表频道数据
     /// - Parameter context: 上下文
+    /// - Parameter presentationData: presentationData
+    /// - Parameter complete: 回调 [TelegramChannel]
+    public static func getGroup(_ context: AccountContext, presentationData:PresentationData ,complete: @escaping (([TelegramChannel]) -> Void)) {
+        let pData = ChatListPresentationData(theme: presentationData.theme, fontSize: PresentationFontSize.regular, strings: presentationData.strings, dateTimeFormat: presentationData.dateTimeFormat, nameSortOrder: presentationData.nameSortOrder, nameDisplayOrder: presentationData.nameDisplayOrder, disableAnimations: presentationData.disableAnimations)
+        
+        let currentState = ChatListNodeState(presentationData: pData, editing: false, peerIdWithRevealedOptions: nil, selectedPeerIds: Set(), selectedAdditionalCategoryIds: Set(), peerInputActivities: nil, pendingRemovalPeerIds: Set(), pendingClearHistoryPeerIds: Set(), archiveShouldBeTemporaryRevealed: false, hiddenPsaPeerId: nil)
+        
+        return ContactUtil.getGroup(context, state:currentState, complete: { peers in
+            guard let peers = peers else { return }
+
+            let group = peers.compactMap{$0 as? TelegramChannel}
+                .filter{
+                    switch $0.info {
+                    case .broadcast:
+                        return false
+                    case .group:
+                        return true
+                    }}
+            complete(group)
+        })
+    }
+    
+    /// 获取聊天列表频道数据
+    /// - Parameter context: 上下文
     /// - Parameter state: 暂不了解
     /// - Parameter complete: 筛选出来的回调数据
-    static func getChannel(_ context: AccountContext, state: ChatListNodeState,complete: @escaping (([Peer]?) -> Void)) {
+    public static func getChannel(_ context: AccountContext, state: ChatListNodeState,complete: @escaping (([Peer]?) -> Void)) {
         getAllChatList(context: context, state: state) { (entries) in
             let results = filter(context, entries, .peers(filter: .onlyChannels, isSelecting: false, additionalCategories: []))
             var peerArr: [Peer] = [Peer]()
