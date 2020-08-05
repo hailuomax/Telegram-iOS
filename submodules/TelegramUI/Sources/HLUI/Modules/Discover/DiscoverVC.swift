@@ -267,7 +267,7 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
             cell.needGuide = model.refCode == "welfareBot"
         }
         // 附近的人 
-        if [3, 5].contains(listData.itemType) {
+        if [3, 5, 6].contains(listData.itemType) {
             cell.iconImageView.image = UIImage(bundleImageName: listData.titleIcon ?? "ic-discover-default")
         }
         ///查看全部
@@ -360,6 +360,11 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
                 HLAccountManager.validateAccountAndcheckPwdSetting((self, entrustAllVC), context: self.context!)
             }
             break
+        case 6:
+            let webVC: HLBaseVC<BaseWkWebView> = HLBaseVC<BaseWkWebView>(context: context).then{
+                $0.contentView.load(urlStr: "https://m.cailu.net/academy", jsNames: [], onListen: {_,_  in})
+            }
+            (self.navigationController as? NavigationController)?.pushViewController(webVC, completion: { })
         default:
             break
         }

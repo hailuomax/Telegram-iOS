@@ -457,7 +457,7 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
             //邀請好友
             entries.append(.inviteFriends(presentationData.theme, PresentationResourcesSettings.inviteFriends, HLLanguage.InviteNewUser.localized()))
             
-            entries.append(.caiLuCloudCollege(presentationData.theme, PresentationResourcesSettings.caiLuCloudCollege, "财路云学院"))
+//            entries.append(.caiLuCloudCollege(presentationData.theme, PresentationResourcesSettings.caiLuCloudCollege, "财路云学院"))
             entries.append(.noticeCenter(presentationData.theme, PresentationResourcesSettings.notificationCenter, "通知中心" , state.unread))
             
         }
