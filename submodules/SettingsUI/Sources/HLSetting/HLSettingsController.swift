@@ -1584,12 +1584,6 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
     let kShowWalletGuideKey = "kShowWalletGuideKey"
     controller.willAppear = {[weak controller]  _ in
         
-        if UserDefaults.standard.bool(forKey: kShowWalletGuideKey) == false {
-        let itemFrame = CGRect(x: 0, y: 130 + NavBarHeight , width: kScreenWidth, height: 44 )
-            GuideView.show(mold: GuideView.Mold.wallet, target: itemFrame)
-            UserDefaults.standard.set(true, forKey:kShowWalletGuideKey)
-        }
-        
         guard let ctr = controller else { return }
         repo.unreadNotice().value { data in
             debugPrint(data)
@@ -1599,6 +1593,12 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                 return state
             }
         }.load(ctr.disposeBag)
+        if UserDefaults.standard.bool(forKey: kShowWalletGuideKey) == true {
+            return
+        }
+        let itemFrame = CGRect(x: 0, y: 130 + NavBarHeight , width: kScreenWidth, height: 44 )
+            GuideView.show(mold: GuideView.Mold.wallet, target: itemFrame)
+            UserDefaults.standard.set(true, forKey:kShowWalletGuideKey)
     }
 
     setDisplayNavigationBarImpl = { [weak controller] display in
