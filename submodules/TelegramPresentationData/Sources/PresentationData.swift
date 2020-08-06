@@ -309,7 +309,7 @@ public func currentPresentationDataAndSettings(accountManager: AccountManager, s
 /// - Parameter languageCode: 语言code
 private func stringValue(_ languageCode: String) -> PresentationStrings{
     
-    let bundle = Bundle.main
+    let bundle = Bundle.getAppBundle()
     //local相关信息
     var l: (languageCode: String, localizedName: String, localization: String)
     

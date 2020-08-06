@@ -7,7 +7,8 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:telegram.me</string>
-		<string>applinks:t.me</string>
+		<string>applinks:i7.app</string>
+		<string>applinks:hailuo</string>
 	</array>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array>
