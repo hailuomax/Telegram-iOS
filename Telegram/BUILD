@@ -264,8 +264,7 @@ telegram_entitlements_template = """
     <string>{telegram_aps_environment}</string>
     <key>com.apple.developer.associated-domains</key>
     <array>
-        <string>applinks:telegram.me</string>
-        <string>applinks:t.me</string>
+        <string>applinks:i7.app</string>
     </array>
     <key>com.apple.developer.siri</key>
     <true/>
