@@ -209,9 +209,11 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
         self.contentView.tableView.reloadData()
     }
     ///验证y
-    @objc func validate(_ continueAction :@escaping ()->()){
+    @objc func validate(_ continueAction: @escaping ()->()){
         
-        if HLAccountManager.shareAccount.token == nil || HLAccountManager.shareAccount.token!.isEmpty {
+        if HLAccountManager.walletIsLogined {
+            continueAction()
+        }else{
             
             let pushAccountValidationVC : (Bool,Phone)->() = { [weak self] (showPwdView,phone) in
                 guard let self = self else {return}
@@ -221,23 +223,21 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
                 })
                 self.navigationController?.pushViewController(vc, animated: true)
             }
-
+            
             AssetVerificationViewController.show(context: self.context!, currentVC: self, onPushAccountLockVC: {[weak self] in
                 guard let self = self else {return}
                 let disableVC = AccountLockVC(context: self.context!, title: $0)
                 self.navigationController?.pushViewController(disableVC, animated: true)
-
-            }, onPushAccountValidationVC: {
-                pushAccountValidationVC($0,$1)
+                
+                }, onPushAccountValidationVC: {
+                    pushAccountValidationVC($0,$1)
             }, onPushBindExceptionVC: {[weak self] in
                 guard let self = self else {return}
                 let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
-
+                
                 let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: self.context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: self.context, viewModel: exceptionVM)
                 self.navigationController?.pushViewController(exceptionVC, animated: true)
             })
-        }else{
-             continueAction()
         }
     }
 }

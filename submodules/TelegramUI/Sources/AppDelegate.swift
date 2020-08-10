@@ -1818,9 +1818,9 @@ final class SharedApplicationContext {
             }
         }
         |> deliverOnMainQueue).start(next: { _, context, authContext in
+            HUD.hide()
             if let context = context {
                 context.openUrl(url)
-                HUD.hide()
             } else if let authContext = authContext {
                 if let proxyData = parseProxyUrl(url) {
                     authContext.rootController.view.endEditing(true)

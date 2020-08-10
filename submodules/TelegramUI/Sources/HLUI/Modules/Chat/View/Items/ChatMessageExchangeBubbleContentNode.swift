@@ -196,7 +196,7 @@ final class ChatMessageExchangeBubbleContentNode: ChatMessageBubbleContentNode {
             exchangeVC.viewModel = exchangeVM
             currentVC.navigationController?.pushViewController(exchangeVC, animated: true)
         }
-        guard HLAccountManager.shareAccount.token == nil || HLAccountManager.shareAccount.token!.isEmpty else {
+        guard !HLAccountManager.walletIsLogined else {
             block()
             return
         }

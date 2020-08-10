@@ -200,7 +200,7 @@ final class ChatMessageTransferBubbleContentNode: ChatMessageBubbleContentNode {
             let receiveVC = TransferGetVC(context: self.item!.context, transferId: transferId,message: self.item?.message)
             navVC.pushViewController(receiveVC)
         }
-        guard HLAccountManager.shareAccount.token == nil || HLAccountManager.shareAccount.token!.isEmpty else {
+        guard !HLAccountManager.walletIsLogined else {
             block()
             return
         }

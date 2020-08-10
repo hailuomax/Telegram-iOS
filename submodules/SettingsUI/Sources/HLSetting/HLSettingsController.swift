@@ -520,7 +520,7 @@ private final class SettingsControllerImpl: ItemListController, SettingsControll
         //MARK: -更新用户信息
         AccountRepo.shared.updateUserInfo().value { (accountM) in
             HLAccountManager.shareAccount = accountM
-            if HLAccountManager.shareAccount.token == nil || HLAccountManager.shareAccount.token!.isEmpty {
+            if accountM.token == nil || accountM.token!.isEmpty {
                 HLAccountManager.cleanWalletToken()
             } else {
                 if let phoneCode = accountM.phoneCode,let telephone = accountM.telephone {
@@ -832,7 +832,9 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                 // 资产首页
                 let  assetVC = AssetVC(context: context)
                 
-                if HLAccountManager.shareAccount.token == nil || HLAccountManager.shareAccount.token!.isEmpty {
+                if HLAccountManager.walletIsLogined{
+                    pushControllerImpl?(assetVC)
+                }else{
                     
                     let pushAccountValidationVC : (Bool, Phone)->() = { (showPwdView, phone) in
                         let vc = AccountValidationVC(phone:phone, context: context,showPwdView: showPwdView, onValidateSuccess: {
@@ -858,9 +860,6 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                         let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)
                         pushControllerImpl?(exceptionVC)
                     })
-
-                }else{
-                    pushControllerImpl?(assetVC)
                 }
             })
     }, openAuthentication: {
