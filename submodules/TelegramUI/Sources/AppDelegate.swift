@@ -1796,6 +1796,17 @@ final class SharedApplicationContext {
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        
+        var url = url
+        
+        ///添加urlScheme处理，唤醒app进入会话页面
+        if url.scheme == self.buildConfig?.appSpecificUrlScheme{
+            let ursStr: String = url.absoluteString.replacingOccurrences(of: url.scheme! + "://", with: "")
+            if let newUrl = URL(string: ursStr){
+                url = newUrl
+            }
+        }
+        
         self.openUrl(url: url)
         return true
     }
