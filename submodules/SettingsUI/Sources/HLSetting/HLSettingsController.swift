@@ -829,6 +829,9 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         let _ = (contextValue.get()
         |> deliverOnMainQueue
             |> take(1)).start(next: { context in
+//                let presentationData = context.sharedContext.currentPresentationData.with({ $0 })
+//                HLSDKAuthorizationVC.show(presentationData: presentationData)
+//                return
                 // 资产首页
                 let  assetVC = AssetVC(context: context)
                 
@@ -849,8 +852,8 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                         let nv = impl(){
                         currentVC = nv.topViewController
                     }
-                    
-                    AssetVerificationViewController.show(context: context, currentVC: currentVC, onPushAccountLockVC: {
+                    let presentationData = context.sharedContext.currentPresentationData.with({ $0 })
+                    AssetVerificationViewController.show(presentationData: presentationData, currentVC: currentVC, onPushAccountLockVC: {
                         let disableVC = AccountLockVC(context: context, title: $0)
                         pushControllerImpl?(disableVC)
                     }, onPushAccountValidationVC: {

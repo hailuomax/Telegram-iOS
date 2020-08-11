@@ -1102,9 +1102,12 @@ final class SharedApplicationContext {
                         return createChannelController(context: context)
                     })
                     PassValuesUtil.default.add(key:.RootViewController, value: { _ in
-                        return app.mainWindow?.viewController as? TelegramRootController
+                        return app.mainWindow?.viewController
                     })
                     
+                    PassValuesUtil.default.add(key:.MainWindow, value: {[weak self] _ in
+                        return self?.mainWindow
+                    })
                     
                     return AuthorizedApplicationContext(sharedApplicationContext: sharedApplicationContext, mainWindow: self.mainWindow, watchManagerArguments: watchManagerArgumentsPromise.get(), context: context, accountManager: sharedApplicationContext.sharedContext.accountManager, showCallsTab: callListSettings.showTab, reinitializedNotificationSettings: {
                         let _ = (self.context.get()

@@ -1248,8 +1248,8 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                         })
                         self.controller?.push(vc)
                     }
-
-                    self.controller?.push(AssetVerificationViewController.show(context: self.context, currentVC: nil, onPushAccountLockVC: {
+                    let presentationData = self.context.sharedContext.currentPresentationData.with({ $0 })
+                    self.controller?.push(AssetVerificationViewController.show(presentationData: presentationData, currentVC: nil, onPushAccountLockVC: {
                         let disableVC = AccountLockVC(context: context, title: $0)
                         self.controller?.push(disableVC)
                     }, onPushAccountValidationVC: {

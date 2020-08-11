@@ -11,6 +11,7 @@ import AccountContext
 import Model
 import Display
 import ViewModel
+import TelegramPresentationData
 
 extension ChatMessageBubbleContentNode {
     func assetVerification(currentVC: ChatController) {
@@ -27,8 +28,8 @@ extension ChatMessageBubbleContentNode {
         
         //没有token，需要跳转到用户验证的vc
         let context = currentVC.context
-        
-        AssetVerificationViewController.show(context: context, currentVC: currentVC, onPushAccountLockVC: {
+        let presentationData = context.sharedContext.currentPresentationData.with({ $0 })
+        AssetVerificationViewController.show(presentationData: presentationData, currentVC: currentVC, onPushAccountLockVC: {
             let disableVC = AccountLockVC(context: context, title: $0)
             pushControllerImpl(disableVC)
         }, onPushAccountValidationVC: {

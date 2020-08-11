@@ -223,8 +223,9 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
                 })
                 self.navigationController?.pushViewController(vc, animated: true)
             }
+            let presentationData = self.context!.sharedContext.currentPresentationData.with({ $0 })
             
-            AssetVerificationViewController.show(context: self.context!, currentVC: self, onPushAccountLockVC: {[weak self] in
+            AssetVerificationViewController.show(presentationData: presentationData, currentVC: self, onPushAccountLockVC: {[weak self] in
                 guard let self = self else {return}
                 let disableVC = AccountLockVC(context: self.context!, title: $0)
                 self.navigationController?.pushViewController(disableVC, animated: true)
