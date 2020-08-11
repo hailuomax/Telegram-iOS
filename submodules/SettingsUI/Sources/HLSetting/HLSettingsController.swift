@@ -518,16 +518,18 @@ private final class SettingsControllerImpl: ItemListController, SettingsControll
             self?.accountsAndPeersValue = value
         })
         //MARK: -更新用户信息
-        AccountRepo.shared.updateUserInfo().value { (accountM) in
-            HLAccountManager.shareAccount = accountM
-            if accountM.token == nil || accountM.token!.isEmpty {
-                HLAccountManager.cleanWalletToken()
-            } else {
-                if let phoneCode = accountM.phoneCode,let telephone = accountM.telephone {
-                    HLAccountManager.sharePhone = "\(phoneCode.replacingOccurrences(of: "+", with: ""))\(telephone)"
+        if HLAccountManager.walletIsLogined{
+            AccountRepo.shared.updateUserInfo().value { (accountM) in
+                HLAccountManager.shareAccount = accountM
+                if accountM.token == nil || accountM.token!.isEmpty {
+                    HLAccountManager.cleanWalletToken()
+                } else {
+                    if let phoneCode = accountM.phoneCode,let telephone = accountM.telephone {
+                        HLAccountManager.sharePhone = "\(phoneCode.replacingOccurrences(of: "+", with: ""))\(telephone)"
+                    }
                 }
-            }
-        }.load(disposeBag)
+            }.load(disposeBag)
+        }
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -1586,7 +1588,8 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
     let kShowWalletGuideKey = "kShowWalletGuideKey"
     controller.willAppear = {[weak controller]  _ in
         
-        guard let ctr = controller else { return }
+        guard let controller = controller,
+            HLAccountManager.walletIsLogined else { return }
         repo.unreadNotice().value { data in
             debugPrint(data)
             updateState { state in
@@ -1594,10 +1597,8 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                 state.unread = data.unread
                 return state
             }
-        }.load(ctr.disposeBag)
-        if UserDefaults.standard.bool(forKey: kShowWalletGuideKey) == true {
-            return
-        }
+        }.load(controller.disposeBag)
+        if UserDefaults.standard.bool(forKey: kShowWalletGuideKey) == true {return}
         let itemFrame = CGRect(x: 0, y: 130 + NavBarHeight , width: kScreenWidth, height: 44 )
             GuideView.show(mold: GuideView.Mold.wallet, target: itemFrame)
             UserDefaults.standard.set(true, forKey:kShowWalletGuideKey)

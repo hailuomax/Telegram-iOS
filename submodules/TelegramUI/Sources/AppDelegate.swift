@@ -1564,7 +1564,6 @@ final class SharedApplicationContext {
     }
 
     private let userActivityRepo: ActivityStatisticalRepo = ActivityStatisticalRepo()
-    private let disposeBag: DisposeBag = DisposeBag()
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         self.isInForegroundValue = true
@@ -1574,8 +1573,7 @@ final class SharedApplicationContext {
         
         self.maybeCheckForUpdates()
         
-        print("统计了一次用户日活")
-        userActivityRepo.activityAdd().load(disposeBag)
+        userActivityRepo.activityAdd()
     }
     
     //MARK: - app将要终止时
