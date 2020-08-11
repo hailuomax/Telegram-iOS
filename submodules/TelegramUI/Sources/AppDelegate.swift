@@ -252,6 +252,10 @@ final class SharedApplicationContext {
             $0.shouldResignOnTouchOutside = true
             $0.enableAutoToolbar = false
         }
+        
+        ///海螺统一的方法交换
+        HLMethodSwizzling.swizzling()
+        
         //MARK:  注册telegramUser的用户更新通知
         _ = NotificationCenter.default.rx
             .notification(HLAccountManager.kTelegramUserDidChangeNotificationName)

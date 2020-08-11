@@ -11,7 +11,7 @@ export BUNDLE_ID=lxtx.conch.app2
 export IS_INTERNAL_BUILD=false
 export IS_APPSTORE_BUILD=true
 export APPSTORE_ID=686449807
-export APP_SPECIFIC_URL_SCHEME=i7.app
+export APP_SPECIFIC_URL_SCHEME=hailuo
 
 export ENTITLEMENTS_APP=Telegram-iOS/Telegram-iOS-AppStoreLLC.entitlements
 export ENTITLEMENTS_EXTENSION_SHARE=Share/Share-AppStoreLLC.entitlements
