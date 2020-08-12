@@ -1812,6 +1812,7 @@ final class SharedApplicationContext {
     
     func openUrl(url: URL) {
         HUD.flashOnTopVC(.systemActivity, delay: 30)
+        
         let _ = (self.sharedContextPromise.get()
         |> take(1)
         |> mapToSignal { sharedApplicationContext -> Signal<(SharedAccountContextImpl, AuthorizedApplicationContext?, UnauthorizedApplicationContext?), NoError> in
@@ -1824,6 +1825,9 @@ final class SharedApplicationContext {
         }
         |> deliverOnMainQueue).start(next: { _, context, authContext in
             HUD.hide()
+            
+            if HLSDK.url(url, context: context, authContext: authContext) {return}
+            
             if let context = context {
                 context.openUrl(url)
             } else if let authContext = authContext {
