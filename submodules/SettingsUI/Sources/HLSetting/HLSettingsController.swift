@@ -831,9 +831,6 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         let _ = (contextValue.get()
         |> deliverOnMainQueue
             |> take(1)).start(next: { context in
-//                let presentationData = context.sharedContext.currentPresentationData.with({ $0 })
-//                HLSDKAuthorizationVC.show(presentationData: presentationData)
-//                return
                 // 资产首页
                 let  assetVC = AssetVC(context: context)
                 
@@ -939,6 +936,11 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         let _ = (contextValue.get()
         |> deliverOnMainQueue
         |> take(1)).start(next: { context in
+            let presentationData = context.sharedContext.currentPresentationData.with({ $0 })
+            
+            guard let navi = getNavigationControllerImpl?() else {return}
+            HLSDKAuthorizationVC.show(presentationData: presentationData, navigationController: navi, param: [:])
+            return
             let vc = SystemMessagesVC(context: context)
             pushControllerImpl?(vc)
         })
