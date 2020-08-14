@@ -22,8 +22,8 @@ final class BotPaymentCardInputItemNode: BotPaymentItemNode, STPPaymentCardTextF
     
     init() {
         self.cardField = STPPaymentCardTextField()
-        self.cardField.borderColor = .clear
-        self.cardField.borderWidth = 0.0
+        self.cardField.layer.borderColor = UIColor.clear.cgColor
+        self.cardField.layer.borderWidth = 0.0
         
         super.init(needsBackground: true)
         

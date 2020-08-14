@@ -344,10 +344,10 @@
             NSString *text = nil;
             __block bool hasPhoto = false;
             __block bool hasVideo = false;
-            [strongSelf->_selectionContext enumerateSelectedItems:^(TGMediaAsset *asset) {
+            [strongSelf->_selectionContext enumerateSelectedItems:^(id asset) {
                 if (![asset isKindOfClass:[TGMediaAsset class]])
                     return;
-                if (asset.isVideo) {
+                if (((TGMediaAsset *) asset).isVideo) {
                     hasVideo = true;
                 } else {
                     hasPhoto = true;
