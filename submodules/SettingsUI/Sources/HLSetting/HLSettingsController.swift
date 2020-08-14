@@ -117,7 +117,7 @@ private final class SettingsItemArguments {
     let openAboutMe: () -> Void
     let openQRCode: (Peer?) -> Void
     let openCaiLuCloudCollege: () -> ()
-    let openNoticeCenter: () -> ()
+    let openNoticeCenter: (Bool) -> ()
     let openSystemMessages: () -> ()
     
     init(
@@ -137,7 +137,7 @@ private final class SettingsItemArguments {
         openAboutMe:@escaping () -> Void,
         openQRCode:@escaping (Peer?) -> Void,
         openCaiLuCloudCollege:@escaping () -> (),
-        openNoticeCenter:@escaping () -> (),
+        openNoticeCenter:@escaping (Bool) -> (),
         openSystemMessages:@escaping () -> ()
         
     ) {
@@ -379,7 +379,7 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
             })
         case let .noticeCenter(_, image, text, unread):
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: "", sectionId: ItemListSectionId(self.section),style: .blocks , showRedDot: unread, action: {
-                arguments.openNoticeCenter()
+                arguments.openNoticeCenter(unread)
             })
         case let .systemMessage(_, image, text):
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: "" , sectionId: ItemListSectionId(self.section), style: .blocks , action: {
@@ -924,11 +924,11 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                 }
                 pushControllerImpl?(webVC)
             })
-    }, openNoticeCenter: {
+    }, openNoticeCenter: { unread in
         let _ = (contextValue.get()
         |> deliverOnMainQueue
         |> take(1)).start(next: { context in
-            let vc = NoticeCenterVC(context: context)
+            let vc = NoticeCenterVC(context: context, unread: unread)
             pushControllerImpl?(vc)
         })
         
@@ -939,7 +939,10 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
             let presentationData = context.sharedContext.currentPresentationData.with({ $0 })
             
             guard let navi = getNavigationControllerImpl?() else {return}
-            HLSDKAuthorizationVC.show(presentationData: presentationData, navigationController: navi, param: [:])
+//            HLSDKAuthorizationVC.show(presentationData: presentationData, navigationController: navi, param: [:])
+            let pvc = PaymentDetailsVC(context: nil, presentationData: presentationData)
+            navi.pushViewController(pvc, animated: false)
+            
             return
             let vc = SystemMessagesVC(context: context)
             pushControllerImpl?(vc)
