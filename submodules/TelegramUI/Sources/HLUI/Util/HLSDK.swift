@@ -9,8 +9,10 @@ import Foundation
 import Display
 import HLBase
 import TelegramPresentationData
+import UI
+import Account
 
-class HLSDK{
+extension HLSDK{
     
     ///判断是否
     static func url(_ url: URL, context: AuthorizedApplicationContext?, authContext: UnauthorizedApplicationContext?) -> Bool{
@@ -45,25 +47,36 @@ class HLSDK{
 ///SDK唤醒的类型
 enum SDKType: String {
     
-    case login
+    ///授权
+    case authorization
+    ///支付
     case pay
+    ///充值
     case recharge
+    ///提币
     case withdrawal
     
     func handel(with param: [String:String], navigationController: NavigationController, presentationData: PresentationData){
         
+        var nextVC: ViewController
         switch self {
-        case .login,
-             .pay,
+        case .authorization:
+            if HLAccountManager.walletIsLogined{
+                print("已登录，跳转到授权信息")
+                return
+            }else{
+                nextVC = HLSDK.Login.PhoneInputVC(presentationData: presentationData)
+            }
+        case .pay,
              .recharge,
              .withdrawal:
             
-            let testWebVC = HLBaseVC<BaseWkWebView>(presentationData: presentationData).then{
+            nextVC = HLBaseVC<BaseWkWebView>(presentationData: presentationData).then{
                 $0.contentView.load(urlStr: "https://www.baidu.com", jsNames: [], onListen: {_,_  in})
             }
-
-            navigationController.pushViewController(testWebVC)
         }
+        
+        navigationController.pushViewController(nextVC)
     }
 }
 
