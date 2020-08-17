@@ -193,6 +193,7 @@ final class ChatMessageExchangeBubbleContentNode: ChatMessageBubbleContentNode {
             let exchangeVM = ExchangeVM()
             exchangeVM.exchangeId = exchangeId
             let exchangeVC = ExchangeOrderCreateVC(context: currentVC.context)
+            exchangeVC.isEnterFromGroup = true
             exchangeVC.viewModel = exchangeVM
             currentVC.navigationController?.pushViewController(exchangeVC, animated: true)
         }

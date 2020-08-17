@@ -232,7 +232,7 @@ extension ItemListTradingItemNodeView{
                     HLAccountManager.shareAccount.pwdErrorTotalTimes =
                         $0.pwdErrorTotalTimes
                     
-                    HUD.flash(.label("交易密码有误"))
+                    HUD.flash(.label(Trading.IncorrectTransactionPassword.str))
                 }
             }).netWorkState({
                 switch $0 {
