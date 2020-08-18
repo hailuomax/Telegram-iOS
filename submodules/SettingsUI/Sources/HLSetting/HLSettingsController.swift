@@ -940,7 +940,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
             
             guard let navi = getNavigationControllerImpl?() else {return}
 //            HLSDKAuthorizationVC.show(presentationData: presentationData, navigationController: navi, param: [:])
-            let pvc = PaymentDetailsVC(context: nil, presentationData: presentationData)
+            let pvc = PaymentDetailsVC(type: PaymentDetailsType.orderPay(id: "1295179409859907586"), context: nil, presentationData: presentationData)
             navi.pushViewController(pvc, animated: false)
             
             return
