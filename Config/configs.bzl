@@ -240,7 +240,7 @@ def widget_extension_info_plist_substitutions():
         "APP_SPECIFIC_URL_SCHEME": appConfig()["appSpecificUrlScheme"],
         "BUILD_NUMBER": get_build_number(),
         "PRODUCT_BUNDLE_SHORT_VERSION": get_short_version(),
-        "MinimumOSVersion": "9.0",
+        "MinimumOSVersion": "10.0",
     }
     return substitutions
 
