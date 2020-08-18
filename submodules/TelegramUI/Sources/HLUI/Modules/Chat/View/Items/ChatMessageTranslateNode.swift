@@ -2,7 +2,7 @@
 //  ChatMessageTranslateNode.swift
 //  TelegramUI
 //
-//  Created by apple on 2020/1/9.
+//  Created by hailuo on 2020/1/9.
 //  Copyright © 2020 Telegram. All rights reserved.
 //
 

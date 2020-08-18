@@ -2,7 +2,7 @@
 //  ChatMessageRedPacketBubbleContentNode.swift
 //  TelegramUI
 //
-//  Created by apple on 2019/10/11.
+//  Created by hailuo on 2019/10/11.
 //  Copyright © 2019 Telegram. All rights reserved.
 //
 

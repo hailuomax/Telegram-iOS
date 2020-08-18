@@ -2,7 +2,7 @@
 //  ChatMessageTransferBubbleContentNode.swift
 //  TelegramUI
 //
-//  Created by apple on 2019/10/22.
+//  Created by hailuo on 2019/10/22.
 //  Copyright © 2019 Telegram. All rights reserved.
 //
 

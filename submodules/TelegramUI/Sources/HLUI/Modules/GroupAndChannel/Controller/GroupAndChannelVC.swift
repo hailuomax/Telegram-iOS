@@ -2,7 +2,7 @@
 //  GroupAndChannelVC.swift
 //  TelegramUI
 //
-//  Created by apple on 2019/10/8.
+//  Created by hailuo on 2019/10/8.
 //  Copyright © 2019 Telegram. All rights reserved.
 //
 
