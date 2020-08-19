@@ -17,6 +17,7 @@ import Display
 import DeviceAccess
 import SwiftSignalKit
 import CoreLocation
+import PresentationDataUtils
 
 import HL
 import UI
@@ -35,11 +36,6 @@ private let kDiscoverSectionFooter = "k\(DiscoverSectionFooter.self)"
 private let kDiscoverSectionHeader = "k\(DiscoverSectionHeader.self)"
 private let kDiscoverItemCell      = "k\(DiscoverItemCell.self)"
 
-private func resolveURL(_ model : DiscoverListItemModel?){
-    guard let link = model?.link , model?.linkType != 4 ,var url = URL(string: link) else {return}
-    url = URL(string:spliceWebUrl(link))!
-    app.openUrl(url: url)
-}
 
 /*
  * h5 链接拼接多语言
@@ -62,11 +58,9 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
     private lazy var locationManager = CLLocationManager()
     
     private var needShowGuide = false
-    /*
-     * 修改记录
-     * 2020/3/24 修改tabBar发现图片
-     * 去掉 .withRenderingMode(.alwaysOriginal)
-     */
+    
+    private var overlayStatusController: ViewController?
+    
     override init(context: AccountContext?, presentationData: PresentationData? = nil) {
         super.init(context: context, presentationData: presentationData)
         
@@ -90,6 +84,12 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
         if needShowGuide == true {
             showGuide()
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        overlayStatusController?.dismiss()
     }
         
     required init(coder aDecoder: NSCoder) {
@@ -241,6 +241,16 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
             })
         }
     }
+    
+    private func resolveURL(_ model : DiscoverListItemModel?){
+        guard let link = model?.link , model?.linkType != 4 ,var url = URL(string: link) else {return}
+        
+        overlayStatusController = OverlayStatusController(theme: self.presentationData.theme,  type: .loading(cancelled: nil))
+        self.present(overlayStatusController!, in: .window(.root))
+        
+        url = URL(string:spliceWebUrl(link))!
+        app.openUrl(url: url)
+    }
 }
 
 
@@ -302,7 +312,9 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
             if rowModel?.refCode == "welfareBot" {
                 self.viewModel.sendWelfareBotTasks()
                 self.contentView.tableView.reloadData()
-                self.validate {resolveURL(rowModel)}
+                self.validate {[weak self] in
+                    self?.resolveURL(rowModel)
+                }
                 return
             }
             resolveURL(rowModel)
@@ -396,6 +408,11 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
         if let listData = self.viewModel.listData[section].list {
             footer.listData = listData.count >= 5 ? [] + listData.prefix(5) : listData
         }
+        
+        footer.resolveURL = { [weak self] in
+            self?.resolveURL($0)
+        }
+        
         return footer
     }
     
@@ -500,6 +517,8 @@ class DiscoverSectionFooter : UITableViewHeaderFooterView,UICollectionViewDelega
         return view
     }()
     
+    var resolveURL: ((DiscoverListItemModel?) -> ())?
+    
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         self.collectionView.delegate = self
@@ -527,7 +546,7 @@ class DiscoverSectionFooter : UITableViewHeaderFooterView,UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        resolveURL(self.listData[indexPath.item])
+        resolveURL?(self.listData[indexPath.item])
     }
 }
 
