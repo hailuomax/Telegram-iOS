@@ -11,6 +11,8 @@ import HLBase
 import TelegramPresentationData
 import UI
 import Account
+import PromiseKit
+import HL
 
 extension HLSDK{
     
@@ -56,17 +58,24 @@ enum SDKType: String {
     ///提币
     case withdrawal
     
+    private static var shareNavigationController: NavigationController!
+    private static var sharePresentationData: PresentationData!
+    
     func handel(with param: [String:String], navigationController: NavigationController, presentationData: PresentationData){
+        
+        SDKType.shareNavigationController = navigationController
+        SDKType.sharePresentationData = presentationData
         
         var nextVC: ViewController
         switch self {
         case .authorization:
-            if HLAccountManager.walletIsLogined{
-                print("已登录，跳转到授权信息")
-                return
-            }else{
-                nextVC = HLSDK.Login.PhoneInputVC(presentationData: presentationData)
-            }
+            guard let openId: String = param["appId"] else {
+                HUD.flash(.label("appId无效"))
+                return }
+            
+            authorization()
+            
+            return
         case .pay,
              .recharge,
              .withdrawal:
@@ -77,6 +86,40 @@ enum SDKType: String {
         }
         
         navigationController.pushViewController(nextVC)
+    }
+    
+    
+    /// 授权流程
+    private func authorization(){
+        
+        firstly{
+            getAccessToken()
+        }
+        .done{ accessToken in
+            HLSDKAuthorizationVC.show(presentationData: SDKType.sharePresentationData, navigationController: SDKType.shareNavigationController, accessToken: accessToken)
+        }
+        .catch{_ in
+            
+        }
+    }
+    
+    /// 获取 accessToken
+    /// - Returns: accessToken
+    private func getAccessToken() -> Promise<String>{
+        
+        return Promise<String>{ reslover in
+            
+            if HLAccountManager.walletIsLogined{
+                print("已登录，直接从本地获取AccessToken")
+                reslover.fulfill(HLAccountManager.shareAccount.token!)
+            }else{
+                let nextVC: HLSDK.Login.PhoneInputVC = HLSDK.Login.PhoneInputVC(presentationData: SDKType.sharePresentationData, onGetUserToken: {
+                    print("LoginUserToken", $0)
+                    reslover.fulfill($0.token)
+                })
+                SDKType.shareNavigationController.pushViewController(nextVC)
+            }
+        }
     }
 }
 
