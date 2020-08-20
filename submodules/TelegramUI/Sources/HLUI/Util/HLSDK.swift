@@ -13,6 +13,7 @@ import UI
 import Account
 import PromiseKit
 import HL
+import Model
 
 extension HLSDK{
     
@@ -111,10 +112,12 @@ enum SDKType: String {
             
             if HLAccountManager.walletIsLogined{
                 print("已登录，直接从本地获取AccessToken")
+                HLSDK.shareAccessToken = HLAccountManager.shareAccount.token!
                 reslover.fulfill(HLAccountManager.shareAccount.token!)
             }else{
                 let nextVC: HLSDK.Login.PhoneInputVC = HLSDK.Login.PhoneInputVC(presentationData: SDKType.sharePresentationData, onGetUserToken: {
                     print("LoginUserToken", $0)
+                    HLSDK.shareAccessToken = $0.token
                     reslover.fulfill($0.token)
                 })
                 SDKType.shareNavigationController.pushViewController(nextVC)

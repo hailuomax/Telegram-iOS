@@ -55,6 +55,7 @@ import Config
 import HL
 import PassValue
 import IQKeyboardManagerSwift
+import Model
 
 private let handleVoipNotifications = false
 
