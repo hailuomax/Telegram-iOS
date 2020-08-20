@@ -715,12 +715,15 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                     if settings.defaultWebBrowser == nil {
                         if #available(iOSApplicationExtension 9.0, iOS 9.0, *) {
                             if let window = navigationController?.view.window {
-                                let controller = SFSafariViewController(url: parsedUrl)
-                                if #available(iOSApplicationExtension 10.0, iOS 10.0, *) {
-                                    controller.preferredBarTintColor = presentationData.theme.rootController.navigationBar.backgroundColor
-                                    controller.preferredControlTintColor = presentationData.theme.rootController.navigationBar.accentTextColor
-                                }
-                                window.rootViewController?.present(controller, animated: true)
+                                //MARK: 弹出WebView
+//                                let controller = SFSafariViewController(url: parsedUrl)
+                                let controller = HLSDKWebViewController(context: context, path: parsedUrl.absoluteString)
+//                                if #available(iOSApplicationExtension 10.0, iOS 10.0, *) {
+//                                    controller.preferredBarTintColor = presentationData.theme.rootController.navigationBar.backgroundColor
+//                                    controller.preferredControlTintColor = presentationData.theme.rootController.navigationBar.accentTextColor
+//                                }
+//                                window.rootViewController?.present(controller, animated: true)
+                                navigationController?.pushViewController(controller, completion: {})
                             } else {
                                 context.sharedContext.applicationBindings.openUrl(parsedUrl.absoluteString)
                             }
