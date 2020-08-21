@@ -936,15 +936,6 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         let _ = (contextValue.get()
         |> deliverOnMainQueue
         |> take(1)).start(next: { context in
-            let presentationData = context.sharedContext.currentPresentationData.with({ $0 })
-            
-            guard let navi = getNavigationControllerImpl?() else {return}
-//            HLSDKAuthorizationVC.show(presentationData: presentationData, navigationController: navi, param: [:])
-            //1295179409859907586
-            let pvc = PaymentDetailsVC(type: PaymentDetailsType.orderPay(id: "1295179409859907586"), context: nil, presentationData: presentationData)
-            navi.pushViewController(pvc, animated: false)
-            
-            return
             let vc = SystemMessagesVC(context: context)
             pushControllerImpl?(vc)
         })
