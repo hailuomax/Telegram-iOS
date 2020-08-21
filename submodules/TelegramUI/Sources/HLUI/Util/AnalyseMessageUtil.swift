@@ -12,6 +12,7 @@ import Config
 import CryptoSwift
 import Extension
 import Model
+import Account
 
 class AnalyseMessageUtil {
     //-> ChatMessageBubbleItemNode -> contentNodeMessagesAndClassesForItem
@@ -21,7 +22,11 @@ class AnalyseMessageUtil {
             switch ChatMsgConversion.default.transform(input:message.text) {
                 
             case .redPacket(version: let version, type: let type, id: let id, senderId: let senderId, recipientId: let recipientId, remark: let remark):
-                let redPacket = TelegramMediaRedPackets(redPacketId: id, senderId: senderId, remark: remark,message.receiveStatus)
+                
+                //备注分析是清除 " " + HLAccountManager.shareAccount.fullInvitedUrl() + " "
+                let remark = remark.replacingOccurrences(of: " " + HLAccountManager.shareAccount.fullInvitedUrl() + " ", with: "")
+                
+                let redPacket = TelegramMediaRedPackets(redPacketId: id, senderId: senderId, remark: remark, message.receiveStatus)
                 
                 return (message.withUpdatedMedia([redPacket]), ChatMessageRedPacketBubbleContentNode.self)
             case .transfer(version: let version, type: let type, id: let id, senderId: let senderId, recipientId: let recipientId, remark: let remark):

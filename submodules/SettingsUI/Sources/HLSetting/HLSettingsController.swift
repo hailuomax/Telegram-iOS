@@ -439,16 +439,6 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
                 pwdStatus = HLLanguage.NotSetUp.localized()
         }
         
-        var gestureStatus = ""
-        switch user.gestureStatus {
-            case 0:
-                gestureStatus = HLLanguage.NotSetUp.localized()
-            case 1:
-                gestureStatus = HLLanguage.Change.localized()
-            default:
-                gestureStatus = HLLanguage.NotSetUp.localized()
-        }
-        
         if checkHadToken {
             //实名认证 暂时隐藏该功能
             //entries.append(.authentication(presentationData.theme, PresentationResourcesSettings.authentication, HL.RealNameAuthentication.localized(), certificate))

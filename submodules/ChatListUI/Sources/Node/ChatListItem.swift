@@ -23,6 +23,7 @@ import Config
 import HL
 import Model
 import Language
+import Account
 
 public enum ChatListItemContent {
     case peer(message: Message?, peer: RenderedPeer, combinedReadState: CombinedPeerReadState?, isRemovedFromTotalUnreadCount: Bool, presence: PeerPresence?, summaryInfo: ChatListMessageTagSummaryInfo, embeddedState: PeerChatListEmbeddedInterfaceState?, inputActivities: [(Peer, PeerInputActivity)]?, promoInfo: ChatListNodeEntryPromoInfo?, ignoreUnreadBadge: Bool, displayAsMessage: Bool, hasFailedMessages: Bool)
@@ -899,12 +900,18 @@ class ChatListItemNode: ItemListRevealOptionsItemNode {
                             break
                         }
                     }else if messageText.contains(ChatMsgConfig.V1.RedPacket){
+                        
+                        //备注分析是清除 " " + HLAccountManager.shareAccount.fullInvitedUrl() + " "
+                        func handelRemark(_ r: String) -> String{
+                            return r.replacingOccurrences(of: " " + HLAccountManager.shareAccount.fullInvitedUrl() + " ", with: "")
+                        }
+                        
                         let type = ChatMsgConversion.default.transform(input: messageText)
                         switch type {
                         case .unknow(type: let type):
                             break
                         case .redPacket(_, _, _, _, _, remark: let remark):
-                            messageText = HLLanguage.RedPacket.ChatListRedPacket.localized() + remark
+                            messageText = HLLanguage.RedPacket.ChatListRedPacket.localized() + handelRemark(remark)
                         case .transfer(_, _, _, _, _, remark: let remark):
                             messageText = HLLanguage.RedPacket.ChatListTransfer.localized() + remark
                         case .exchange:
