@@ -901,9 +901,11 @@ class ChatListItemNode: ItemListRevealOptionsItemNode {
                         }
                     }else if messageText.contains(ChatMsgConfig.V1.RedPacket){
                         
-                        //备注分析是清除 " " + HLAccountManager.shareAccount.fullInvitedUrl() + " "
+                        //备注分析是清除 邀请链接 HLAccountManager.shareAccount.invitedUrl
                         func handelRemark(_ r: String) -> String{
-                            return r.replacingOccurrences(of: " " + HLAccountManager.shareAccount.fullInvitedUrl() + " ", with: "")
+                            guard let rang: Range<String.Index> = r.range(of: " " + HLAccountManager.shareAccount.invitedUrl) else {return r}
+                            let endIndex: String.Index = rang.lowerBound
+                            return String(r[r.startIndex..<endIndex])
                         }
                         
                         let type = ChatMsgConversion.default.transform(input: messageText)

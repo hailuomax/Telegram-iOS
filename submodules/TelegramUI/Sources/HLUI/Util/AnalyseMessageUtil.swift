@@ -20,9 +20,11 @@ class AnalyseMessageUtil {
     class V1 {
         static func analyse(message: Message) ->( Message, ChatMessageBubbleContentNode.Type ){
             
-            //备注分析是清除 " " + HLAccountManager.shareAccount.fullInvitedUrl() + " "
+            //备注分析是清除 邀请链接 HLAccountManager.shareAccount.invitedUrl
             func handelRemark(_ r: String) -> String{
-                return r.replacingOccurrences(of: " " + HLAccountManager.shareAccount.fullInvitedUrl() + " ", with: "")
+                guard let rang: Range<String.Index> = r.range(of: " " + HLAccountManager.shareAccount.invitedUrl) else {return r}
+                let endIndex: String.Index = rang.lowerBound
+                return String(r[r.startIndex..<endIndex])
             }
             
             switch ChatMsgConversion.default.transform(input:message.text) {
