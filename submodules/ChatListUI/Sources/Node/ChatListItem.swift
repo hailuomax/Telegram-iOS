@@ -913,7 +913,7 @@ class ChatListItemNode: ItemListRevealOptionsItemNode {
                         case .redPacket(_, _, _, _, _, remark: let remark):
                             messageText = HLLanguage.RedPacket.ChatListRedPacket.localized() + handelRemark(remark)
                         case .transfer(_, _, _, _, _, remark: let remark):
-                            messageText = HLLanguage.RedPacket.ChatListTransfer.localized() + remark
+                            messageText = HLLanguage.RedPacket.ChatListTransfer.localized() + handelRemark(remark)
                         case .exchange:
                             messageText =  HLLanguage.FastExchange.localized()
                         }
