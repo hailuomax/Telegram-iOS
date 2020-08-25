@@ -2,15 +2,15 @@
 
 export BUCK=buck
 export TELEGRAM_ENV_SET=1
-export DEVELOPMENT_CODE_SIGN_IDENTITY=Apple Development: Guojian Huang (MZP78X9H74)
-export DISTRIBUTION_CODE_SIGN_IDENTITY=iPhone Distribution: CAILU PTE LTD (4UB2QM68WG)
-export DEVELOPMENT_TEAM=4UB2QM68WG
+export DEVELOPMENT_CODE_SIGN_IDENTITY=Apple Development: Qiang Chen (G994634UGW)
+export DISTRIBUTION_CODE_SIGN_IDENTITY=Apple Distribution: Qiang Chen (AP3P9K3HUS)
+export DEVELOPMENT_TEAM=AP3P9K3HUS
 export API_ID=1727834
 export API_HASH=c8b31c26e3342e91aa0a276107cf9c0b
-export BUNDLE_ID=lxtx.conch.app2
+export BUNDLE_ID=com.chenqiang.sleepMusic
 export IS_INTERNAL_BUILD=false
 export IS_APPSTORE_BUILD=true
-export APPSTORE_ID=686449807
+export APPSTORE_ID=1477006180
 export APP_SPECIFIC_URL_SCHEME=hailuo
 
 export ENTITLEMENTS_APP=Telegram-iOS/Telegram-iOS-AppStoreLLC.entitlements
@@ -20,22 +20,22 @@ export ENTITLEMENTS_EXTENSION_NOTIFICATIONSERVICE=NotificationService/Notificati
 export ENTITLEMENTS_EXTENSION_NOTIFICATIONCONTENT=NotificationContent/NotificationContent-AppStoreLLC.entitlements
 export ENTITLEMENTS_EXTENSION_INTENTS=SiriIntents/SiriIntents-AppStoreLLC.entitlements
 
-export DEVELOPMENT_PROVISIONING_PROFILE_APP=lxtx.conch.app2_dev
-export DISTRIBUTION_PROVISIONING_PROFILE_APP=lxtx.conch.app2_pro
-export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_SHARE=lxtx.conch.app2.Share_dev
-export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_SHARE=lxtx.conch.app2.Share_pro
-export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_WIDGET=lxtx.conch.app2.Widget_dev
-export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_WIDGET=lxtx.conch.app2.Widget_pro
-export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_NOTIFICATIONSERVICE=lxtx.conch.app2.NotificationService_dev
-export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_NOTIFICATIONSERVICE=lxtx.conch.app2.NotificationService_pro
-export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_NOTIFICATIONCONTENT=lxtx.conch.app2.NotificationContent_dev
-export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_NOTIFICATIONCONTENT=lxtx.conch.app2.NotificationContent_pro
-export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_INTENTS=lxtx.conch.app2.SiriIntents_dev
-export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_INTENTS=lxtx.conch.app2.SiriIntents_pro
-export DEVELOPMENT_PROVISIONING_PROFILE_WATCH_APP=lxtx.conch.app2.watchkitapp_dev
-export DISTRIBUTION_PROVISIONING_PROFILE_WATCH_APP=lxtx.conch.app2.watchkitapp_pro
-export DEVELOPMENT_PROVISIONING_PROFILE_WATCH_EXTENSION=lxtx.conch.app2.watchkitapp.watchkitextension_dev
-export DISTRIBUTION_PROVISIONING_PROFILE_WATCH_EXTENSION=lxtx.conch.app2.watchkitapp.watchkitextension_pro
+export DEVELOPMENT_PROVISIONING_PROFILE_APP=com.chenqiang.sleepMusic_dev
+export DISTRIBUTION_PROVISIONING_PROFILE_APP=com.chenqiang.sleepMusic_pro
+export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_SHARE=com.chenqiang.sleepMusic.Share_dev
+export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_SHARE=com.chenqiang.sleepMusic.Share_pro
+export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_WIDGET=com.chenqiang.sleepMusic.Widget_dev
+export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_WIDGET=com.chenqiang.sleepMusic.Widget_pro
+export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_NOTIFICATIONSERVICE=com.chenqiang.sleepMusic.NotificationService_dev
+export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_NOTIFICATIONSERVICE=com.chenqiang.sleepMusic.NotificationService_pro
+export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_NOTIFICATIONCONTENT=com.chenqiang.sleepMusic.NotificationContent_dev
+export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_NOTIFICATIONCONTENT=com.chenqiang.sleepMusic.NotificationContent_pro
+export DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_INTENTS=com.chenqiang.sleepMusic.SiriIntents_dev
+export DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_INTENTS=com.chenqiang.sleepMusic.SiriIntents_pro
+# export DEVELOPMENT_PROVISIONING_PROFILE_WATCH_APP=com.chenqiang.sleepMusic.watchkitapp_dev
+# export DISTRIBUTION_PROVISIONING_PROFILE_WATCH_APP=com.chenqiang.sleepMusic.watchkitapp_pro
+# export DEVELOPMENT_PROVISIONING_PROFILE_WATCH_EXTENSION=com.chenqiang.sleepMusic.watchkitapp.watchkitextension_dev
+# export DISTRIBUTION_PROVISIONING_PROFILE_WATCH_EXTENSION=com.chenqiang.sleepMusic.watchkitapp.watchkitextension_pro
 export BUILDBOX_DIR=buildbox
 export CODESIGNING_PROFILES_VARIANT=appstore
 export PACKAGE_METHOD=appstore
@@ -43,7 +43,7 @@ export PACKAGE_METHOD=appstore
 export BUILD_NUMBER=$(shell date +%Y%m%d%H%M)
 
 # app 版本
-APP_VERSION="1.2.10"
+APP_VERSION="1.3.4"
 
 include Utils.makefile
 
@@ -83,10 +83,10 @@ BUCK_OPTIONS=\
 	--config custom.entitlementsExtensionIntents="${ENTITLEMENTS_EXTENSION_INTENTS}" \
 	--config custom.developmentProvisioningProfileExtensionIntents="${DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_INTENTS}" \
 	--config custom.distributionProvisioningProfileExtensionIntents="${DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_INTENTS}" \
-	--config custom.developmentProvisioningProfileWatchApp="${DEVELOPMENT_PROVISIONING_PROFILE_WATCH_APP}" \
-	--config custom.distributionProvisioningProfileWatchApp="${DISTRIBUTION_PROVISIONING_PROFILE_WATCH_APP}" \
-	--config custom.developmentProvisioningProfileWatchExtension="${DEVELOPMENT_PROVISIONING_PROFILE_WATCH_EXTENSION}" \
-	--config custom.distributionProvisioningProfileWatchExtension="${DISTRIBUTION_PROVISIONING_PROFILE_WATCH_EXTENSION}"
+	# --config custom.developmentProvisioningProfileWatchApp="${DEVELOPMENT_PROVISIONING_PROFILE_WATCH_APP}" \
+	# --config custom.distributionProvisioningProfileWatchApp="${DISTRIBUTION_PROVISIONING_PROFILE_WATCH_APP}" \
+	# --config custom.developmentProvisioningProfileWatchExtension="${DEVELOPMENT_PROVISIONING_PROFILE_WATCH_EXTENSION}" \
+	# --config custom.distributionProvisioningProfileWatchExtension="${DISTRIBUTION_PROVISIONING_PROFILE_WATCH_EXTENSION}"
 
 BAZEL=$(shell which bazel)
 
@@ -130,7 +130,6 @@ build_arm64: check_env
 	//submodules/Display:Display#shared,iphoneos-arm64 \
 	//submodules/TelegramUI:TelegramUI#dwarf-and-dsym,shared,iphoneos-arm64 \
 	//submodules/TelegramUI:TelegramUI#shared,iphoneos-arm64 \
-	//Telegram:WatchAppExtension#dwarf-and-dsym,watchos-arm64_32,watchos-armv7k \
 	//Telegram:ShareExtension#dwarf-and-dsym,iphoneos-arm64 \
     //Telegram:WidgetExtension#dwarf-and-dsym,iphoneos-arm64 \
     //Telegram:NotificationContentExtension#dwarf-and-dsym,iphoneos-arm64 \
@@ -160,7 +159,6 @@ build_debug_arm64: check_env
 	//submodules/Display:Display#shared,iphoneos-arm64 \
 	//submodules/TelegramUI:TelegramUI#dwarf-and-dsym,shared,iphoneos-arm64 \
 	//submodules/TelegramUI:TelegramUI#shared,iphoneos-arm64 \
-	//Telegram:WatchAppExtension#dwarf-and-dsym,watchos-arm64_32,watchos-armv7k \
 	//Telegram:ShareExtension#dwarf-and-dsym,iphoneos-arm64 \
     //Telegram:WidgetExtension#dwarf-and-dsym,iphoneos-arm64 \
     //Telegram:NotificationContentExtension#dwarf-and-dsym,iphoneos-arm64 \
@@ -204,7 +202,6 @@ build_debug_armv7: check_env
 	//submodules/Display:Display#shared,iphoneos-armv7 \
 	//submodules/TelegramUI:TelegramUI#dwarf-and-dsym,shared,iphoneos-armv7 \
 	//submodules/TelegramUI:TelegramUI#shared,iphoneos-armv7 \
-	//Telegram:WatchAppExtension#dwarf-and-dsym,watchos-armv7_32,watchos-armv7k \
 	//Telegram:ShareExtension#dwarf-and-dsym,iphoneos-armv7 \
     //Telegram:WidgetExtension#dwarf-and-dsym,iphoneos-armv7 \
     //Telegram:NotificationContentExtension#dwarf-and-dsym,iphoneos-armv7 \
@@ -234,7 +231,6 @@ build: check_env
 	//submodules/Display:Display#shared,iphoneos-arm64,iphoneos-armv7 \
 	//submodules/TelegramUI:TelegramUI#dwarf-and-dsym,shared,iphoneos-arm64,iphoneos-armv7 \
 	//submodules/TelegramUI:TelegramUI#shared,iphoneos-arm64,iphoneos-armv7 \
-	//Telegram:WatchAppExtension#dwarf-and-dsym,watchos-arm64_32,watchos-armv7k \
 	//Telegram:ShareExtension#dwarf-and-dsym,iphoneos-arm64,iphoneos-armv7 \
     //Telegram:WidgetExtension#dwarf-and-dsym,iphoneos-arm64,iphoneos-armv7 \
     //Telegram:NotificationContentExtension#dwarf-and-dsym,iphoneos-arm64,iphoneos-armv7 \
@@ -257,8 +253,6 @@ package_arm64:
 	PACKAGE_ENTITLEMENTS_EXTENSION_NotificationContent="Telegram/${ENTITLEMENTS_EXTENSION_NOTIFICATIONCONTENT}" \
 	PACKAGE_PROVISIONING_PROFILE_EXTENSION_Intents="${DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_INTENTS}" \
 	PACKAGE_ENTITLEMENTS_EXTENSION_Intents="Telegram/${ENTITLEMENTS_EXTENSION_INTENTS}" \
-	PACKAGE_PROVISIONING_PROFILE_WATCH_APP="${DISTRIBUTION_PROVISIONING_PROFILE_WATCH_APP}" \
-	PACKAGE_PROVISIONING_PROFILE_WATCH_EXTENSION="${DISTRIBUTION_PROVISIONING_PROFILE_WATCH_EXTENSION}" \
 	PACKAGE_BUNDLE_ID="${BUNDLE_ID}" \
 	sh package_app.sh iphoneos-arm64 $(BUCK) "telegram" $(BUCK_OPTIONS) ${BUCK_RELEASE_OPTIONS}
 
@@ -277,8 +271,6 @@ package_armv7:
 	PACKAGE_ENTITLEMENTS_EXTENSION_NotificationContent="Telegram/${ENTITLEMENTS_EXTENSION_NOTIFICATIONCONTENT}" \
 	PACKAGE_PROVISIONING_PROFILE_EXTENSION_Intents="${DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_INTENTS}" \
 	PACKAGE_ENTITLEMENTS_EXTENSION_Intents="Telegram/${ENTITLEMENTS_EXTENSION_INTENTS}" \
-	PACKAGE_PROVISIONING_PROFILE_WATCH_APP="${DISTRIBUTION_PROVISIONING_PROFILE_WATCH_APP}" \
-	PACKAGE_PROVISIONING_PROFILE_WATCH_EXTENSION="${DISTRIBUTION_PROVISIONING_PROFILE_WATCH_EXTENSION}" \
 	PACKAGE_BUNDLE_ID="${BUNDLE_ID}" \
 	sh package_app.sh iphoneos-armv7 $(BUCK) "telegram" $(BUCK_OPTIONS) ${BUCK_RELEASE_OPTIONS}
 
@@ -297,8 +289,6 @@ package_debug_arm64:
 	PACKAGE_ENTITLEMENTS_EXTENSION_NotificationContent="Telegram/${ENTITLEMENTS_EXTENSION_NOTIFICATIONCONTENT}" \
 	PACKAGE_PROVISIONING_PROFILE_EXTENSION_Intents="${DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_INTENTS}" \
 	PACKAGE_ENTITLEMENTS_EXTENSION_Intents="Telegram/${ENTITLEMENTS_EXTENSION_INTENTS}" \
-	PACKAGE_PROVISIONING_PROFILE_WATCH_APP="${DEVELOPMENT_PROVISIONING_PROFILE_WATCH_APP}" \
-	PACKAGE_PROVISIONING_PROFILE_WATCH_EXTENSION="${DEVELOPMENT_PROVISIONING_PROFILE_WATCH_EXTENSION}" \
 	PACKAGE_BUNDLE_ID="${BUNDLE_ID}" \
 	ENABLE_GET_TASK_ALLOW=0 \
 	CODESIGNING_PROFILES_VARIANT="development" \
@@ -319,8 +309,6 @@ package_debug_armv7:
 	PACKAGE_ENTITLEMENTS_EXTENSION_NotificationContent="Telegram/${ENTITLEMENTS_EXTENSION_NOTIFICATIONCONTENT}" \
 	PACKAGE_PROVISIONING_PROFILE_EXTENSION_Intents="${DEVELOPMENT_PROVISIONING_PROFILE_EXTENSION_INTENTS}" \
 	PACKAGE_ENTITLEMENTS_EXTENSION_Intents="Telegram/${ENTITLEMENTS_EXTENSION_INTENTS}" \
-	PACKAGE_PROVISIONING_PROFILE_WATCH_APP="${DEVELOPMENT_PROVISIONING_PROFILE_WATCH_APP}" \
-	PACKAGE_PROVISIONING_PROFILE_WATCH_EXTENSION="${DEVELOPMENT_PROVISIONING_PROFILE_WATCH_EXTENSION}" \
 	PACKAGE_BUNDLE_ID="${BUNDLE_ID}" \
 	ENABLE_GET_TASK_ALLOW=0 \
 	CODESIGNING_PROFILES_VARIANT="development" \
@@ -341,8 +329,6 @@ package:
 	PACKAGE_ENTITLEMENTS_EXTENSION_NotificationContent="Telegram/${ENTITLEMENTS_EXTENSION_NOTIFICATIONCONTENT}" \
 	PACKAGE_PROVISIONING_PROFILE_EXTENSION_Intents="${DISTRIBUTION_PROVISIONING_PROFILE_EXTENSION_INTENTS}" \
 	PACKAGE_ENTITLEMENTS_EXTENSION_Intents="Telegram/${ENTITLEMENTS_EXTENSION_INTENTS}" \
-	PACKAGE_PROVISIONING_PROFILE_WATCH_APP="${DISTRIBUTION_PROVISIONING_PROFILE_WATCH_APP}" \
-	PACKAGE_PROVISIONING_PROFILE_WATCH_EXTENSION="${DISTRIBUTION_PROVISIONING_PROFILE_WATCH_EXTENSION}" \
 	PACKAGE_BUNDLE_ID="${BUNDLE_ID}" \
 	sh package_app.sh iphoneos-arm64 $(BUCK) "telegram" $(BUCK_OPTIONS) ${BUCK_RELEASE_OPTIONS}
 
@@ -378,7 +364,6 @@ build_buckdebug: check_env
 	//submodules/Display:Display#shared,iphoneos-arm64 \
 	//submodules/TelegramUI:TelegramUI#dwarf-and-dsym,shared,iphoneos-arm64 \
 	//submodules/TelegramUI:TelegramUI#shared,iphoneos-arm64 \
-	//Telegram:WatchAppExtension#dwarf-and-dsym,watchos-arm64_32,watchos-armv7k \
 	//Telegram:ShareExtension#dwarf-and-dsym,iphoneos-arm64 \
     //Telegram:WidgetExtension#dwarf-and-dsym,iphoneos-arm64 \
     //Telegram:NotificationContentExtension#dwarf-and-dsym,iphoneos-arm64 \
@@ -408,7 +393,6 @@ build_verbose: check_env
 	//submodules/Display:Display#shared,iphoneos-arm64 \
 	//submodules/TelegramUI:TelegramUI#dwarf-and-dsym,shared,iphoneos-arm64 \
 	//submodules/TelegramUI:TelegramUI#shared,iphoneos-arm64 \
-	//Telegram:WatchAppExtension#dwarf-and-dsym,watchos-arm64_32,watchos-armv7k \
 	//Telegram:ShareExtension#dwarf-and-dsym,iphoneos-arm64 \
 	//Telegram:WidgetExtension#dwarf-and-dsym,iphoneos-arm64 \
 	//Telegram:NotificationContentExtension#dwarf-and-dsym,iphoneos-arm64 \
