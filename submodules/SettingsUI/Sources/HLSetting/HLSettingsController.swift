@@ -873,7 +873,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         let _ = (contextValue.get()
         |> deliverOnMainQueue
         |> take(1)).start(next: { context in
-            let inviteVC = InviteFriendsVC(context: context)
+            let inviteVC = NewInviteFriendsVC(context: context)
             pushControllerImpl?(inviteVC)
         })
     }, openSetting: {
