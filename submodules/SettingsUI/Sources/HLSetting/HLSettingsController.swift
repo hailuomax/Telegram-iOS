@@ -407,11 +407,6 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
         let phones = AccountRepo.getAccountPhone()
         entries.append(.myWallet(presentationData.theme, PresentationResourcesSettings.myWallet, HLLanguage.MyAssets.localized(), phones.phone))
         
-        var checkHadToken = false
-        if let token = HLAccountManager.shareAccount.token {
-            checkHadToken = !token.isEmpty
-        }
-        
         let user = HLAccountManager.shareAccount
         
         var certificate = ""
@@ -439,7 +434,7 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
                 pwdStatus = HLLanguage.NotSetUp.localized()
         }
         
-        if checkHadToken {
+        if  HLAccountManager.walletIsLogined {
             //实名认证 暂时隐藏该功能
             //entries.append(.authentication(presentationData.theme, PresentationResourcesSettings.authentication, HL.RealNameAuthentication.localized(), certificate))
             //交易密码
