@@ -22,6 +22,7 @@ target 'Telegram' do
  	#pod 'JXPatternLock' #手势解锁
  	pod 'Cache'
 	pod 'Socket.IO-Client-Swift', '~> 15.2.0'
-    	pod 'Result'
+    pod 'Result'
 	pod 'IQKeyboardManagerSwift', '~> 6.5.0'
+	pod 'BaiduMobStatCodeless'
 end

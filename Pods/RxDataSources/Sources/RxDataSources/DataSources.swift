@@ -29,7 +29,7 @@ func rxDebugFatalError(_ error: Error) {
 
 func rxDebugFatalError(_ message: String) {
   #if DEBUG
-    //fatalError(message)
+    fatalError(message)
   #else
     print(message)
   #endif
