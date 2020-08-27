@@ -227,6 +227,8 @@ framework(
         "//Pods/RxSwift:RxSwift",
         "//Pods/RxCocoa:RxCocoa",
         "//Pods/SnapKit:SnapKit",
+        "//Pods/BaiduMobStatCodeless:BaiduMobStatCodeless",
+        "//Pods/BaiduMobStatCodeless:BaiduMobStatCodelessA",
         "//Pods/IQKeyboardManagerSwift:IQKeyboardManagerSwift",
         "//submodules/HL/UI:UI",
         "//submodules/HL/ViewModel:ViewModel",

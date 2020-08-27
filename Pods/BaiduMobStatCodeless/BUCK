@@ -1,0 +1,16 @@
+load("//Config:buck_rule_macros.bzl", "static_library")
+
+static_library(
+	name = "BaiduMobStatCodeless",
+	visibility = ["PUBLIC"],
+	exported_headers = glob([
+        	"**/*.h",
+	])
+)
+apple_resource(
+    name = "BaiduMobStatCodelessA",
+    visibility = ["PUBLIC"],
+    files = glob([
+        "**/*.a",
+    ]),
+)
