@@ -114,7 +114,9 @@ private func contentNodeMessagesAndClassesForItem(_ item: ChatMessageItem) -> [(
         inner: for media in message.media {
             if let webpage = media as? TelegramMediaWebpage {
                 if case .Loaded = webpage.content {
-                    result.append((message, ChatMessageWebpageBubbleContentNode.self, itemAttributes))
+                    if !message.text.contains(ChatMsgConfig.V1.RedPacket){//新红包解析
+                        result.append((message, ChatMessageWebpageBubbleContentNode.self, itemAttributes))
+                    }
                 }
                 break inner
             }
