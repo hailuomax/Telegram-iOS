@@ -2,7 +2,7 @@
 //  ChatMessageInteractiveExchangeNode.swift
 //  TelegramUI#shared
 //
-//  Created by lemon on 2020/5/6.
+//  Created by fan on 2020/5/6.
 //
 
 import Foundation

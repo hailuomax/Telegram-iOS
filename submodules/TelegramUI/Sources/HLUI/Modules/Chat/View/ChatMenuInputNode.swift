@@ -2,7 +2,7 @@
 //  ChatMenuInputNode.swift
 //  TelegramUI
 //
-//  Created by lemon on 2020/3/16.
+//  Created by fan on 2020/3/16.
 //  Copyright © 2020 Telegram. All rights reserved.
 //
 

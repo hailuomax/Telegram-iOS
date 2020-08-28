@@ -2,7 +2,7 @@
 //  HLUIConfig.swift
 //  TelegramUI#shared
 //
-//  Created by lemon on 2020/4/1.
+//  Created by fan on 2020/4/1.
 //
 
 import UIKit

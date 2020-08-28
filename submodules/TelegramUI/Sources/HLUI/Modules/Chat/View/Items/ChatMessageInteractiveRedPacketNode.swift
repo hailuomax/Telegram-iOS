@@ -2,7 +2,7 @@
 //  ChatMessageInteractiveRedPacketNode.swift
 //  TelegramUI#shared
 //
-//  Created by lemon on 2020/4/29.
+//  Created by fan on 2020/4/29.
 //
 
 import Foundation

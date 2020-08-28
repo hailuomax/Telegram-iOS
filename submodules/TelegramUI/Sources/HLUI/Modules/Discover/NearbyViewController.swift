@@ -2,7 +2,7 @@
 //  NearbyViewController.swift
 //  TelegramUI
 //
-//  Created by lemon on 2020/3/23.
+//  Created by fan on 2020/3/23.
 //  Copyright © 2020 Telegram. All rights reserved.
 //
 

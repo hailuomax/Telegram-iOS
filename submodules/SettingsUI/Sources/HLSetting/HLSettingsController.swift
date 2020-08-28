@@ -2,7 +2,7 @@
 //  HLSettingsController.swift
 //  TelegramUI#shared
 //
-//  Created by lemon on 2020/4/13.
+//  Created by fan on 2020/4/13.
 //
 
 import Foundation

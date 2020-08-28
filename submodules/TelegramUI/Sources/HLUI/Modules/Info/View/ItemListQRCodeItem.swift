@@ -2,7 +2,7 @@
 //  QRCodeItem.swift
 //  TelegramUI
 //
-//  Created by lemon on 2020/3/5.
+//  Created by fan on 2020/3/5.
 //  Copyright © 2020 Telegram. All rights reserved.
 //
 import Foundation
