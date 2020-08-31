@@ -9302,7 +9302,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                                            recipientId: recipientId,
                                            remark: remark)
         
-        self.sendMessages([.message(text: msgType.generateChatMsg(), attributes: [], mediaReference: nil, replyToMessageId: replyMessageId, localGroupingKey: nil)])
+        self.sendMessages([.message(text: msgType.generateChatMsg(), attributes: [OutgoingContentInfoMessageAttribute(flags: [.disableLinkPreviews])], mediaReference: nil, replyToMessageId: replyMessageId, localGroupingKey: nil)])
     }
     
     
@@ -9391,7 +9391,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             let replyMessageId = self.presentationInterfaceState.interfaceState.replyMessageId
             let senderId = "\(HLAccountManager.shareTgUser.id.id)"
             let msgType = ChatMsgEnum.transfer(version: ChatMsgConfig.V1.version, type: MessageTypeModel.typeEnum.transfer.rawValue, id: redPacketId, senderId: senderId, recipientId: recipientId, remark: remark)
-            self.sendMessages([.message(text: msgType.generateChatMsg(), attributes: [], mediaReference: nil, replyToMessageId: replyMessageId, localGroupingKey: nil)])
+            self.sendMessages([.message(text: msgType.generateChatMsg(), attributes: [OutgoingContentInfoMessageAttribute(flags: [.disableLinkPreviews])], mediaReference: nil, replyToMessageId: replyMessageId, localGroupingKey: nil)])
             
         })
         HLAccountManager.validateAccountAndcheckPwdSetting((self, transferVC), context: self.context)
@@ -9424,7 +9424,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
         let replyMessageId = self.presentationInterfaceState.interfaceState.replyMessageId
         let senderId = "\(HLAccountManager.shareTgUser.id.id)"
         let msgType = ChatMsgEnum.exchange(version: ChatMsgConfig.V1.version, type: MessageTypeModel.typeEnum.exchange.rawValue, id: msgExchangeM.id, senderId: senderId, recipientId: msgExchangeM.senderId, payCoin: msgExchangeM.outCoin, getCoin: msgExchangeM.inCoin)
-        sendMessages([.message(text: msgType.generateChatMsg(), attributes: [], mediaReference: nil, replyToMessageId: replyMessageId, localGroupingKey: nil)])
+        sendMessages([.message(text: msgType.generateChatMsg(), attributes: [OutgoingContentInfoMessageAttribute(flags: [.disableLinkPreviews])], mediaReference: nil, replyToMessageId: replyMessageId, localGroupingKey: nil)])
     }
 }
 
