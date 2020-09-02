@@ -9229,35 +9229,44 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     //MARK: --拍照
     func openCamera(editMediaOptions: MessageMediaEditingOptions? , peer: Peer  ,storeEditedPhotos : Bool) {
         let inputText = self.presentationInterfaceState.interfaceState.effectiveInputState.inputText
-        presentedLegacyCamera(context: self.context, peer: peer, cameraView: nil, menuController: nil, parentController: self, editingMedia: editMediaOptions != nil, saveCapturedPhotos: storeEditedPhotos, mediaGrouping: true, initialCaption: inputText.string, hasSchedule: !self.presentationInterfaceState.isScheduledMessages && peer.id.namespace != Namespaces.Peer.SecretChat, sendMessagesWithSignals: { [weak self] signals, silentPosting, scheduleTime in
-            if let strongSelf = self {
-                if editMediaOptions != nil {
-                    strongSelf.editMessageMediaWithLegacySignals(signals!)
-                } else {
-                    strongSelf.enqueueMediaMessages(signals: signals, silentPosting: silentPosting, scheduleTime: scheduleTime > 0 ? scheduleTime : nil)
-                }
-
-            }
-            }, recognizedQRCode: { [weak self] code in
-                if let strongSelf = self {
-                    if let (host, port, username, password, secret) = parseProxyUrl(code) {
-                        strongSelf.openResolved(ResolvedUrl.proxy(host: host, port: port, username: username, password: password, secret: secret))
-                    }/* else if let url = URL(string: code), let parsedWalletUrl = parseWalletUrl(url) {
-                     //strongSelf.openResolved(ResolvedUrl.wallet(address: parsedWalletUrl.address, amount: parsedWalletUrl.amount, comment: parsedWalletUrl.comment))
-                     }*/
-                }
-            }, presentSchedulePicker: { [weak self] done in
-                if let strongSelf = self {
-                    strongSelf.presentScheduleTimePicker(completion: { [weak self] time in
-                        if let strongSelf = self {
-                            done(time)
-                            if !strongSelf.presentationInterfaceState.isScheduledMessages && time != scheduleWhenOnlineTimestamp {
-                                strongSelf.openScheduledMessages()
-                            }
+        
+        //DeviceAccess.authorizeAccess判断是否授权
+        DeviceAccess.authorizeAccess(to: .camera, presentationData: context.sharedContext.currentPresentationData.with { $0 }, present: context.sharedContext.presentGlobalController, openSettings: context.sharedContext.applicationBindings.openSettings, {[weak self] value in
+            guard let self = self else {return}
+            if value {
+                presentedLegacyCamera(context: self.context, peer: peer, cameraView: nil, menuController: nil, parentController: self, editingMedia: editMediaOptions != nil, saveCapturedPhotos: storeEditedPhotos, mediaGrouping: true, initialCaption: inputText.string, hasSchedule: !self.presentationInterfaceState.isScheduledMessages && peer.id.namespace != Namespaces.Peer.SecretChat, sendMessagesWithSignals: { [weak self] signals, silentPosting, scheduleTime in
+                    if let strongSelf = self {
+                        if editMediaOptions != nil {
+                            strongSelf.editMessageMediaWithLegacySignals(signals!)
+                        } else {
+                            strongSelf.enqueueMediaMessages(signals: signals, silentPosting: silentPosting, scheduleTime: scheduleTime > 0 ? scheduleTime : nil)
                         }
-                    })
-                }
+
+                    }
+                    }, recognizedQRCode: { [weak self] code in
+                        if let strongSelf = self {
+                            if let (host, port, username, password, secret) = parseProxyUrl(code) {
+                                strongSelf.openResolved(ResolvedUrl.proxy(host: host, port: port, username: username, password: password, secret: secret))
+                            }/* else if let url = URL(string: code), let parsedWalletUrl = parseWalletUrl(url) {
+                             //strongSelf.openResolved(ResolvedUrl.wallet(address: parsedWalletUrl.address, amount: parsedWalletUrl.amount, comment: parsedWalletUrl.comment))
+                             }*/
+                        }
+                    }, presentSchedulePicker: { [weak self] done in
+                        if let strongSelf = self {
+                            strongSelf.presentScheduleTimePicker(completion: { [weak self] time in
+                                if let strongSelf = self {
+                                    done(time)
+                                    if !strongSelf.presentationInterfaceState.isScheduledMessages && time != scheduleWhenOnlineTimestamp {
+                                        strongSelf.openScheduledMessages()
+                                    }
+                                }
+                            })
+                        }
+                })
+            }
         })
+        
+        
         
     }
 
