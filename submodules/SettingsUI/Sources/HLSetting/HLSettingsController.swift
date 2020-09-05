@@ -819,10 +819,9 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                 // 资产首页
                 let  assetVC = AssetVC(context: context)
                 
-                if HLAccountManager.walletIsLogined{
+                if HLAccountManager.walletIsLogined {
                     pushControllerImpl?(assetVC)
-                }else{
-                    
+                } else {
                     let pushAccountValidationVC : (Bool, Phone)->() = { (showPwdView, phone) in
                         let vc = AccountValidationVC(phone:phone, context: context,showPwdView: showPwdView, onValidateSuccess: {
                             //验证成功回调
