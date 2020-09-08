@@ -903,7 +903,9 @@ class ChatListItemNode: ItemListRevealOptionsItemNode {
                         
                         //备注分析是清除 邀请链接 HLAccountManager.shareAccount.invitedUrl
                         func handelRemark(_ r: String) -> String{
-                            guard let rang: Range<String.Index> = r.range(of: " " + HLAccountManager.shareAccount.invitedUrl) else {return r}
+                            let invitedUrl: String = HLAccountManager.shareAccount.invitedUrl ?? " "
+                            
+                            guard let rang: Range<String.Index> = r.range(of: " " + invitedUrl) else {return r}
                             let endIndex: String.Index = rang.lowerBound
                             return String(r[r.startIndex..<endIndex])
                         }

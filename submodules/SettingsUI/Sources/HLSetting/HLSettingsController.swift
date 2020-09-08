@@ -409,36 +409,36 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
         
         let user = HLAccountManager.shareAccount
         
-        var certificate = ""
-        //1：未认证 2：审核中 3：已认证 4：认证失败
-        switch user.certificateStatus {
-            case .uncertificated:
-                certificate = HLLanguage.Uncertified.localized()
-            case .inReview:
-                certificate = HLLanguage.InAudit.localized()
-            case .certified:
-                certificate = HLLanguage.Certified.localized()
-            case .failed:
-                certificate = HLLanguage.AuthenticationFailed.localized()
-            case .none:
-                certificate = HLLanguage.Uncertified.localized()
-        }
+//        var certificate = ""
+//        //1：未认证 2：审核中 3：已认证 4：认证失败
+//        switch user.certificateStatus {
+//            case .uncertificated:
+//                certificate = HLLanguage.Uncertified.localized()
+//            case .inReview:
+//                certificate = HLLanguage.InAudit.localized()
+//            case .certified:
+//                certificate = HLLanguage.Certified.localized()
+//            case .failed:
+//                certificate = HLLanguage.AuthenticationFailed.localized()
+//            case .none:
+//                certificate = HLLanguage.Uncertified.localized()
+//        }
         
-        var pwdStatus = ""
-        switch user.payPwdStatus {
-            case 0:
-                pwdStatus = HLLanguage.NotSetUp.localized()
-            case 1:
-                pwdStatus = HLLanguage.Change.localized()
-            default:
-                pwdStatus = HLLanguage.NotSetUp.localized()
-        }
+//        var pwdStatus = ""
+//        switch user.payPwdStatus {
+//            case 0:
+//                pwdStatus = HLLanguage.NotSetUp.localized()
+//            case 1:
+//                pwdStatus = HLLanguage.Change.localized()
+//            default:
+//                pwdStatus = HLLanguage.NotSetUp.localized()
+//        }
         
         if  HLAccountManager.walletIsLogined {
             //实名认证 暂时隐藏该功能
             //entries.append(.authentication(presentationData.theme, PresentationResourcesSettings.authentication, HL.RealNameAuthentication.localized(), certificate))
             //交易密码
-            entries.append(.tradePassword(presentationData.theme, PresentationResourcesSettings.tradePassword, HLLanguage.TransactionPassword.localized(), pwdStatus))
+            entries.append(.tradePassword(presentationData.theme, PresentationResourcesSettings.tradePassword, HLLanguage.TransactionPassword.localized(), HLLanguage.Change.localized()))
             //邀請好友
             entries.append(.inviteFriends(presentationData.theme, PresentationResourcesSettings.inviteFriends, HLLanguage.InviteNewUser.localized()))
             
