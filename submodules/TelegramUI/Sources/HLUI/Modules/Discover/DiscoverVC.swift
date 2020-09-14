@@ -372,12 +372,16 @@ extension DiscoverVC : UITableViewDelegate,UITableViewDataSource{
                 let entrustAllVC = EntrustAllVC(symbol: "",context:self.context)
                 HLAccountManager.validateAccountAndcheckPwdSetting((self, entrustAllVC), context: self.context!)
             }
-            break
         case 6:
             let webVC: HLBaseVC<BaseWkWebView> = HLBaseVC<BaseWkWebView>(context: context).then{
                 $0.contentView.load(urlStr: "https://m.cailu.net/academy", jsNames: [], onListen: {_,_  in})
             }
             (self.navigationController as? NavigationController)?.pushViewController(webVC, completion: { })
+        case 7:
+            
+            let activityVC: MiningActivitiesAdvertisingVC = MiningActivitiesAdvertisingVC(presentationData: self.presentationData)
+            self.navigationController?.pushViewController(activityVC, animated: true)
+            
         default:
             break
         }
