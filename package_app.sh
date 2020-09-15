@@ -328,10 +328,10 @@ for EXTENSION in $EXTENSIONS; do
 	cp -r "$EXTENSION_DSYM_PATH" "$DSYMS_DIR/"
 done
 
-if [ "$APP_TYPE" != "wallet" ]; then
-	WATCH_EXTENSION_DSYM_PATH="buck-out/gen/Telegram/WatchAppExtension#dwarf-and-dsym,no-include-frameworks,watchos-arm64_32,watchos-armv7k/WatchAppExtension.appex.dSYM"
-	cp -r "$WATCH_EXTENSION_DSYM_PATH" "$DSYMS_DIR/"
-fi
+# if [ "$APP_TYPE" != "wallet" ]; then
+# 	WATCH_EXTENSION_DSYM_PATH="buck-out/gen/Telegram/WatchAppExtension#dwarf-and-dsym,no-include-frameworks,watchos-arm64_32,watchos-armv7k/WatchAppExtension.appex.dSYM"
+# 	cp -r "$WATCH_EXTENSION_DSYM_PATH" "$DSYMS_DIR/"
+# fi
 
 TEMP_DYLIB_DIR="$TEMP_PATH/SwiftSupport"
 rm -rf "$TEMP_DYLIB_DIR"
