@@ -19,8 +19,8 @@ static_library(
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",
         "$SDKROOT/System/Library/Frameworks/UIKit.framework",
-        "$SDKROOT/System/Library/Frameworks/MobileCoreServices.framework",
-        "$SDKROOT/System/Library/Frameworks/AddressBook.framework",
+        "$SDKROOT/System/Library/Frameworks/CoreServices.framework",
+        "$SDKROOT/System/Library/Frameworks/Contacts.framework",
         "$SDKROOT/System/Library/Frameworks/AVFoundation.framework",
         "$SDKROOT/System/Library/Frameworks/PassKit.framework",
     ],
