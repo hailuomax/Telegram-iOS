@@ -18,7 +18,8 @@ import AccountContext
 import SyncCore
 import LegacyUI
 import TelegramPresentationData
- 
+import JYDebug
+
 final class ChatMenuInputNode: ChatInputNode {
     private let context: AccountContext
     // 公开给ChatViewController使用
@@ -39,9 +40,13 @@ final class ChatMenuInputNode: ChatInputNode {
         
         let height: CGFloat = 380
         
+        jyPrint(width)
+        
         self.backgroundColor = interfaceState.theme.chat.inputPanel.panelBackgroundColor
         self.menuNode.backgroundColor = self.backgroundColor
         transition.updateFrame(node: self.menuNode, frame: CGRect(origin: CGPoint(), size: CGSize(width: width, height: height)))
+        
+        jyPrint(self.menuNode)
         
         return (height + bottomInset, 0)
     }

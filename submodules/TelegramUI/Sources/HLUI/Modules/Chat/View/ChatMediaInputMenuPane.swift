@@ -23,6 +23,8 @@ import Extension
 import LegacyUI
 import Language
 import LegacyMediaPickerUI
+import JYDebug
+import Then
 
 enum ChatMediaInputMenu: String, Equatable{
     
@@ -255,7 +257,7 @@ final class ChatMediaInputMenuView: UIView{
             superStackView.addArrangedSubview(childView)
             
             childView.snp.makeConstraints({
-                $0.width.equalTo(self.scrollView)
+                $0.width.equalTo(kScreenWidth)
             })
         }
     }
