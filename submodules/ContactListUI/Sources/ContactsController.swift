@@ -95,6 +95,8 @@ public class ContactsController: ViewController, ShowPopMenuAble {
     
     public var openGroupAndChannel: (() -> Void)?
     
+    public var openNearby: (() -> Void)?
+    
     public override func updateNavigationCustomData(_ data: Any?, progress: CGFloat, transition: ContainedViewLayoutTransition) {
         if self.isNodeLoaded {
             self.contactsNode.contactListNode.updateSelectedChatLocation(data as? ChatLocation, progress: progress, transition: transition)
@@ -293,45 +295,12 @@ public class ContactsController: ViewController, ShowPopMenuAble {
         self.contactsNode.openGroupAndChannel = { [weak self] in
             self?.openGroupAndChannel?()
         }
-        
+        //MARK: 需要调到TelegramUI里的附近的人
         self.contactsNode.openPeopleNearby = { [weak self] in
-            let _ = (DeviceAccess.authorizationStatus(subject: .location(.tracking))
-            |> take(1)
-            |> deliverOnMainQueue).start(next: { [weak self] status in
-                guard let strongSelf = self else {
-                    return
-                }
-                let presentPeersNearby = {
-                    let controller = strongSelf.context.sharedContext.makePeersNearbyController(context: strongSelf.context)
-                    controller.navigationPresentation = .master
-                    (strongSelf.navigationController as? NavigationController)?.pushViewController(controller, animated: true, completion: { [weak self] in
-                        if let strongSelf = self {
-                            strongSelf.contactsNode.contactListNode.listNode.clearHighlightAnimated(true)
-                        }
-                    })
-                }
-                
-                switch status {
-                    case .allowed:
-                        presentPeersNearby()
-                    default:
-                        let controller = PermissionController(context: strongSelf.context, splashScreen: false)
-                        controller.setState(.permission(.nearbyLocation(status: PermissionRequestStatus(accessType: status))), animated: false)
-                        controller.navigationPresentation = .master
-                        controller.proceed = { result in
-                            if result {
-                                presentPeersNearby()
-                            } else {
-                                let _ = (strongSelf.navigationController as? NavigationController)?.popViewController(animated: true)
-                            }
-                        }
-                        (strongSelf.navigationController as? NavigationController)?.pushViewController(controller, completion: { [weak self] in
-                            if let strongSelf = self {
-                                strongSelf.contactsNode.contactListNode.listNode.clearHighlightAnimated(true)
-                            }
-                        })
-                }
-            })
+            if let strongSelf = self {
+                strongSelf.contactsNode.contactListNode.listNode.clearHighlightAnimated(true)
+            }
+            self?.openNearby?()
         }
         
         self.contactsNode.openInvite = { [weak self] in

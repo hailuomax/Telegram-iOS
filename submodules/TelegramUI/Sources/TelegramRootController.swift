@@ -13,6 +13,9 @@ import CallListUI
 import ChatListUI
 import SettingsUI
 import AppBundle
+import DeviceAccess
+import TelegramPermissionsUI
+import TelegramPermissions
 
 public final class TelegramRootController: NavigationController {
     private let context: AccountContext
@@ -100,6 +103,11 @@ public final class TelegramRootController: NavigationController {
              (vc.navigationController as? NavigationController)?.pushViewController(chatListController, completion: {
              })
         }
+        //跳转到附近的人
+        contactsController.openNearby = { [weak contactsController, weak self] in
+            guard let vc = contactsController, let self = self else { return }
+            self.pushNearbyVC(nav: (vc.navigationController as? NavigationController), context: self.context, presentationData: (self.context.sharedContext.currentPresentationData.with { $0 }))
+        }
         
         var restoreSettignsController: (ViewController & SettingsController)?
         if let sharedContext = self.context.sharedContext as? SharedAccountContextImpl {
@@ -178,5 +186,36 @@ public final class TelegramRootController: NavigationController {
         }
         controller.view.endEditing(true)
         presentedLegacyShortcutCamera(context: self.context, saveCapturedMedia: false, saveEditedPhotos: false, mediaGrouping: true, parentController: controller)
+    }
+    
+    
+    public func pushNearbyVC(nav: NavigationController?, context: AccountContext?, presentationData: PresentationData?) {
+        guard let context = context else { return }
+        let _ = (DeviceAccess.authorizationStatus(subject: .location(.tracking))
+        |> take(1)
+        |> deliverOnMainQueue).start(next: { [weak self] status in
+            
+            let presentPeersNearby = {
+                let controller = NearbyViewController.init(context: context, presentationData: presentationData)
+
+                nav?.replaceAllButRootController(controller, animated: true, completion: {})
+            }
+            
+            switch status {
+                case .allowed:
+                    presentPeersNearby()
+                default:
+                    let controller = PermissionController(context: context, splashScreen: false)
+                    controller.setState(.permission(.nearbyLocation(status: PermissionRequestStatus(accessType: status))), animated: false)
+                    controller.proceed = { result in
+                        if result {
+                            presentPeersNearby()
+                        } else {
+                            let _ = nav?.popViewController(animated: true)
+                        }
+                    }
+                    nav?.pushViewController(controller, completion: { })
+            }
+        })
     }
 }

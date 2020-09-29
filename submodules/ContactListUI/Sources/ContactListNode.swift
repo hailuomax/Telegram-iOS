@@ -360,7 +360,21 @@ private enum ContactListNodeEntry: Comparable, Identifiable {
     }
 }
 
+extension String {
+    func transformPinYin() -> String {
+        let mutableString = NSMutableString.init(string: self)
+        // 将中文转换成带声调的拼音
+        CFStringTransform(mutableString as CFMutableString, nil, kCFStringTransformToLatin, false)
+        // 去掉声调(用此方法大大提高遍历的速度)
+        let pinyinString = mutableString.folding(options: String.CompareOptions.diacriticInsensitive, locale: NSLocale.current)
+        // 将拼音首字母装换成大写
+        //        let strPinYin = pinyinString.uppercased()
+        return pinyinString
+    }
+}
+
 private extension PeerIndexNameRepresentation {
+    
     func isLessThan(other: PeerIndexNameRepresentation, ordering: PresentationPersonNameOrder) -> ComparisonResult {
         switch self {
             case let .title(lhsTitle, _):
@@ -384,7 +398,7 @@ private extension PeerIndexNameRepresentation {
                                 }
                         }
                 }
-                return lhsTitle.caseInsensitiveCompare(rhsString)
+                return lhsTitle.transformPinYin().caseInsensitiveCompare(rhsString.transformPinYin())
             case let .personName(lhsFirst, lhsLast, _, _):
                 let lhsString: String
                 switch ordering {
@@ -421,7 +435,8 @@ private extension PeerIndexNameRepresentation {
                                 }
                         }
                 }
-                return lhsString.caseInsensitiveCompare(rhsString)
+                //通过拼音排序
+                return lhsString.transformPinYin().caseInsensitiveCompare(rhsString.transformPinYin())
         }
     }
 }
@@ -515,21 +530,21 @@ private func contactListNodeEntries(accountPeer: Peer?, peers: [ContactListPeer]
                 var indexHeader: unichar = 35
                 switch peer.indexName {
                     case let .title(title, _):
-                        if let c = title.folding(options: .diacriticInsensitive, locale: .current).uppercased().utf16.first {
+                        if let c = title.transformPinYin().folding(options: .diacriticInsensitive, locale: .current).uppercased().utf16.first {
                             indexHeader = c
                         }
                     case let .personName(first, last, _, _):
                         switch sortOrder {
                             case .firstLast:
-                                if let c = first.folding(options: .diacriticInsensitive, locale: .current).uppercased().utf16.first {
+                                if let c = first.transformPinYin().folding(options: .diacriticInsensitive, locale: .current).uppercased().utf16.first {
                                     indexHeader = c
-                                } else if let c = last.folding(options: .diacriticInsensitive, locale: .current).uppercased().utf16.first {
+                                } else if let c = last.transformPinYin().folding(options: .diacriticInsensitive, locale: .current).uppercased().utf16.first {
                                     indexHeader = c
                                 }
                             case .lastFirst:
-                                if let c = last.folding(options: .diacriticInsensitive, locale: .current).uppercased().utf16.first {
+                                if let c = last.transformPinYin().folding(options: .diacriticInsensitive, locale: .current).uppercased().utf16.first {
                                     indexHeader = c
-                                } else if let c = first.folding(options: .diacriticInsensitive, locale: .current).uppercased().utf16.first {
+                                } else if let c = first.transformPinYin().folding(options: .diacriticInsensitive, locale: .current).uppercased().utf16.first {
                                     indexHeader = c
                                 }
                         }
@@ -1297,6 +1312,38 @@ public final class ContactListNode: ASDisplayNode {
             }
         }
         
+        let hasTopNotch = self.validLayout?.0.deviceMetrics.hasTopNotch ?? false
+        let navHeight = CGFloat(hasTopNotch ? 88 : 64)
+        self.listNode.didScroll = { [weak self] _ in
+            guard let self = self else {return}
+            //判断哪个header在最上面
+            var currentHeader : ContactListNameIndexHeaderNode?
+            self.listNode.forEachItemHeaderNode { (headerNode) in
+                if let itemHeaderNode = headerNode as? ContactListNameIndexHeaderNode {
+                    if itemHeaderNode.frame.origin.y >= navHeight {
+                        if currentHeader == nil {
+                            currentHeader = itemHeaderNode
+                        }else {
+                            if itemHeaderNode.frame.origin.y <= currentHeader!.frame.origin.y {
+                                currentHeader = itemHeaderNode
+                            }
+                        }
+                    }
+                }
+            }
+            guard let current = currentHeader else {
+                self.indexNode.updateNotSelected()
+                return
+            }
+            if current.frame.origin.y > navHeight + current.frame.height {
+                //在最顶部就不显示选中效果
+                self.indexNode.updateNotSelected()
+            }else {
+                self.indexNode.updateCurrentSelected(title: currentHeader?.sectionHeaderNode.title)
+            }
+            
+        }
+        
         authorizeImpl = {
             let _ = (DeviceAccess.authorizationStatus(subject: .contacts)
             |> take(1)
@@ -1372,7 +1419,7 @@ public final class ContactListNode: ASDisplayNode {
             
             let indexNodeFrame = CGRect(origin: CGPoint(x: layout.size.width - insets.right - 20.0, y: insets.top), size: CGSize(width: 20.0, height: layout.size.height - insets.top - insets.bottom))
             transition.updateFrame(node: indexNode, frame: indexNodeFrame)
-            self.indexNode.update(size: indexNodeFrame.size, color: self.presentationData.theme.list.itemAccentColor, sections: indexSections, transition: transition)
+            self.indexNode.update(size: indexNodeFrame.size, color: UIColor(hexString: "555555")!, sections: indexSections, transition: transition)
         }
         
         self.authorizationNode.updateLayout(size: layout.size, insets: insets, transition: transition)
@@ -1423,7 +1470,7 @@ public final class ContactListNode: ASDisplayNode {
                     let indexNodeFrame = CGRect(origin: CGPoint(x: layout.size.width - insets.right - 20.0, y: insets.top), size: CGSize(width: 20.0, height: layout.size.height - insets.top - insets.bottom))
                     self.indexNode.frame = indexNodeFrame
 
-                    self.indexNode.update(size: CGSize(width: 20.0, height: layout.size.height - insets.top - insets.bottom), color: self.presentationData.theme.list.itemAccentColor, sections: transition.indexSections, transition: .animated(duration: 0.2, curve: .easeInOut))
+                    self.indexNode.update(size: CGSize(width: 20.0, height: layout.size.height - insets.top - insets.bottom), color: UIColor(hexString: "555555")!, sections: transition.indexSections, transition: .animated(duration: 0.2, curve: .easeInOut))
                     self.indexNode.isUserInteractionEnabled = !transition.indexSections.isEmpty
                 }
                 

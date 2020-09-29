@@ -95,7 +95,9 @@ final class ContactsControllerNode: ASDisplayNode {
         
         //添加群组和频道按钮
         var groupAndChannelImpl: (() -> Void)?
-        let options = [ContactListAdditionalOption(title: HLLanguage.GroupsAndChannels.localized(), icon: .generic(UIImage(bundleImageName: "Contact List/PeopleNearbyIcon_blue")!), action: {
+        let options = [ContactListAdditionalOption(title: HLLanguage.PeopleNearby.localized(), icon: .generic(UIImage(bundleImageName: "Contact List/PeopleNearbyIcon_blue")!), action: {
+            addNearbyImpl?()
+        }),ContactListAdditionalOption(title: HLLanguage.GroupsAndChannels.localized(), icon: .generic(UIImage(bundleImageName: "Contact List/PeopleNearbyIcon_blue")!), action: {
             groupAndChannelImpl?()
         })]
         
@@ -103,7 +105,8 @@ final class ContactsControllerNode: ASDisplayNode {
         |> map { sortOrder -> ContactListPresentation in
             switch sortOrder {
                 case .presence:
-                    return .orderedByPresence(options: options)
+//                    return .orderedByPresence(options: options)
+                    return .natural(options: options, includeChatList: false)
                 case .natural:
                     return .natural(options: options, includeChatList: false)
             }

@@ -35,7 +35,7 @@ final class ContactListNameIndexHeaderNode: ListViewItemHeaderNode {
     private var theme: PresentationTheme
     private let letter: unichar
     
-    private let sectionHeaderNode: ListSectionHeaderNode
+    public let sectionHeaderNode: ListSectionHeaderNode
     
     init(theme: PresentationTheme, letter: unichar) {
         self.theme = theme
