@@ -23,7 +23,6 @@ import Extension
 import LegacyUI
 import Language
 import LegacyMediaPickerUI
-import JYDebug
 import Then
 
 enum ChatMediaInputMenu: String, Equatable{
