@@ -236,7 +236,6 @@ framework(
         "//submodules/HL/Theme:Theme",
         ":AssetXib",
         "//submodules/HL/PassValue:PassValue",
-        "//submodules/HL/JYDebug:JYDebug",
     ],
     frameworks = [
         "$SDKROOT/System/Library/Frameworks/Foundation.framework",
