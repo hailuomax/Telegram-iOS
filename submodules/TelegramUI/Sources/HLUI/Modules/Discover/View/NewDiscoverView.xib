@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,28 +15,44 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="53X-aT-CU9">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Y4i-22-Ls4">
-                        <size key="itemSize" width="128" height="128"/>
-                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    </collectionViewFlowLayout>
+                    <collectionViewLayout key="collectionViewLayout" id="C4m-lQ-yZf" customClass="SectionBackGroundColorLayout" customModule="TelegramUI"/>
                 </collectionView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NWu-HC-B7r">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="发现" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qHf-2D-jAe">
+                            <rect key="frame" x="170" y="30" width="35" height="21"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="qHf-2D-jAe" secondAttribute="bottom" constant="13" id="3gs-KG-iDf"/>
+                        <constraint firstAttribute="height" constant="64" id="hI7-DZ-VAS"/>
+                        <constraint firstItem="qHf-2D-jAe" firstAttribute="centerX" secondItem="NWu-HC-B7r" secondAttribute="centerX" id="lHk-7n-CRX"/>
+                    </constraints>
+                </view>
             </subviews>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="53X-aT-CU9" secondAttribute="bottom" id="7by-pM-vqB"/>
-                <constraint firstItem="53X-aT-CU9" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="JPz-m5-PUn"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="53X-aT-CU9" secondAttribute="trailing" id="QTo-J6-N2y"/>
-                <constraint firstItem="53X-aT-CU9" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="m8x-JL-vy3"/>
+                <constraint firstAttribute="bottom" secondItem="53X-aT-CU9" secondAttribute="bottom" id="7by-pM-vqB"/>
+                <constraint firstItem="53X-aT-CU9" firstAttribute="top" secondItem="NWu-HC-B7r" secondAttribute="bottom" id="Gds-GY-YFq"/>
+                <constraint firstItem="53X-aT-CU9" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="JPz-m5-PUn"/>
+                <constraint firstAttribute="trailing" secondItem="NWu-HC-B7r" secondAttribute="trailing" id="Phx-mn-4W7"/>
+                <constraint firstAttribute="trailing" secondItem="53X-aT-CU9" secondAttribute="trailing" id="QTo-J6-N2y"/>
+                <constraint firstItem="NWu-HC-B7r" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="iXL-ay-m5b"/>
+                <constraint firstItem="NWu-HC-B7r" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="rMi-f2-24y"/>
             </constraints>
             <connections>
                 <outlet property="collectionView" destination="53X-aT-CU9" id="YSG-mE-OU5"/>
+                <outlet property="navigationBgView" destination="NWu-HC-B7r" id="Aqm-CD-Pzm"/>
+                <outlet property="navigationHeight" destination="hI7-DZ-VAS" id="Xdm-uW-QwL"/>
             </connections>
-            <point key="canvasLocation" x="141" y="102"/>
+            <point key="canvasLocation" x="140" y="101.19940029985008"/>
         </view>
     </objects>
     <resources>

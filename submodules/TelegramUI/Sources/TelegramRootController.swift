@@ -25,7 +25,7 @@ public final class TelegramRootController: NavigationController {
     public var contactsController: ContactsController?
     public var callListController: CallListController?
     public var chatListController: ChatListController?
-    var discoverController: DiscoverVC?
+    var discoverController: NewDiscoverVC?
     public var accountSettingsController: ViewController?
     
     private var permissionsDisposable: Disposable?
@@ -120,7 +120,7 @@ public final class TelegramRootController: NavigationController {
         
         let accountSettingsController = restoreSettignsController ?? hlSettingsController(context: self.context, accountManager: context.sharedContext.accountManager, enableDebugActions: !GlobalExperimentalSettings.isAppStoreBuild)
         
-        let discoverVC = DiscoverVC(context: self.context)
+        let discoverVC = NewDiscoverVC(context: self.context)
         
         let viewControllers = [chatListController,contactsController,discoverVC,accountSettingsController]
         
