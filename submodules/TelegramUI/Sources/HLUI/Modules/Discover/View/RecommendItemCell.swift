@@ -7,6 +7,7 @@
 
 import UIKit
 import Model
+import Extension
 
 class RecommendItemCell: UICollectionViewCell {
 
@@ -16,6 +17,8 @@ class RecommendItemCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        imageView.cornerRadius = 25.5
+        imageView.layer.masksToBounds = true
     }
 
 }

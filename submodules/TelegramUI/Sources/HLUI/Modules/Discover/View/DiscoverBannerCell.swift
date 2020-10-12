@@ -80,6 +80,13 @@ extension DiscoverBannerCell : ZCycleViewProtocol {
         let mixColor2 = UIColor.mixColor(startColor: startColor2, endColor: endColor2, coe: coe)
         gradientLayerDidChange.onNext([mixColor1.cgColor,mixColor2.cgColor])
     }
-    
+    func cycleViewConfigurePageControl(_ cycleView: ZCycleView, pageControl: ZPageControl) {
+        
+        pageControl.frame.origin.y -= 10
+        pageControl.dotSize = CGSize(width: 5, height: 5)
+        pageControl.pageIndicatorTintColor = UIColor(white: 1, alpha: 0.5)
+        pageControl.currentPageIndicatorTintColor = UIColor(white: 1, alpha: 1)
+        
+    }
 }
  

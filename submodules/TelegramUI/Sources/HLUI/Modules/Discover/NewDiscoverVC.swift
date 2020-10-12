@@ -32,7 +32,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
     lazy var viewModel = ViewModel.Discover()
     
     lazy var dataSource: RxCollectionViewSectionedReloadDataSource<Model.Discover.Section> = createDataSources()
-    
+        
     override init(context: TGAccountContext?, presentationData: PD? = nil) {
         super.init(context: context, presentationData: presentationData)
         
@@ -75,14 +75,21 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
         self.view.insertSubview(headerBgView, at: 0)
         self.contentView.collectionView.delegate = self
         
-        self.contentView.layout(snapKitMaker: {
-            $0.top.equalTo(0)
-            $0.left.equalToSuperview()
-            $0.width.equalTo(kScreenWidth)
-            $0.bottom.equalTo(-TabBarHeight)
-        })
-
+        DispatchQueue.main.async {
+            self.contentView.layout(snapKitMaker: {
+                $0.top.equalTo(0)
+                $0.left.equalToSuperview()
+                $0.width.equalTo(kScreenWidth)
+                $0.bottom.equalTo(-TabBarHeight)
+            })
+        }
+        
         self.displayNavigationBar = false
+        if #available(iOS 11.0, *) {
+            self.contentView.collectionView.contentInsetAdjustmentBehavior = .never
+        } else {
+            self.automaticallyAdjustsScrollViewInsets = false
+        }
         
         let layer = CAShapeLayer()
         let circularPath = UIBezierPath(arcCenter: CGPoint(x: kScreenWidth/2,y: 0), radius: 450, startAngle: 0, endAngle: .pi, clockwise: true)
@@ -111,10 +118,14 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
             case .banner(let list):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DiscoverBannerCell", for: indexPath) as! DiscoverBannerCell
                 cell.setModel(list: list)
+                cell.gradientLayerDidChange.subscribe(onNext: {[weak self] colors in
+                    self?.gradientLayer.colors = colors
+                }).disposed(by: cell.disposeBag)
                 return cell
                 
             case .sysMessage(let list):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DiscoverNoticeCell", for: indexPath)
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DiscoverNoticeCell", for: indexPath) as! DiscoverNoticeCell
+                cell.setList(list: list)
                 return cell
                 
             case .hot(let item):
@@ -123,7 +134,8 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 return cell
                 
             case .recommend(let list):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DiscoverRecommendCell", for: indexPath)
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DiscoverRecommendCell", for: indexPath) as! DiscoverRecommendCell
+                cell.listData.onNext(list)
                 return cell
                 
             case .bot(let item):
@@ -137,9 +149,12 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 switch ds[indexPath] {
                 case .sysMessage, .banner:
                     break
-                default:
+                case .bot , .hot:
+                    view.moreButton.isHidden = true
                     view.titleLabel.text = ds[indexPath.section].header
-
+                default:
+                    view.moreButton.isHidden = false
+                    view.titleLabel.text = ds[indexPath.section].header
                 }
                 return view
             }else {
@@ -163,7 +178,7 @@ extension NewDiscoverVC: UICollectionViewDelegate, UICollectionViewDelegateFlowL
         case .sysMessage:
             return CGSize(width: kSectionWidth, height: 38)
         case .recommend:
-            return CGSize(width: kSectionWidth, height: 107)
+            return CGSize(width: kSectionWidth, height: 117)
         }
     
     }
@@ -184,7 +199,7 @@ extension NewDiscoverVC: UICollectionViewDelegate, UICollectionViewDelegateFlowL
         case .banner, .sysMessage:
             return CGSize.zero
         default:
-            return CGSize(width: kSectionWidth, height: 20 + kSectionEdge.bottom)
+            return CGSize(width: kSectionWidth, height: 10 + kSectionEdge.bottom)
         }
     }
     
@@ -208,7 +223,7 @@ extension NewDiscoverVC: UICollectionViewDelegate, UICollectionViewDelegateFlowL
         }
         
     }
-    
+        
 }
 
 extension NewDiscoverVC {
@@ -240,6 +255,7 @@ class NewDiscoverView: BaseContentViewType{
         collectionView.backgroundColor = .clear
         navigationHeight.constant = NavBarHeight
         navigationBgView.backgroundColor = .clear
+        collectionView.alwaysBounceVertical = true
     }
     
 }

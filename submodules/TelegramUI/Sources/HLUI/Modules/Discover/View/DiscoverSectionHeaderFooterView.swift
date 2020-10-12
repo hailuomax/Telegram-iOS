@@ -32,6 +32,8 @@ class DiscoverSectionHeaderView : UICollectionReusableView {
         titleLabel.font = CustomFont.mediumFontWithSize(16)
         moreButton.setTitleColor(UIColor(hexString: "AEB2C3"), for: .normal)
         moreButton.setImage(UIImage(bundleImageName: "arrowGrayRight"), for: .normal)
+        moreButton.titleLabel?.font = CustomFont.regularfontWithSize(13)
+        moreButton.setTitle("查看全部", for: .normal)
         
         self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(moreButton)
@@ -45,6 +47,8 @@ class DiscoverSectionHeaderView : UICollectionReusableView {
             make.right.equalTo(-12)
             make.centerY.equalToSuperview()
         }
+        
+        moreButton.layoutButtonEdgeInsets(type: .PositionRight, space: 8)
     }
     
     required init?(coder: NSCoder) {
@@ -60,7 +64,7 @@ class DiscoverSectionFooterView: UICollectionReusableView {
         super.init(frame: frame)
         self.addSubview(contentView)
         contentView.backgroundColor = .white
-        contentView.frame = CGRect(x: kSectionEdge.left, y: 0, width: kScreenWidth - kSectionEdge.left - kSectionEdge.right, height: 20)
+        contentView.frame = CGRect(x: kSectionEdge.left, y: 0, width: kScreenWidth - kSectionEdge.left - kSectionEdge.right, height: 10)
         contentView.setMaskCorner(roundingCorners: [.bottomLeft, .bottomRight], cornerSize: CGSize(width: 7.5, height: 7.5))
     }
     
@@ -92,18 +96,15 @@ class SectionBackGroundColorLayout: UICollectionViewFlowLayout {
     
     //初始化时进行一些注册操作
     func setup() {
-        //注册我们自定义用来作为Section背景的 Decoration 视图
         self.register(SectionBgCollectionReusableView.classForCoder(),
                       forDecorationViewOfKind: SectionBg)
     }
     
     override func prepare() {
         super.prepare()
-        //如果collectionView当前没有分区，或者未实现相关的代理则直接退出
-        guard let numberOfSections = self.collectionView?.numberOfSections
-            else {
-                return
-        }
+        guard let numberOfSections = self.collectionView?.numberOfSections ,
+              let delegate = self.collectionView?.delegate as? UICollectionViewDelegateFlowLayout
+              else {return}
         
         //分别计算每个section背景的布局属性
         for section in 0..<numberOfSections {
@@ -135,7 +136,7 @@ class SectionBackGroundColorLayout: UICollectionViewFlowLayout {
             attr.frame = sectionFrame
             attr.zIndex = -1
             //通过代理方法获取该section背景使用的颜色
-            attr.backgroundColor = section == 0 ? .clear : .white
+            attr.backgroundColor = delegate.collectionView?(self.collectionView!, layout: self.collectionView!.collectionViewLayout, referenceSizeForHeaderInSection: section).equalTo(CGSize.zero) ?? true ? .clear : .white
             
             //将该section背景的布局属性保存起来
             self.decorationViewAttrs.append(attr)
@@ -186,17 +187,15 @@ private class SectionBgCollectionReusableView: UICollectionReusableView {
 //（在这里定义一个backgroundColor属性表示Section背景色）
 private class SectionBgCollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
         
-    //背景色
+    
     var backgroundColor = UIColor.white
     
-    //所定义属性的类型需要遵从 NSCopying 协议
     override func copy(with zone: NSZone? = nil) -> Any {
         let copy = super.copy(with: zone) as! SectionBgCollectionViewLayoutAttributes
         copy.backgroundColor = self.backgroundColor
         return copy
     }
     
-    //所定义属性的类型还要实现相等判断方法（isEqual）
     override func isEqual(_ object: Any?) -> Bool {
         guard let rhs = object as? SectionBgCollectionViewLayoutAttributes else {
             return false
