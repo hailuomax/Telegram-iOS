@@ -16,15 +16,24 @@ class DiscoverRecommendCell: UICollectionViewCell {
 
     @IBOutlet var collectionView: UICollectionView!
     
-    var listData = PublishSubject<[Model.Discover.Dynamic.Item]>()
+    var listData = PublishSubject<[Model.Discover.Item]>()
     
     var disposeBag = DisposeBag()
+    
+    private let bag = DisposeBag()
+    
+    let didSelectedItem = PublishSubject<Model.Discover.Item>()
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         setUI()
         bindUI()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
     
     func setUI(){
@@ -38,7 +47,11 @@ class DiscoverRecommendCell: UICollectionViewCell {
             cell.imageView.setImage(urlString: element.linkIcon, placeholder: "ic-discover-default")
             cell.titleLabel.text = element.linkName
          }
-         .disposed(by: disposeBag)
+         .disposed(by: bag)
+        
+        collectionView.rx.modelSelected(Model.Discover.Item.self)
+            .bind(to: didSelectedItem)
+            .disposed(by: bag)
     }
 
 }

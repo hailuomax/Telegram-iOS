@@ -32,6 +32,14 @@
                         <rect key="frame" x="46" y="0.0" width="187" height="50"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bYf-pp-YsG">
+                        <rect key="frame" x="36.5" y="18.5" width="0.5" height="13"/>
+                        <color key="backgroundColor" red="0.68627450980392157" green="0.68627450980392157" blue="0.68627450980392157" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="13" id="Iiv-SJ-hU3"/>
+                            <constraint firstAttribute="width" constant="0.5" id="bva-P1-peR"/>
+                        </constraints>
+                    </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
@@ -42,7 +50,9 @@
                 <constraint firstItem="mcc-8x-kdy" firstAttribute="leading" secondItem="KiC-FX-DFo" secondAttribute="trailing" constant="20" id="L7r-ra-BPu"/>
                 <constraint firstItem="KiC-FX-DFo" firstAttribute="leading" secondItem="v0W-Tg-c1x" secondAttribute="trailing" constant="17" id="PMd-27-EoI"/>
                 <constraint firstAttribute="bottom" secondItem="KiC-FX-DFo" secondAttribute="bottom" id="Wdt-s2-uch"/>
+                <constraint firstItem="bYf-pp-YsG" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="ZbJ-m9-KXD"/>
                 <constraint firstItem="v0W-Tg-c1x" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="cUZ-mC-hI2"/>
+                <constraint firstItem="KiC-FX-DFo" firstAttribute="leading" secondItem="bYf-pp-YsG" secondAttribute="trailing" constant="9" id="gkU-ho-bjB"/>
                 <constraint firstAttribute="trailing" secondItem="mcc-8x-kdy" secondAttribute="trailing" constant="12" id="jq4-MF-8sX"/>
                 <constraint firstItem="v0W-Tg-c1x" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="12" id="lk6-31-qFr"/>
             </constraints>

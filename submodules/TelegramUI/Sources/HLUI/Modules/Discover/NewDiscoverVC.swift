@@ -18,10 +18,21 @@ import RxSwift
 import RxDataSources
 import Language
 import TelegramUIPreferences
+import Account
+import Display
+import PresentationDataUtils
+import AccountContext
 
 let kSectionEdge = UIEdgeInsets(top: 6, left: 15, bottom: 6, right: 15)
 
 let kSectionWidth = kScreenWidth - kSectionEdge.left - kSectionEdge.right
+
+enum DiscoverActionType {
+    /// 跳转网页 或者机器人
+    case resolveURL(url: String)
+    /// 应用内跳转
+    case native(type: Model.Discover.RefCode, item: Model.Discover.Item)
+}
 
 class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
     
@@ -32,6 +43,10 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
     lazy var viewModel = ViewModel.Discover()
     
     lazy var dataSource: RxCollectionViewSectionedReloadDataSource<Model.Discover.Section> = createDataSources()
+    
+    lazy var actionType: PublishSubject<DiscoverActionType> = PublishSubject<DiscoverActionType>()
+    
+    private var overlayStatusController: ViewController?
         
     override init(context: TGAccountContext?, presentationData: PD? = nil) {
         super.init(context: context, presentationData: presentationData)
@@ -62,12 +77,18 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
 //        }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        dismissLoading()
+    }
+    
     func setUI() {
         let _ = updateExperimentalUISettingsInteractively(accountManager: self.context!.sharedContext.accountManager, { settings in
             var settings = settings
             settings.keepChatNavigationStack = true
             return settings
         }).start()
+        
         let headerHeight : CGFloat = 150 + (isNotch ? 20 : 0)
         self.view.backgroundColor = UIColor(hexString: "F4F5F7")
         self.contentView.backgroundColor = .clear
@@ -107,8 +128,25 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
         
         output.isRefreshing.bind(to: contentView.collectionView.rx.isRefreshing).disposed(by: disposeBag)
         
-        output.sections.drive( contentView.collectionView.rx.items(dataSource: dataSource))
-            .disposed(by: disposeBag)
+        output.sections.drive( contentView.collectionView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+        
+        actionType.subscribe(onNext: {[weak self] type in
+            guard let self = self else {return}
+            self.action(type: type)
+        }).disposed(by: disposeBag)
+        
+        contentView.collectionView.rx.modelSelected(Model.Discover.Section.Item.self)
+            .subscribe(onNext: {[weak self] row in
+                guard let self = self else {return}
+                switch row {
+                case .bot(let item),
+                     .hot(let item):
+                    self.selectedItem(item)
+                default:
+                    break
+                }
+            }).disposed(by: disposeBag)
+        
     }
     
     func createDataSources() -> RxCollectionViewSectionedReloadDataSource<Model.Discover.Section> {
@@ -121,6 +159,17 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 cell.gradientLayerDidChange.subscribe(onNext: {[weak self] colors in
                     self?.gradientLayer.colors = colors
                 }).disposed(by: cell.disposeBag)
+                // 处理特殊情况
+                cell.didSeletedItem.map { (item) -> Model.Discover.Item in
+                    var model = item
+                    if model.linkType == 6, model.link == "http://\(Scheme.i7_app)/jumpExchange" {
+                        model.refCode = Model.Discover.RefCode.exchangeSquare.rawValue
+                    }
+                    return model
+                }.subscribe(onNext: {[weak self] item in
+                    self?.selectedItem(item)
+                }).disposed(by: cell.disposeBag)
+                
                 return cell
                 
             case .sysMessage(let list):
@@ -136,6 +185,9 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
             case .recommend(let list):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DiscoverRecommendCell", for: indexPath) as! DiscoverRecommendCell
                 cell.listData.onNext(list)
+                cell.didSelectedItem.subscribe(onNext: {[weak self] item in
+                    self?.selectedItem(item)
+                }).disposed(by: cell.disposeBag)
                 return cell
                 
             case .bot(let item):
@@ -155,6 +207,14 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 default:
                     view.moreButton.isHidden = false
                     view.titleLabel.text = ds[indexPath.section].header
+                    // 查看更多推荐群
+                    view.moreButton.rx.controlEvent(.touchUpInside)
+                        .subscribe(onNext:{[weak self] _ in
+                            guard let self = self else { return }
+                            let groupVM = DiscoverGroupVM()
+                            let groupVC = DiscoverGroupVC(context: self.context,viewModel: groupVM)
+                            self.navigationController?.pushViewController(groupVC, animated: true)
+                        }).disposed(by: view.disposeBag)
                 }
                 return view
             }else {
@@ -162,9 +222,104 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 return view
             }
         })
-            
+    }
+
+    func selectedItem(_ item: Model.Discover.Item) {
+        //跳转类型 1-跳转机器人页面 2-加入电报群聊 3-跳转频道会话 4,不可点击 5,网页跳转 6,App内跳转\
+        var type : DiscoverActionType?
+        switch item.linkType {
+        case 1, 2, 3, 5:
+            type = DiscoverActionType.resolveURL(url: item.link ?? "")
+        case 6:
+            guard let refCode = Model.Discover.RefCode(rawValue: item.refCode ?? "") else {return}
+            type = DiscoverActionType.native(type: refCode, item: item)
+        default:break
+        }
+        
+        guard let actionType = type else {return}
+        self.actionType.onNext(actionType)
     }
     
+    //MARK: 跳转
+    func action(type: DiscoverActionType){
+        switch type {
+        case .resolveURL(let url):
+            self.resolveURL(url)
+        case .native(let type, let item):
+            switch type {
+            case .exchangeSquare:
+                self.validate {[weak self] in
+                    guard let self = self else {return}
+                    let squareVC = ExchangeSquareVC(context: self.context)
+                    self.navigationController?.pushViewController(squareVC, animated: true)
+                }
+            case .coinRoadExchange:
+                self.validate {[weak self] in
+                    guard let self = self , let link = item.link, let url = URL(string: link + "?token=\(HLAccountManager.shareAccount.token)") else {
+                        HUD.flashOnTopVC(.label("地址无效！"))
+                        return
+                    }
+                    app.openUrl(url: url)
+                }
+            case .clcLockAndMining:
+                let activityVC: MiningActivitiesAdvertisingVC = MiningActivitiesAdvertisingVC(presentationData: self.presentationData)
+                self.navigationController?.pushViewController(activityVC, animated: true)
+                
+            case .notice:
+                let sysMessageVC = SystemMessagesVC(context: self.context!)
+                self.navigationController?.pushViewController(sysMessageVC, animated: true)
+            default:
+                break
+            }
+        }
+    }
+    
+    func validate(_ continueAction: @escaping ()->()){
+        
+        if HLAccountManager.walletIsLogined {
+            continueAction()
+        }else{
+            let pushAccountValidationVC : (Bool,Phone)->() = { [weak self] (showPwdView,phone) in
+                guard let self = self else {return}
+                let vc = AccountValidationVC(phone:phone, context: self.context!,showPwdView: showPwdView, onValidateSuccess: {
+                    //手势设置页面设置好手势密保，或者点击跳过，会有此回调
+                    continueAction()
+                })
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            let presentationData = self.context!.sharedContext.currentPresentationData.with({ $0 })
+            
+            AssetVerificationViewController.show(presentationData: presentationData, currentVC: self, onPushAccountLockVC: {[weak self] in
+                guard let self = self else {return}
+                let disableVC = AccountLockVC(context: self.context!, title: $0)
+                self.navigationController?.pushViewController(disableVC, animated: true)
+                
+                }, onPushAccountValidationVC: {
+                    pushAccountValidationVC($0,$1)
+            }, onPushBindExceptionVC: {[weak self] in
+                guard let self = self else {return}
+                let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
+                
+                let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: self.context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: self.context, viewModel: exceptionVM)
+                self.navigationController?.pushViewController(exceptionVC, animated: true)
+            })
+        }
+    }
+    
+    func resolveURL(_ urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        showLoading()
+        app.openUrl(url: url)
+    }
+    
+    func showLoading() {
+        overlayStatusController = OverlayStatusController(theme: self.presentationData.theme,  type: .loading(cancelled: nil))
+        self.present(overlayStatusController!, in: .window(.root))
+    }
+    
+    func dismissLoading() {
+        overlayStatusController?.dismiss()
+    }
 }
 //MARK: --CollectionView样式
 extension NewDiscoverVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {

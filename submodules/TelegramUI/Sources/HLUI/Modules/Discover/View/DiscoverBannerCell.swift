@@ -10,16 +10,19 @@ import Model
 import HL
 import RxSwift
 import RxCocoa
+import Config
 
 class DiscoverBannerCell: UICollectionViewCell {
 
     @IBOutlet var bannerView: ZCycleView!
     
-    private var list : [Model.Discover.Banner.Item] = []
+    private var list : [Model.Discover.Item] = []
     
     var disposeBag = DisposeBag()
     
     var gradientLayerDidChange = PublishSubject<[CGColor]>()
+    
+    let didSeletedItem: PublishSubject<Model.Discover.Item> = PublishSubject<Model.Discover.Item>()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,7 +37,7 @@ class DiscoverBannerCell: UICollectionViewCell {
         disposeBag = DisposeBag()
     }
     
-    func setModel(list:[Model.Discover.Banner.Item]) {
+    func setModel(list:[Model.Discover.Item]) {
         self.list = list
         bannerView.setUrlsGroup(list.map{$0.linkIcon})
     }
@@ -51,15 +54,7 @@ extension DiscoverBannerCell : ZCycleViewProtocol {
 
     func cycleViewDidSelectedIndex(_ cycleView: ZCycleView, index: Int) {
         let model = self.list[index]
-//        if model.linkType == 6,let link = model.link ,link == "http://\(Scheme.i7_app)/jumpExchange" {
-//            self.validate {[weak self] in
-//                guard let self = self else {return}
-//                let squareVC = ExchangeSquareVC(context: self.context)
-//                self.navigationController?.pushViewController(squareVC, animated: true)
-//            }
-//            return
-//        }
-//        resolveURL(self.viewModel.bannerDatas[index])
+        didSeletedItem.onNext(model)
     }
     
     func cycleViewDidScroll(_ cycleView: ZCycleView, contentOffset: CGPoint) {
@@ -67,8 +62,8 @@ extension DiscoverBannerCell : ZCycleViewProtocol {
         let width = self.contentView.frame.size.width
         let current = Int(floor(x / width).truncatingRemainder(dividingBy: CGFloat(self.list.count)))
         let next = current > self.list.count - 2 ? 0 : current + 1
-        let currentColor = self.list[current].color.components(separatedBy: "-")
-        let nextColor = self.list[next].color.components(separatedBy: "-")
+        let currentColor = self.list[current].color!.components(separatedBy: "-")
+        let nextColor = self.list[next].color!.components(separatedBy: "-")
         
         let startColor1 = UIColor.hexString(currentColor.first)
         let endColor1 = UIColor.hexString(nextColor.first)

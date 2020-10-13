@@ -51,9 +51,9 @@ class DiscoverGroupVC: HLBaseVC<DiscoverGroupView> {
     func setupSegmentView(){
         self.contentView.segmentView?.removeFromSuperview()
         var style = SegmentStyle()
-        style.selectedTitleColor = .black
-        style.normalTitleColor = ColorEnum.k666666.toColor()
-        style.scrollLineColor = .black
+        style.selectedTitleColor = ColorEnum.kBlue.toColor()
+        style.normalTitleColor = ColorEnum.k999999.toColor()
+        style.scrollLineColor = ColorEnum.kBlue.toColor()
         style.showLine = true
         style.scrollLineWidth = 20
         style.scrollLineHeight = 1
@@ -76,7 +76,7 @@ class DiscoverGroupVC: HLBaseVC<DiscoverGroupView> {
             
             let allModel = DiscoverGroupTypeModel()
             allModel.name = "全部"
-            let groupTypeDatas = [allModel] + self.viewModel.groupTypeDatas
+            let groupTypeDatas = self.viewModel.groupTypeDatas + [allModel]
             
             let groupVCs = groupTypeDatas.map{(model) -> DiscoverDetailVC in
                 let detailVM = DiscoverDetailVM()
@@ -114,7 +114,7 @@ class DiscoverGroupVC: HLBaseVC<DiscoverGroupView> {
 extension DiscoverGroupVC: NavigationBarType{
      
     var titleView: UIView{
-        return createTitleViewWith(self.viewModel.discoverData.name ?? HLLanguage.Tabbar.Discover.localized())
+        return createTitleViewWith("热门交流群")
        }
 }
 

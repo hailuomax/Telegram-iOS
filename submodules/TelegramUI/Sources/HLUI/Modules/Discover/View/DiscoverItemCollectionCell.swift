@@ -24,13 +24,13 @@ class DiscoverItemCollectionCell: UICollectionViewCell {
         redDotView.isHidden = true
     }
     
-    func setItem(item: Model.Discover.Header.Item){
+    func setItem(item: Model.Discover.Item){
         titleLabel.text = item.linkName
         redDotView.isHidden = true
         imageView.setImage(urlString: item.linkIcon, placeholder: "ic-discover-default")
         
         if item.refCode == "notice" { //系统通知
-            redDotView.isHidden = !(Defaults[HLDefaultsKey.HasNewMessage].bool ?? true)
+            redDotView.isHidden = !(Defaults[HLDefaultsKey.HasNewSystemMessage].bool ?? true)
         }else if item.refCode == "welfareBot" {// 福利
             redDotView.isHidden = !(Defaults[HLDefaultsKey.HasNewWelfareMessage].bool ?? true)
         }

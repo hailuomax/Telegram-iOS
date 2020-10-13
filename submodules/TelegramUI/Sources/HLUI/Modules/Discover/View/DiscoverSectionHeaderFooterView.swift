@@ -9,6 +9,7 @@ import UIKit
 import Extension
 import Config
 import HL
+import RxSwift
 
 class DiscoverSectionHeaderView : UICollectionReusableView {
     
@@ -18,6 +19,8 @@ class DiscoverSectionHeaderView : UICollectionReusableView {
 
     lazy var moreButton = UIButton()
     
+    var disposeBag = DisposeBag()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(contentView)
@@ -26,6 +29,11 @@ class DiscoverSectionHeaderView : UICollectionReusableView {
         contentView.setMaskCorner(roundingCorners: [.topLeft, .topRight], cornerSize: CGSize(width: 7.5, height: 7.5))
         
         setSubViews()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
     
     func setSubViews(){

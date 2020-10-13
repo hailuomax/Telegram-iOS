@@ -29,6 +29,7 @@ class DiscoverNoticeCell: UICollectionViewCell {
         bgView.repeatShow(dataSources: list, repetitionInterval: 3, withDuration: 0.3) { (item) -> (UIView) in
             let button = UIButton()
             button.titleLabel?.textAlignment = .left
+            button.contentHorizontalAlignment = .left
             button.titleLabel?.lineBreakMode = .byTruncatingTail
             button.titleLabel?.font = FontEnum.k_pingFangSC_Medium.toFont(12)
             button.setTitleColor(UIColor(hexString: "#9AA3AC"), for: .normal)
@@ -37,3 +38,4 @@ class DiscoverNoticeCell: UICollectionViewCell {
         }
     }
 }
+
