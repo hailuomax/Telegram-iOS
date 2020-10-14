@@ -66,7 +66,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
         super.loadView()
         setUI()
         bindUI()
-        contentView.collectionView.jy.startRefresh()
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -103,6 +103,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 $0.width.equalTo(kScreenWidth)
                 $0.bottom.equalTo(-TabBarHeight)
             })
+            self.contentView.collectionView.layoutIfNeeded()
         }
         
         self.displayNavigationBar = false
@@ -147,8 +148,13 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 }
             }).disposed(by: disposeBag)
         
+        DispatchQueue.main.async {
+            self.contentView.collectionView.jy.startRefresh()
+        }
+        
     }
     
+    //MARK: Cell and SectionHeader
     func createDataSources() -> RxCollectionViewSectionedReloadDataSource<Model.Discover.Section> {
         
         return RxCollectionViewSectionedReloadDataSource<Model.Discover.Section>.init(configureCell: { (ds, collectionView, indexPath, section) -> UICollectionViewCell in
@@ -175,6 +181,11 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
             case .sysMessage(let list):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DiscoverNoticeCell", for: indexPath) as! DiscoverNoticeCell
                 cell.setList(list: list)
+                cell.didSelectedItem.subscribe(onNext: {[weak self] item in
+                    guard let self = self else {return}
+                    let vc = SystemMessageDetailsVC(model: item, contenxt: self.context, presentationData: self.presentationData)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }).disposed(by: cell.cellBag)
                 return cell
                 
             case .hot(let item):
@@ -212,7 +223,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                         .subscribe(onNext:{[weak self] _ in
                             guard let self = self else { return }
                             let groupVM = DiscoverGroupVM()
-                            let groupVC = DiscoverGroupVC(context: self.context,viewModel: groupVM)
+                            let groupVC = DiscoverGroupVC(context: self.context,viewModel: groupVM, selectedTitle:  ds[indexPath.section].header)
                             self.navigationController?.pushViewController(groupVC, animated: true)
                         }).disposed(by: view.disposeBag)
                 }
