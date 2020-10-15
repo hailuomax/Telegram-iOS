@@ -19,6 +19,7 @@ class RecommendItemCell: UICollectionViewCell {
         // Initialization code
         imageView.cornerRadius = 25.5
         imageView.layer.masksToBounds = true
+        addButton.isUserInteractionEnabled = false
     }
 
 }

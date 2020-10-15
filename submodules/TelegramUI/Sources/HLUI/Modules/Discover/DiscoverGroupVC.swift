@@ -20,9 +20,11 @@ class DiscoverGroupVC: HLBaseVC<DiscoverGroupView> {
     
     var groupVCs   = [DiscoverDetailVC]()
     let viewModel : DiscoverGroupVM
+    var defaultTitle : String?
     
-    init(context: AccountContext?,viewModel:DiscoverGroupVM) {
+    init(context: AccountContext?,viewModel:DiscoverGroupVM, selectedTitle: String? = nil) {
         self.viewModel = viewModel
+        self.defaultTitle = selectedTitle
         super.init(context: context)
     }
     
@@ -67,6 +69,19 @@ class DiscoverGroupVC: HLBaseVC<DiscoverGroupView> {
             self?.view.disablesInteractiveTransitionGestureRecognizer = $0 != 0
         }
         self.contentView.addSubview(self.contentView.segmentView!)
+        
+        if let selectedTitle = self.defaultTitle {
+            let index = self.groupVCs.map{$0.title}
+                .enumerated()
+                .makeIterator()
+                .first { (_, text) -> Bool in
+                    return text == selectedTitle
+                }?.offset
+            DispatchQueue.main.async {
+                self.contentView.segmentView?.titleSegmentItemsView.selectedIndex(index ?? 0, animated: true)
+            }
+            
+        }
     }
 
     func setBind(){
