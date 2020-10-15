@@ -218,20 +218,22 @@ class BigTitleNode : ASDisplayNode {
     
     lazy var titleNode : ASTextNode = ASTextNode()
     
-    lazy var bgImageNode : ImageNode = ImageNode()
+    lazy var bgImageNode : ASImageNode = ASImageNode()
     
     override init() {
         super.init()
         titleNode.textAlignment = .center
         self.addSubnode(titleNode)
-        
-        self.bgImageNode.backgroundColor = UIColor(hexString: "949494")
+        self.bgImageNode.image = UIImage(bundleImageName: "title_bg")
+//        self.bgImageNode.backgroundColor = UIColor(hexString: "949494")
         self.insertSubnode(bgImageNode, belowSubnode: titleNode)
     }
     
     override func didLoad() {
         super.didLoad()
-        titleNode.frame = self.bounds
+        var titleNodeFrame = self.bounds
+        titleNodeFrame.origin.y += 3
+        titleNode.frame = titleNodeFrame
         bgImageNode.frame = self.bounds
     }
 }

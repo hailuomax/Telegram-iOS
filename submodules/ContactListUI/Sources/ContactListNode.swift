@@ -741,6 +741,8 @@ public final class ContactListNode: ASDisplayNode {
     private var indexNode: CollectionIndexNode
     private var indexSections: [String]?
     
+    private var backToTopButton: ASButtonNode
+    
     private var queuedTransitions: [ContactsListNodeTransition] = []
     private var validLayout: (ContainerViewLayout, UIEdgeInsets)?
     
@@ -801,6 +803,7 @@ public final class ContactListNode: ASDisplayNode {
     private var authorizationNode: PermissionContentNode
     private let displayPermissionPlaceholder: Bool
     
+    
     public init(context: AccountContext, presentation: Signal<ContactListPresentation, NoError>, filters: [ContactListFilter] = [.excludeSelf], selectionState: ContactListNodeGroupSelectionState? = nil, displayPermissionPlaceholder: Bool = true, displaySortOptions: Bool = false, contextAction: ((Peer, ASDisplayNode, ContextGesture?) -> Void)? = nil, isSearch: Bool = false) {
         self.context = context
         self.filters = filters
@@ -848,6 +851,8 @@ public final class ContactListNode: ASDisplayNode {
         })
         self.authorizationNode.isHidden = true
         
+        self.backToTopButton = ASButtonNode()
+        
         super.init()
         
         self.backgroundColor = self.presentationData.theme.chatList.backgroundColor
@@ -859,6 +864,11 @@ public final class ContactListNode: ASDisplayNode {
         self.addSubnode(self.listNode)
         self.addSubnode(self.indexNode)
         self.addSubnode(self.authorizationNode)
+        
+        self.insertSubnode(backToTopButton, aboveSubnode: indexNode)
+        self.backToTopButton.isHidden = true
+        self.backToTopButton.setImage(UIImage(bundleImageName: "scrollTop"), for: .normal)
+        self.backToTopButton.addTarget(self, action: #selector(scrollToTop), forControlEvents: .touchUpInside)
         
         let processingQueue = Queue()
         let previousEntries = Atomic<[ContactListNodeEntry]?>(value: nil)
@@ -1338,8 +1348,10 @@ public final class ContactListNode: ASDisplayNode {
             if current.frame.origin.y > navHeight + current.frame.height {
                 //在最顶部就不显示选中效果
                 self.indexNode.updateNotSelected()
+                self.backToTopButton.isHidden = true
             }else {
                 self.indexNode.updateCurrentSelected(title: currentHeader?.sectionHeaderNode.title)
+                self.backToTopButton.isHidden = false
             }
             
         }
@@ -1428,6 +1440,8 @@ public final class ContactListNode: ASDisplayNode {
         if !hadValidLayout {
             self.dequeueTransitions()
         }
+        
+        self.backToTopButton.frame = CGRect(x: layout.size.width - 50, y: layout.size.height - insets.bottom - 50, width: 40, height: 40)
     }
     
     private func enqueueTransition(_ transition: ContactsListNodeTransition) {
@@ -1489,7 +1503,7 @@ public final class ContactListNode: ASDisplayNode {
         }
     }
     
-    public func scrollToTop() {
+    @objc public func scrollToTop() {
         self.listNode.transaction(deleteIndices: [], insertIndicesAndItems: [], updateIndicesAndItems: [], options: [.Synchronous, .LowLatency], scrollToItem: ListViewScrollToItem(index: 0, position: .top(-50.0), animated: true, curve: .Default(duration: nil), directionHint: .Up), updateSizeAndInsets: nil, stationaryItemRange: nil, updateOpaqueState: nil, completion: { _ in })
     }
 }

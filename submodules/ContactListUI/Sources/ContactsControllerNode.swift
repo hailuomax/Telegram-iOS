@@ -95,9 +95,9 @@ final class ContactsControllerNode: ASDisplayNode {
         
         //添加群组和频道按钮
         var groupAndChannelImpl: (() -> Void)?
-        let options = [ContactListAdditionalOption(title: HLLanguage.PeopleNearby.localized(), icon: .generic(UIImage(bundleImageName: "Contact List/PeopleNearbyIcon_blue")!), action: {
+        let options = [ContactListAdditionalOption(title: HLLanguage.PeopleNearby.localized(), icon: .generic(UIImage(bundleImageName: "contact_groups")!), action: {
             addNearbyImpl?()
-        }),ContactListAdditionalOption(title: HLLanguage.GroupsAndChannels.localized(), icon: .generic(UIImage(bundleImageName: "Contact List/PeopleNearbyIcon_blue")!), action: {
+        }),ContactListAdditionalOption(title: HLLanguage.GroupsAndChannels.localized(), icon: .generic(UIImage(bundleImageName: "contact_location")!), action: {
             groupAndChannelImpl?()
         })]
         
