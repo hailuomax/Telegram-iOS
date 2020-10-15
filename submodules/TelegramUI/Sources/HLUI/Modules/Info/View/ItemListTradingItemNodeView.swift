@@ -175,8 +175,6 @@ extension ItemListTradingItemNodeView{
                 title = Trading.apply.renewal.str
             case .success:
                 title = Trading.apply.opened.str
-                enable = false
-                bgColor = UIColor.hex(.kGray)
             case .review:
                 title = Trading.apply.review.str
                 enable = false
