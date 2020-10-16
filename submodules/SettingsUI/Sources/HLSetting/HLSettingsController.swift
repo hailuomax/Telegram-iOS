@@ -112,7 +112,7 @@ private final class SettingsItemArguments {
     let openAuthentication: () -> Void
     let openTradePassword: () -> Void
     let openProxy: () -> Void
-    let openInvite: () -> Void
+    let openInvite: (Peer?) -> Void
     let openSetting: () -> Void
     let openAboutMe: () -> Void
     let openQRCode: (Peer?) -> Void
@@ -132,7 +132,7 @@ private final class SettingsItemArguments {
         openAuthentication:@escaping () -> Void,
         openTradePassword:@escaping () -> Void,
         openProxy:@escaping () -> Void,
-        openInvite:@escaping ()-> Void,
+        openInvite:@escaping (Peer?)-> Void,
         openSetting:@escaping () -> Void,
         openAboutMe:@escaping () -> Void,
         openQRCode:@escaping (Peer?) -> Void,
@@ -177,7 +177,7 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
     
     case authentication(PresentationTheme,UIImage?, String, String)
     case tradePassword(PresentationTheme,UIImage?, String, String)
-    case inviteFriends(PresentationTheme,UIImage?, String)
+    case inviteFriends(PresentationTheme,UIImage?, String, Peer?)
     case proxy(PresentationTheme, UIImage?, String)
     
     ///财路云学院
@@ -194,9 +194,9 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         switch self {
             case .userInfo:
                 return SettingsSection.info.rawValue
-        case .myWallet, .authentication, .tradePassword, .proxy, .inviteFriends, .caiLuCloudCollege, .noticeCenter, .systemMessage:
+        case .myWallet, .authentication, .tradePassword, .inviteFriends, .caiLuCloudCollege, .noticeCenter, .systemMessage:
                 return SettingsSection.wallet.rawValue
-            case .settings, .aboutMe:
+            case .settings, .proxy, .aboutMe:
                 return SettingsSection.settings.rawValue
         }
     }
@@ -291,8 +291,8 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
                 } else {
                     return false
                 }
-            case let .inviteFriends(lhsTheme, _, lhsTitle):
-                if case let .inviteFriends(rhsTheme,_,rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
+            case let .inviteFriends(lhsTheme, _, lhsTitle,_):
+                if case let .inviteFriends(rhsTheme,_,rhsTitle,_) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
                     return true
                 } else {
                     return false
@@ -357,9 +357,9 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks , action: {
                 arguments.openTradePassword()
             })
-        case let .inviteFriends(_, image, title):
+        case let .inviteFriends(_, image, title, peer):
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: title, label: "", sectionId: ItemListSectionId(self.section), style: .blocks , action: {
-                arguments.openInvite()
+                arguments.openInvite(peer)
             })
         case let .proxy(_, image, text):
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: "", sectionId: ItemListSectionId(self.section), style: .blocks , action: {
@@ -440,14 +440,14 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
             //交易密码
             entries.append(.tradePassword(presentationData.theme, PresentationResourcesSettings.tradePassword, HLLanguage.TransactionPassword.localized(), HLLanguage.Change.localized()))
             //邀請好友
-            entries.append(.inviteFriends(presentationData.theme, PresentationResourcesSettings.inviteFriends, HLLanguage.InviteNewUser.localized()))
+            entries.append(.inviteFriends(presentationData.theme, PresentationResourcesSettings.inviteFriends, HLLanguage.InviteNewUser.localized(), peer))
             
 //            entries.append(.caiLuCloudCollege(presentationData.theme, PresentationResourcesSettings.caiLuCloudCollege, "财路云学院"))
             entries.append(.noticeCenter(presentationData.theme, PresentationResourcesSettings.notificationCenter, "通知中心" , state.unread))
             
         }
         
-        entries.append(.systemMessage(presentationData.theme, PresentationResourcesSettings.systemNotice, "系统公告"))
+//        entries.append(.systemMessage(presentationData.theme, PresentationResourcesSettings.systemNotice, "系统公告"))
         
         entries.append(.proxy(presentationData.theme, PresentationResourcesSettings.proxy, HLLanguage.Agent.localized()))
         
@@ -867,12 +867,12 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         |> take(1)).start(next: { context in
             pushControllerImpl?(proxySettingsController(context: context))
         })
-    }, openInvite: {
+    }, openInvite: { peer in
         //MARK: 邀请好友
         let _ = (contextValue.get()
         |> deliverOnMainQueue
         |> take(1)).start(next: { context in
-            let inviteVC = NewInviteFriendsVC(context: context)
+            let inviteVC = NewInviteFriendsVC(peer: peer, context: context, presentationData: nil)
             pushControllerImpl?(inviteVC)
         })
     }, openSetting: {
