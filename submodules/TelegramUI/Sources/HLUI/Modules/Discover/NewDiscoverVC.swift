@@ -46,6 +46,8 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
     
     lazy var actionType: PublishSubject<DiscoverActionType> = PublishSubject<DiscoverActionType>()
     
+    let needUpdateBage = PublishSubject<Void>()
+    
     private var overlayStatusController: ViewController?
         
     override init(context: TGAccountContext?, presentationData: PD? = nil) {
@@ -71,6 +73,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        needUpdateBage.onNext(())
 //        self.updateTheme()
 //        if needShowGuide == true {
 //            showGuide()
@@ -125,7 +128,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
     }
     
     func bindUI() {
-        let output = viewModel.transform(input: Discover.Input(refresh: contentView.collectionView.rx.onRefresh))
+        let output = viewModel.transform(input: Discover.Input(refresh: contentView.collectionView.rx.onRefresh, updateBage: needUpdateBage))
         
         output.isRefreshing.bind(to: contentView.collectionView.rx.isRefreshing).disposed(by: disposeBag)
         
@@ -152,7 +155,13 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
             self.contentView.collectionView.jy.startRefresh()
         }
         
+        output.hasNewMessage.drive(onNext: {[weak self] in
+            self?.tabBarItem.badgeValue = $0 ? "1" : ""
+            self?.contentView.collectionView.reloadData()
+        }).disposed(by: disposeBag)
+        
     }
+    
     
     //MARK: Cell and SectionHeader
     func createDataSources() -> RxCollectionViewSectionedReloadDataSource<Model.Discover.Section> {
