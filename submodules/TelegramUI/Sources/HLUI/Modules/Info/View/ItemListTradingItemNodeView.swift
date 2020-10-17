@@ -93,7 +93,7 @@ extension ItemListTradingItemNodeView{
                 .dismissible(true)
                 .interactive(true)
                 .penetraable(false)
-            popView.disPlay()
+            popView.display()
         }).disposed(by: disposeBag)
         
         //申请
