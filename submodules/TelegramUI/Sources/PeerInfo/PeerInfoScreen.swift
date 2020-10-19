@@ -1239,9 +1239,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                     
                     case .apply,
                          .again:
-                        return BourseGroupDetailVC(groupId: "\(self.peerId.id)", presentationData: self.context.sharedContext.currentPresentationData.with({ $0 }))
-                        //FIXME: 暂时跳转，上线记得改回来
-                        //return BourseApplyStatementVC(peerId: self.peerId, context: self.context)
+                        return BourseApplyStatementVC(peerId: self.peerId, context: self.context)
                     
                     case .success:
                         return BourseGroupDetailVC(groupId: "\(self.peerId.id)", presentationData: self.context.sharedContext.currentPresentationData.with({ $0 }))
