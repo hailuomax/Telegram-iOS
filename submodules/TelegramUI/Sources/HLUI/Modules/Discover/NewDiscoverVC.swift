@@ -156,7 +156,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
         }
         
         output.hasNewMessage.drive(onNext: {[weak self] in
-            self?.tabBarItem.badgeValue = $0 ? "1" : ""
+            self?.tabBarItem.badgeValue = $0 ? "0" : ""
             self?.contentView.collectionView.reloadData()
         }).disposed(by: disposeBag)
         
