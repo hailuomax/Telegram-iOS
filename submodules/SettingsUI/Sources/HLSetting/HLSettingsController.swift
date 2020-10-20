@@ -119,6 +119,8 @@ private final class SettingsItemArguments {
     let openCaiLuCloudCollege: () -> ()
     let openNoticeCenter: (Bool) -> ()
     let openSystemMessages: () -> ()
+    ///跳转交易账户页面
+    let openBiluAccount: () -> ()
     
     init(
         sharedContext: SharedAccountContext,
@@ -138,8 +140,8 @@ private final class SettingsItemArguments {
         openQRCode:@escaping (Peer?) -> Void,
         openCaiLuCloudCollege:@escaping () -> (),
         openNoticeCenter:@escaping (Bool) -> (),
-        openSystemMessages:@escaping () -> ()
-        
+        openSystemMessages:@escaping () -> (),
+        openBiluAccount: @escaping ()->()
     ) {
         self.sharedContext = sharedContext
         self.avatarAndNameInfoContext = avatarAndNameInfoContext
@@ -160,6 +162,7 @@ private final class SettingsItemArguments {
         self.openCaiLuCloudCollege = openCaiLuCloudCollege
         self.openNoticeCenter = openNoticeCenter
         self.openSystemMessages = openSystemMessages
+        self.openBiluAccount = openBiluAccount
     }
 }
 
@@ -173,7 +176,10 @@ private enum SettingsSection: Int32 {
 private indirect enum SettingsEntry: ItemListNodeEntry {
     case userInfo(Account, PresentationTheme, PresentationStrings, PresentationDateTimeFormat, Peer?, CachedPeerData?, ItemListAvatarAndNameInfoItemState, ItemListAvatarAndNameInfoItemUpdatingAvatar?)
     
+    ///海螺钱包
     case myWallet(PresentationTheme, UIImage?, String ,String)
+    ///币路交易账户
+    case biluAccount(PresentationTheme, UIImage?, String)
     
     case authentication(PresentationTheme,UIImage?, String, String)
     case tradePassword(PresentationTheme,UIImage?, String, String)
@@ -194,7 +200,7 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         switch self {
             case .userInfo:
                 return SettingsSection.info.rawValue
-        case .myWallet, .authentication, .tradePassword, .inviteFriends, .caiLuCloudCollege, .noticeCenter, .systemMessage:
+        case .myWallet, .biluAccount, .authentication, .tradePassword, .inviteFriends, .caiLuCloudCollege, .noticeCenter, .systemMessage:
                 return SettingsSection.wallet.rawValue
             case .settings, .proxy, .aboutMe:
                 return SettingsSection.settings.rawValue
@@ -205,15 +211,16 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         switch self {
         case .userInfo: return 0
         case .myWallet: return 1
-        case .authentication: return 2
-        case .tradePassword: return 3
-        case .caiLuCloudCollege: return 4
-        case .noticeCenter: return 6
-        case .systemMessage: return 7
-        case .inviteFriends: return 5
-        case .proxy: return 8
-        case .settings: return 9
-        case .aboutMe: return 10
+        case .biluAccount: return 2
+        case .authentication: return 3
+        case .tradePassword: return 4
+        case .caiLuCloudCollege: return 5
+        case .noticeCenter: return 7
+        case .systemMessage: return 8
+        case .inviteFriends: return 6
+        case .proxy: return 9
+        case .settings: return 10
+        case .aboutMe: return 11
         }
     }
     
@@ -265,6 +272,12 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
             if case let .myWallet(rhsTheme,_,rhsTitle,rhsText) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle, lhsText == rhsText {
                     return true
                 } else {
+                    return false
+                }
+            case let .biluAccount(lhsTheme, _, lhsTitle):
+                if case let .biluAccount(rhsTheme, _, rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle{
+                    return true
+                }else{
                     return false
                 }
             case let .authentication(lhsTheme,_,lhsTitle, lhsText):
@@ -348,7 +361,12 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
             return ItemListDisclosureItem(presentationData: presentationData, icon: image, title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks,action: {
                 arguments.openMyWallet()
             }, clearHighlightAutomatically: false)
-
+        
+        case let .biluAccount(_, image, text):
+            return ItemListDisclosureItem(presentationData: presentationData, icon: image, title: text, label: "", sectionId: ItemListSectionId(self.section), style: .blocks,action: {
+                arguments.openBiluAccount()
+            })
+            
         case let .authentication(_, image, text, value):
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks , action: {
                 arguments.openAuthentication()
@@ -409,47 +427,26 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
         
         let user = HLAccountManager.shareAccount
         
-//        var certificate = ""
-//        //1：未认证 2：审核中 3：已认证 4：认证失败
-//        switch user.certificateStatus {
-//            case .uncertificated:
-//                certificate = HLLanguage.Uncertified.localized()
-//            case .inReview:
-//                certificate = HLLanguage.InAudit.localized()
-//            case .certified:
-//                certificate = HLLanguage.Certified.localized()
-//            case .failed:
-//                certificate = HLLanguage.AuthenticationFailed.localized()
-//            case .none:
-//                certificate = HLLanguage.Uncertified.localized()
-//        }
-        
-//        var pwdStatus = ""
-//        switch user.payPwdStatus {
-//            case 0:
-//                pwdStatus = HLLanguage.NotSetUp.localized()
-//            case 1:
-//                pwdStatus = HLLanguage.Change.localized()
-//            default:
-//                pwdStatus = HLLanguage.NotSetUp.localized()
-//        }
-        
         if  HLAccountManager.walletIsLogined {
-            //实名认证 暂时隐藏该功能
-            //entries.append(.authentication(presentationData.theme, PresentationResourcesSettings.authentication, HL.RealNameAuthentication.localized(), certificate))
+            
+            entries.append(.biluAccount(presentationData.theme, UIImage(bundleImageName: "BiluAsset"), BiluTransfer.Bilu.str))
+            
             //交易密码
             entries.append(.tradePassword(presentationData.theme, PresentationResourcesSettings.tradePassword, HLLanguage.TransactionPassword.localized(), HLLanguage.Change.localized()))
+            
+            entries.append(.noticeCenter(presentationData.theme, PresentationResourcesSettings.notificationCenter, Notice.Title.str , state.unread))
+            
             //邀請好友
             entries.append(.inviteFriends(presentationData.theme, PresentationResourcesSettings.inviteFriends, HLLanguage.InviteNewUser.localized(), peer))
             
 //            entries.append(.caiLuCloudCollege(presentationData.theme, PresentationResourcesSettings.caiLuCloudCollege, "财路云学院"))
-            entries.append(.noticeCenter(presentationData.theme, PresentationResourcesSettings.notificationCenter, "通知中心" , state.unread))
+            
             
         }
         
 //        entries.append(.systemMessage(presentationData.theme, PresentationResourcesSettings.systemNotice, "系统公告"))
         
-        entries.append(.proxy(presentationData.theme, PresentationResourcesSettings.proxy, HLLanguage.Agent.localized()))
+        entries.append(.proxy(presentationData.theme, UIImage(bundleImageName: "ProxySetting"), HLLanguage.Agent.localized()))
         
         //        entries.append(.task1(presentationData.theme, PresentationResourcesSettings.task1, "任务内容1"))
         //
@@ -923,6 +920,23 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
             let vc = SystemMessagesVC(context: context)
             pushControllerImpl?(vc)
         })
+    }, openBiluAccount: {
+        let _ = (contextValue.get()
+                    |> deliverOnMainQueue
+                    |> take(1)).start(next: { context in
+                        
+                        let biluAccountVC: BiluAccountCurrencyListVC = BiluAccountCurrencyListVC(context: context)
+                        
+                        if HLAccountManager.biLuToken.isEmpty {
+                            let logoinVC = TransactionLoginVC(context: context)
+                            logoinVC.successBlock = { [weak logoinVC] in
+                                logoinVC?.navigationController?.popViewController(animated: true)
+                            }
+                            pushControllerImpl?(logoinVC)
+                        }else{
+                            pushControllerImpl?(biluAccountVC)
+                        }
+                    })
     })
     
     changeProfilePhotoImpl = {
