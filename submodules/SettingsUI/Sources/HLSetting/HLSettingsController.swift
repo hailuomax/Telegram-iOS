@@ -636,7 +636,7 @@ private final class SettingsTabBarContextExtractedContentSource: ContextExtracte
     }
 }
 
-let repo = Repo.Notice()
+let repo = Repo.DiscoverRepo()
 //MARK: ====HLSettingsController=====
 public func hlSettingsController(context: AccountContext, accountManager: AccountManager, enableDebugActions: Bool) -> SettingsController & ViewController {
     
@@ -1571,11 +1571,11 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         
         guard let controller = controller,
             HLAccountManager.walletIsLogined else { return }
-        repo.unreadNotice().value { data in
-            debugPrint(data)
+        repo.getNotifyStatus().value { data in
+            
             updateState { state in
                 var state = state
-                state.unread = data.unread
+                state.unread = data.userNotifyStatus
                 return state
             }
         }.load(controller.disposeBag)

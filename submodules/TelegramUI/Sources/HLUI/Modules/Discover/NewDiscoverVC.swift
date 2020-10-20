@@ -288,6 +288,19 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
             case .notice:
                 let sysMessageVC = SystemMessagesVC(context: self.context!)
                 self.navigationController?.pushViewController(sysMessageVC, animated: true)
+                
+            case .entrust:
+                if HLAccountManager.biLuToken.isEmpty {
+                    let logoinVC = TransactionLoginVC(context:self.context)
+                    logoinVC.successBlock = { [weak self] in
+                        guard let self = self else { return }
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                    HLAccountManager.validateAccountAndcheckPwdSetting((self, logoinVC), context: self.context!)
+                } else {
+                    let entrustAllVC = EntrustAllVC(symbol: "",context:self.context)
+                    HLAccountManager.validateAccountAndcheckPwdSetting((self, entrustAllVC), context: self.context!)
+                }
             default:
                 break
             }

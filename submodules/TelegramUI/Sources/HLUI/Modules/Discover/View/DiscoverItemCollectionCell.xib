@@ -25,8 +25,8 @@
                             <constraint firstAttribute="width" constant="27" id="wg0-c7-uTY"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJJ-IZ-7xo">
-                        <rect key="frame" x="35" y="45.5" width="33" height="16"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJJ-IZ-7xo">
+                        <rect key="frame" x="5" y="45.5" width="93" height="16"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -49,10 +49,11 @@
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="WJJ-IZ-7xo" secondAttribute="trailing" constant="5" id="8yq-GH-94a"/>
                 <constraint firstItem="hRZ-e2-hYH" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="11" id="HRA-NX-9rp"/>
                 <constraint firstItem="NXS-Y9-Adz" firstAttribute="leading" secondItem="hRZ-e2-hYH" secondAttribute="trailing" id="LD0-gT-PPv"/>
                 <constraint firstItem="hRZ-e2-hYH" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="b5g-lt-1mb"/>
-                <constraint firstItem="WJJ-IZ-7xo" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="bRi-A2-WRS"/>
+                <constraint firstItem="WJJ-IZ-7xo" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="dJc-CX-H8B"/>
                 <constraint firstItem="WJJ-IZ-7xo" firstAttribute="top" secondItem="hRZ-e2-hYH" secondAttribute="bottom" constant="7.5" id="gzy-sh-YFQ"/>
                 <constraint firstItem="NXS-Y9-Adz" firstAttribute="bottom" secondItem="hRZ-e2-hYH" secondAttribute="top" constant="4" id="nAh-kY-tlU"/>
             </constraints>
