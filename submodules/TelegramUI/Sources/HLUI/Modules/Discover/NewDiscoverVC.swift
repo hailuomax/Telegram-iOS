@@ -43,9 +43,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
     lazy var viewModel = ViewModel.Discover()
     
     lazy var dataSource: RxCollectionViewSectionedReloadDataSource<Model.Discover.Section> = createDataSources()
-    
-    lazy var actionType: PublishSubject<DiscoverActionType> = PublishSubject<DiscoverActionType>()
-    
+        
     let needUpdateBage = PublishSubject<Void>()
     
     private var overlayStatusController: ViewController?
@@ -106,7 +104,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 $0.width.equalTo(kScreenWidth)
                 $0.bottom.equalTo(-TabBarHeight)
             })
-            self.contentView.collectionView.layoutIfNeeded()
+            self.contentView.layoutIfNeeded()
         }
         
         self.displayNavigationBar = false
@@ -133,11 +131,6 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
         output.isRefreshing.bind(to: contentView.collectionView.rx.isRefreshing).disposed(by: disposeBag)
         
         output.sections.drive( contentView.collectionView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
-        
-        actionType.subscribe(onNext: {[weak self] type in
-            guard let self = self else {return}
-            self.action(type: type)
-        }).disposed(by: disposeBag)
         
         contentView.collectionView.rx.modelSelected(Model.Discover.Section.Item.self)
             .subscribe(onNext: {[weak self] row in
@@ -257,7 +250,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
         }
         
         guard let actionType = type else {return}
-        self.actionType.onNext(actionType)
+        self.action(type: actionType)
     }
     
     //MARK: 跳转
@@ -387,7 +380,7 @@ extension NewDiscoverVC: UICollectionViewDelegate, UICollectionViewDelegateFlowL
         case .banner, .sysMessage:
             return CGSize.zero
         default:
-            return CGSize(width: kSectionWidth, height: 10 + kSectionEdge.bottom)
+            return CGSize(width: kSectionWidth, height: (section == dataSource.sectionModels.count - 1 ? 40 : 10) + kSectionEdge.bottom )
         }
     }
     
