@@ -1223,7 +1223,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
             arguments.openEditing()
         })
         
-        let controllerState = ItemListControllerState(presentationData: ItemListPresentationData(presentationData), title: .text(presentationData.strings.Settings_Title), leftNavigationButton: nil, rightNavigationButton: rightNavigationButton, backNavigationButton: ItemListBackButton(title: presentationData.strings.Common_Back))
+        let controllerState = ItemListControllerState(presentationData: ItemListPresentationData(presentationData), title: .text(HLLanguage.TabBar.Mine.str), leftNavigationButton: nil, rightNavigationButton: rightNavigationButton, backNavigationButton: ItemListBackButton(title: presentationData.strings.Common_Back))
         
         var unreadTrendingStickerPacks = 0
         for item in featuredAndArchived.0 {
@@ -1346,7 +1346,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         if accountTabBarAvatarBadge > 0 {
             otherAccountsBadge = compactNumericCountString(Int(accountTabBarAvatarBadge), decimalSeparator: presentationData.dateTimeFormat.decimalSeparator)
         }
-        return ItemListControllerTabBarItem(title: presentationData.strings.Settings_Title, image: accountTabBarAvatar?.0 ?? icon, selectedImage: accountTabBarAvatar?.1 ?? icon, tintImages: accountTabBarAvatar == nil, badgeValue: notificationsWarning ? "!" : otherAccountsBadge)
+        return ItemListControllerTabBarItem(title: HLLanguage.TabBar.Mine.str, image: accountTabBarAvatar?.0 ?? icon, selectedImage: accountTabBarAvatar?.1 ?? icon, tintImages: accountTabBarAvatar == nil, badgeValue: notificationsWarning ? "!" : otherAccountsBadge)
     }
     
     //MARK: 创建controller

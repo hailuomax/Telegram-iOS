@@ -76,6 +76,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
 //        if needShowGuide == true {
 //            showGuide()
 //        }
+        self.tabBarItem.title = HLLanguage.Tabbar.Discover.localized()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
