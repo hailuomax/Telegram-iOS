@@ -137,7 +137,7 @@ extension DiscoverDetailVC : UITableViewDelegate,UITableViewDataSource{
 extension DiscoverDetailVC: NavigationBarType{
      
     var titleView: UIView{
-        return createTitleViewWith(self.viewModel.discoverData.name ?? HLLanguage.Tabbar.Discover.localized())
+        return createTitleViewWith(self.viewModel.discoverData.name ?? HLLanguage.TabBar.Discover.localized())
        }
 }
 

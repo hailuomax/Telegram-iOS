@@ -52,7 +52,7 @@ private func spliceWebUrl(_ url : String) -> String{
 }
 
 class DiscoverVC: HLBaseVC<DiscoverView> {
-    
+     
     private var viewModel: DiscoverVM!
     
     private lazy var locationManager = CLLocationManager()
@@ -67,7 +67,7 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
         let icon = UIImage(bundleImageName: "Chat List/Tabs/IconFound")
         self.tabBarItem.image = icon
         self.tabBarItem.selectedImage = icon
-        self.tabBarItem.title = HLLanguage.Tabbar.Discover.str
+        self.tabBarItem.title = HLLanguage.TabBar.Discover.str
         
         self.viewModel = DiscoverVM(onUpdateBadge: {[weak self] in
             self?.tabBarItem.badgeValue = ($0 == nil || $0!.isEmpty) ? $0 : "0"
@@ -77,9 +77,9 @@ class DiscoverVC: HLBaseVC<DiscoverView> {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.contentView.titleLabel.text = HLLanguage.Tabbar.Discover.localized()
-        self.title = HLLanguage.Tabbar.Discover.localized()
-        self.tabBarItem.title = HLLanguage.Tabbar.Discover.localized()
+        self.contentView.titleLabel.text = HLLanguage.TabBar.Discover.localized()
+        self.title = HLLanguage.TabBar.Discover.localized()
+        self.tabBarItem.title = HLLanguage.TabBar.Discover.localized()
         self.updateTheme()
         if needShowGuide == true {
             showGuide()

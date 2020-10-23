@@ -54,7 +54,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
         let icon = UIImage(bundleImageName: "Chat List/Tabs/IconFound")
         self.tabBarItem.image = icon
         self.tabBarItem.selectedImage = icon
-        self.tabBarItem.title = HLLanguage.Tabbar.Discover.str
+        self.tabBarItem.title = HLLanguage.TabBar.Discover.str
         
     }
     
@@ -76,7 +76,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
 //        if needShowGuide == true {
 //            showGuide()
 //        }
-        self.tabBarItem.title = HLLanguage.Tabbar.Discover.localized()
+        self.tabBarItem.title = HLLanguage.TabBar.Discover.localized()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
