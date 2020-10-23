@@ -134,8 +134,8 @@ class SectionBackGroundColorLayout: UICollectionViewFlowLayout {
             sectionFrame.origin.y -= sectionInset.top
             
             //计算得到该section实际的尺寸
-            sectionFrame.size.width = self.collectionView!.frame.width - kSectionEdge.left - kSectionEdge.right
-            sectionFrame.size.height += sectionInset.top + sectionInset.bottom
+            sectionFrame.size.width = kScreenWidth - kSectionEdge.left - kSectionEdge.right
+//            sectionFrame.size.height += sectionInset.top + sectionInset.bottom
             
             
             //更具上面的结果计算section背景的布局属性
