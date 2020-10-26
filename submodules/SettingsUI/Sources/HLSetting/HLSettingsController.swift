@@ -215,9 +215,9 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         case .authentication: return 3
         case .tradePassword: return 4
         case .caiLuCloudCollege: return 5
-        case .noticeCenter: return 7
+        case .noticeCenter: return 6
         case .systemMessage: return 8
-        case .inviteFriends: return 6
+        case .inviteFriends: return 7
         case .proxy: return 9
         case .settings: return 10
         case .aboutMe: return 11
