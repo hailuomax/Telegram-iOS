@@ -633,7 +633,7 @@ private final class SettingsTabBarContextExtractedContentSource: ContextExtracte
     }
 }
 
-let repo = Repo.DiscoverRepo()
+let repo = Repo.Notice()
 //MARK: ====HLSettingsController=====
 public func hlSettingsController(context: AccountContext, accountManager: AccountManager, enableDebugActions: Bool) -> SettingsController & ViewController {
     
@@ -1583,13 +1583,16 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
     let kShowWalletGuideKey = "kShowWalletGuideKey"
     controller.willAppear = {[weak controller]  _ in
         
+        controller?.tabBarItem.badgeValue = ""
+        
         guard let controller = controller,
-            HLAccountManager.walletIsLogined else { return }
-        repo.getNotifyStatus().value { data in
-            
+            HLAccountManager.walletIsLogined else {return}
+        repo.unreadNotice().value { data in
+            debugPrint(data)
             updateState { state in
                 var state = state
-                state.unread = data.userNotifyStatus
+                state.unread = data.unread
+                controller.tabBarItem.badgeValue = state.unread ? "0" : ""
                 return state
             }
         }.load(controller.disposeBag)
