@@ -54,9 +54,11 @@ class DiscoverSectionHeaderView : UICollectionReusableView {
         moreButton.snp.makeConstraints { (make) in
             make.right.equalTo(-12)
             make.centerY.equalToSuperview()
+            make.width.greaterThanOrEqualTo(70)
         }
         
         moreButton.layoutButtonEdgeInsets(type: .PositionRight, space: 8)
+    
     }
     
     required init?(coder: NSCoder) {
@@ -110,6 +112,7 @@ class SectionBackGroundColorLayout: UICollectionViewFlowLayout {
     
     override func prepare() {
         super.prepare()
+        decorationViewAttrs.removeAll()
         guard let numberOfSections = self.collectionView?.numberOfSections ,
               let delegate = self.collectionView?.delegate as? UICollectionViewDelegateFlowLayout
               else {return}

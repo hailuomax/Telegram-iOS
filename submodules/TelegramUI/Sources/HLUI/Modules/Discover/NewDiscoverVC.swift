@@ -269,7 +269,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 }
             case .coinRoadExchange:
                 self.validate {[weak self] in
-                    guard let self = self , let link = item.link, let url = URL(string: link + "?token=\(HLAccountManager.shareAccount.token)") else {
+                    guard let self = self , let link = item.link, let url = URL(string: link + "?token=\(HLAccountManager.shareAccount.token ?? "")") else {
                         HUD.flashOnTopVC(.label("地址无效！"))
                         return
                     }
