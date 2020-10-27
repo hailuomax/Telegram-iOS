@@ -62,6 +62,7 @@ public class ItemListTradingItemNodeView: UIView{
     
     private let repo: BiLuRepo = BiLuRepo()
     private let disposeBag: DisposeBag = DisposeBag()
+    private var tradingType: ItemListTradingItemType?
     
     public override func awakeFromNib() {
         super.awakeFromNib()
@@ -101,15 +102,15 @@ extension ItemListTradingItemNodeView{
             .subscribe(onNext: {[weak self] in
                 guard let self = self else {return}
                 guard let b = self.onApply else {return}
-                if !HLAccountManager.walletIsLogined{
-                    b(self.detail.status == 2 ? .renewal : .apply)
-                }else{
+//                if !HLAccountManager.walletIsLogined{
+//                    b(self.detail.status == 2 ? .renewal : .apply)
+//                }else{
                     if self.detail.status == 2{
                         self.popRenewView()
-                    }else{
-                        b(.apply)
+                    }else if let type = self.tradingType{
+                        b(type)
                     }
-                }
+                //}
             }).disposed(by: disposeBag)
     }
     
@@ -117,7 +118,7 @@ extension ItemListTradingItemNodeView{
     private func updateUI(){
         
         ///开通状态
-        {() -> ItemListTradingItemType in
+        tradingType = {() -> ItemListTradingItemType in
             
             switch detail.status!{
             case 0, 3, 4: return .apply
@@ -135,7 +136,7 @@ extension ItemListTradingItemNodeView{
             }
         }()
         .then(updateLayout)
-        .do(updateBtnStyle)
+        .then(updateBtnStyle)
         
         //如果是周期付费
         if let depositAmount = detail.depositAmount,
