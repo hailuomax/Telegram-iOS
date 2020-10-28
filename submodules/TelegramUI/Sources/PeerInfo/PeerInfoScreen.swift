@@ -1234,13 +1234,13 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                 guard let self = self else {return}
                 
                 
-                let bourseVC: ViewController = { () -> ViewController in
+                func bourseVC() -> ViewController{
                     switch tradingItemType{
                     
                     case .apply,
                          .again:
                         return BourseApplyStatementVC(peerId: self.peerId, context: self.context)
-                    
+                        
                     case .success:
                         return BourseGroupDetailVC(groupId: "\(self.peerId.id)", presentationData: self.context.sharedContext.currentPresentationData.with({ $0 }))
                         
@@ -1248,8 +1248,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                          .renewal:
                         assert(false, "状态 \(tradingItemType) 不应该进入这个作用域，请检查")
                     }
-                }()
-                
+                }
                 
                 
                 
@@ -1261,7 +1260,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                             //手势设置页面设置好手势密保，或者点击跳过，会有此回调
                             
                             if tradingItemType != .renewal{
-                                self.controller?.push(bourseVC)
+                                self.controller?.push(bourseVC())
                             }
                         })
                         self.controller?.push(vc)
@@ -1281,7 +1280,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                 } else{
 
                     if tradingItemType != .renewal{
-                        self.controller?.push(bourseVC)
+                        self.controller?.push(bourseVC())
                     }
                 }
             }
