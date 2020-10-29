@@ -1323,17 +1323,19 @@ public final class ContactListNode: ASDisplayNode {
         }
         
         let hasTopNotch = self.validLayout?.0.deviceMetrics.hasTopNotch ?? false
-        let navHeight = CGFloat(hasTopNotch ? 88 : 64)
         self.listNode.didScroll = { [weak self] _ in
             guard let self = self else {return}
+            let top : CGFloat = self.listNode.headerInsets.top
             //判断哪个header在最上面
             var currentHeader : ContactListNameIndexHeaderNode?
             self.listNode.forEachItemHeaderNode { (headerNode) in
                 if let itemHeaderNode = headerNode as? ContactListNameIndexHeaderNode {
-                    if itemHeaderNode.frame.origin.y >= navHeight {
+                    //筛选header minY大于顶部的
+                    if itemHeaderNode.frame.minY >= top {
                         if currentHeader == nil {
                             currentHeader = itemHeaderNode
                         }else {
+                            //获取最合适的header
                             if itemHeaderNode.frame.origin.y <= currentHeader!.frame.origin.y {
                                 currentHeader = itemHeaderNode
                             }
@@ -1345,12 +1347,13 @@ public final class ContactListNode: ASDisplayNode {
                 self.indexNode.updateNotSelected()
                 return
             }
-            if current.frame.origin.y > navHeight + current.frame.height {
+            if current.frame.minY > top + current.frame.height {
                 //在最顶部就不显示选中效果
                 self.indexNode.updateNotSelected()
                 self.backToTopButton.isHidden = true
             }else {
-                self.indexNode.updateCurrentSelected(title: currentHeader?.sectionHeaderNode.title)
+                //不是在最顶部的话就设置高亮分组
+                self.indexNode.updateCurrentSelected(title: current.sectionHeaderNode.title)
                 self.backToTopButton.isHidden = false
             }
             

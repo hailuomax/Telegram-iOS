@@ -106,6 +106,7 @@ final class ContactsControllerNode: ASDisplayNode {
             switch sortOrder {
                 case .presence:
 //                    return .orderedByPresence(options: options)
+                    //natural显示分区
                     return .natural(options: options, includeChatList: false)
                 case .natural:
                     return .natural(options: options, includeChatList: false)
