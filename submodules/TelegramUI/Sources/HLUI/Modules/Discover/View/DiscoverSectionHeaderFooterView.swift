@@ -54,7 +54,7 @@ class DiscoverSectionHeaderView : UICollectionReusableView {
         moreButton.snp.makeConstraints { (make) in
             make.right.equalTo(-12)
             make.centerY.equalToSuperview()
-            make.width.greaterThanOrEqualTo(7)
+            make.width.greaterThanOrEqualTo(70)
         }
         
         moreButton.layoutButtonEdgeInsets(type: .PositionRight, space: 8)
