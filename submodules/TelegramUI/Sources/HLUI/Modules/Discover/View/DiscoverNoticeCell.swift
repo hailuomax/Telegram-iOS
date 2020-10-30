@@ -18,6 +18,8 @@ class DiscoverNoticeCell: UICollectionViewCell {
     
     private let disposeBag = DisposeBag()
     
+    private var cache : [Model.Discover.SysMessage.Item] = []
+    
     var cellBag = DisposeBag()
     
     let didSelectedItem = PublishSubject<Model.Discover.SysMessage.Item>()
@@ -39,6 +41,10 @@ class DiscoverNoticeCell: UICollectionViewCell {
     }
 
     func setList(list: [Model.Discover.SysMessage.Item]) {
+        if list == cache {
+            return
+        }
+        cache = list
         bgView.repeatShow(dataSources: list, repetitionInterval: 3, withDuration: 0.3) {[weak self] (item) -> (UIView) in
             let button = NoticeButton()
             button.titleLabel?.textAlignment = .left

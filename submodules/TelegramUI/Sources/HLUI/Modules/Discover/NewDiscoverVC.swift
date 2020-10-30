@@ -151,7 +151,10 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
         
         output.hasNewMessage.drive(onNext: {[weak self] in
             self?.tabBarItem.badgeValue = $0 ? "0" : ""
-            self?.contentView.collectionView.reloadData()
+            let offset = self?.dataSource.sectionModels.enumerated().first(where: {$0.element.header == "热门"})?.offset
+            if let section = offset {
+                self?.contentView.collectionView.reloadSections([section])
+            }
         }).disposed(by: disposeBag)
         
     }
