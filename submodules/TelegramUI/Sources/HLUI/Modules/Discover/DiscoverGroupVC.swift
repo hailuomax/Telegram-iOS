@@ -53,11 +53,11 @@ class DiscoverGroupVC: HLBaseVC<DiscoverGroupView> {
     func setupSegmentView(){
         self.contentView.segmentView?.removeFromSuperview()
         var style = SegmentStyle()
-        style.selectedTitleColor = ColorEnum.kBlue.toColor()
+        style.selectedTitleColor = ColorEnum.k007DFF.toColor()
         style.normalTitleColor = ColorEnum.k999999.toColor()
-        style.scrollLineColor = ColorEnum.kBlue.toColor()
+        style.scrollLineColor = ColorEnum.k007DFF.toColor()
         style.showLine = true
-        style.scrollLineWidth = 20
+//        style.scrollLineWidth = 20
         style.scrollLineHeight = 1
         style.equipartition = false
         style.titleFont = FontEnum.k_pingFangSC_Medium.toFont(14)

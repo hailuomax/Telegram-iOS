@@ -174,11 +174,11 @@ class DiscoverDetailCell: UITableViewCell {
     let checkButton : UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle(HLLanguage.GetInto.localized(), for: .normal)
-        button.layer.borderColor = ColorEnum.k0091FF.toColor().cgColor
+        button.layer.borderColor = ColorEnum.k007DFF.toColor().cgColor
         button.layer.borderWidth = 0.5
         button.clipsToBounds = true
         button.layer.cornerRadius = 3
-        button.setTitleColor(ColorEnum.k0091FF.toColor(), for: .normal)
+        button.setTitleColor(ColorEnum.k007DFF.toColor(), for: .normal)
         button.titleLabel?.font = FontEnum.k_pingFangSC_Regular.toFont(13)
         return button
     }()
