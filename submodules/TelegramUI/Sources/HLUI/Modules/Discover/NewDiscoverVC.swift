@@ -151,10 +151,22 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
         
         output.hasNewMessage.drive(onNext: {[weak self] in
             self?.tabBarItem.badgeValue = $0 ? "0" : ""
-            let offset = self?.dataSource.sectionModels.enumerated().first(where: {$0.element.header == "热门"})?.offset
-            if let section = offset {
-                self?.contentView.collectionView.reloadSections([section])
+            guard let self = self else {return}
+            let sectionModels = self.dataSource.sectionModels
+            guard let section = sectionModels.enumerated().first(where: {$0.element.header == "热门"})?.offset else {return}
+            let items : [String] = [Model.Discover.RefCode.notice.rawValue, Model.Discover.RefCode.welfareBot.rawValue]
+            //要刷新的IndexPath
+            let rows = sectionModels[section].items.enumerated().filter {
+                if case .hot(let item) = $0.element {
+                    return items.contains(item.refCode ?? "")
+                }else {
+                    return false
+                }
             }
+            .map{$0.offset}
+            .map{IndexPath(row: $0, section: section)}
+            self.contentView.collectionView.reloadItems(at: rows)
+
         }).disposed(by: disposeBag)
         
     }

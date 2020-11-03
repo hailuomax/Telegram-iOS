@@ -29,9 +29,9 @@ class DiscoverItemCollectionCell: UICollectionViewCell {
         redDotView.isHidden = true
         imageView.setImage(urlString: item.linkIcon, placeholder: "ic-discover-default")
         
-        if item.refCode == "notice" { //系统通知
+        if item.refCode == Model.Discover.RefCode.notice.rawValue { //系统通知
             redDotView.isHidden = !(Defaults[HLDefaultsKey.HasNewSystemMessage].bool ?? true)
-        }else if item.refCode == "welfareBot" {// 福利
+        }else if item.refCode == Model.Discover.RefCode.welfareBot.rawValue {// 福利
             redDotView.isHidden = !(Defaults[HLDefaultsKey.HasNewWelfareMessage].bool ?? true)
         }
         
