@@ -1254,7 +1254,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                 
                 if !HLAccountManager.walletIsLogined {
                     
-                    let pushAccountValidationVC : (Bool,Phone)->() = { (showPwdView, phone) in
+                    let pushAccountValidationVC : (Bool,Phone,Bool)->() = { (showPwdView, phone,canLoginWithPwd) in
                         let vc = AccountValidationVC(phone: phone, context: self.context, showPwdView: showPwdView, onValidateSuccess: {
                             
                             //手势设置页面设置好手势密保，或者点击跳过，会有此回调
@@ -1270,7 +1270,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                         let disableVC = AccountLockVC(context: context, title: $0)
                         self.controller?.push(disableVC)
                     }, onPushAccountValidationVC: {
-                        pushAccountValidationVC($0,$1)
+                        pushAccountValidationVC($0,$1,$2)
                     }, onPushBindExceptionVC: {
                         let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
                         let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)

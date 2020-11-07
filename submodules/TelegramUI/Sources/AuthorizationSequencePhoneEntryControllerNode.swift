@@ -46,74 +46,103 @@ private final class PhoneAndCountryNode: ASDisplayNode {
     
     var selectCountryCode: (() -> Void)?
     var checkPhone: (() -> Void)?
+    var loginHLWallet: (() -> Void)?
+    
+    let loginHlWalletButtonTitle = "切换海螺钱包账号登录"
+    //是否都输入
+    var numberAndCountryIsInput : Bool {
+        return !phoneInputNode.countryCodeText.isEmpty && !phoneInputNode.numberText.isEmpty
+    }
+    
+    //登录海螺钱包
+    let loginHlWalletButton: ASButtonNode
+    
+    private let countryBottomLine: ASDisplayNode
+    private let numberBottomLine: ASDisplayNode
+    private let arrowImageNode: ASImageNode
     
     init(strings: PresentationStrings, theme: PresentationTheme) {
         self.strings = strings
         
-        let countryButtonBackground = generateImage(CGSize(width: 61.0, height: 67.0), rotatedContext: { size, context in
-            let arrowSize: CGFloat = 10.0
-            let lineWidth = UIScreenPixel
-            context.clear(CGRect(origin: CGPoint(), size: size))
-            context.setStrokeColor(theme.list.itemPlainSeparatorColor.cgColor)
-            context.setLineWidth(lineWidth)
-            context.move(to: CGPoint(x: 15.0, y: lineWidth / 2.0))
-            context.addLine(to: CGPoint(x: size.width, y: lineWidth / 2.0))
-            context.strokePath()
-            
-            context.move(to: CGPoint(x: size.width, y: size.height - arrowSize - lineWidth / 2.0))
-            context.addLine(to: CGPoint(x: size.width - 1.0, y: size.height - arrowSize - lineWidth / 2.0))
-            context.addLine(to: CGPoint(x: size.width - 1.0 - arrowSize, y: size.height - lineWidth / 2.0))
-            context.addLine(to: CGPoint(x: size.width - 1.0 - arrowSize - arrowSize, y: size.height - arrowSize - lineWidth / 2.0))
-            context.addLine(to: CGPoint(x: 15.0, y: size.height - arrowSize - lineWidth / 2.0))
-            context.strokePath()
-        })?.stretchableImage(withLeftCapWidth: 61, topCapHeight: 1)
-        
-        let countryButtonHighlightedBackground = generateImage(CGSize(width: 60.0, height: 67.0), rotatedContext: { size, context in
-            let arrowSize: CGFloat = 10.0
-            context.clear(CGRect(origin: CGPoint(), size: size))
-            context.setFillColor(theme.list.itemHighlightedBackgroundColor.cgColor)
-            context.fill(CGRect(origin: CGPoint(), size: CGSize(width: size.width, height: size.height - arrowSize)))
-            context.move(to: CGPoint(x: size.width, y: size.height - arrowSize))
-            context.addLine(to: CGPoint(x: size.width - 1.0, y: size.height - arrowSize))
-            context.addLine(to: CGPoint(x: size.width - 1.0 - arrowSize, y: size.height))
-            context.addLine(to: CGPoint(x: size.width - 1.0 - arrowSize - arrowSize, y: size.height - arrowSize))
-            context.closePath()
-            context.fillPath()
-        })?.stretchableImage(withLeftCapWidth: 61, topCapHeight: 2)
-        
-        let phoneInputBackground = generateImage(CGSize(width: 85.0, height: 57.0), rotatedContext: { size, context in
-            let lineWidth = UIScreenPixel
-            context.clear(CGRect(origin: CGPoint(), size: size))
-            context.setStrokeColor(theme.list.itemPlainSeparatorColor.cgColor)
-            context.setLineWidth(lineWidth)
-            context.move(to: CGPoint(x: 15.0, y: size.height - lineWidth / 2.0))
-            context.addLine(to: CGPoint(x: size.width, y: size.height - lineWidth / 2.0))
-            context.strokePath()
-            context.move(to: CGPoint(x: size.width - 2.0 + lineWidth / 2.0, y: size.height - lineWidth / 2.0))
-            context.addLine(to: CGPoint(x: size.width - 2.0 + lineWidth / 2.0, y: 0.0))
-            context.strokePath()
-        })?.stretchableImage(withLeftCapWidth: 84, topCapHeight: 2)
+//        let countryButtonBackground = generateImage(CGSize(width: 61.0, height: 67.0), rotatedContext: { size, context in
+//            let arrowSize: CGFloat = 10.0
+//            let lineWidth = UIScreenPixel
+//            context.clear(CGRect(origin: CGPoint(), size: size))
+//            context.setStrokeColor(theme.list.itemPlainSeparatorColor.cgColor)
+//            context.setLineWidth(lineWidth)
+//            context.move(to: CGPoint(x: 15.0, y: lineWidth / 2.0))
+//            context.addLine(to: CGPoint(x: size.width, y: lineWidth / 2.0))
+//            context.strokePath()
+//
+//            context.move(to: CGPoint(x: size.width, y: size.height - arrowSize - lineWidth / 2.0))
+//            context.addLine(to: CGPoint(x: size.width - 1.0, y: size.height - arrowSize - lineWidth / 2.0))
+//            context.addLine(to: CGPoint(x: size.width - 1.0 - arrowSize, y: size.height - lineWidth / 2.0))
+//            context.addLine(to: CGPoint(x: size.width - 1.0 - arrowSize - arrowSize, y: size.height - arrowSize - lineWidth / 2.0))
+//            context.addLine(to: CGPoint(x: 15.0, y: size.height - arrowSize - lineWidth / 2.0))
+//            context.strokePath()
+//        })?.stretchableImage(withLeftCapWidth: 61, topCapHeight: 1)
+//
+//        let countryButtonHighlightedBackground = generateImage(CGSize(width: 60.0, height: 67.0), rotatedContext: { size, context in
+//            let arrowSize: CGFloat = 10.0
+//            context.clear(CGRect(origin: CGPoint(), size: size))
+//            context.setFillColor(theme.list.itemHighlightedBackgroundColor.cgColor)
+//            context.fill(CGRect(origin: CGPoint(), size: CGSize(width: size.width, height: size.height - arrowSize)))
+//            context.move(to: CGPoint(x: size.width, y: size.height - arrowSize))
+//            context.addLine(to: CGPoint(x: size.width - 1.0, y: size.height - arrowSize))
+//            context.addLine(to: CGPoint(x: size.width - 1.0 - arrowSize, y: size.height))
+//            context.addLine(to: CGPoint(x: size.width - 1.0 - arrowSize - arrowSize, y: size.height - arrowSize))
+//            context.closePath()
+//            context.fillPath()
+//        })?.stretchableImage(withLeftCapWidth: 61, topCapHeight: 2)
+//
+//        let phoneInputBackground = generateImage(CGSize(width: 85.0, height: 57.0), rotatedContext: { size, context in
+//            let lineWidth = UIScreenPixel
+//            context.clear(CGRect(origin: CGPoint(), size: size))
+//            context.setStrokeColor(theme.list.itemPlainSeparatorColor.cgColor)
+//            context.setLineWidth(lineWidth)
+//            context.move(to: CGPoint(x: 15.0, y: size.height - lineWidth / 2.0))
+//            context.addLine(to: CGPoint(x: size.width, y: size.height - lineWidth / 2.0))
+//            context.strokePath()
+//            context.move(to: CGPoint(x: size.width - 2.0 + lineWidth / 2.0, y: size.height - lineWidth / 2.0))
+//            context.addLine(to: CGPoint(x: size.width - 2.0 + lineWidth / 2.0, y: 0.0))
+//            context.strokePath()
+//        })?.stretchableImage(withLeftCapWidth: 84, topCapHeight: 2)
         
         self.countryButton = ASButtonNode()
         self.countryButton.displaysAsynchronously = false
-        self.countryButton.setBackgroundImage(countryButtonBackground, for: [])
-        self.countryButton.titleNode.maximumNumberOfLines = 1
-        self.countryButton.titleNode.truncationMode = .byTruncatingTail
-        self.countryButton.setBackgroundImage(countryButtonHighlightedBackground, for: .highlighted)
+//        self.countryButton.setBackgroundImage(countryButtonBackground, for: [])
+//        self.countryButton.titleNode.maximumNumberOfLines = 1
+//        self.countryButton.titleNode.truncationMode = .byTruncatingTail
+//        self.countryButton.setBackgroundImage(countryButtonHighlightedBackground, for: .highlighted)
         
         self.phoneBackground = ASImageNode()
-        self.phoneBackground.image = phoneInputBackground
+//        self.phoneBackground.image = phoneInputBackground
         self.phoneBackground.displaysAsynchronously = false
         self.phoneBackground.displayWithoutProcessing = true
         self.phoneBackground.isLayerBacked = true
         
         self.phoneInputNode = PhoneInputNode()
         
+        self.loginHlWalletButton = ASButtonNode()
+        self.countryBottomLine = ASDisplayNode()
+        self.numberBottomLine = ASDisplayNode()
+        self.arrowImageNode = ASImageNode()
+        
         super.init()
         
-        self.addSubnode(self.phoneBackground)
-        self.addSubnode(self.countryButton)
+//        self.addSubnode(self.phoneBackground)
         self.addSubnode(self.phoneInputNode)
+//        self.addSubnode(self.loginHlWalletButton)
+        self.addSubnode(self.countryButton)
+        self.addSubnode(self.countryBottomLine)
+        self.addSubnode(self.numberBottomLine)
+        self.countryButton.addSubnode(self.arrowImageNode)
+        
+        self.arrowImageNode.image = UIImage(bundleImageName: "down_arrow")
+        self.countryBottomLine.backgroundColor = UIColor(hexString: "#EBEBEB")
+        self.numberBottomLine.backgroundColor = UIColor(hexString: "#EBEBEB")
+        
+        self.loginHlWalletButton.setTitle(loginHlWalletButtonTitle, with: UIFont.systemFont(ofSize: 13), with: UIColor(hexString: "#3F83FF")!, for: .normal)
         
         self.phoneInputNode.countryCodeField.textField.keyboardAppearance = theme.rootController.keyboardColor.keyboardAppearance
         self.phoneInputNode.numberField.textField.keyboardAppearance = theme.rootController.keyboardColor.keyboardAppearance
@@ -128,26 +157,27 @@ private final class PhoneAndCountryNode: ASDisplayNode {
         self.phoneInputNode.countryCodeField.textField.disableAutomaticKeyboardHandling = [.forward]
         self.phoneInputNode.numberField.textField.disableAutomaticKeyboardHandling = [.forward]
         
+//        self.countryButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 10.0, right: 0.0)
+//        self.countryButton.contentHorizontalAlignment = .left
         
-        self.countryButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 10.0, right: 0.0)
-        self.countryButton.contentHorizontalAlignment = .left
-        
-        self.phoneInputNode.numberField.textField.attributedPlaceholder = NSAttributedString(string: strings.Login_PhonePlaceholder, font: Font.regular(20.0), textColor: theme.list.itemPlaceholderTextColor)
+        self.phoneInputNode.numberField.textField.attributedPlaceholder = NSAttributedString(string: "请确认国际电话区号并输入手机号码", font: Font.regular(14.0), textColor: theme.list.itemPlaceholderTextColor)
         
         self.countryButton.addTarget(self, action: #selector(self.countryPressed), forControlEvents: .touchUpInside)
+        
+        self.loginHlWalletButton.addTarget(self, action: #selector(self.clickLoginHLWalletButton), forControlEvents: .touchUpInside)
         
         self.phoneInputNode.countryCodeUpdated = { [weak self] code, name in
             if let strongSelf = self {
                 if let code = Int(code), let name = name, let countryName = countryCodeAndIdToName[CountryCodeAndId(code: code, id: name)] {
                     let flagString = emojiFlagForISOCountryCode(name as NSString)
                     let localizedName: String = AuthorizationSequenceCountrySelectionController.lookupCountryNameById(name, strings: strongSelf.strings) ?? countryName
-                    strongSelf.countryButton.setTitle("\(flagString) \(localizedName)", with: Font.regular(20.0), with: theme.list.itemPrimaryTextColor, for: [])
+//                    strongSelf.countryButton.setTitle("\(flagString) \(localizedName)", with: Font.regular(20.0), with: theme.list.itemPrimaryTextColor, for: [])
                 } else if let code = Int(code), let (countryId, countryName) = countryCodeToIdAndName[code] {
                     let flagString = emojiFlagForISOCountryCode(countryId as NSString)
                     let localizedName: String = AuthorizationSequenceCountrySelectionController.lookupCountryNameById(countryId, strings: strongSelf.strings) ?? countryName
-                    strongSelf.countryButton.setTitle("\(flagString) \(localizedName)", with: Font.regular(20.0), with: theme.list.itemPrimaryTextColor, for: [])
+//                    strongSelf.countryButton.setTitle("\(flagString) \(localizedName)", with: Font.regular(20.0), with: theme.list.itemPrimaryTextColor, for: [])
                 } else {
-                    strongSelf.countryButton.setTitle(strings.Login_SelectCountry_Title, with: Font.regular(20.0), with: theme.list.itemPlaceholderTextColor, for: [])
+//                    strongSelf.countryButton.setTitle(strings.Login_SelectCountry_Title, with: Font.regular(20.0), with: theme.list.itemPlaceholderTextColor, for: [])
                 }
             }
         }
@@ -156,10 +186,15 @@ private final class PhoneAndCountryNode: ASDisplayNode {
         self.phoneInputNode.returnAction = { [weak self] in
             self?.checkPhone?()
         }
+        
     }
     
     @objc func countryPressed() {
         self.selectCountryCode?()
+    }
+    
+    @objc func clickLoginHLWalletButton() {
+        self.loginHLWallet?()
     }
     
     override func layout() {
@@ -167,17 +202,26 @@ private final class PhoneAndCountryNode: ASDisplayNode {
         
         let size = self.bounds.size
         
-        self.countryButton.frame = CGRect(origin: CGPoint(), size: CGSize(width: size.width, height: 67.0))
-        self.phoneBackground.frame = CGRect(origin: CGPoint(x: 0.0, y: size.height - 57.0), size: CGSize(width: size.width, height: 57.0))
-        
-        let countryCodeFrame = CGRect(origin: CGPoint(x: 18.0, y: size.height - 57.0), size: CGSize(width: 60.0, height: 57.0))
-        let numberFrame = CGRect(origin: CGPoint(x: 96.0, y: size.height - 57.0), size: CGSize(width: size.width - 96.0 - 8.0, height: 57.0))
+//        self.phoneBackground.frame = CGRect(origin: CGPoint(x: 0.0, y: size.height - 57.0), size: CGSize(width: size.width, height: 57.0))
+        let inputHeight: CGFloat = 44
+        let countryCodeFrame = CGRect(origin: CGPoint(x: 25, y: 0), size: CGSize(width: 60.0, height: inputHeight))
+        let numberFrame = CGRect(origin: CGPoint(x: 110, y: 0), size: CGSize(width: size.width - 110 - 25, height: inputHeight))
         
         let phoneInputFrame = countryCodeFrame.union(numberFrame)
         
         self.phoneInputNode.frame = phoneInputFrame
         self.phoneInputNode.countryCodeField.frame = countryCodeFrame.offsetBy(dx: -phoneInputFrame.minX, dy: -phoneInputFrame.minY)
         self.phoneInputNode.numberField.frame = numberFrame.offsetBy(dx: -phoneInputFrame.minX, dy: -phoneInputFrame.minY)
+        
+        self.countryButton.frame = CGRect(origin: countryCodeFrame.origin, size: self.phoneInputNode.countryCodeField.frame.size)
+        
+        let fitSize = loginHlWalletButtonTitle.sizeWithConstrainedWidth(size.width, font: UIFont.systemFont(ofSize: 13))
+        self.loginHlWalletButton.frame = CGRect(x: 25, y: inputHeight + 20, width: fitSize.width, height: 20)
+        
+        self.countryBottomLine.frame = CGRect(x: 25, y: inputHeight, width: 67.0, height: 0.5)
+        self.numberBottomLine.frame = CGRect(x: 110, y: inputHeight, width: numberFrame.width, height: 0.5)
+        
+        self.arrowImageNode.frame = CGRect(x: 60 - 5, y: (inputHeight - 9) / 2, width: 12, height: 9)
     }
 }
 
@@ -199,6 +243,7 @@ private final class ContactSyncNode: ASDisplayNode {
         
         self.addSubnode(self.titleNode)
         self.addSubnode(self.switchNode)
+    
     }
     
     func updateLayout(width: CGFloat) -> CGSize {
@@ -229,7 +274,7 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
     var accountUpdated: ((UnauthorizedAccount) -> Void)?
     
     private let debugAction: () -> Void
-    
+    // 当前号码
     var currentNumber: String {
         return self.phoneAndCountryNode.phoneInputNode.number
     }
@@ -254,6 +299,7 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
     
     var selectCountryCode: (() -> Void)?
     var checkPhone: (() -> Void)?
+    var login: (() -> Void)?
     
     var inProgress: Bool = false {
         didSet {
@@ -279,7 +325,7 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
     ///跳转代理button
     private lazy var proxyNode: ASButtonNode = {
         let node = ASButtonNode()
-        node.setTitle(HLLanguage.SwitchProxy.localized(), with: FontEnum.k_pingFangSC_Regular.toFont(15), with: ColorEnum.kBlue.toColor(), for: .normal)
+        node.setTitle(HLLanguage.SwitchProxy.localized(), with: FontEnum.k_pingFangSC_Regular.toFont(15), with: UIColor(hexString: "#3F83FF")!, for: .normal)
         node.addTarget(self, action: #selector(proxyButtonTap), forControlEvents: ASControlNodeEvent.touchUpInside)
         node.frame = CGRect(x: 34, y: 0, width: 100, height: 20)
         return node
@@ -288,11 +334,21 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
     ///logo
     private lazy var iconNode: ASImageNode = {
         let node = ASImageNode()
-        node.image = UIImage(bundleImageName: "bindHLLogo")
+        node.image = UIImage(bundleImageName: "login_icon")
         node.frame = CGRect(x: 34, y: 0, width: 70, height: 54)
         node.contentMode = .scaleToFill
         return node
     }()
+    
+    //确认按钮
+    private lazy var confirmButton: ASButtonNode = {
+        let btn = ASButtonNode ()
+        btn.setTitle("确认", with: UIFont.systemFont(ofSize: 18), with: UIColor(hexString: "#FFFFFF")!, for: .normal)
+        return btn
+    }()
+    
+    var loginHLWallet: (() -> Void)?
+    
     
     init(sharedContext: SharedAccountContext, account: UnauthorizedAccount, strings: PresentationStrings, theme: PresentationTheme, debugAction: @escaping () -> Void,switchProxyTap:@escaping () -> Void, hasOtherAccounts: Bool) {
         self.sharedContext = sharedContext
@@ -327,6 +383,8 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         })
         
         self.backgroundColor = theme.list.plainBackgroundColor
+        self.confirmButton.layer.cornerRadius = 6
+        self.confirmButton.layer.masksToBounds = true
         
         self.addSubnode(self.titleNode)
         self.addSubnode(self.noticeNode)
@@ -336,6 +394,8 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         self.addSubnode(self.iconNode)
         self.addSubnode(self.proxyNode)
         
+        self.addSubnode(confirmButton)
+        
         self.contactSyncNode.isHidden = true
         
         self.phoneAndCountryNode.selectCountryCode = { [weak self] in
@@ -344,11 +404,28 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         self.phoneAndCountryNode.checkPhone = { [weak self] in
             self?.checkPhone?()
         }
+        self.phoneAndCountryNode.loginHLWallet = {[weak self] in
+            self?.loginHLWallet?()
+        }
+        
+        self.phoneAndCountryNode.phoneInputNode.numberTextUpdated = {[weak self] in
+            guard let self = self else {return}
+            self.confirmButton.isEnabled = !$0.isEmpty
+            let colors : [UIColor]
+            if $0.isEmpty {
+                colors = [UIColor.hex(.kA1D3FB),UIColor.hex(.k91BFFA)]
+            }else {
+                colors = [UIColor.hex(.k4FB8FF),UIColor.hex(.k3493FF)]
+            }
+            let image = UIImage.setGradientImageWithBounds(rect:CGRect(origin: CGPoint.zero, size: self.confirmButton.frame.size) , colors: colors, type: 1)
+            self.confirmButton.backgroundImageNode.image = image
+        }
         
         self.tokenEventsDisposable.set((account.updateLoginTokenEvents
         |> deliverOnMainQueue).start(next: { [weak self] _ in
             self?.refreshQrToken()
         }))
+        
     }
     
     deinit {
@@ -358,12 +435,16 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
     
     override func didLoad() {
         super.didLoad()
+        let image = UIImage.setGradientImageWithBounds(rect:CGRect(origin: CGPoint.zero, size: CGSize(width: self.frame.size.width - 50, height: 50)) , colors: [UIColor.hex(.kA1D3FB),UIColor.hex(.k91BFFA)], type: 1)
+        confirmButton.backgroundImageNode.image = image
         
+        confirmButton.addTarget(self, action: #selector(clickComfirmButton), forControlEvents: .touchUpInside)
         self.titleNode.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.debugTap(_:))))
         #if DEBUG
         self.noticeNode.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.debugQrTap(_:))))
         #endif
     }
+    
     
     func containerLayoutUpdated(_ layout: ContainerViewLayout, navigationBarHeight: CGFloat, transition: ContainedViewLayoutTransition) {
         var insets = layout.insets(options: [])
@@ -373,44 +454,39 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
             insets.bottom += max(inputHeight, layout.standardInputHeight)
         }
         
-        if max(layout.size.width, layout.size.height) > 1023.0 {
-            self.titleNode.attributedText = NSAttributedString(string: HLLanguage.HaiLuoAccountLogin.localized(), font: Font.light(40.0), textColor: self.theme.list.itemPrimaryTextColor)
-        } else {
-            self.titleNode.attributedText = NSAttributedString(string: strings.Login_PhoneTitle, font: Font.light(30.0), textColor: self.theme.list.itemPrimaryTextColor)
-        }
-        
-        let titleSize = self.titleNode.measure(CGSize(width: layout.size.width, height: CGFloat.greatestFiniteMagnitude))
+//        if max(layout.size.width, layout.size.height) > 1023.0 {
+//            self.titleNode.attributedText = NSAttributedString(string: HLLanguage.HaiLuoAccountLogin.localized(), font: Font.light(40.0), textColor: self.theme.list.itemPrimaryTextColor)
+//        } else {
+//            self.titleNode.attributedText = NSAttributedString(string: strings.Login_PhoneTitle, font: Font.light(30.0), textColor: self.theme.list.itemPrimaryTextColor)
+//        }
+//
+//        let titleSize = self.titleNode.measure(CGSize(width: layout.size.width, height: CGFloat.greatestFiniteMagnitude))
 //        let noticeSize = self.noticeNode.measure(CGSize(width: min(274.0, layout.size.width - 28.0), height: CGFloat.greatestFiniteMagnitude))
         
         var items: [AuthorizationLayoutItem] = [
-            AuthorizationLayoutItem(node: self.iconNode, size: CGSize(width: 54, height: 45), spacingBefore: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 10.0, maxValue: 10.0)),
-            AuthorizationLayoutItem(node: self.titleNode, size: titleSize, spacingBefore: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0)),
+            AuthorizationLayoutItem(node: self.iconNode, size: CGSize(width: 60, height: 75), spacingBefore: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 10.0, maxValue: 10.0)),
             AuthorizationLayoutItem(node: self.proxyNode, size: CGSize(width: 100, height: 20), spacingBefore: AuthorizationLayoutItemSpacing(weight: 10.0, maxValue: 10.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0)),
-            AuthorizationLayoutItem(node: self.phoneAndCountryNode, size: CGSize(width: layout.size.width, height: 115.0), spacingBefore: AuthorizationLayoutItemSpacing(weight: 44.0, maxValue: 44.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0))
+            AuthorizationLayoutItem(node: self.phoneAndCountryNode, size: CGSize(width: layout.size.width, height: 44), spacingBefore: AuthorizationLayoutItemSpacing(weight: 30, maxValue: 30), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0)),
+            AuthorizationLayoutItem(node: self.confirmButton, size: CGSize(width: layout.size.width - 50, height: 50), spacingBefore: AuthorizationLayoutItemSpacing(weight: 50, maxValue: 50), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0))
         ]
         let contactSyncSize = self.contactSyncNode.updateLayout(width: layout.size.width)
-        if self.hasOtherAccounts {
-            self.contactSyncNode.isHidden = false
-            items.append(AuthorizationLayoutItem(node: self.contactSyncNode, size: contactSyncSize, spacingBefore: AuthorizationLayoutItemSpacing(weight: 16.0, maxValue: 16.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0)))
-        } else {
-            self.contactSyncNode.isHidden = true
-        }
-        
-        let _ = layoutAuthorizationItems(bounds: CGRect(origin: CGPoint(x: 0.0, y: insets.top), size: CGSize(width: layout.size.width, height: layout.size.height - insets.top - insets.bottom - 10.0)), items: items, transition: transition, failIfDoesNotFit: false)
+
+        // layout.size.height - insets.top - insets.bottom - 10.0
+        let _ = layoutAuthorizationItems(bounds: CGRect(origin: CGPoint(x: 0.0, y: insets.top), size: CGSize(width: layout.size.width, height: 310)), items: items, transition: transition, failIfDoesNotFit: false)
         
 //        let protocolSize = self.protocolNode.measure(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
-        let newY = self.bounds.size.height - insets.bottom - 30
-        let oldY = self.protocolNode.frame.origin.y
-        let block : ()->() = {
-            self.protocolNode.frame = CGRect(origin: CGPoint(x: 0, y: newY ), size: CGSize(width: layout.size.width - 10, height: 30))
+        self.protocolNode.frame = CGRect(origin: CGPoint(x: 0, y: self.bounds.size.height - insets.bottom - 30 ), size: CGSize(width: layout.size.width - 10, height: 30))
+        
+        let colors : [UIColor]
+        if !phoneAndCountryNode.numberAndCountryIsInput {
+            colors = [UIColor.hex(.kA1D3FB),UIColor.hex(.k91BFFA)]
+        }else {
+            colors = [UIColor.hex(.k4FB8FF),UIColor.hex(.k3493FF)]
         }
-        if newY < oldY{
-            UIView.animate(withDuration: 0.3) {
-                block()
-            }
-        }else{
-            block()
-        }
+        let image = UIImage.setGradientImageWithBounds(rect:CGRect(origin: CGPoint.zero, size: self.confirmButton.frame.size) , colors: colors, type: 1)
+        self.confirmButton.backgroundImageNode.image = image
+        
+        
     }
     
     func activateInput() {
@@ -422,16 +498,20 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         self.phoneAndCountryNode.phoneInputNode.numberField.layer.addShakeAnimation()
     }
     
-        /// 未勾选同意相关协议时的抖动动画
-        func notAgreeAnimateError(){
-            self.protocolNode.layer.addShakeAnimation()
-        }
+    /// 未勾选同意相关协议时的抖动动画
+    func notAgreeAnimateError(){
+        self.protocolNode.layer.addShakeAnimation()
+    }
+    
+    @objc private func proxyButtonTap(){
         
-        @objc private func proxyButtonTap(){
-            
-            self.switchProxyTap()
+        self.switchProxyTap()
         
-        }
+    }
+    
+    @objc private func clickComfirmButton(){
+        self.login?()
+    }
     
     private var debugTapCounter: (Double, Int) = (0.0, 0)
     @objc private func debugTap(_ recognizer: UITapGestureRecognizer) {
@@ -634,3 +714,4 @@ private class ProtocolContentNode: ASControlNode{
             
     }
 }
+

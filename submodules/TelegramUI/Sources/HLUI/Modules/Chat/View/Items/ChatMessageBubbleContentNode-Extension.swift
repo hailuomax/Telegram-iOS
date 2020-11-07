@@ -15,7 +15,7 @@ import TelegramPresentationData
 
 extension ChatMessageBubbleContentNode {
     func assetVerification(currentVC: ChatController) {
-        let pushAccountValidationVC : (Bool,Phone)->() = {  (showPwdView,phone) in
+        let pushAccountValidationVC : (Bool,Phone,Bool)->() = {  (showPwdView,phone,canLoginWithPwd) in
             let vc = AccountValidationVC(phone:phone, context: currentVC.context ,showPwdView: showPwdView, onValidateSuccess: {[weak currentVC] in
                 currentVC?.navigationController?.popViewController(animated: true)
             })
@@ -33,7 +33,7 @@ extension ChatMessageBubbleContentNode {
             let disableVC = AccountLockVC(context: context, title: $0)
             pushControllerImpl(disableVC)
         }, onPushAccountValidationVC: {
-            pushAccountValidationVC($0,$1)
+            pushAccountValidationVC($0,$1,$2)
         }, onPushBindExceptionVC: {
             let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
             let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)

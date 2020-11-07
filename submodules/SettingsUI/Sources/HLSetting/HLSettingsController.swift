@@ -819,7 +819,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                 if HLAccountManager.walletIsLogined {
                     pushControllerImpl?(assetVC)
                 } else {
-                    let pushAccountValidationVC : (Bool, Phone)->() = { (showPwdView, phone) in
+                    let pushAccountValidationVC : (Bool, Phone,Bool)->() = { (showPwdView, phone,canLoginWithPwd) in
                         let vc = AccountValidationVC(phone:phone, context: context,showPwdView: showPwdView, onValidateSuccess: {
                             //验证成功回调
                             pushControllerImpl?(assetVC)
@@ -837,7 +837,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                         let disableVC = AccountLockVC(context: context, title: $0)
                         pushControllerImpl?(disableVC)
                     }, onPushAccountValidationVC: {
-                        pushAccountValidationVC($0,$1)
+                        pushAccountValidationVC($0,$1,$2)
                     }, onPushBindExceptionVC: {
                         let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
                         let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)

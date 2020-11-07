@@ -19,6 +19,8 @@ import Repo
 import Config
 import UI
 import RxSwift
+import Model
+import ViewModel
 
 final class AuthorizationSequencePhoneEntryController: ViewController {
     private var controllerNode: AuthorizationSequencePhoneEntryControllerNode {
@@ -40,10 +42,12 @@ final class AuthorizationSequencePhoneEntryController: ViewController {
     var inProgress: Bool = false {
         didSet {
             if self.inProgress {
-                let item = UIBarButtonItem(customDisplayNode: ProgressNavigationButtonNode(color: self.presentationData.theme.rootController.navigationBar.accentTextColor))
-                self.navigationItem.rightBarButtonItem = item
+//                let item = UIBarButtonItem(customDisplayNode: ProgressNavigationButtonNode(color: self.presentationData.theme.rootController.navigationBar.accentTextColor))
+//                self.navigationItem.rightBarButtonItem = item
+                HUD.show(.systemActivity, onView: self.view, dismiss: true, marginTop: false, marginBottom: false)
             } else {
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: self.presentationData.strings.Common_Next, style: .done, target: self, action: #selector(self.nextPressed))
+//                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: self.presentationData.strings.Common_Next, style: .done, target: self, action: #selector(self.nextPressed))
+                HUD.hide()
             }
             self.controllerNode.inProgress = self.inProgress
         }
@@ -82,7 +86,34 @@ final class AuthorizationSequencePhoneEntryController: ViewController {
         if !otherAccountPhoneNumbers.1.isEmpty {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: presentationData.strings.Common_Cancel, style: .plain, target: self, action: #selector(self.cancelPressed))
         }
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: presentationData.strings.Common_Next, style: .done, target: self, action: #selector(self.nextPressed))
+//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: presentationData.strings.Common_Next, style: .done, target: self, action: #selector(self.nextPressed))
+        //登录海螺钱包
+        self.controllerNode.loginHLWallet = {[weak self] in
+            guard let self = self else {return}
+            let assetVC = AssetVC(context: nil, presentationData: presentationData)
+            let pushAccountValidationVC : (Bool,Phone,Bool)->() = { (showPwdView,phone,canLoginWithPwd) in
+                
+                let vc = AccountValidationVC(phone:phone, presentationData: presentationData, showPwdView: showPwdView, onValidateSuccess: {
+                    self.navigationController?.pushViewController(assetVC, animated: true)
+                })
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            
+            AssetVerificationViewController.show(presentationData: presentationData, currentVC: self, onPushAccountLockVC: {
+                let disableVC = AccountLockVC(presentationData: presentationData, title: $0)
+                self.navigationController?.pushViewController(disableVC, animated: true)
+            }, onPushAccountValidationVC: {
+                pushAccountValidationVC($0,$1,$2)
+            }, onPushBindExceptionVC: {
+                let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
+                let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: nil,presentationData: presentationData, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: nil, presentationData: presentationData, viewModel: exceptionVM)
+                self.navigationController?.pushViewController(exceptionVC, animated: true)
+            })
+        }
+        
+        self.controllerNode.login = {[weak self] in
+            self?.nextPressed()
+        }
     }
     
     required init(coder aDecoder: NSCoder) {

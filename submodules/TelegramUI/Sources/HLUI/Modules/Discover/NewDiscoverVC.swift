@@ -321,7 +321,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
         if HLAccountManager.walletIsLogined {
             continueAction()
         }else{
-            let pushAccountValidationVC : (Bool,Phone)->() = { [weak self] (showPwdView,phone) in
+            let pushAccountValidationVC : (Bool,Phone,Bool)->() = { [weak self] (showPwdView,phone,canLoginWithPwd) in
                 guard let self = self else {return}
                 let vc = AccountValidationVC(phone:phone, context: self.context!,showPwdView: showPwdView, onValidateSuccess: {
                     //手势设置页面设置好手势密保，或者点击跳过，会有此回调
@@ -337,7 +337,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 self.navigationController?.pushViewController(disableVC, animated: true)
                 
                 }, onPushAccountValidationVC: {
-                    pushAccountValidationVC($0,$1)
+                    pushAccountValidationVC($0,$1,$2)
             }, onPushBindExceptionVC: {[weak self] in
                 guard let self = self else {return}
                 let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
