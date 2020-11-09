@@ -820,10 +820,13 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                     pushControllerImpl?(assetVC)
                 } else {
                     let pushAccountValidationVC : (Bool, Phone,Bool)->() = { (showPwdView, phone,canLoginWithPwd) in
-                        let vc = AccountValidationVC(phone:phone, context: context,showPwdView: showPwdView, onValidateSuccess: {
-                            //验证成功回调
+//                        let vc = AccountValidationVC(phone:phone, context: context,showPwdView: showPwdView, onValidateSuccess: {
+//                            //验证成功回调
+//                            pushControllerImpl?(assetVC)
+//                        })
+                        let vc = AccountValidationVC.create( context: context, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) {
                             pushControllerImpl?(assetVC)
-                        })
+                        }
                         pushControllerImpl?(vc)
                     }
                     

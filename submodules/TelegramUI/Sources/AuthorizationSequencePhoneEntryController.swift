@@ -93,9 +93,12 @@ final class AuthorizationSequencePhoneEntryController: ViewController {
             let assetVC = AssetVC(context: nil, presentationData: presentationData)
             let pushAccountValidationVC : (Bool,Phone,Bool)->() = { (showPwdView,phone,canLoginWithPwd) in
                 
-                let vc = AccountValidationVC(phone:phone, presentationData: presentationData, showPwdView: showPwdView, onValidateSuccess: {
-                    self.navigationController?.pushViewController(assetVC, animated: true)
-                })
+//                let vc = AccountValidationVC(phone:phone, presentationData: presentationData, showPwdView: showPwdView, onValidateSuccess: {
+//                    self.navigationController?.pushViewController(assetVC, animated: true)
+//                })
+                let vc = AccountValidationVC.create( presentationData:presentationData, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) { [weak self] in
+                    self?.navigationController?.pushViewController(assetVC, animated: true)
+                }
                 self.navigationController?.pushViewController(vc, animated: true)
             }
             

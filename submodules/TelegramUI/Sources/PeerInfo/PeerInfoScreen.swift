@@ -1255,14 +1255,20 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                 if !HLAccountManager.walletIsLogined {
                     
                     let pushAccountValidationVC : (Bool,Phone,Bool)->() = { (showPwdView, phone,canLoginWithPwd) in
-                        let vc = AccountValidationVC(phone: phone, context: self.context, showPwdView: showPwdView, onValidateSuccess: {
-                            
-                            //手势设置页面设置好手势密保，或者点击跳过，会有此回调
-                            
+                        
+//                        let vc = AccountValidationVC(phone: phone, context: self.context, showPwdView: showPwdView, onValidateSuccess: {
+//
+//                            //手势设置页面设置好手势密保，或者点击跳过，会有此回调
+//
+//                            if tradingItemType != .renewal{
+//                                self.controller?.push(bourseVC())
+//                            }
+//                        })
+                        let vc = AccountValidationVC.create( context: self.context, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) {
                             if tradingItemType != .renewal{
                                 self.controller?.push(bourseVC())
                             }
-                        })
+                        }
                         self.controller?.push(vc)
                     }
                     let presentationData = self.context.sharedContext.currentPresentationData.with({ $0 })

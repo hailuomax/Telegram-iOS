@@ -323,10 +323,13 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
         }else{
             let pushAccountValidationVC : (Bool,Phone,Bool)->() = { [weak self] (showPwdView,phone,canLoginWithPwd) in
                 guard let self = self else {return}
-                let vc = AccountValidationVC(phone:phone, context: self.context!,showPwdView: showPwdView, onValidateSuccess: {
-                    //手势设置页面设置好手势密保，或者点击跳过，会有此回调
+//                let vc = AccountValidationVC(phone:phone, context: self.context!,showPwdView: showPwdView, onValidateSuccess: {
+//                    //手势设置页面设置好手势密保，或者点击跳过，会有此回调
+//                    continueAction()
+//                })
+                let vc = AccountValidationVC.create( context: self.context, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) {
                     continueAction()
-                })
+                }
                 self.navigationController?.pushViewController(vc, animated: true)
             }
             let presentationData = self.context!.sharedContext.currentPresentationData.with({ $0 })
