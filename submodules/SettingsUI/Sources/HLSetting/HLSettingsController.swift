@@ -1583,8 +1583,6 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
     let kShowWalletGuideKey = "kShowWalletGuideKey"
     controller.willAppear = {[weak controller]  _ in
         
-        controller?.tabBarItem.badgeValue = ""
-        
         guard let controller = controller,
             HLAccountManager.walletIsLogined else {return}
         repo.unreadNotice().value { data in
