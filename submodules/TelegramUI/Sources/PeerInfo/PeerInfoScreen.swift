@@ -1247,6 +1247,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                     case .review,
                          .renewal:
                         assert(false, "状态 \(tradingItemType) 不应该进入这个作用域，请检查")
+                        return BourseApplyStatementVC(peerId: self.peerId, context: self.context)
                     }
                 }
                 

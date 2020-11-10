@@ -358,8 +358,17 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
     }
     
     func showLoading() {
-        overlayStatusController = OverlayStatusController(theme: self.presentationData.theme,  type: .loading(cancelled: nil))
-        self.present(overlayStatusController!, in: .window(.root))
+        var onDismiss: (()->())?
+        
+        let statusController = OverlayStatusController(theme: self.presentationData.theme,  type: .loading(cancelled: {onDismiss?()}))
+        
+        onDismiss = {[weak statusController] in
+            statusController?.dismiss()
+        }
+        
+        overlayStatusController = statusController
+        
+        self.present(statusController, in: .window(.root))
     }
     
     func dismissLoading() {
