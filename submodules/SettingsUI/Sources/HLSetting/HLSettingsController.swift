@@ -56,6 +56,7 @@ import Model
 import RxSwift
 import HLBase
 import Network
+import Extension
 
 private let avatarFont = avatarPlaceholderFont(size: 13.0)
 
@@ -110,6 +111,7 @@ private final class SettingsItemArguments {
     let openUsername: () -> Void
     let openMyWallet: () -> Void
     let openAuthentication: () -> Void
+    let openLoginPassword: () -> ()
     let openTradePassword: () -> Void
     let openProxy: () -> Void
     let openInvite: (Peer?) -> Void
@@ -132,6 +134,7 @@ private final class SettingsItemArguments {
         openUsername:@escaping () -> Void,
         openMyWallet:@escaping () -> Void,
         openAuthentication:@escaping () -> Void,
+        openLoginPassword: @escaping () -> (),
         openTradePassword:@escaping () -> Void,
         openProxy:@escaping () -> Void,
         openInvite:@escaping (Peer?)-> Void,
@@ -154,6 +157,7 @@ private final class SettingsItemArguments {
         self.openMyWallet = openMyWallet
         self.openAuthentication = openAuthentication
         self.openTradePassword = openTradePassword
+        self.openLoginPassword = openLoginPassword
         self.openProxy = openProxy
         self.openInvite = openInvite
         self.openSetting = openSetting
@@ -182,6 +186,7 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
     case biluAccount(PresentationTheme, UIImage?, String)
     
     case authentication(PresentationTheme,UIImage?, String, String)
+    case loginPassword(PresentationTheme,UIImage?, String, String)
     case tradePassword(PresentationTheme,UIImage?, String, String)
     case inviteFriends(PresentationTheme,UIImage?, String, Peer?)
     case proxy(PresentationTheme, UIImage?, String)
@@ -200,7 +205,7 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         switch self {
             case .userInfo:
                 return SettingsSection.info.rawValue
-        case .myWallet, .biluAccount, .authentication, .tradePassword, .inviteFriends, .caiLuCloudCollege, .noticeCenter, .systemMessage:
+        case .myWallet, .biluAccount, .authentication, .loginPassword, .tradePassword, .inviteFriends, .caiLuCloudCollege, .noticeCenter, .systemMessage:
                 return SettingsSection.wallet.rawValue
             case .settings, .proxy, .aboutMe:
                 return SettingsSection.settings.rawValue
@@ -213,128 +218,135 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         case .myWallet: return 1
         case .biluAccount: return 2
         case .authentication: return 3
-        case .tradePassword: return 4
-        case .caiLuCloudCollege: return 5
-        case .noticeCenter: return 6
-        case .systemMessage: return 8
-        case .inviteFriends: return 7
-        case .proxy: return 9
-        case .settings: return 10
-        case .aboutMe: return 11
+        case .loginPassword: return 4
+        case .tradePassword: return 5
+        case .caiLuCloudCollege: return 6
+        case .noticeCenter: return 7
+        case .inviteFriends: return 8
+        case .systemMessage: return 9
+        case .proxy: return 10
+        case .settings: return 11
+        case .aboutMe: return 12
         }
     }
     
     static func ==(lhs: SettingsEntry, rhs: SettingsEntry) -> Bool {
         switch lhs {
-            case let .userInfo(lhsAccount, lhsTheme, lhsStrings, lhsDateTimeFormat, lhsPeer, lhsCachedData, lhsEditingState, lhsUpdatingImage):
-                if case let .userInfo(rhsAccount, rhsTheme, rhsStrings, rhsDateTimeFormat, rhsPeer, rhsCachedData, rhsEditingState, rhsUpdatingImage) = rhs {
-                    if lhsAccount !== rhsAccount {
-                        return false
-                    }
-                    if lhsTheme !== rhsTheme {
-                        return false
-                    }
-                    if lhsStrings !== rhsStrings {
-                        return false
-                    }
-                    if lhsDateTimeFormat != rhsDateTimeFormat {
-                        return false
-                    }
-                    if let lhsPeer = lhsPeer, let rhsPeer = rhsPeer {
-                        //用户名不相等也刷新判断
-                        if lhsPeer.addressName != rhsPeer.addressName {
-                            return false
-                        }
-                        if !lhsPeer.isEqual(rhsPeer) {
-                            return false
-                        }
-                    } else if (lhsPeer != nil) != (rhsPeer != nil) {
-                        return false
-                    }
-                    if let lhsCachedData = lhsCachedData, let rhsCachedData = rhsCachedData {
-                        if !lhsCachedData.isEqual(to: rhsCachedData) {
-                            return false
-                        }
-                    } else if (lhsCachedData != nil) != (rhsCachedData != nil) {
-                        return false
-                    }
-                    if lhsEditingState != rhsEditingState {
-                        return false
-                    }
-                    if lhsUpdatingImage != rhsUpdatingImage {
-                        return false
-                    }
-                    return true
-                } else {
+        case let .userInfo(lhsAccount, lhsTheme, lhsStrings, lhsDateTimeFormat, lhsPeer, lhsCachedData, lhsEditingState, lhsUpdatingImage):
+            if case let .userInfo(rhsAccount, rhsTheme, rhsStrings, rhsDateTimeFormat, rhsPeer, rhsCachedData, rhsEditingState, rhsUpdatingImage) = rhs {
+                if lhsAccount !== rhsAccount {
                     return false
                 }
-            case let .myWallet(lhsTheme,_,lhsTitle,lhsText):
+                if lhsTheme !== rhsTheme {
+                    return false
+                }
+                if lhsStrings !== rhsStrings {
+                    return false
+                }
+                if lhsDateTimeFormat != rhsDateTimeFormat {
+                    return false
+                }
+                if let lhsPeer = lhsPeer, let rhsPeer = rhsPeer {
+                    //用户名不相等也刷新判断
+                    if lhsPeer.addressName != rhsPeer.addressName {
+                        return false
+                    }
+                    if !lhsPeer.isEqual(rhsPeer) {
+                        return false
+                    }
+                } else if (lhsPeer != nil) != (rhsPeer != nil) {
+                    return false
+                }
+                if let lhsCachedData = lhsCachedData, let rhsCachedData = rhsCachedData {
+                    if !lhsCachedData.isEqual(to: rhsCachedData) {
+                        return false
+                    }
+                } else if (lhsCachedData != nil) != (rhsCachedData != nil) {
+                    return false
+                }
+                if lhsEditingState != rhsEditingState {
+                    return false
+                }
+                if lhsUpdatingImage != rhsUpdatingImage {
+                    return false
+                }
+                return true
+            } else {
+                return false
+            }
+        case let .myWallet(lhsTheme,_,lhsTitle,lhsText):
             if case let .myWallet(rhsTheme,_,rhsTitle,rhsText) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle, lhsText == rhsText {
-                    return true
-                } else {
-                    return false
-                }
-            case let .biluAccount(lhsTheme, _, lhsTitle):
-                if case let .biluAccount(rhsTheme, _, rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle{
-                    return true
-                }else{
-                    return false
-                }
-            case let .authentication(lhsTheme,_,lhsTitle, lhsText):
-                if case let .authentication(rhsTheme,_,rhsTitle, rhsText) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle, lhsText == rhsText {
-                        return true
-                    } else {
-                        return false
-                    }
-            case let .tradePassword(lhsTheme,_,lhsTitle, lhsText):
-                if case let .tradePassword(rhsTheme,_,rhsTitle, rhsText) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle, lhsText == rhsText {
-                        return true
-                    } else {
-                        return false
-                    }
-            case let .proxy(lhsTheme,_,lhsTitle):
-                if case let .proxy(rhsTheme,_,rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
-                        return true
-                    } else {
-                        return false
-                    }
-            case let .settings(lhsTheme,_,lhsTitle):
-                if case let .settings(rhsTheme,_,rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
-                    return true
-                } else {
-                    return false
-                }
-            case let .inviteFriends(lhsTheme, _, lhsTitle,_):
-                if case let .inviteFriends(rhsTheme,_,rhsTitle,_) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
-                    return true
-                } else {
-                    return false
-                }
-            case let .aboutMe(lhsTheme,_,lhsTitle,lhsText):
-                if case let .aboutMe(rhsTheme,_,rhsTitle,rhsText) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle, lhsText == rhsText {
-                    return true
-                } else {
-                    return false
-                }
-            case let .caiLuCloudCollege(lhsTheme, _, lhsTitle):
-                if case let .caiLuCloudCollege(rhsTheme,_,rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
-                    return true
-                } else {
-                    return false
-                }
-            case let .noticeCenter(lhsTheme, _, lhsTitle, lhsUnread):
-                if case let .noticeCenter(rhsTheme, _, rhsTitle, rhsUnread) = rhs,  lhsTheme === rhsTheme, lhsTitle == rhsTitle , lhsUnread == rhsUnread {
-                    return true
-                }else {
-                    return false
-                }
+                return true
+            } else {
+                return false
+            }
+        case let .biluAccount(lhsTheme, _, lhsTitle):
+            if case let .biluAccount(rhsTheme, _, rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle{
+                return true
+            }else{
+                return false
+            }
+        case let .authentication(lhsTheme,_,lhsTitle, lhsText):
+            if case let .authentication(rhsTheme,_,rhsTitle, rhsText) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle, lhsText == rhsText {
+                return true
+            } else {
+                return false
+            }
+        case let .tradePassword(lhsTheme,_,lhsTitle, lhsText):
+            if case let .tradePassword(rhsTheme,_,rhsTitle, rhsText) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle, lhsText == rhsText {
+                return true
+            } else {
+                return false
+            }
+        case let .loginPassword(lhsTheme, _, lhsTitle, lhsText):
+            if case let .loginPassword(rhsTheme,_,rhsTitle, rhsText) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle, lhsText == rhsText {
+                return true
+            } else {
+                return false
+            }
+        case let .proxy(lhsTheme,_,lhsTitle):
+            if case let .proxy(rhsTheme,_,rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
+                return true
+            } else {
+                return false
+            }
+        case let .settings(lhsTheme,_,lhsTitle):
+            if case let .settings(rhsTheme,_,rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
+                return true
+            } else {
+                return false
+            }
+        case let .inviteFriends(lhsTheme, _, lhsTitle,_):
+            if case let .inviteFriends(rhsTheme,_,rhsTitle,_) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
+                return true
+            } else {
+                return false
+            }
+        case let .aboutMe(lhsTheme,_,lhsTitle,lhsText):
+            if case let .aboutMe(rhsTheme,_,rhsTitle,rhsText) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle, lhsText == rhsText {
+                return true
+            } else {
+                return false
+            }
+        case let .caiLuCloudCollege(lhsTheme, _, lhsTitle):
+            if case let .caiLuCloudCollege(rhsTheme,_,rhsTitle) = rhs, lhsTheme === rhsTheme, lhsTitle == rhsTitle {
+                return true
+            } else {
+                return false
+            }
+        case let .noticeCenter(lhsTheme, _, lhsTitle, lhsUnread):
+            if case let .noticeCenter(rhsTheme, _, rhsTitle, rhsUnread) = rhs,  lhsTheme === rhsTheme, lhsTitle == rhsTitle , lhsUnread == rhsUnread {
+                return true
+            }else {
+                return false
+            }
             
-            case let .systemMessage(lhsTheme, _, lhsTitle):
-                if case let .systemMessage(rhsTheme, _, rhsTitle) = rhs,  lhsTheme === rhsTheme, lhsTitle == rhsTitle {
-                    return true
-                }else {
-                    return false
-                }
+        case let .systemMessage(lhsTheme, _, lhsTitle):
+            if case let .systemMessage(rhsTheme, _, rhsTitle) = rhs,  lhsTheme === rhsTheme, lhsTitle == rhsTitle {
+                return true
+            }else {
+                return false
+            }
         }
     }
     
@@ -370,6 +382,10 @@ private indirect enum SettingsEntry: ItemListNodeEntry {
         case let .authentication(_, image, text, value):
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks , action: {
                 arguments.openAuthentication()
+            })
+        case let .loginPassword(_, image, text, value):
+            return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks , action: {
+                arguments.openLoginPassword()
             })
         case let .tradePassword(_,image, text, value):
             return ItemListDisclosureItem.init(presentationData: presentationData,icon: image , title: text, label: value, sectionId: ItemListSectionId(self.section), style: .blocks , action: {
@@ -431,6 +447,8 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
             
             entries.append(.biluAccount(presentationData.theme, UIImage(bundleImageName: "BiluAsset"), BiluTransfer.Bilu.str))
             
+            //登录密码
+            entries.append(.loginPassword(presentationData.theme, PresentationResourcesSettings.accountProtection, HLLanguage.LoginPassword.localized(), HLLanguage.Change.localized()))
             //交易密码
             entries.append(.tradePassword(presentationData.theme, PresentationResourcesSettings.tradePassword, HLLanguage.TransactionPassword.localized(), HLLanguage.Change.localized()))
             
@@ -851,6 +869,8 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
     }, openAuthentication: {
         //MARK: 实名认证
 
+    }, openLoginPassword:{
+        JYPrint("openLoginPassword")
     }, openTradePassword: {
         //MARK: 交易密码
         let _ = (contextValue.get()
