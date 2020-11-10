@@ -15,7 +15,11 @@ import AccountContext
 import CountrySelectionUI
 import SettingsUI
 import PhoneNumberFormat
+
 import UI
+import Account
+import Model
+import ViewModel
 
 private enum InnerState: Equatable {
     case state(UnauthorizedAccountStateContents)
@@ -216,7 +220,36 @@ public final class AuthorizationSequenceController: NavigationController, MFMail
 //                                    }))
                                     //MARK: 账号封禁，转移账户资产入口
                                     showAlert = false
-                                    PopViewUtil.tgPhoneBanned(containerView: controller.view, phoneNumber: formatPhoneNumber(number))
+                                    PopViewUtil.tgPhoneBanned(containerView: controller.view, phoneNumber: formatPhoneNumber(number), login: { [weak self, weak controller] in
+                                        guard let strongSelf = self, let controller = controller else {
+                                            return
+                                        }
+                                        
+                                        let pushAccountValidationVC : (Bool, Phone, Bool)->() = {[weak self, weak controller] (showPwdView, phone, canLoginWithPwd) in
+                                            
+                                            let vc = AccountValidationVC.create(presentationData: self?.presentationData, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) { [weak self] in
+                                                let assetVC = AssetVC(presentationData: self?.presentationData)
+                                                controller?.navigationController?.pushViewController(assetVC, animated: true)
+                                            }
+                                            controller?.navigationController?.pushViewController(vc, animated: true)
+                                        }
+                                        
+                                        let presentationData = strongSelf.presentationData
+                                        AssetVerificationViewController.show(presentationData: strongSelf.presentationData, currentVC: controller, onPushAccountLockVC: {[weak self, weak controller] in
+                                            let disableVC = AccountLockVC(presentationData: self?.presentationData, title: $0)
+                                            controller?.navigationController?.pushViewController(disableVC, animated: true)
+                                        }, onPushAccountValidationVC: {
+                                            pushAccountValidationVC($0,$1,$2)
+                                        }, onPushBindExceptionVC: {[weak self, weak controller] in
+                                            guard let self = self else {
+                                                return
+                                            }
+                                            let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
+                                            let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: nil, presentationData: self.presentationData, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: nil, presentationData: self.presentationData, viewModel: exceptionVM)
+                                            controller?.navigationController?.pushViewController(exceptionVC, animated: true)
+                                        })
+                                        
+                                    })
                                 case let .generic(info):
                                     text = strongSelf.presentationData.strings.Login_UnknownError
                                     actions.append(TextAlertAction(type: .defaultAction, title: strongSelf.presentationData.strings.Login_PhoneNumberHelp, action: { [weak controller] in
