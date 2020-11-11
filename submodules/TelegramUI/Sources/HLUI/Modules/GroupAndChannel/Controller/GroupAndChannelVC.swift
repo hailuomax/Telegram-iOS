@@ -42,9 +42,10 @@ public class ContactViewController: BaseVC {
     
     private var currentLocation: ChatListNodeLocation?
     private let chatListLocation = ValuePromise<ChatListNodeLocation>()
-    
+    private let context: AccountContext
     
     public init(context: AccountContext, groupId: PeerGroupId, controlsHistoryPreload: Bool, hideNetworkActivityStatus: Bool = false,presentationData:PresentationData) {
+        self.context = context
         self.groupId = groupId
         self.controlsHistoryPreload = controlsHistoryPreload
         let pData = ChatListPresentationData(theme: presentationData.theme, fontSize: PresentationFontSize.regular, strings: presentationData.strings, dateTimeFormat: presentationData.dateTimeFormat, nameSortOrder: presentationData.nameSortOrder, nameDisplayOrder: presentationData.nameDisplayOrder, disableAnimations: presentationData.disableAnimations)
@@ -56,7 +57,7 @@ public class ContactViewController: BaseVC {
         self.groupVC = GroupVC(context: context)
         self.channelVC = ChannelVC(context: context)
         
-        super.init(context: context)
+        super.init(presentationData: context.sharedContext.currentPresentationData.with { $0 })
         
         
         let viewProcessingQueue = self.viewProcessingQueue

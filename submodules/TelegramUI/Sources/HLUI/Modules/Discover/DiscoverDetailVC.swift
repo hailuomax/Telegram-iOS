@@ -9,7 +9,6 @@
 import UIKit
 import HLBase
 import ViewModel
-import AccountContext
 import Extension
 import HL
 import Model
@@ -22,9 +21,9 @@ private let kDiscoverDetailCell = "k\(DiscoverDetailCell.self)"
 class DiscoverDetailVC: HLBaseVC<DiscoverDetailView> {
 
     let viewModel : DiscoverDetailVM
-    init(context: AccountContext?,viewModel:DiscoverDetailVM) {
+    init(presentationData: PD, viewModel:DiscoverDetailVM) {
         self.viewModel = viewModel
-        super.init(context: context)
+        super.init(presentationData: presentationData)
     }
     
     required init(coder aDecoder: NSCoder) {

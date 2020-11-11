@@ -239,7 +239,7 @@ class ChatControllerNode: ASDisplayNode, UIScrollViewDelegate {
             //TODO: 这里加交易所的view
             return CoinRoadControllorView.loadFromNib()
             .then({
-                $0.context = self.context
+                $0.presentationData = self.context.sharedContext.currentPresentationData.with{$0}
                 $0.chatId = self.chatId ?? ""
                 $0.vm.startObserve()
             })

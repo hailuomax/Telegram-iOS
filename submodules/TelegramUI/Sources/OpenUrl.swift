@@ -717,7 +717,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                             if let window = navigationController?.view.window {
                                 //MARK: 弹出WebView
 //                                let controller = SFSafariViewController(url: parsedUrl)
-                                let controller = HLSDKWebViewController(context: context, path: parsedUrl.absoluteString)
+                                let controller = HLSDKWebViewController(presentationData: context.sharedContext.currentPresentationData.with {$0}, path: parsedUrl.absoluteString)
 //                                if #available(iOSApplicationExtension 10.0, iOS 10.0, *) {
 //                                    controller.preferredBarTintColor = presentationData.theme.rootController.navigationBar.backgroundColor
 //                                    controller.preferredControlTintColor = presentationData.theme.rootController.navigationBar.accentTextColor

@@ -47,9 +47,12 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
     let needUpdateBage = PublishSubject<Void>()
     
     private var overlayStatusController: ViewController?
+    private let context: AccountContext
+    
+    init(context: AccountContext) {
         
-    override init(context: TGAccountContext?, presentationData: PD? = nil) {
-        super.init(context: context, presentationData: presentationData)
+        self.context = context
+        super.init(presentationData: context.sharedContext.currentPresentationData.with {$0})
         
         let icon = UIImage(bundleImageName: "Chat List/Tabs/IconFound")
         self.tabBarItem.image = icon
@@ -85,7 +88,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
     }
     
     func setUI() {
-        let _ = updateExperimentalUISettingsInteractively(accountManager: self.context!.sharedContext.accountManager, { settings in
+        let _ = updateExperimentalUISettingsInteractively(accountManager: self.context.sharedContext.accountManager, { settings in
             var settings = settings
             settings.keepChatNavigationStack = true
             return settings
@@ -201,7 +204,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 cell.setList(list: list)
                 cell.didSelectedItem.subscribe(onNext: {[weak self] item in
                     guard let self = self else {return}
-                    let vc = SystemMessageDetailsVC(model: item, contenxt: self.context, presentationData: self.presentationData)
+                    let vc = SystemMessageDetailsVC(model: item, presentationData: self.presentationData)
                     self.navigationController?.pushViewController(vc, animated: true)
                 }).disposed(by: cell.cellBag)
                 return cell
@@ -241,7 +244,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                         .subscribe(onNext:{[weak self] _ in
                             guard let self = self else { return }
                             let groupVM = DiscoverGroupVM()
-                            let groupVC = DiscoverGroupVC(context: self.context,viewModel: groupVM, selectedTitle:  ds[indexPath.section].header)
+                            let groupVC = DiscoverGroupVC(presentationData: self.presentationData, viewModel: groupVM, selectedTitle: ds[indexPath.section].header)
                             self.navigationController?.pushViewController(groupVC, animated: true)
                         }).disposed(by: view.disposeBag)
                 }
@@ -295,20 +298,20 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 self.navigationController?.pushViewController(activityVC, animated: true)
                 
             case .notice:
-                let sysMessageVC = SystemMessagesVC(context: self.context!)
+                let sysMessageVC = SystemMessagesVC(presentationData: self.presentationData)
                 self.navigationController?.pushViewController(sysMessageVC, animated: true)
                 
             case .entrust:
                 if HLAccountManager.biLuToken.isEmpty {
-                    let logoinVC = TransactionLoginVC(context:self.context)
+                    let logoinVC = TransactionLoginVC(presentationData: self.presentationData)
                     logoinVC.successBlock = { [weak self] in
                         guard let self = self else { return }
                         self.navigationController?.popViewController(animated: true)
                     }
-                    HLAccountManager.validateAccountAndcheckPwdSetting((self, logoinVC), context: self.context!)
+                    HLAccountManager.validateAccountAndcheckPwdSetting((self, logoinVC), presentationData: self.presentationData)
                 } else {
-                    let entrustAllVC = EntrustAllVC(symbol: "",context:self.context)
-                    HLAccountManager.validateAccountAndcheckPwdSetting((self, entrustAllVC), context: self.context!)
+                    let entrustAllVC = EntrustAllVC(symbol: "", presentationData: self.presentationData)
+                    HLAccountManager.validateAccountAndcheckPwdSetting((self, entrustAllVC), presentationData: self.presentationData)
                 }
             default:
                 break
@@ -327,16 +330,15 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
 //                    //手势设置页面设置好手势密保，或者点击跳过，会有此回调
 //                    continueAction()
 //                })
-                let vc = AccountValidationVC.create( context: self.context, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) {
+                let vc = AccountValidationVC.create(presentationData: self.presentationData, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) {
                     continueAction()
                 }
                 self.navigationController?.pushViewController(vc, animated: true)
             }
-            let presentationData = self.context!.sharedContext.currentPresentationData.with({ $0 })
             
-            AssetVerificationViewController.show(presentationData: presentationData, currentVC: self, onPushAccountLockVC: {[weak self] in
+            AssetVerificationViewController.show(presentationData: self.presentationData, currentVC: self, onPushAccountLockVC: {[weak self] in
                 guard let self = self else {return}
-                let disableVC = AccountLockVC(context: self.context!, title: $0)
+                let disableVC = AccountLockVC(presentationData: self.presentationData, title: $0)
                 self.navigationController?.pushViewController(disableVC, animated: true)
                 
                 }, onPushAccountValidationVC: {
@@ -345,7 +347,7 @@ class NewDiscoverVC: HLBaseVC<NewDiscoverView> {
                 guard let self = self else {return}
                 let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
                 
-                let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: self.context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: self.context, viewModel: exceptionVM)
+                let exceptionVC = $0 == "1" ? BindExceptionPswVC(presentationData: self.presentationData, viewModel: exceptionVM) : BindExceptionCaptchaVC(presentationData: self.presentationData, viewModel: exceptionVM)
                 self.navigationController?.pushViewController(exceptionVC, animated: true)
             })
         }

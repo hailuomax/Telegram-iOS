@@ -1265,7 +1265,7 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
 //                                self.controller?.push(bourseVC())
 //                            }
 //                        })
-                        let vc = AccountValidationVC.create( context: self.context, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) {
+                        let vc = AccountValidationVC.create(presentationData: self.presentationData, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) {
                             if tradingItemType != .renewal{
                                 self.controller?.push(bourseVC())
                             }
@@ -1274,13 +1274,13 @@ private final class PeerInfoScreenNode: ViewControllerTracingNode, UIScrollViewD
                     }
                     let presentationData = self.context.sharedContext.currentPresentationData.with({ $0 })
                     self.controller?.push(AssetVerificationViewController.show(presentationData: presentationData, currentVC: nil, onPushAccountLockVC: {
-                        let disableVC = AccountLockVC(context: context, title: $0)
+                        let disableVC = AccountLockVC(presentationData: self.presentationData, title: $0)
                         self.controller?.push(disableVC)
                     }, onPushAccountValidationVC: {
                         pushAccountValidationVC($0,$1,$2)
                     }, onPushBindExceptionVC: {
                         let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
-                        let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)
+                        let exceptionVC = $0 == "1" ? BindExceptionPswVC(presentationData: self.presentationData, viewModel: exceptionVM) : BindExceptionCaptchaVC(presentationData: self.presentationData, viewModel: exceptionVM)
                         self.controller?.push(exceptionVC)
                     }))
                     

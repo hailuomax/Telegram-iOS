@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AccountContext
 import HLBase
 import ViewModel
 import HL
@@ -22,10 +21,10 @@ class DiscoverGroupVC: HLBaseVC<DiscoverGroupView> {
     let viewModel : DiscoverGroupVM
     var defaultTitle : String?
     
-    init(context: AccountContext?,viewModel:DiscoverGroupVM, selectedTitle: String? = nil) {
+    init(presentationData: PD, viewModel:DiscoverGroupVM, selectedTitle: String? = nil) {
         self.viewModel = viewModel
         self.defaultTitle = selectedTitle
-        super.init(context: context)
+        super.init(presentationData: presentationData)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -96,7 +95,7 @@ class DiscoverGroupVC: HLBaseVC<DiscoverGroupView> {
             let groupVCs = groupTypeDatas.map{(model) -> DiscoverDetailVC in
                 let detailVM = DiscoverDetailVM()
                 detailVM.groupTypeModel = model
-                let detailVC = DiscoverDetailVC(context: self.context, viewModel: detailVM)
+                let detailVC = DiscoverDetailVC(presentationData: self.presentationData, viewModel: detailVM)
                 detailVC.title = model.name
                 return detailVC
             }

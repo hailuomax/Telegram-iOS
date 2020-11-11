@@ -30,6 +30,17 @@ class NearbyViewController: HLBaseVC<NearbyView>  {
     
     private var currentScrollView : UIScrollView?
     
+    private let context: AccountContext
+    
+    init(context: AccountContext){
+        self.context = context
+        super.init(presentationData: context.sharedContext.currentPresentationData.with {$0})
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     deinit {
         print("NearbyViewController deinit!!!")
     }
@@ -79,7 +90,7 @@ class NearbyViewController: HLBaseVC<NearbyView>  {
         style.scrollLineHeight = 2
         style.equipartition = false
         style.titleFont = FontEnum.k_pingFangSC_Medium.toFont(14)
-        let viewControllers = self.viewControllers(context: context!)
+        let viewControllers = self.viewControllers()
         viewControllers.forEach {[weak self] (vc) in
             self?.addChild(vc)
         }
@@ -124,7 +135,7 @@ class NearbyViewController: HLBaseVC<NearbyView>  {
         
     }
     
-    private func viewControllers(context: AccountContext) -> [ItemListController] {
+    private func viewControllers() -> [ItemListController] {
         
         return [NearbyType.user, NearbyType.group].map{
             let nearbyVC = peersNearbyController(context: context, nearbyType:$0)

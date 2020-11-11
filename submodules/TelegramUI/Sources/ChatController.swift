@@ -9274,9 +9274,11 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     func openReadPacket(peer: Peer){
         let receiverName = self.chatTitleView?.titleNode.attributedText?.string ?? ""
         
+        let presentationData = self.context.sharedContext.currentPresentationData.with{$0}
+        
         var nextVC: ViewController!
         if peer is TelegramUser || peer is TelegramSecretChat{
-            nextVC = RedPacketVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, redPacketMessageSendBlock: { [weak self] (redPacketId,remark,senderId) in
+            nextVC = RedPacketVC(presentationData: presentationData, chatLocation: self.chatLocation, receiverName: receiverName, redPacketMessageSendBlock: { [weak self] (redPacketId,remark,senderId) in
                 guard let strongSelf = self else { return }
                 strongSelf.sendRedPacket(redPacketId:redPacketId,remark:remark,recipientId:senderId)
             })
@@ -9288,13 +9290,13 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
                     channelGroup = true
                 }
                 if tgGroup != nil || channelGroup{
-                    nextVC = GroupRedPacketVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, membersCount: tgGroup?.participantCount ?? self.channelGroupMemberCount , redPacketMessageSendBlock: { [weak self] (redPacketId,remark,senderId) in
+                    nextVC = GroupRedPacketVC(presentationData: presentationData, chatLocation: self.chatLocation, receiverName: receiverName, membersCount: tgGroup?.participantCount ?? self.channelGroupMemberCount , redPacketMessageSendBlock: { [weak self] (redPacketId,remark,senderId) in
                         guard let strongSelf = self else { return }
                         strongSelf.sendRedPacket(redPacketId:redPacketId,remark:remark,recipientId:senderId)
                     })
                 } else { return }
             }
-            HLAccountManager.validateAccountAndcheckPwdSetting((self, nextVC), context: self.context)
+            HLAccountManager.validateAccountAndcheckPwdSetting((self, nextVC), presentationData: self.presentationData)
     }
     
     private func sendRedPacket(redPacketId: String, remark: String, recipientId: String) {
@@ -9318,6 +9320,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     //MARK:-- 发送超级红包
     func openSuperRedPacket(peer: Peer){
         let receiverName = self.chatTitleView?.titleNode.attributedText?.string ?? ""
+        let presentationData = self.context.sharedContext.currentPresentationData.with{$0}
         
         var nextVC: ViewController!
         let tgGroup = peer as? TelegramGroup
@@ -9327,13 +9330,13 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             channelGroup = true
         }
         if tgGroup != nil || channelGroup{
-            nextVC = GroupRedPacketVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, membersCount: tgGroup?.participantCount ?? self.channelGroupMemberCount ,isSuper: true, superRedPacketMessageSendBlock:{ [weak self] (model) in
+            nextVC = GroupRedPacketVC(presentationData: presentationData, chatLocation: self.chatLocation, receiverName: receiverName, membersCount: tgGroup?.participantCount ?? self.channelGroupMemberCount ,isSuper: true, superRedPacketMessageSendBlock:{ [weak self] (model) in
                 guard let self = self else { return }
                 self.sendSuperRedpacket(model)
             })
         } else { return }
         
-        HLAccountManager.validateAccountAndcheckPwdSetting((self, nextVC), context: self.context)
+        HLAccountManager.validateAccountAndcheckPwdSetting((self, nextVC), presentationData: presentationData)
     }
     
     ///- 发送超级红包
@@ -9393,7 +9396,8 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     //MARK:-- 转账
     func openTransfer(){
         let receiverName = self.chatTitleView?.titleNode.attributedText?.string ?? ""
-
+        let presentationData = self.context.sharedContext.currentPresentationData.with{$0}
+        
         let transferVC = TransferVC(context: self.context, chatLocation: self.chatLocation, receiverName: receiverName, redPacketMessageSendBlock: { [weak self] (redPacketId,remark,recipientId) in
             guard let self = self else { return }
             
@@ -9403,27 +9407,30 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             self.sendMessages([.message(text: msgType.generateChatMsg(), attributes: [OutgoingContentInfoMessageAttribute(flags: [.disableLinkPreviews])], mediaReference: nil, replyToMessageId: replyMessageId, localGroupingKey: nil)])
             
         })
-        HLAccountManager.validateAccountAndcheckPwdSetting((self, transferVC), context: self.context)
+        HLAccountManager.validateAccountAndcheckPwdSetting((self, transferVC), presentationData: presentationData)
     }
 
     //MARK:-- 闪兑
     func openExchange(){
         let receiverName = self.chatTitleView?.titleNode.attributedText?.string ?? ""
-        var peerId = ""
-        switch self.chatLocation {
-        case let .peer(id):
-            peerId = "\(id.toInt64())"
-        }
+        let presentationData = self.context.sharedContext.currentPresentationData.with{$0}
+        
+        let peerId: String = {
+            switch self.chatLocation {
+            case let .peer(id):
+                return "\(id.toInt64())"
+            }
+        }()
 
         let viewModel = ExchangeVM()
         viewModel.receiverName = receiverName
         viewModel.receiverTelegramId = peerId
 
-        let exchangeVC = ExchangeCreateVC(context: self.context, viewModel: viewModel) {[weak self] (messageJson, rateStr)  in
+        let exchangeVC = ExchangeCreateVC(presentationData: presentationData, viewModel: viewModel) {[weak self] (messageJson, rateStr)  in
             guard let self = self else { return }
             self.sendFastExchange(messageJson, rateStr: rateStr)
         }
-        HLAccountManager.validateAccountAndcheckPwdSetting((self, exchangeVC), context: self.context)
+        HLAccountManager.validateAccountAndcheckPwdSetting((self, exchangeVC), presentationData: self.presentationData)
     }
     
     //

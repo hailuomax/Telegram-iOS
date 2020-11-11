@@ -106,7 +106,7 @@ public final class TelegramRootController: NavigationController {
         //跳转到附近的人
         contactsController.openNearby = { [weak contactsController, weak self] in
             guard let vc = contactsController, let self = self else { return }
-            self.pushNearbyVC(nav: (vc.navigationController as? NavigationController), context: self.context, presentationData: (self.context.sharedContext.currentPresentationData.with { $0 }))
+            self.pushNearbyVC(nav: (vc.navigationController as? NavigationController), context: self.context)
         }
         
         var restoreSettignsController: (ViewController & SettingsController)?
@@ -189,14 +189,14 @@ public final class TelegramRootController: NavigationController {
     }
     
     
-    public func pushNearbyVC(nav: NavigationController?, context: AccountContext?, presentationData: PresentationData?) {
-        guard let context = context else { return }
+    public func pushNearbyVC(nav: NavigationController?, context: AccountContext) {
+        
         let _ = (DeviceAccess.authorizationStatus(subject: .location(.tracking))
         |> take(1)
         |> deliverOnMainQueue).start(next: { [weak self] status in
             
             let presentPeersNearby = {
-                let controller = NearbyViewController.init(context: context, presentationData: presentationData)
+                let controller = NearbyViewController(context: context)
 
                 nav?.replaceAllButRootController(controller, animated: true, completion: {})
             }

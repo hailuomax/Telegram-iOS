@@ -831,8 +831,10 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         let _ = (contextValue.get()
         |> deliverOnMainQueue
             |> take(1)).start(next: { context in
+                
+                let presentationData = context.sharedContext.currentPresentationData.with{$0}
                 // 资产首页
-                let  assetVC = AssetVC(context: context)
+                let  assetVC = AssetVC(presentationData: presentationData)
                 
                 if HLAccountManager.walletIsLogined {
                     pushControllerImpl?(assetVC)
@@ -842,7 +844,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
 //                            //验证成功回调
 //                            pushControllerImpl?(assetVC)
 //                        })
-                        let vc = AccountValidationVC.create( context: context, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) {
+                        let vc = AccountValidationVC.create(presentationData: presentationData, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) {
                             pushControllerImpl?(assetVC)
                         }
                         pushControllerImpl?(vc)
@@ -855,13 +857,13 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                     }
                     let presentationData = context.sharedContext.currentPresentationData.with({ $0 })
                     AssetVerificationViewController.show(presentationData: presentationData, currentVC: currentVC, onPushAccountLockVC: {
-                        let disableVC = AccountLockVC(context: context, title: $0)
+                        let disableVC = AccountLockVC(presentationData: presentationData, title: $0)
                         pushControllerImpl?(disableVC)
                     }, onPushAccountValidationVC: {
                         pushAccountValidationVC($0,$1,$2)
                     }, onPushBindExceptionVC: {
                         let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
-                        let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: context, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: context, viewModel: exceptionVM)
+                        let exceptionVC = $0 == "1" ? BindExceptionPswVC(presentationData: presentationData, viewModel: exceptionVM) : BindExceptionCaptchaVC(presentationData: presentationData, viewModel: exceptionVM)
                         pushControllerImpl?(exceptionVC)
                     })
                 }
@@ -876,7 +878,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         let _ = (contextValue.get()
         |> deliverOnMainQueue
         |> take(1)).start(next: { context in
-            let pwdVC = TradePasswordVC(context: context, onPwdSat: nil)
+            let pwdVC = TradePasswordVC(presentationData: context.sharedContext.currentPresentationData.with{$0}, onPwdSat: nil)
             pushControllerImpl?(pwdVC)
 
         })
@@ -892,7 +894,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         let _ = (contextValue.get()
         |> deliverOnMainQueue
         |> take(1)).start(next: { context in
-            let inviteVC = NewInviteFriendsVC(peer: peer, context: context, presentationData: nil)
+            let inviteVC = NewInviteFriendsVC(peer: peer, context: context)
             pushControllerImpl?(inviteVC)
         })
     }, openSetting: {
@@ -923,7 +925,9 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         let _ = (contextValue.get()
             |> deliverOnMainQueue
             |> take(1)).start(next: { context in
-                let webVC: HLBaseVC<BaseWkWebView> = HLBaseVC<BaseWkWebView>(context: context).then{
+                let presentationData = context.sharedContext.currentPresentationData.with{$0}
+                
+                let webVC: HLBaseVC<BaseWkWebView> = HLBaseVC<BaseWkWebView>(presentationData: presentationData).then{
                     $0.contentView.load(urlStr: "https://m.cailu.net/academy", jsNames: [], onListen: {_,_  in})
                 }
                 pushControllerImpl?(webVC)
@@ -932,7 +936,8 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         let _ = (contextValue.get()
         |> deliverOnMainQueue
         |> take(1)).start(next: { context in
-            let vc = NoticeCenterVC(context: context, unread: unread)
+            let presentationData = context.sharedContext.currentPresentationData.with{$0}
+            let vc = NoticeCenterVC(presentationData: presentationData, unread: unread)
             pushControllerImpl?(vc)
         })
         
@@ -940,18 +945,20 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         let _ = (contextValue.get()
         |> deliverOnMainQueue
         |> take(1)).start(next: { context in
-            let vc = SystemMessagesVC(context: context)
+            let presentationData = context.sharedContext.currentPresentationData.with{$0}
+            let vc = SystemMessagesVC(presentationData: presentationData)
             pushControllerImpl?(vc)
         })
     }, openBiluAccount: {
         let _ = (contextValue.get()
                     |> deliverOnMainQueue
                     |> take(1)).start(next: { context in
+                        let presentationData = context.sharedContext.currentPresentationData.with{$0}
                         
-                        let biluAccountVC: BiluAccountCurrencyListVC = BiluAccountCurrencyListVC(context: context)
+                        let biluAccountVC: BiluAccountCurrencyListVC = BiluAccountCurrencyListVC(presentationData: presentationData)
                         
                         if HLAccountManager.biLuToken.isEmpty {
-                            let logoinVC = TransactionLoginVC(context: context)
+                            let logoinVC = TransactionLoginVC(presentationData: presentationData)
                             logoinVC.successBlock = { [weak logoinVC] in
                                 logoinVC?.navigationController?.popViewController(animated: true)
                             }

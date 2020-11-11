@@ -90,13 +90,13 @@ final class AuthorizationSequencePhoneEntryController: ViewController {
         //登录海螺钱包
         self.controllerNode.loginHLWallet = {[weak self] in
             guard let self = self else {return}
-            let assetVC = AssetVC(context: nil, presentationData: presentationData)
+            let assetVC = AssetVC(presentationData: presentationData)
             let pushAccountValidationVC : (Bool,Phone,Bool)->() = { (showPwdView,phone,canLoginWithPwd) in
                 
 //                let vc = AccountValidationVC(phone:phone, presentationData: presentationData, showPwdView: showPwdView, onValidateSuccess: {
 //                    self.navigationController?.pushViewController(assetVC, animated: true)
 //                })
-                let vc = AccountValidationVC.create( presentationData:presentationData, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) { [weak self] in
+                let vc = AccountValidationVC.create(presentationData: presentationData, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) { [weak self] in
                     self?.navigationController?.pushViewController(assetVC, animated: true)
                 }
                 self.navigationController?.pushViewController(vc, animated: true)
@@ -109,7 +109,7 @@ final class AuthorizationSequencePhoneEntryController: ViewController {
                 pushAccountValidationVC($0,$1,$2)
             }, onPushBindExceptionVC: {
                 let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
-                let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: nil,presentationData: presentationData, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: nil, presentationData: presentationData, viewModel: exceptionVM)
+                let exceptionVC = $0 == "1" ? BindExceptionPswVC(presentationData: presentationData, viewModel: exceptionVM) : BindExceptionCaptchaVC(presentationData: presentationData, viewModel: exceptionVM)
                 self.navigationController?.pushViewController(exceptionVC, animated: true)
             })
         }
