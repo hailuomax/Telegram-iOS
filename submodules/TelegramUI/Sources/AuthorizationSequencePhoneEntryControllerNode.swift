@@ -325,7 +325,7 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
     ///跳转代理button
     private lazy var proxyNode: ASButtonNode = {
         let node = ASButtonNode()
-        node.setTitle(HLLanguage.SwitchProxy.localized(), with: FontEnum.k_pingFangSC_Regular.toFont(15), with: UIColor(hexString: "#3F83FF")!, for: .normal)
+        node.setTitle(HLLanguage.SwitchProxy.localized(), with: FontEnum.k_pingFangSC_Regular.toFont(15), with: UIColor(hexString: "3F83FF")!, for: .normal)
         node.addTarget(self, action: #selector(proxyButtonTap), forControlEvents: ASControlNodeEvent.touchUpInside)
         node.frame = CGRect(x: 34, y: 0, width: 100, height: 20)
         return node
@@ -663,7 +663,7 @@ private class ProtocolContentNode: ASControlNode{
     
     func setUpProtocolNode() {
         let font = UIFont.systemFont(ofSize: 10)
-        let fontBlueColor = UIColor.hex(.kBlue)
+        let fontBlueColor = UIColor(hexString: "3F83FF")!
         let fontBlackColor = UIColor.hex(.k878B9F)
         
         /// 协议链接标签的样式 attributes(link, textColor)  link:点击跳转的url
