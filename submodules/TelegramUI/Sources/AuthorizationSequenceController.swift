@@ -226,9 +226,10 @@ public final class AuthorizationSequenceController: NavigationController, MFMail
                                         }
                                         
                                         let pushAccountValidationVC : (Bool, Phone, Bool)->() = {[weak self, weak controller] (showPwdView, phone, canLoginWithPwd) in
-                                            
-                                            let vc = AccountValidationVC.create(presentationData: self?.presentationData, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) { [weak self] in
-                                                let assetVC = AssetVC(presentationData: self?.presentationData)
+                                            guard let self = self else {return}
+                                            let vc = AccountValidationVC.create(presentationData: self.presentationData, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) { [weak self] in
+                                                guard let self = self else {return}
+                                                let assetVC = AssetVC(presentationData: self.presentationData)
                                                 controller?.navigationController?.pushViewController(assetVC, animated: true)
                                             }
                                             controller?.navigationController?.pushViewController(vc, animated: true)
@@ -236,7 +237,8 @@ public final class AuthorizationSequenceController: NavigationController, MFMail
                                         
                                         let presentationData = strongSelf.presentationData
                                         AssetVerificationViewController.show(presentationData: strongSelf.presentationData, currentVC: controller, onPushAccountLockVC: {[weak self, weak controller] in
-                                            let disableVC = AccountLockVC(presentationData: self?.presentationData, title: $0)
+                                            guard let self = self else {return}
+                                            let disableVC = AccountLockVC(presentationData: self.presentationData, title: $0)
                                             controller?.navigationController?.pushViewController(disableVC, animated: true)
                                         }, onPushAccountValidationVC: {
                                             pushAccountValidationVC($0,$1,$2)
@@ -245,7 +247,7 @@ public final class AuthorizationSequenceController: NavigationController, MFMail
                                                 return
                                             }
                                             let exceptionVM = BindExceptionVM(oldPhoneCode: $0, oldTelephone: $1, payPwdStatus: $2, onValidateSuccess: {})
-                                            let exceptionVC = $0 == "1" ? BindExceptionPswVC(context: nil, presentationData: self.presentationData, viewModel: exceptionVM) : BindExceptionCaptchaVC(context: nil, presentationData: self.presentationData, viewModel: exceptionVM)
+                                            let exceptionVC = $0 == "1" ? BindExceptionPswVC(presentationData: self.presentationData, viewModel: exceptionVM) : BindExceptionCaptchaVC( presentationData: self.presentationData, viewModel: exceptionVM)
                                             controller?.navigationController?.pushViewController(exceptionVC, animated: true)
                                         })
                                         
