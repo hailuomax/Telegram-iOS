@@ -1107,7 +1107,7 @@ final class SharedApplicationContext {
                         return createChannelController(context: context)
                     })
                     PassValuesUtil.default.add(key:.RootViewController, value: { _ in
-                        return app.mainWindow?.viewController
+                        return app.window?.rootViewController
                     })
                     
                     PassValuesUtil.default.add(key:.MainWindow, value: {[weak self] _ in
