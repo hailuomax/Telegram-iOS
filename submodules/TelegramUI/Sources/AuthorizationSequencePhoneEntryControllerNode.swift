@@ -334,8 +334,8 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
     ///logo
     private lazy var iconNode: ASImageNode = {
         let node = ASImageNode()
-        node.image = UIImage(bundleImageName: "login_icon")
-        node.frame = CGRect(x: 34, y: 0, width: 70, height: 54)
+        node.image = UIImage(bundleImageName: "bindHLLogo")
+        node.frame = CGRect(x: 34, y: 0, width: 70, height: 45)
         node.contentMode = .scaleToFill
         return node
     }()
@@ -360,15 +360,15 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         self.hasOtherAccounts = hasOtherAccounts
         
         self.titleNode = ASTextNode()
+        self.titleNode.textAlignment = .center
         self.titleNode.isUserInteractionEnabled = true
         self.titleNode.displaysAsynchronously = false
-        self.titleNode.attributedText = NSAttributedString(string: strings.Login_PhoneTitle, font: Font.light(30.0), textColor: theme.list.itemPrimaryTextColor)
+        self.titleNode.attributedText = NSAttributedString(string: "海螺", font: Font.regular(18), textColor: theme.list.itemPrimaryTextColor)
         
         self.noticeNode = ASTextNode()
 //        self.noticeNode.maximumNumberOfLines = 0
 //        self.noticeNode.isUserInteractionEnabled = true
 //        self.noticeNode.displaysAsynchronously = false
-//        self.titleNode.attributedText = NSAttributedString(string: strings.Login_PhoneTitle, font: Font.light(30.0), textColor: theme.list.itemPrimaryTextColor)
         
         self.contactSyncNode = ContactSyncNode(theme: theme, strings: strings)
         
@@ -464,7 +464,8 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
 //        let noticeSize = self.noticeNode.measure(CGSize(width: min(274.0, layout.size.width - 28.0), height: CGFloat.greatestFiniteMagnitude))
         
         var items: [AuthorizationLayoutItem] = [
-            AuthorizationLayoutItem(node: self.iconNode, size: CGSize(width: 60, height: 75), spacingBefore: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 10.0, maxValue: 10.0)),
+            AuthorizationLayoutItem(node: self.iconNode, size: CGSize(width: 60, height: 45), spacingBefore: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0, maxValue: 0)),
+            AuthorizationLayoutItem(node: self.titleNode, size: CGSize(width: 100, height: 18), spacingBefore: AuthorizationLayoutItemSpacing(weight: 15.0, maxValue: 15.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 10.0, maxValue: 10.0)),
             AuthorizationLayoutItem(node: self.proxyNode, size: CGSize(width: 100, height: 20), spacingBefore: AuthorizationLayoutItemSpacing(weight: 10.0, maxValue: 10.0), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0)),
             AuthorizationLayoutItem(node: self.phoneAndCountryNode, size: CGSize(width: layout.size.width, height: 44), spacingBefore: AuthorizationLayoutItemSpacing(weight: 30, maxValue: 30), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0)),
             AuthorizationLayoutItem(node: self.confirmButton, size: CGSize(width: layout.size.width - 50, height: 50), spacingBefore: AuthorizationLayoutItemSpacing(weight: 50, maxValue: 50), spacingAfter: AuthorizationLayoutItemSpacing(weight: 0.0, maxValue: 0.0))
