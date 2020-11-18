@@ -872,7 +872,14 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
         //MARK: 实名认证
 
     }, openLoginPassword:{
-        JYPrint("openLoginPassword")
+        //MARK: 登录密码
+        let _ = (contextValue.get()
+        |> deliverOnMainQueue
+        |> take(1)).start(next: { context in
+            let pwdVC = SetLoginPWDVC(presentationData: context.sharedContext.currentPresentationData.with{$0})
+            pushControllerImpl?(pwdVC)
+        })
+        
     }, openTradePassword: {
         //MARK: 交易密码
         let _ = (contextValue.get()
