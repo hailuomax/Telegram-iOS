@@ -439,7 +439,7 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
         entries.append(.userInfo(account, presentationData.theme, presentationData.strings, presentationData.dateTimeFormat, peer, view.cachedData, userInfoState, state.updatingAvatar))
         
         let phones = AccountRepo.getAccountPhone()
-        entries.append(.myWallet(presentationData.theme, PresentationResourcesSettings.myWallet, HLLanguage.MyAssets.localized(), phones.phone))
+        entries.append(.myWallet(presentationData.theme, PresentationResourcesSettings.myWallet, HLLanguage.HaloWallet.localized(), phones.phone))
         
         let user = HLAccountManager.shareAccount
         
