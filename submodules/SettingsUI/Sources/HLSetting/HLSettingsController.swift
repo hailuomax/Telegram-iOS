@@ -669,6 +669,8 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
     var setDisplayNavigationBarImpl: ((Bool) -> Void)?
     var getNavigationControllerImpl: (() -> NavigationController?)?
     var displayCopyContextMenuImpl: ((Peer) -> Void)?
+    //不删除第一个VCpush
+    var defultPushControllerImpl: ((ViewController) -> Void)?
     
     let actionsDisposable = DisposableSet()
     
@@ -847,7 +849,7 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
                         let vc = AccountValidationVC.create(presentationData: presentationData, showPwdView: showPwdView, phone: phone, canLoginWithPwd: canLoginWithPwd) {
                             pushControllerImpl?(assetVC)
                         }
-                        pushControllerImpl?(vc)
+                        defultPushControllerImpl?(vc)
                     }
                     
                     var currentVC: UIViewController? = nil
@@ -1391,6 +1393,9 @@ public func hlSettingsController(context: AccountContext, accountManager: Accoun
     
     pushControllerImpl = { [weak controller] value in
         (controller?.navigationController as? NavigationController)?.replaceAllButRootController(value, animated: true, animationOptions: [.removeOnMasterDetails])
+    }
+    defultPushControllerImpl = { [weak controller] value in
+        (controller?.navigationController as? NavigationController)?.pushViewController(value)
     }
     presentControllerImpl = { [weak controller] value, arguments in
         controller?.present(value, in: .window(.root), with: arguments, blockInteraction: true)
