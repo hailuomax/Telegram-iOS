@@ -53,6 +53,7 @@ class DiscoverNoticeCell: UICollectionViewCell {
             button.titleLabel?.font = FontEnum.k_pingFangSC_Medium.toFont(12)
             button.setTitleColor(UIColor(hexString: "#9AA3AC"), for: .normal)
             button.setTitle(item.title, for: .normal)
+            button.contentEdgeInsets.right = 40
             if let self = self {
                 button.rx.controlEvent(.touchUpInside)
                     .map{_ in item}
