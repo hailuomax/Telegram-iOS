@@ -292,6 +292,13 @@ final class SharedApplicationContext {
                         HUD.flash(.label(noti.object as! String), delay: 1)
                     }
                     navigationVC.popToRoot(animated: true)
+
+                    app.nativeWindow?.forEachController{ vc in
+                        if let target = vc as? AuthorizationSequenceController {
+                            target.popToRoot(animated: true)
+                            HUD.flash(.label(noti.object as! String), delay: 1)
+                        }
+                    }
                 }
                     
             })
