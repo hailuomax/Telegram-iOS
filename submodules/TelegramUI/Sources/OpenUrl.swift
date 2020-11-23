@@ -212,7 +212,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                         name = "\(user.lastName ?? "")\(user.firstName ?? "")"
                     }
                     if (value.contains(Scheme.i7_app) || value.contains(tScheme)),value.contains("game=hailuoRedEnvelope") {
-                        url = "https://webview.0593xg.com/superRedEnvelope?telegramId=\(context.account.peerId.id)&gameShortName=hailuoRedEnvelope&userName=\(name)"
+                        url = "https://webview.ftkj99.com/superRedEnvelope?telegramId=\(context.account.peerId.id)&gameShortName=hailuoRedEnvelope&userName=\(name)"
                         
                     }
                     context.sharedContext.applicationBindings.openUrl(url)
