@@ -501,6 +501,7 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
     
     /// 未勾选同意相关协议时的抖动动画
     func notAgreeAnimateError(){
+        HUD.flashOnTopVC(.label("请先阅读海螺用户隐私政策及服务协议"))
         self.protocolNode.layer.addShakeAnimation()
     }
     
