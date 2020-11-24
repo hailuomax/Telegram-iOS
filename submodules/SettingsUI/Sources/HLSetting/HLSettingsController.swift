@@ -448,7 +448,7 @@ private func settingsEntries(account: Account, presentationData: PresentationDat
             entries.append(.biluAccount(presentationData.theme, UIImage(bundleImageName: "BiluAsset"), BiluTransfer.Bilu.str))
             
             //登录密码
-            entries.append(.loginPassword(presentationData.theme, PresentationResourcesSettings.accountProtection, HLLanguage.LoginPassword.localized(), HLLanguage.Change.localized()))
+            entries.append(.loginPassword(presentationData.theme, PresentationResourcesSettings.accountProtection, HLLanguage.LoginPassword.localized(), (HLAccountManager.shareAccount.pwdStatus == 1 ? HLLanguage.Change.str : HLLanguage.NotSetUp.str)))
             //交易密码
             entries.append(.tradePassword(presentationData.theme, PresentationResourcesSettings.tradePassword, HLLanguage.TransactionPassword.localized(), HLLanguage.Change.localized()))
             
