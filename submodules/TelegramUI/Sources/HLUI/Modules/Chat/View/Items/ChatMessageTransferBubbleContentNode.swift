@@ -197,7 +197,7 @@ final class ChatMessageTransferBubbleContentNode: ChatMessageBubbleContentNode {
         let block = { [weak self] in
             guard let self = self,
                 let navVC = self.item?.controllerInteraction.navigationController() else{ return }
-            let receiveVC = TransferGetVC(presentationData: self.item!.context.sharedContext.currentPresentationData.with({ $0 }), transferId: transferId,message: self.item?.message)
+            let receiveVC = TransferGetVC(context: self.item!.context, transferId: transferId,message: self.item?.message)
             navVC.pushViewController(receiveVC)
         }
         guard !HLAccountManager.walletIsLogined else {
