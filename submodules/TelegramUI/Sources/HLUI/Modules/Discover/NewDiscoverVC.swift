@@ -453,6 +453,7 @@ class NewDiscoverView: BaseContentViewType{
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var navigationBgView: UIView!
     @IBOutlet var navigationHeight: NSLayoutConstraint!
+    @IBOutlet var naviTitleLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -467,6 +468,7 @@ class NewDiscoverView: BaseContentViewType{
         navigationHeight.constant = NavBarHeight
         navigationBgView.backgroundColor = .clear
         collectionView.alwaysBounceVertical = true
+        naviTitleLabel.text = HLLanguage.TabBar.Discover.str
     }
     
 }

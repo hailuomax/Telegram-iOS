@@ -10,6 +10,7 @@ import Extension
 import Config
 import HL
 import RxSwift
+import Language
 
 class DiscoverSectionHeaderView : UICollectionReusableView {
     
@@ -41,7 +42,7 @@ class DiscoverSectionHeaderView : UICollectionReusableView {
         moreButton.setTitleColor(UIColor(hexString: "AEB2C3"), for: .normal)
         moreButton.setImage(UIImage(bundleImageName: "arrowGrayRight"), for: .normal)
         moreButton.titleLabel?.font = CustomFont.regularfontWithSize(13)
-        moreButton.setTitle("查看全部", for: .normal)
+        moreButton.setTitle(HLLanguage.ViewAll.str, for: .normal)
         
         self.contentView.addSubview(titleLabel)
         self.contentView.addSubview(moreButton)
