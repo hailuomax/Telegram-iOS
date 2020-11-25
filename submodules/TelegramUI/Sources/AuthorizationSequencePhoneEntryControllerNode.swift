@@ -160,9 +160,9 @@ private final class PhoneAndCountryNode: ASDisplayNode {
 //        self.countryButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 10.0, right: 0.0)
 //        self.countryButton.contentHorizontalAlignment = .left
         
-        self.phoneInputNode.numberField.textField.attributedPlaceholder = NSAttributedString(string: "请确认国际电话区号并输入手机号码", font: Font.medium(16.0), textColor: theme.list.itemPlaceholderTextColor)
+        self.phoneInputNode.numberField.textField.attributedPlaceholder = NSAttributedString(string: "请确认国际电话区号并输入手机号码", font: Font.regular(14.0), textColor: theme.list.itemPlaceholderTextColor)
         self.phoneInputNode.countryCodeField.textField.font = Font.medium(16.0)
-        self.phoneInputNode.numberField.textField.font = Font.medium(16.0)
+        self.phoneInputNode.numberField.textField.font = Font.medium(15.0)
         self.phoneInputNode.countryCodeField.textField.textAlignment = .left
         
         self.countryButton.addTarget(self, action: #selector(self.countryPressed), forControlEvents: .touchUpInside)
