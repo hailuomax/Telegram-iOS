@@ -160,7 +160,10 @@ private final class PhoneAndCountryNode: ASDisplayNode {
 //        self.countryButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 10.0, right: 0.0)
 //        self.countryButton.contentHorizontalAlignment = .left
         
-        self.phoneInputNode.numberField.textField.attributedPlaceholder = NSAttributedString(string: "请确认国际电话区号并输入手机号码", font: Font.regular(14.0), textColor: theme.list.itemPlaceholderTextColor)
+        self.phoneInputNode.numberField.textField.attributedPlaceholder = NSAttributedString(string: "请确认国际电话区号并输入手机号码", font: Font.medium(16.0), textColor: theme.list.itemPlaceholderTextColor)
+        self.phoneInputNode.countryCodeField.textField.font = Font.medium(16.0)
+        self.phoneInputNode.numberField.textField.font = Font.medium(16.0)
+        self.phoneInputNode.countryCodeField.textField.textAlignment = .left
         
         self.countryButton.addTarget(self, action: #selector(self.countryPressed), forControlEvents: .touchUpInside)
         
@@ -205,7 +208,7 @@ private final class PhoneAndCountryNode: ASDisplayNode {
 //        self.phoneBackground.frame = CGRect(origin: CGPoint(x: 0.0, y: size.height - 57.0), size: CGSize(width: size.width, height: 57.0))
         let inputHeight: CGFloat = 44
         let countryCodeFrame = CGRect(origin: CGPoint(x: 25, y: 0), size: CGSize(width: 60.0, height: inputHeight))
-        let numberFrame = CGRect(origin: CGPoint(x: 110, y: 0), size: CGSize(width: size.width - 110 - 25, height: inputHeight))
+        let numberFrame = CGRect(origin: CGPoint(x: 90, y: 0), size: CGSize(width: size.width - 90 - 25, height: inputHeight))
         
         let phoneInputFrame = countryCodeFrame.union(numberFrame)
         
@@ -218,10 +221,10 @@ private final class PhoneAndCountryNode: ASDisplayNode {
         let fitSize = loginHlWalletButtonTitle.sizeWithConstrainedWidth(size.width, font: UIFont.systemFont(ofSize: 13))
         self.loginHlWalletButton.frame = CGRect(x: 25, y: inputHeight + 20, width: fitSize.width, height: 20)
         
-        self.countryBottomLine.frame = CGRect(x: 25, y: inputHeight, width: 67.0, height: 0.5)
-        self.numberBottomLine.frame = CGRect(x: 110, y: inputHeight, width: numberFrame.width, height: 0.5)
+        self.countryBottomLine.frame = CGRect(x: 25, y: inputHeight, width: 47, height: 0.5)
+        self.numberBottomLine.frame = CGRect(x: 90, y: inputHeight, width: numberFrame.width, height: 0.5)
         
-        self.arrowImageNode.frame = CGRect(x: 60 - 5, y: (inputHeight - 9) / 2, width: 12, height: 9)
+        self.arrowImageNode.frame = CGRect(x: 47 - 7, y: (inputHeight - 9) / 2, width: 12, height: 9)
     }
 }
 
@@ -336,14 +339,14 @@ final class AuthorizationSequencePhoneEntryControllerNode: ASDisplayNode {
         let node = ASImageNode()
         node.image = UIImage(bundleImageName: "bindHLLogo")
         node.frame = CGRect(x: 34, y: 0, width: 70, height: 45)
-        node.contentMode = .scaleToFill
+        node.contentMode = .scaleAspectFit
         return node
     }()
     
     //确认按钮
     private lazy var confirmButton: ASButtonNode = {
         let btn = ASButtonNode ()
-        btn.setTitle("确认", with: UIFont.systemFont(ofSize: 18), with: UIColor(hexString: "#FFFFFF")!, for: .normal)
+        btn.setTitle(HLLanguage.Confirm.str, with: UIFont.systemFont(ofSize: 18), with: UIColor(hexString: "#FFFFFF")!, for: .normal)
         return btn
     }()
     
